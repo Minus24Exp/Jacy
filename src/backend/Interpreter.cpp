@@ -5,7 +5,7 @@ YoctoVisitor::YoctoVisitor(){
 	enter_scope();
 
 	// Register all built-ins including classes and functions
-	register_builtins(*this);
+	// register_builtins(*this);
 }
 
 void YoctoVisitor::enter_scope(Scope * new_scope){

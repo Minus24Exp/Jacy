@@ -3,19 +3,14 @@
 
 #include <map>
 
-class Callable;
+using ObjectFields = std::map<std::string, Object*>;
 
-/**
- * For now forget about super classes,
- * add them in the future
- */
+class Callable;
 
 class Object {
 public:
 	Object();
 	virtual ~Object() = default;
-
-	void extend(Object * super);
 
 	bool has_field(const std::string & name) const;
 	Object * find_field(const std::string & name) const;
@@ -28,9 +23,15 @@ public:
 	// Shorthand for method that does not receive params and just returns a value
 	void set_return_method(const std::string & name, Object * val);
 
+	void extend(Object * super);
+
+	Object * get_super() const {
+		return super;
+	}
+
 private:
 	Object * super;
-	std::map<std::string, Object*> fields;
+	ObjectFields fields;
 };
 
 #endif

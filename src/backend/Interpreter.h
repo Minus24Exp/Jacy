@@ -1,5 +1,5 @@
-#ifndef YOCTOVISITOR_H
-#define YOCTOVISITOR_H
+#ifndef INTERPRETER_H
+#define INTERPRETER_H
 
 #include "BaseVisitor.h"
 #include "Token.h"
@@ -17,10 +17,10 @@
 
 #include <iostream>
 
-class YoctoVisitor : public BaseVisitor {
+class Interpreter : public BaseVisitor {
 public:
-	YoctoVisitor();
-	virtual ~YoctoVisitor() = default;
+	Interpreter();
+	virtual ~Interpreter() = default;
 
 	// Scope * get_scope() const {
 	// 	// Used to define built-ins before compilation outside of visitor
