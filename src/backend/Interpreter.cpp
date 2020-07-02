@@ -4,6 +4,10 @@ YoctoVisitor::YoctoVisitor(){
 	// Enter root scope
 	enter_scope();
 
+	scope->define("Integer", new Class({
+		
+	}));
+
 	// Register all built-ins including classes and functions
 	// register_builtins(*this);
 }
@@ -37,6 +41,7 @@ void YoctoVisitor::visit(ExprStmt & expr_stmt){
 void YoctoVisitor::visit(Literal & literal){
 	switch(literal.token.type){
 		case TokenType::Int:{
+			value = new Object;
 			value = new Int(literal.token.Int());
 			break;
 		}

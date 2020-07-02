@@ -23,14 +23,11 @@ public:
 	// Shorthand for method that does not receive params and just returns a value
 	void set_return_method(const std::string & name, Object * val);
 
-	void extend(Object * super);
-
-	Object * get_super() const {
-		return super;
+	Object * operator[](const std::string & name) const {
+		return find_field(name);
 	}
 
 private:
-	Object * super;
 	ObjectFields fields;
 };
 

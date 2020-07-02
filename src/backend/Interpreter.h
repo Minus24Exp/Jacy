@@ -4,16 +4,12 @@
 #include "BaseVisitor.h"
 #include "Token.h"
 #include "tree/nodes.h"
-#include "Object/Int.h"
-#include "Object/Float.h"
-#include "Object/String.h"
-#include "Object/Method.h"
-#include "Object/NativeMethod.h"
-#include "Object/NullClass.h"
-#include "Object/FalseClass.h"
-#include "Object/TrueClass.h"
 #include "backend/Scope.h"
 #include "backend/register_builtins.c"
+
+#include "Object/Object.h"
+#include "Object/NativeMethod.h"
+#include "Object/Method.h"
 
 #include <iostream>
 

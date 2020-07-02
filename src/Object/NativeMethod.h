@@ -11,8 +11,8 @@
  * It creates map of names and objects that were received
  */
 
-using NativeMethodArgs = std::map<std::string, Object*>;
-using NativeMethodBody = std::function<Object*(const NativeMethodArgs & args)>;
+using NMArgs = std::map<std::string, Object*>;
+using NativeMethodBody = std::function<Object*(const NMArgs & args)>;
 
 class NativeMethod : public Callable {
 public:
@@ -26,7 +26,7 @@ public:
 		// TODO: variadic args
 		// Idea: For variadic use argument "*" that will show that next arg is variadic
 
-		NativeMethodArgs named_args;
+		NMArgs named_args;
 		for(int i = 0; i < params.size(); i++){
 			named_args[params[i].name] = args[i];
 		}
