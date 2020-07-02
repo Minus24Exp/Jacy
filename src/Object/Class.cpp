@@ -1,20 +1,19 @@
 #include "Object/Class.h"
 
-Class::Class(const ObjectFields & fields) : fields(fields) {
-	set_field("new", make_native_method([this](const NMArgs & args){
-		// TODO: Add constructor method
-		Object * instance = new Object;
-
-		// TODO: Add super field inheritance
-
-		for(const auto & field : fields){
-			instance->set_field(field.first, field.second);
-		}
-
-		return instance;
-	}));
+Class::Class(const std::string & name, Class * super, const ClassFields & fields){
+	this->name = name;
+	this->super = super;
+	this->fields = fields;
 }
 
-void Class::extend(Class * super){
-	this->super = super;
+Object * Class::find_field(const std::string & name) const {
+	if(fields.find(name) != fields.end()){
+		return fields.at(name);
+	}
+
+	if(super){
+		return super.find_field(name);
+	}
+
+	return nullptr;
 }

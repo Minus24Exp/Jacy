@@ -1,29 +1,29 @@
 #ifndef CLASS_H
 #define CLASS_H
 
-#include "Object/Object.h"
-#include "Object/NativeMethod.h"
+#include "Object/Callable.h"
+#include <map>
 
-/**
- * Classes is kinda factory for objects
- */
+using ClassFields = std::map<std::string, Object*>;
 
-class Class : public Object {
+class Class : public Callable {
 public:
-	Class(const ObjectFields & fields);
+	Class(const std::string & name, Class * super, const ClassFields & fields);
 	virtual ~Class() = default;
 
-	void extend(Class * super);
+	Object * call(Interpreter & interpreter, const Args & args) override {
+		Instance * instance = new Instance(this);
 
-	Class * get_super() const {
-		return super;
+		// Find constructor
+		Callable * constructor = find_field(name);
 	}
+
+	Object * find_field(const std::string & name) const;
 
 private:
 	Class * super;
-	ObjectFields fields;
-
 	std::string name;
+	ClassFields fields;
 };
 
 #endif

@@ -10,33 +10,50 @@
 
 #include <vector>
 
-class Method : public Callable {
+class Method : public Object, public Callable {
 public:
-	Method(FuncDecl & func_decl) : Callable({}) {
-		for(const auto & param : func_decl.params){
-			params.push_back({ .name = param.id.get_name() });
-		}
-		body = func_decl.body.stmts;
-	}
+	Method(FuncDecl & func_decl, Scope * closure) : decl(decl), closure(closure) {}
 	virtual ~Method() = default;
 
+	int argc() const {
+		return decl.params.size();
+	}
+
+	Method * bind(Instance * instance){
+		Scope * scope = new Scope(closure);
+		scope->define("this", instance);
+
+		return new Method(decl, scope);
+	}
+
 	Object * call(BaseVisitor & visitor, const Args & args) override {
-		compare_args(args);
-
-		for(int i = 0; i < params.size(); i++){
-			define(params[i].name, {args[i]});
+		if(!compare_args(args)){
+			throw YoctoException("Invalid parameters");
 		}
 
-		for(Statement * stmt : body){
-			stmt->accept(visitor);
+		Scope * scope = new Scope(closure);
+
+		for(int i = 0; i < decl.params.size(); i++){
+			scope->define(decl.params[i].name, args[i]);
 		}
 
-		// TODO: !!! Add return statement and return last value if there's no return
+		interpreter.visit(decl.body);
+		
+		// TODO: !!! Add return value
 		return nullptr;
 	}
 
 private:
-	StatementList body;
+	Scope * closure;
+	FuncDecl & decl;
+
+	bool compare_args(const Args & args){
+		if(args.size() != argc()){
+			return false;
+		}
+
+		return true;
+	}
 };
 
 #endif

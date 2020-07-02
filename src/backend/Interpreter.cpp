@@ -4,10 +4,6 @@ YoctoVisitor::YoctoVisitor(){
 	// Enter root scope
 	enter_scope();
 
-	scope->define("Integer", new Class({
-		
-	}));
-
 	// Register all built-ins including classes and functions
 	// register_builtins(*this);
 }
