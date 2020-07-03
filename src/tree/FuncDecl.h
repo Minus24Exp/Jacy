@@ -6,21 +6,21 @@
 #include "tree/Node.h"
 
 struct FuncParam {
-	Identifier & id;
+	id_ptr id;
 };
 
 using ParamList = std::vector<FuncParam>;
 
 struct FuncDecl : Statement {
-	Identifier & id;
+	id_ptr id;
 	ParamList params;
-	Block & body;
+	block_ptr body;
 
-	FuncDecl(Identifier & id, const ParamList & params, Block & body)
+	FuncDecl(id_ptr id, const ParamList & params, block_ptr body)
 		: id(id), params(params), body(body) {}
 
 	void accept(BaseVisitor & visitor) override {
-		visitor.visit(*this);
+		visitor.visit(this);
 	}
 };
 

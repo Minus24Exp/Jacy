@@ -5,26 +5,22 @@
 #include "tree/Node.h"
 
 struct ConditionStructure {
-	Expression & cond;
-	Block & body;
-
-	ConditionStructure(Expression & cond, Block & body)
-		: cond(cond), body(body) {}
-	virtual ~ConditionStructure() = default;
+	expr_ptr cond;
+	block_ptr body;
 };
 
 using ConditionList = std::vector<ConditionStructure>;
 
 struct IfExpression : Expression {
 	ConditionList conditions;
-	Block * Else;
+	block_ptr Else;
 
-	IfExpression(const ConditionList & conditions, Block * Else)
+	IfExpression(const ConditionList & conditions, block_ptr Else)
 		: conditions(conditions), Else(Else) {}
 	virtual ~IfExpression() = default;
 
 	void accept(BaseVisitor & visitor) override {
-		visitor.visit(*this);
+		visitor.visit(this);
 	}
 };
 

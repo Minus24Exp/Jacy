@@ -9,8 +9,8 @@
 #include "Exception.h"
 #include "Lexer.h"
 #include "Parser.h"
-#include "ParseTreePrinter.h"
-#include "backend/YoctoVisitor.h"
+#include "Printer.h"
+#include "backend/Interpreter.h"
 
 class Yocto {
 public:

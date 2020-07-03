@@ -1,141 +1,127 @@
-#include "YoctoVisitor.h"
+#include "backend/Interpreter.h"
 
-YoctoVisitor::YoctoVisitor(){
-	// Enter root scope
-	enter_scope();
-
-	// Register all built-ins including classes and functions
-	// register_builtins(*this);
+Interpreter::Interpreter(){
+	value = nullptr;
+	scope = new Scope;
 }
 
-void YoctoVisitor::enter_scope(Scope * new_scope){
-	if(new_scope){
-		new_scope->set_parent(scope);
-		scope = new_scope;
-	}else{
-		scope = new Scope(scope);
+void Interpreter::interpret(const StmtList & tree){
+	for(const auto & stmt : tree){
+		execute(stmt.get());
 	}
 }
 
-void YoctoVisitor::exit_scope(){
-	Scope * parent = scope->get_parent();
-	delete scope;
-	scope = parent;
+void Interpreter::execute(Statement * stmt){
+	stmt->accept(*this);
 }
 
-void YoctoVisitor::eval(const ParseTree & tree){
-	for(Node * stmt : tree){
-		stmt->accept(*this);
+obj_ptr Interpreter::eval(Expression * expr){
+	expr->accept(*this);
+	return std::move(value);
+}
+
+void Interpreter::execute_block(Block * block, scope_ptr sub_scope){
+	scope_ptr previous = scope;
+	scope = sub_scope;
+	for(const auto & stmt : block->stmts){
+		execute(stmt.get());
 	}
-	exit_scope();
+	scope = previous;
 }
 
-void YoctoVisitor::visit(ExprStmt & expr_stmt){
-	expr_stmt.expr.accept(*this);
+void Interpreter::call(Func * func, ObjList && args){
+	scope_ptr sub_scope = std::make_shared<Scope>(func->closure);
+	scope_ptr previous = scope;
+
+	for(size_t i = 0; i < func->decl.params.size(); i++){
+		sub_scope->define(func->decl.params[i].id->get_name(), std::move(args[i]));
+	}
+
+	try{
+		execute_block(func->decl.body.get(), sub_scope);
+	}catch(Object & ret_val){
+		scope = previous;
+		return;
+	}
 }
 
-void YoctoVisitor::visit(Literal & literal){
-	switch(literal.token.type){
-		case TokenType::Int:{
-			value = new Object;
-			value = new Int(literal.token.Int());
-			break;
-		}
-		case TokenType::Float:{
-			value = new Float(literal.token.Float());
-			break;
-		}
-		case TokenType::Str:{
-			value = new String(literal.token.String());
+void Interpreter::visit(ExprStmt * expr_stmt){
+	value = eval(expr_stmt->expr.get());
+}
+
+void Interpreter::visit(Literal * literal){
+	switch(literal->token.type){
+		case TokenType::Null:{
+			value.reset(new Null);
 			break;
 		}
 		case TokenType::Bool:{
-			if(literal.token.Bool()){
-				value = new TrueClass();
-			}else{
-				value = new FalseClass();
-			}
+			value.reset(new Bool(literal->token.Bool()));
 			break;
 		}
-		default:{
-			throw YoctoException("Unexpected literal type");		
+		case TokenType::Int:{
+			value.reset(new Int(literal->token.Int()));
+			break;
+		}
+		case TokenType::Float:{
+			value.reset(new Float(literal->token.Float()));
+			break;
+		}
+		case TokenType::Str:{
+			value.reset(new String(literal->token.String()));
+			break;
 		}
 	}
 }
 
-void YoctoVisitor::visit(Identifier & id){
-	value = scope->lookup(id.get_name());
+void Interpreter::visit(Identifier * id){
+	Object * obj = scope->get(id->get_name());
+	if(!obj){
+		throw YoctoException(id->get_name() + " is not defined");
+		return;
+	}
+	value = obj->clone();
 }
 
-void YoctoVisitor::visit(VarDecl & var_decl){
-	// TODO: Add var/val difference
-	
-	if(var_decl.assign_expr){
-		var_decl.assign_expr->accept(*this);
-		scope->define(var_decl.id.get_name(), value);
+void Interpreter::visit(VarDecl * var_decl){
+	std::cout << "visit var_decl" << std::endl;
+	if(var_decl->assign_expr){
+		value = eval(var_decl->assign_expr.get());
+		scope->define(var_decl->id->get_name(), value->clone());
 	}else{
-		// By default define as null
-		scope->define(var_decl.id.get_name(), NullClass)
+		scope->define(var_decl->id->get_name(), std::make_unique<Null>());
 	}
+
+	value = nullptr;
 }
 
-void YoctoVisitor::visit(Block & block){
-	enter_scope();
-	for(Statement * stmt : block.stmts){
-		stmt->accept(*this);
-	}
-	exit_scope();
+void Interpreter::visit(Block * block){
+	scope_ptr sub_scope = std::make_shared<Scope>(scope);
+	execute_block(block, sub_scope);
 }
 
-void YoctoVisitor::visit(FuncDecl & func_decl){
-	scope->define(func_decl.id.get_name(), new Method(func_decl));
+void Interpreter::visit(FuncDecl * func_decl){
+	obj_ptr func = std::make_unique<Func>(*func_decl, scope);
+	scope->define(func_decl->id->get_name(), std::move(func));
 }
 
-void YoctoVisitor::visit(FuncCall & func_call){
-	// Eval left-hand side of function call (it can be not only an Identifier)
-	func_call.left.accept(*this);
-
-	Callable * func = dynamic_cast<Callable*>(value);
-
-	if(!func){
-		throw YoctoException("Invalid left-hand side in call");
+void Interpreter::visit(FuncCall * func_call){
+	obj_ptr lhs = eval(func_call->left.get());
+	ObjList args;
+	for(const auto & arg : func_call->args){
+		args.push_back(eval(arg.get()));
 	}
 
-	Args args;
-	for(Expression * expr : func_call.args){
-		expr->accept(*this);
-		args.push_back(value);
-	}
+	// TODO: Add check for function type
+	Func * func = static_cast<Func*>(lhs.get());
 
-	func->call(*this, args);
+	call(func, std::move(args));
 }
 
-void YoctoVisitor::visit(InfixOp & infix_op){
-	// TODO: Add assignment
+void Interpreter::visit(InfixOp * infix_op){
 
-	infix_op.left.accept(*this);
-
-	std::string magic;
-
-	switch(infix_op.op.op()){
-		case Operator::Add: magic = "__add"; break;
-		case Operator::Sub: magic = "__sub"; break;
-		case Operator::Mul: magic = "__mul"; break;
-		case Operator::Div: magic = "__div"; break;
-		case Operator::Mod: magic = "__mod"; break;
-		default: throw YoctoException("Unexpected infix operator");
-	}
-
-	Callable * magic_method = dynamic_cast<Callable*>(value->find_field(magic));
-	
-	if(!magic_method){
-		throw YoctoException("Unable to use `" + op_to_str(infix_op.op.op()) + "` operator");
-	}
-
-	infix_op.right.accept(*this);
-
-	magic_method->call(*this, { value });
 }
 
-void YoctoVisitor::visit(IfExpression & if_expr){
+void Interpreter::visit(IfExpression * if_expr){
+
 }

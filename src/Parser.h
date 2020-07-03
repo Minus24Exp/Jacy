@@ -13,13 +13,13 @@ public:
 	Parser(const TokenStream & tokens);
 	virtual ~Parser() = default;
 
-	ParseTree parse();
+	StmtList parse();
 
 private:
 	TokenStream tokens;
 	uint32_t index;
 
-	ParseTree tree;
+	StmtList tree;
 
 	Token peek();
 	Token advance();
@@ -40,16 +40,16 @@ private:
 	void skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl);
 
 	// Parsers
-	Statement * parse_statement();
-	Expression * parse_expression();
-	Expression * parse_atom();
-	Identifier * parse_id();
-	Block * parse_block();
-	Expression * parse_infix(Expression * left, int prec);
-	VarDecl * parse_var_decl();
-	FuncDecl * parse_func_decl();
-	FuncCall * parse_func_call(Expression * left);
-	IfExpression * parse_if_expr();
+	stmt_ptr parse_statement();
+	expr_ptr parse_expression();
+	expr_ptr parse_atom();
+	id_ptr parse_id();
+	block_ptr parse_block();
+	expr_ptr parse_infix(expr_ptr left, int prec);
+	stmt_ptr parse_var_decl();
+	stmt_ptr parse_func_decl();
+	expr_ptr parse_func_call(expr_ptr left);
+	expr_ptr parse_if_expr();
 
 	// Errors
 	void error(const std::string & msg);

@@ -3,6 +3,9 @@
 
 #include "tree/Node.h"
 
+struct Identifier;
+using id_ptr = std::shared_ptr<Identifier>;
+
 struct Identifier : Expression {
 	Token token;
 
@@ -13,7 +16,7 @@ struct Identifier : Expression {
 	}
 
 	void accept(BaseVisitor & visitor) override {
-		visitor.visit(*this);
+		visitor.visit(this);
 	}
 };
 

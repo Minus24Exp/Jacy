@@ -3,13 +3,16 @@
 
 #include "tree/Node.h"
 
-struct Block : Expression {
-	StatementList stmts;
+struct Block;
+using block_ptr = std::shared_ptr<Block>;
 
-	Block(const StatementList & stmts) : stmts(stmts) {}
+struct Block : Statement {
+	StmtList stmts;
+
+	Block(const StmtList & stmts) : stmts(stmts) {}
 
 	void accept(BaseVisitor & visitor) override {
-		visitor.visit(*this);
+		visitor.visit(this);
 	}
 };
 

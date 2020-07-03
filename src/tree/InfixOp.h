@@ -48,15 +48,14 @@ inline int get_infix_prec(const Operator & op){
 }
 
 struct InfixOp : Expression {
-	Expression & left;
+	expr_ptr left;
 	Token op;
-	Expression & right;
+	expr_ptr right;
 
-	InfixOp(Expression & left, const Token & op, Expression & right)
-		: left(left), op(op), right(right) {}
+	InfixOp(expr_ptr left, const Token & op, expr_ptr right) : left(left), op(op), right(right) {}
 
 	void accept(BaseVisitor & visitor) override {
-		visitor.visit(*this);
+		visitor.visit(this);
 	}
 };
 

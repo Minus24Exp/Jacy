@@ -45,21 +45,21 @@ void Yocto::run(const std::string & script){
 	// Parse tokens
 	Parser parser(tokens);
 	auto parser_start = bench();
-	ParseTree tree = parser.parse();
+	StmtList tree = parser.parse();
 	auto parser_end = bench();
 
 	// Print tree
-	ParseTreePrinter printer;
+	Printer printer;
 	std::cout << "\nParse Tree:\n";
 	printer.print(tree);
 	std::cout << std::endl;
 
 	std::cout << std::endl;
 
-	YoctoVisitor visitor;
-	auto visitor_start = bench();
-	visitor.eval(tree);
-	auto visitor_end = bench();
+	Interpreter interpreter;
+	auto ip_start = bench();
+	interpreter.interpret(tree);
+	auto ip_end = bench();
 
 	std::cout << "\n\nBenchmarks:\n";
 
@@ -69,6 +69,6 @@ void Yocto::run(const std::string & script){
 	auto parser_duration = std::chrono::duration<double>(parser_end - parser_start).count();
 	std::cout << "Parsing: " << parser_duration << "s" << std::endl;
 
-	auto visitor_duration = std::chrono::duration<double>(visitor_end - visitor_start).count();
-	std::cout << "Evaluation: " << visitor_duration << "s" << std::endl;
+	auto ip_duration = std::chrono::duration<double>(ip_end - ip_start).count();
+	std::cout << "Evaluation: " << ip_duration << "s" << std::endl;
 }

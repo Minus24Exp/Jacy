@@ -1,27 +1,18 @@
-#ifndef INTERPRETER_H
-#define INTERPRETER_H
+#ifndef PARSETREEPRINTER_H
+#define PARSETREEPRINTER_H
 
-#include <memory>
 #include <iostream>
 
 #include "BaseVisitor.h"
 #include "tree/nodes.h"
-#include "backend/Scope.h"
-#include "Object/objects.h"
 
-class Interpreter : public BaseVisitor {
+class Printer : public BaseVisitor {
 public:
-	Interpreter();
-	virtual ~Interpreter() = default;
+	Printer();
+	virtual ~Printer() = default;
 
-	void interpret(const StmtList & tree);
-
-	void execute(Statement * stmt);
-	obj_ptr eval(Expression * expr);
-	void execute_block(Block * block, scope_ptr sub_scope);
-
-	void call(Func * func, ObjList && args);
-
+	void print(const StmtList & tree);
+	
 	void visit(ExprStmt * expr_stmt) override;
 	void visit(Literal * literal) override;
 	void visit(Identifier * id) override;
@@ -33,8 +24,9 @@ public:
 	void visit(IfExpression * if_expr) override;
 
 private:
-	obj_ptr value;
-	scope_ptr scope;
+	void print_indent();
+
+	size_t indent;
 };
 
 #endif

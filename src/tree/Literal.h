@@ -14,7 +14,7 @@ struct Literal : Expression {
 	virtual ~Literal() = default;
 
 	void accept(BaseVisitor & visitor) override {
-		visitor.visit(*this);
+		visitor.visit(this);
 	}
 };
 

@@ -1,17 +1,17 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <memory>
 #include "Token.h"
 #include "BaseVisitor.h"
 
-struct Node;
-using ParseTree = std::vector<Node*>;
-
 struct Statement;
-using StatementList = std::vector<Statement*>;
+using stmt_ptr = std::shared_ptr<Statement>;
+using StmtList = std::vector<stmt_ptr>;
 
 struct Expression;
-using ExpressionList = std::vector<Expression*>;
+using expr_ptr = std::shared_ptr<Expression>;
+using ExprList = std::vector<expr_ptr>;
 
 struct Node {
 	Node() {}
@@ -35,14 +35,14 @@ struct Expression : Node {
 };
 
 struct ExprStmt : Statement {
-	Expression & expr;
+	expr_ptr expr;
 
-	ExprStmt(Expression & expr)
+	ExprStmt(expr_ptr expr)
 		: expr(expr) {}
 	virtual ~ExprStmt() = default;
 
 	virtual void accept(BaseVisitor & visitor) override {
-		visitor.visit(*this);
+		visitor.visit(this);
 	}
 };
 

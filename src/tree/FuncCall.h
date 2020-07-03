@@ -4,14 +4,13 @@
 #include "tree/Node.h"
 
 struct FuncCall : Expression {
-	Expression & left;
-	ExpressionList args;
+	expr_ptr left;
+	ExprList args;
 
-	FuncCall(Expression & left, const ExpressionList & args)
-		: left(left), args(args) {}
+	FuncCall(expr_ptr left, const ExprList & args) : left(left), args(args) {}
 
 	void accept(BaseVisitor & visitor) override {
-		visitor.visit(*this);
+		visitor.visit(this);
 	}
 };
 

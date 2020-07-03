@@ -40,3 +40,7 @@ Operator overloading can be implemented with operator magic functions:
 - `__div` - `/`
 - `__mod` - `%`
 - `__pow` - `**`
+
+
+## Think about it
+If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`.
