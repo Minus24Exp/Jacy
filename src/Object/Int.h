@@ -1,7 +1,7 @@
 #ifndef INT_H
 #define INT_H
 
-#include "Object/Object.h"
+#include "object/Object.h"
 
 class Int : public Object {
 public:

@@ -174,10 +174,16 @@ id_ptr Parser::parse_id(){
 	return id;
 }
 
-block_ptr Parser::parse_block(){
-	skip_op(Operator::LBrace, false, true);
-
+block_ptr Parser::parse_block(bool allow_one_line){
 	StmtList stmts;
+
+	// If one-line block is allowed then try to parse single stmt
+	if(!is_op(Operator::LBrace) && allow_one_line){
+		stmts.push_back(parse_statement());
+		return std::make_shared<Block>(stmts);
+	}
+
+	skip_op(Operator::LBrace, false, true);
 	
 	bool first = true;
 	while(!eof()){
@@ -287,44 +293,20 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 	return std::make_shared<FuncCall>(left, args);
 }
 
-expr_ptr Parser::parse_if_expr(){
-	ConditionList conditions;
-
-	// Note: do-while because there always must first condition-struct (`if`)
-	
-	// Parse if
+expr_ptr Parser::parse_if_expr(){	
 	skip_kw(Keyword::If, true, true);
 	skip_op(Operator::LParen, true, true);
-	expr_ptr IfCond = parse_expression();
+	expr_ptr cond = parse_expression();
 	skip_op(Operator::RParen, true, true);
-	block_ptr IfBody = parse_block();
+	block_ptr then_branch = parse_block(true);
 
-	conditions.push_back({IfCond, IfBody});
-
-	while(!eof()){
-		if(is_kw(Keyword::Elif)){
-			std::cout << "elif found\n";
-			skip_kw(Keyword::Elif, true, true);
-		}else{
-			std::cout << "end condition\n";
-			break;
-		}
-
-		skip_op(Operator::LParen, true, true);
-		expr_ptr cond = parse_expression();
-		skip_op(Operator::RParen, true, true);
-		block_ptr body = parse_block();
-
-		conditions.push_back({cond, body});
-	}
-
-	block_ptr Else = nullptr;
+	block_ptr else_branch = nullptr;
 	if(is_kw(Keyword::Else)){
 		skip_kw(Keyword::Else, true, true);
-		Else = parse_block();
+		else_branch = parse_block(true);
 	}
 
-	return std::make_shared<IfExpr>(conditions, Else);
+	return std::make_shared<IfExpr>(cond, then_branch, else_branch);
 }
 
 ////////////

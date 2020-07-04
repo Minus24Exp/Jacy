@@ -1,6 +1,6 @@
-#include "Object/Float.h"
-#include "Object/String.h"
-#include "Object/NativeFunc.h"
+#include "object/Float.h"
+#include "object/String.h"
+#include "object/NativeFunc.h"
 
 Float::Float(scope_ptr closure, const double & d)
 		  : Object(closure, ObjectType::Float), value(d)

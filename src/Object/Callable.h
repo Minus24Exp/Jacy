@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "backend/Scope.h"
-#include "Object/Object.h"
+#include "object/Object.h"
 
 class Interpreter;
 

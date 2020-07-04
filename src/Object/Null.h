@@ -1,7 +1,7 @@
 #ifndef NULL_H
 #define NULL_H
 
-#include "Object/Object.h"
+#include "object/Object.h"
 
 class Null : public Object {
 public:

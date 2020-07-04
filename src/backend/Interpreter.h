@@ -7,7 +7,7 @@
 #include "BaseVisitor.h"
 #include "tree/nodes.h"
 #include "backend/Scope.h"
-#include "Object/objects.h"
+#include "object/objects.h"
 
 class Interpreter : public BaseVisitor {
 public:

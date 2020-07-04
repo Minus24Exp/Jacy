@@ -1,4 +1,4 @@
-#include "Object/NativeFunc.h"
+#include "object/NativeFunc.h"
 #include "backend/Interpreter.h"
 
 obj_ptr NativeFunc::call(Interpreter & ip, ObjList && args){

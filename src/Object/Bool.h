@@ -1,7 +1,7 @@
 #ifndef BOOL_H
 #define BOOL_H
 
-#include "Object/Object.h"
+#include "object/Object.h"
 
 class Bool : public Object {
 public:

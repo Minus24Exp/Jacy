@@ -180,7 +180,13 @@ TokenStream Lexer::lex(){
 			Keyword kw = str_to_kw(id);
 
 			if(kw < Keyword::MAX){
-				add_token(kw);
+				// Note: !!! `elif` -> `else if` preprocessor
+				if(kw == Keyword::Elif){
+					add_token(Keyword::Else);
+					add_token(Keyword::If);
+				}else{
+					add_token(kw);
+				}
 			}else{
 				add_token(TokenType::Id, id);
 			}

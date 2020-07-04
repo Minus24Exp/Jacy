@@ -1,6 +1,6 @@
-#include "Object/Int.h"
-#include "Object/String.h"
-#include "Object/NativeFunc.h"
+#include "object/Int.h"
+#include "object/String.h"
+#include "object/NativeFunc.h"
 
 Int::Int(scope_ptr closure, const int & i)
 		  : Object(closure, ObjectType::Int), value(i)

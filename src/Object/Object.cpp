@@ -1,6 +1,6 @@
-#include "Object/Object.h"
-#include "Object/String.h"
-#include "Object/NativeFunc.h"
+#include "object/Object.h"
+#include "object/String.h"
+#include "object/NativeFunc.h"
 
 Object::Object(scope_ptr closure, const ObjectType & type)
 	: closure(closure), type(type)

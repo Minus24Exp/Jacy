@@ -3,8 +3,8 @@
 
 #include "tree/FuncDecl.h"
 #include "backend/Scope.h"
-#include "Object/Object.h"
-#include "Object/Callable.h"
+#include "object/Object.h"
+#include "object/Callable.h"
 
 class Func : public Callable {
 public:

@@ -4,19 +4,13 @@
 #include <vector>
 #include "tree/Expr.h"
 
-struct ConditionStructure {
-	expr_ptr cond;
-	block_ptr body;
-};
-
-using ConditionList = std::vector<ConditionStructure>;
-
 struct IfExpr : Expr {
-	ConditionList conditions;
-	block_ptr Else;
+	expr_ptr cond;
+	block_ptr if_branch;
+	block_ptr else_branch;
 
-	IfExpr(const ConditionList & conditions, block_ptr Else)
-		: Expr(ExprType::If), conditions(conditions), Else(Else) {}
+	IfExpr(expr_ptr cond, block_ptr if_branch, block_ptr else_branch)
+		: Expr(ExprType::If), cond(cond), if_branch(if_branch), else_branch(else_branch) {}
 	virtual ~IfExpr() = default;
 
 	void accept(BaseVisitor & visitor) override {

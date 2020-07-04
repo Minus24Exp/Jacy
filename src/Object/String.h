@@ -1,7 +1,7 @@
 #ifndef STRING_H
 #define STRING_H
 
-#include "Object/Object.h"
+#include "object/Object.h"
 
 class String : public Object {
 public:

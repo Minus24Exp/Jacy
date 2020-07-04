@@ -108,23 +108,15 @@ void Printer::visit(Infix * infix){
 }
 
 void Printer::visit(IfExpr * if_expr){
-	bool first = true;
-	for(const auto & c : if_expr->conditions){
-		if(first){
-			std::cout << "if";
-			first = false;
-		}else{
-			std::cout << "elif";
-		}
-		std::cout << " (";
-		c.cond->accept(*this);
-		std::cout << ") ";
-		c.body->accept(*this);
-	}
+	std::cout << "if(";
+	if_expr->cond->accept(*this);
+	std::cout << "){\n";
+	if_expr->if_branch->accept(*this);
+	std::cout << "}";
 
-	if(if_expr->Else){
+	if(if_expr->else_branch){
 		std::cout << " else {\n";
-		if_expr->Else->accept(*this);
+		if_expr->else_branch->accept(*this);
 		std::cout << "\n}";
 	}
 }

@@ -171,4 +171,11 @@ void Interpreter::visit(Infix * infix){
 }
 
 void Interpreter::visit(IfExpr * if_expr){
+	value = eval(if_expr->cond.get());
+
+	if(value->truthy()){
+		execute_block(if_expr->if_branch.get());
+	}else if(if_expr->else_branch){
+		execute_block(if_expr->else_branch.get());
+	}
 }

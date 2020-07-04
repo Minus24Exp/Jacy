@@ -1,5 +1,5 @@
-#include "Object/String.h"
-#include "Object/NativeFunc.h"
+#include "object/String.h"
+#include "object/NativeFunc.h"
 
 String::String(scope_ptr closure, const std::string & s)
 	: Object(closure, ObjectType::String), value(s)

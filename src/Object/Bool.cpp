@@ -1,6 +1,6 @@
-#include "Object/Bool.h"
-#include "Object/String.h"
-#include "Object/NativeFunc.h"
+#include "object/Bool.h"
+#include "object/String.h"
+#include "object/NativeFunc.h"
 
 Bool::Bool(scope_ptr closure, const bool & b)
 		  : Object(closure, ObjectType::Bool), value(b)

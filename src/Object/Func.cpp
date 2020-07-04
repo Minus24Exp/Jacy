@@ -1,4 +1,4 @@
-#include "Object/Func.h"
+#include "object/Func.h"
 #include "backend/Interpreter.h"
 
 obj_ptr Func::call(Interpreter & ip, ObjList && args){

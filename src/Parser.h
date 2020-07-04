@@ -44,7 +44,7 @@ private:
 	expr_ptr parse_expression();
 	expr_ptr parse_atom();
 	id_ptr parse_id();
-	block_ptr parse_block();
+	block_ptr parse_block(bool allow_one_line = false);
 	expr_ptr parse_infix(expr_ptr left, int prec);
 	stmt_ptr parse_var_decl();
 	stmt_ptr parse_func_decl();
