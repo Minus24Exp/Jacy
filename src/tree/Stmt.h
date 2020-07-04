@@ -12,7 +12,8 @@ enum class StmtType {
 	Expr, // Expression Statement
 	Block,
 	FuncDecl,
-	VarDecl
+	VarDecl,
+	While
 };
 
 struct Stmt : Node {

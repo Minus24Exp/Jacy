@@ -12,6 +12,43 @@ __Yocto implementation with AST-Walker.__
 - Everything is an Object, primitives are objects too and all operators implemented as magic functions
 - The compiler always inside a function. The top-level code is always in some kinda `main()` function
 
+### Control flow
+
+#### `if`/`elif`(`else if`)/`else`
+In Yocto `if` is an expression.
+It means that it can be used as:
+```
+var a = if() //...
+```
+
+`elif` is syntax sugar that automatically preprocessing to `else if` on lexing level.
+
+`if`/`elif`/`else` can have one-line body:
+```
+if(a) print(a)
+else print('nope')
+```
+
+`if`/`elif` can have conditions without parenthesis:
+```
+if a
+	print(a)
+elif b
+	print(b)
+else
+	print('nope')
+```
+But, what's important, then there MUST be new-line after condition.
+Or, it could be written as one-line body if put braces:
+```
+if a { print(a) }
+elif b { print(b) }
+else { print('nope') }
+```
+
+Important note: As `elif` converts to `else if` at lexing level then all errors about it will
+reference to `else`. Maybe I'll solve it in the future.
+
 ### Types
 
 #### Primitives
@@ -54,3 +91,4 @@ If FuncDecl stored Token instead of Identifier then it will be possible to use n
 
 ## Personal reminders
 - If there's Segmentation fault about unique_ptr, probably problem is in try to copy or multiple storing.
+- When parser expect semi (`;` or `[new line]`) don't forget about checking for `!eof()`

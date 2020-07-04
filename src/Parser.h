@@ -40,8 +40,8 @@ private:
 	void skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl);
 
 	// Parsers
-	stmt_ptr parse_statement();
-	expr_ptr parse_expression();
+	stmt_ptr parse_stmt();
+	expr_ptr parse_expr();
 	expr_ptr parse_atom();
 	id_ptr parse_id();
 	block_ptr parse_block(bool allow_one_line = false);

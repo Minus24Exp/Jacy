@@ -99,7 +99,7 @@ StmtList Parser::parse(){
 		while(is_nl()){
 			advance();
 		}
-		tree.push_back(parse_statement());
+		tree.push_back(parse_stmt());
 
 		if(!eof()){
 			skip_semis();
@@ -109,7 +109,7 @@ StmtList Parser::parse(){
 	return tree;
 }
 
-stmt_ptr Parser::parse_statement(){
+stmt_ptr Parser::parse_stmt(){
 
 	if(is_typeof(TokenType::Kw)){
 		switch(peek().kw()){
@@ -125,10 +125,10 @@ stmt_ptr Parser::parse_statement(){
 		}
 	}
 
-	return std::make_shared<ExprStmt>(parse_expression());
+	return std::make_shared<ExprStmt>(parse_expr());
 }
 
-expr_ptr Parser::parse_expression(){
+expr_ptr Parser::parse_expr(){
 	expr_ptr left = parse_atom();
 
 	while(!eof()){
@@ -179,7 +179,13 @@ block_ptr Parser::parse_block(bool allow_one_line){
 
 	// If one-line block is allowed then try to parse single stmt
 	if(!is_op(Operator::LBrace) && allow_one_line){
-		stmts.push_back(parse_statement());
+		// TODO: Think about this skip_nl
+		// Is it okay?
+		skip_nl(true);
+		stmts.push_back(parse_stmt());
+		if(!eof()){
+			skip_semis();
+		}
 		return std::make_shared<Block>(stmts);
 	}
 
@@ -198,7 +204,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
 		if(is_op(Operator::RBrace)){
 			break;
 		}
-		stmts.push_back(parse_statement());
+		stmts.push_back(parse_stmt());
 	}
 	skip_op(Operator::RBrace, true, false);
 
@@ -235,7 +241,7 @@ stmt_ptr Parser::parse_var_decl(){
 	expr_ptr assign_expr = nullptr;
 	if(is_op(Operator::Assign)){
 		skip_op(Operator::Assign, true, true);
-		assign_expr = parse_expression();
+		assign_expr = parse_expr();
 	}
 
 	return std::make_shared<VarDecl>(decl, id, assign_expr);
@@ -285,7 +291,7 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 		}else{
 			skip_op(Operator::Comma, true, true);
 		}
-		args.push_back(parse_expression());
+		args.push_back(parse_expr());
 	}
 
 	skip_op(Operator::RParen, true, false);
@@ -293,12 +299,29 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 	return std::make_shared<FuncCall>(left, args);
 }
 
-expr_ptr Parser::parse_if_expr(){	
+expr_ptr Parser::parse_if_expr(){
 	skip_kw(Keyword::If, true, true);
-	skip_op(Operator::LParen, true, true);
-	expr_ptr cond = parse_expression();
-	skip_op(Operator::RParen, true, true);
-	block_ptr then_branch = parse_block(true);
+	
+	bool paren = true;
+	if(is_op(Operator::LParen)){
+		skip_op(Operator::LParen, true, true);
+	}else{
+		paren = false;
+	}
+
+	expr_ptr cond = parse_expr();
+
+	bool allow_one_line = false;
+	if(paren){
+		skip_op(Operator::RParen, true, true);
+		allow_one_line = true;
+	}else if(is_nl()){
+		// If `if` condition is not capture in parenthesis,
+		// then only if there's new-line after it the body can be one-line
+		allow_one_line = true;
+	}
+
+	block_ptr then_branch = parse_block(allow_one_line);
 
 	block_ptr else_branch = nullptr;
 	if(is_kw(Keyword::Else)){
