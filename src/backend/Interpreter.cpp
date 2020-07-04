@@ -30,11 +30,11 @@ void Interpreter::exit_scope(){
 	scope = scope->get_parent();
 }
 
-void Interpreter::execute(Statement * stmt){
+void Interpreter::execute(Stmt * stmt){
 	stmt->accept(*this);
 }
 
-obj_ptr Interpreter::eval(Expression * expr){
+obj_ptr Interpreter::eval(Expr * expr){
 	expr->accept(*this);
 	return std::move(value);
 }
@@ -45,6 +45,23 @@ void Interpreter::execute_block(Block * block, scope_ptr sub_scope){
 		execute(stmt.get());
 	}
 	exit_scope();
+}
+
+void Interpreter::eval_assign(Infix * infix){
+	// Assignment is right-associative
+	// So evaluate rhs
+	
+	obj_ptr rhs = eval(infix->right.get());
+
+	switch(infix->left->type){
+		case ExprType::Id:{
+			scope->assign(static_cast<Identifier*>(infix->left.get())->get_name(), std::move(rhs));
+			break;
+		}
+		default:{
+			throw YoctoException("Invalid left-hand side in assignment");
+		}
+	}
 }
 
 void Interpreter::visit(ExprStmt * expr_stmt){
@@ -137,9 +154,21 @@ void Interpreter::visit(FuncCall * func_call){
 	}
 }
 
-void Interpreter::visit(InfixOp * infix_op){
+void Interpreter::visit(Infix * infix){
+	// Assignment is infix too.
+	// I don't want to separate it from other operators on parsing level,
+	// because of convenient precedence parsing,
+	// so I do it here.
+	// Assignment works pretty different from other operators,
+	// for simple `id = value` assignment there's one way,
+	// for `obj.field = value` there's different way.
+	// and so on.
+
+	if(infix->op.op() == Operator::Assign){
+		eval_assign(infix);
+		return;
+	}
 }
 
-void Interpreter::visit(IfExpression * if_expr){
-
+void Interpreter::visit(IfExpr * if_expr){
 }

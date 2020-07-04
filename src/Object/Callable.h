@@ -20,10 +20,6 @@ public:
 	virtual ~Callable() = default;
 
 	// Object //
-	bool truthy() const override {
-		return true;
-	}
-
 	bool equals(Object * other) const override {
 		if(other->type != ObjectType::Callable){
 			return false;

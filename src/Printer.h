@@ -20,8 +20,8 @@ public:
 	void visit(Block * block) override;
 	void visit(FuncDecl * func_decl) override;
 	void visit(FuncCall * func_call) override;
-	void visit(InfixOp * infix_op) override;
-	void visit(IfExpression * if_expr) override;
+	void visit(Infix * infix) override;
+	void visit(IfExpr * if_expr) override;
 
 private:
 	void print_indent();

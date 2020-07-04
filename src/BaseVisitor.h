@@ -12,8 +12,8 @@ struct VarDecl;
 struct Block;
 struct FuncDecl;
 struct FuncCall;
-struct InfixOp;
-struct IfExpression;
+struct Infix;
+struct IfExpr;
 
 class BaseVisitor {
 public:
@@ -27,8 +27,8 @@ public:
 	virtual void visit(Block * block) = 0;
 	virtual void visit(FuncDecl * func_decl) = 0;
 	virtual void visit(FuncCall * func_call) = 0;
-	virtual void visit(InfixOp * infix_op) = 0;
-	virtual void visit(IfExpression * if_expr) = 0;
+	virtual void visit(Infix * infix) = 0;
+	virtual void visit(IfExpr * if_expr) = 0;
 	
 };
 

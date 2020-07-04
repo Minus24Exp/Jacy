@@ -1,15 +1,15 @@
 #ifndef IDENTIFIER_H
 #define IDENTIFIER_H
 
-#include "tree/Node.h"
+#include "tree/Expr.h"
 
 struct Identifier;
 using id_ptr = std::shared_ptr<Identifier>;
 
-struct Identifier : Expression {
+struct Identifier : Expr {
 	Token token;
 
-	Identifier(const Token & token) : token(token) {}
+	Identifier(const Token & token) : Expr(ExprType::Id), token(token) {}
 
 	std::string get_name(){
 		return token.String();

@@ -22,9 +22,10 @@ public:
 		return scope;
 	}
 
-	void execute(Statement * stmt);
-	obj_ptr eval(Expression * expr);
+	void execute(Stmt * stmt);
+	obj_ptr eval(Expr * expr);
 	void execute_block(Block * block, scope_ptr sub_scope = nullptr);
+	void eval_assign(Infix * infix);
 
 	void visit(ExprStmt * expr_stmt) override;
 	void visit(Literal * literal) override;
@@ -33,8 +34,8 @@ public:
 	void visit(Block * block) override;
 	void visit(FuncDecl * func_decl) override;
 	void visit(FuncCall * func_call) override;
-	void visit(InfixOp * infix_op) override;
-	void visit(IfExpression * if_expr) override;
+	void visit(Infix * infix) override;
+	void visit(IfExpr * if_expr) override;
 
 private:
 	obj_ptr value;

@@ -99,15 +99,15 @@ void Printer::visit(FuncCall * func_call){
 	std::cout << ")";
 }
 
-void Printer::visit(InfixOp * infix_op){
+void Printer::visit(Infix * infix){
 	std::cout << "(";
-	infix_op->left->accept(*this);
-	std::cout << " " << op_to_str(infix_op->op.op()) << " ";
-	infix_op->right->accept(*this);
+	infix->left->accept(*this);
+	std::cout << " " << op_to_str(infix->op.op()) << " ";
+	infix->right->accept(*this);
 	std::cout << ")";
 }
 
-void Printer::visit(IfExpression * if_expr){
+void Printer::visit(IfExpr * if_expr){
 	bool first = true;
 	for(const auto & c : if_expr->conditions){
 		if(first){

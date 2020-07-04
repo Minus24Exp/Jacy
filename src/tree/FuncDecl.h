@@ -3,7 +3,6 @@
 
 #include "tree/Identifier.h"
 #include "tree/Block.h"
-#include "tree/Node.h"
 
 struct FuncParam {
 	id_ptr id;
@@ -11,13 +10,13 @@ struct FuncParam {
 
 using ParamList = std::vector<FuncParam>;
 
-struct FuncDecl : Statement {
+struct FuncDecl : Stmt {
 	id_ptr id;
 	ParamList params;
 	block_ptr body;
 
 	FuncDecl(id_ptr id, const ParamList & params, block_ptr body)
-		: id(id), params(params), body(body) {}
+		: Stmt(StmtType::FuncDecl), id(id), params(params), body(body) {}
 
 	void accept(BaseVisitor & visitor) override {
 		visitor.visit(this);

@@ -1,7 +1,7 @@
-#ifndef INFIXOP_H
-#define INFIXOP_H
+#ifndef INFIX_H
+#define INFIX_H
 
-#include "tree/Node.h"
+#include "tree/Expr.h"
 
 enum class InfixPrec {
 	Zero,
@@ -47,12 +47,15 @@ inline int get_infix_prec(const Operator & op){
 	return static_cast<int>(prec);
 }
 
-struct InfixOp : Expression {
+struct Infix : Expr {
 	expr_ptr left;
 	Token op;
 	expr_ptr right;
 
-	InfixOp(expr_ptr left, const Token & op, expr_ptr right) : left(left), op(op), right(right) {}
+	Infix(expr_ptr left, const Token & op, expr_ptr right)
+		   : Expr(ExprType::Infix), left(left), op(op), right(right) {}
+
+	virtual ~Infix() = default;
 
 	void accept(BaseVisitor & visitor) override {
 		visitor.visit(this);

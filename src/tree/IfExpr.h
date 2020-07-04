@@ -1,8 +1,8 @@
-#ifndef IFEXPRESSION_H
-#define IFEXPRESSION_H
+#ifndef IFEXPR_H
+#define IFEXPR_H
 
 #include <vector>
-#include "tree/Node.h"
+#include "tree/Expr.h"
 
 struct ConditionStructure {
 	expr_ptr cond;
@@ -11,13 +11,13 @@ struct ConditionStructure {
 
 using ConditionList = std::vector<ConditionStructure>;
 
-struct IfExpression : Expression {
+struct IfExpr : Expr {
 	ConditionList conditions;
 	block_ptr Else;
 
-	IfExpression(const ConditionList & conditions, block_ptr Else)
-		: conditions(conditions), Else(Else) {}
-	virtual ~IfExpression() = default;
+	IfExpr(const ConditionList & conditions, block_ptr Else)
+		: Expr(ExprType::If), conditions(conditions), Else(Else) {}
+	virtual ~IfExpr() = default;
 
 	void accept(BaseVisitor & visitor) override {
 		visitor.visit(this);

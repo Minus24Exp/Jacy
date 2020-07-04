@@ -4,8 +4,8 @@
 #include "tree/VarDecl.h"
 #include "tree/FuncDecl.h"
 #include "tree/FuncCall.h"
-#include "tree/InfixOp.h"
-#include "tree/IfExpression.h"
+#include "tree/Infix.h"
+#include "tree/IfExpr.h"
 
 #include "tree/Node.h"
 
