@@ -1,6 +1,11 @@
 #include "Object/Object.h"
-#include "Object/objects.h"
+#include "Object/String.h"
+#include "Object/NativeFunc.h"
 
-Object::Object(const ObjectType & type) : type(type), closure(closure) {
-	set_field("to_s", make_nf("to_s"))
+Object::Object(scope_ptr closure, const ObjectType & type)
+	: closure(closure), type(type)
+{
+	// set("to_s", make_nf(closure, "to_s", {}, [this](NFArgs && args) -> obj_ptr {
+	// 	return std::make_unique<String>(this->closure, "<object>");
+	// }));
 }

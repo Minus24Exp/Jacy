@@ -1,7 +1,7 @@
+#include "tree/Block.h"
 #include "tree/Literal.h"
 #include "tree/Identifier.h"
 #include "tree/VarDecl.h"
-#include "tree/Block.h"
 #include "tree/FuncDecl.h"
 #include "tree/FuncCall.h"
 #include "tree/InfixOp.h"

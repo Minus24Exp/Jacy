@@ -23,7 +23,7 @@ enum class ObjectType {
 
 class Object {
 public:
-	Object(const ObjectType & type);
+	Object(scope_ptr closure, const ObjectType & type);
 	virtual ~Object() = default;
 
 	ObjectType type;
@@ -34,23 +34,31 @@ public:
 
 	virtual bool equals(Object * other) const = 0;
 	virtual obj_ptr clone() const = 0;
-	virtual std::string to_string() const = 0;
+	virtual std::string to_string() const {
+		return "<Object>";
+	}
 
-	Object * get_field(const std::string & name) const {
+	Object * get(const std::string & name) const {
+		// TODO: Add superclass
+
 		if(fields.find(name) != fields.end()){
 			return fields.at(name).get();
 		}
 		return nullptr;
 	}
 
-	void set_field(const std::string & name, obj_ptr obj){
+	void set(const std::string & name, obj_ptr obj){
 		// TODO: Think about cases when field is not reassignable
 		fields[name] = std::move(obj);
 	}
 
-private:
+	scope_ptr get_closure() const {
+		return closure;
+	}
+
+protected:
+	scope_ptr closure;
 	ObjFields fields;
-	scope_ptr scope;
 };
 
 #endif

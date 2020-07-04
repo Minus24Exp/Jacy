@@ -1,5 +1,11 @@
-func a(b){
-	print(b)
+func a(c){
+	func b(d){
+		print(d)
+	}
+
+	c = "234"
+
+	b(c)
 }
 
-print(a("1"))
+a("1")

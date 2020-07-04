@@ -8,7 +8,7 @@ void Yocto::run_prompt(){
 		std::string line;
 		std::getline(std::cin, line);
 		run(line);
-		std::cout << "\n";
+		std::cout << std::endl;
 	}
 }
 
@@ -37,10 +37,10 @@ void Yocto::run(const std::string & script){
 	TokenStream tokens = lexer.lex();
 	auto lexer_end = bench();
 
-	std::cout << "Tokens:\n";
-	for(auto & t : tokens){
-		std::cout << t.to_string() << std::endl;
-	}
+	// std::cout << "Tokens:" << std::endl;
+	// for(auto & t : tokens){
+	// 	std::cout << t.to_string() << std::endl;
+	// }
 
 	// Parse tokens
 	Parser parser(tokens);
@@ -49,19 +49,17 @@ void Yocto::run(const std::string & script){
 	auto parser_end = bench();
 
 	// Print tree
-	Printer printer;
-	std::cout << "\nParse Tree:\n";
-	printer.print(tree);
-	std::cout << std::endl;
-
-	std::cout << std::endl;
+	// Printer printer;
+	// std::cout << "\nParse Tree:" << std::endl;
+	// printer.print(tree);
+	// std::cout << std::endl;
 
 	Interpreter interpreter;
 	auto ip_start = bench();
 	interpreter.interpret(tree);
 	auto ip_end = bench();
 
-	std::cout << "\n\nBenchmarks:\n";
+	std::cout << "\n\nBenchmarks:" << std::endl;
 
 	auto lexer_duration = std::chrono::duration<double>(lexer_end - lexer_start).count();
 	std::cout << "Lexing: " << lexer_duration << "s" << std::endl;

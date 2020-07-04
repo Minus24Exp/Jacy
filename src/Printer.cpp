@@ -29,7 +29,7 @@ void Printer::visit(Literal * literal){
 		case TokenType::Bool: std::cout << literal->token.Bool(); break;
 		case TokenType::Int: std::cout << literal->token.Int(); break;
 		case TokenType::Float: std::cout << literal->token.Float(); break;
-		case TokenType::Str: std::cout << literal->token.String(); break;
+		case TokenType::Str: std::cout << "\"" << literal->token.String() << "\""; break;
 	}
 }
 

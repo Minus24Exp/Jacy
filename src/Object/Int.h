@@ -1,9 +1,11 @@
 #ifndef INT_H
 #define INT_H
 
+#include "Object/Object.h"
+
 class Int : public Object {
 public:
-	Int(const int & i) : Object(ObjectType::Int), value(i) {}
+	Int(scope_ptr closure, const int & i);
 	virtual ~Int() = default;
 
 	int get_value() const {
@@ -18,11 +20,11 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<Int>(new Int(value));
+		return std::unique_ptr<Int>(new Int(closure, value));
 	}
 
 	std::string to_string() const override {
-		return std::to_string(value);
+		return "<Int:"+ std::to_string(value) +">";
 	}
 
 private:

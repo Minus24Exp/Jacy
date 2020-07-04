@@ -49,7 +49,7 @@ void Parser::skip_nl(const bool & optional){
 			advance();
 		}while(is_nl());
 	}else if(!optional){
-		expected_error("new line");
+		expected_error("[new line]");
 	}
 }
 
@@ -59,7 +59,7 @@ void Parser::skip_semis(){
 			advance();
 		}while(is_nl() || is_op(Operator::Semi));
 	}else{
-		expected_error("`;` or new line");
+		expected_error("`;` or [new line]");
 	}
 }
 
@@ -282,7 +282,7 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 		args.push_back(parse_expression());
 	}
 
-	skip_op(Operator::RParen, true, true);
+	skip_op(Operator::RParen, true, false);
 
 	return std::make_shared<FuncCall>(left, args);
 }

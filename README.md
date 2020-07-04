@@ -41,6 +41,16 @@ Operator overloading can be implemented with operator magic functions:
 - `__mod` - `%`
 - `__pow` - `**`
 
+## Some important rules about code
+
+### Parser
+- NEVER skip newline after last operator in statement (statements )
+
+## TODO
+Move all literal object to one `Literal.h` ro reduce files count.
 
 ## Think about it
 If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`.
+
+## Personal reminders
+- If there's Segmentation fault about unique_ptr, probably problem is in try to copy or multiple storing.

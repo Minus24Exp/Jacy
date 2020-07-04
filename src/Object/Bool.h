@@ -5,7 +5,7 @@
 
 class Bool : public Object {
 public:
-	Bool(const bool & b) : value(b), Object(ObjectType::Bool) {}
+	Bool(scope_ptr closure, const bool & b);
 	virtual ~Bool() = default;
 
 	bool get_value() const {
@@ -23,13 +23,12 @@ public:
 		return value == static_cast<Bool*>(other)->get_value();
 	}
 
-
 	obj_ptr clone() const override {
-		return std::unique_ptr<Bool>(new Bool(value));
+		return std::unique_ptr<Bool>(new Bool(closure, value));
 	}
 
 	std::string to_string() const override {
-		return std::to_string(value);
+		return "<Bool:"+ std::to_string(value) + ">";
 	}
 
 private:

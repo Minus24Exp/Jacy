@@ -5,7 +5,7 @@
 
 class Float : public Object {
 public:
-	Float(const double & d) : value(d), Object(ObjectType::Float) {}
+	Float(scope_ptr closure, const double & d);
 	virtual ~Float() = default;
 
 	double get_value() const {
@@ -20,11 +20,11 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<Float>(new Float(value));
+		return std::unique_ptr<Float>(new Float(closure, value));
 	}
 
 	std::string to_string() const override {
-		return std::to_string(value);
+		return "<Float:"+ std::to_string(value) + ">";
 	}
 
 private:

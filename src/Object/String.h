@@ -5,7 +5,7 @@
 
 class String : public Object {
 public:
-	String(const std::string & s) : value(s), Object(ObjectType::String) {}
+	String(scope_ptr closure, const std::string & s);
 	virtual ~String() = default;
 
 	std::string get_value() const {
@@ -20,11 +20,11 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<String>(new String(value));
+		return std::unique_ptr<String>(new String(closure, value));
 	}
 
 	std::string to_string() const override {
-		return value;
+		return "<String:'"+ value +"'>";
 	}
 
 private:

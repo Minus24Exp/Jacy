@@ -4,10 +4,10 @@ Interpreter::Interpreter(){
 	value = nullptr;
 	scope = std::make_shared<Scope>();
 
-	scope->define("print", make_nf(scope, "print", { {"o"} }, [](NFArgs && args) -> obj_ptr {
-		std::cout << args.at("o").get()->to_string() << std::endl;
+	scope->define("print", make_nf(scope, "print", { {"o"} }, [this](NFArgs && args) -> obj_ptr {
+		std::cout << args["o"]->to_string() << std::endl;
 
-		return make_null();
+		return nullptr;
 	}));
 }
 
@@ -54,23 +54,23 @@ void Interpreter::visit(ExprStmt * expr_stmt){
 void Interpreter::visit(Literal * literal){
 	switch(literal->token.type){
 		case TokenType::Null:{
-			value.reset(new Null);
+			value.reset(new Null(scope));
 			break;
 		}
 		case TokenType::Bool:{
-			value.reset(new Bool(literal->token.Bool()));
+			value.reset(new Bool(scope, literal->token.Bool()));
 			break;
 		}
 		case TokenType::Int:{
-			value.reset(new Int(literal->token.Int()));
+			value.reset(new Int(scope, literal->token.Int()));
 			break;
 		}
 		case TokenType::Float:{
-			value.reset(new Float(literal->token.Float()));
+			value.reset(new Float(scope, literal->token.Float()));
 			break;
 		}
 		case TokenType::Str:{
-			value.reset(new String(literal->token.String()));
+			value.reset(new String(scope, literal->token.String()));
 			break;
 		}
 	}
@@ -90,7 +90,7 @@ void Interpreter::visit(VarDecl * var_decl){
 		value = eval(var_decl->assign_expr.get());
 		scope->define(var_decl->id->get_name(), value->clone());
 	}else{
-		scope->define(var_decl->id->get_name(), std::make_unique<Null>());
+		scope->define(var_decl->id->get_name(), std::make_unique<Null>(scope));
 	}
 
 	value = nullptr;
@@ -124,11 +124,20 @@ void Interpreter::visit(FuncCall * func_call){
 		throw YoctoException("Invalid arguments");
 	}
 
+	// TODO: !!! Add exception handling for call
+	// It will be really useful for NativeFunc
+
 	value = callable->call(*this, std::move(args));
+	
+	if(!value){
+		// Note: This is just a helper for built-in functions
+		// They can return nullptr, and then here it will be converted to Null.
+		// But, nullptr does not equal to Null
+		value = make_null(scope);
+	}
 }
 
 void Interpreter::visit(InfixOp * infix_op){
-
 }
 
 void Interpreter::visit(IfExpression * if_expr){

@@ -5,7 +5,7 @@
 
 class Null : public Object {
 public:
-	Null() : Object(ObjectType::Null) {}
+	Null(scope_ptr closure);
 	virtual ~Null() = default;
 
 	bool truthy() const override {
@@ -17,16 +17,16 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<Null>();
+		return std::unique_ptr<Null>(new Null(closure));
 	}
 
 	std::string to_string() const override {
-		return "Null";
+		return "<Null>";
 	}
 };
 
-static inline obj_ptr make_null(){
-	return std::make_unique<Null>();
+static inline obj_ptr make_null(scope_ptr closure){
+	return std::make_unique<Null>(closure);
 }
 
 #endif
