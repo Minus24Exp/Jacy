@@ -25,4 +25,8 @@ public:
 	}
 };
 
+static inline obj_ptr make_null(){
+	return std::make_unique<Null>();
+}
+
 #endif

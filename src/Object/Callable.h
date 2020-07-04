@@ -47,9 +47,9 @@ public:
 
 	virtual size_t argc() const = 0;
 
-	virtual bool cmp_args(ObjList && args) const = 0;
+	virtual bool cmp_args(const ObjList & args) const = 0;
 
-	virtual void call(Interpreter & interpreter, ObjList && args) = 0;
+	virtual obj_ptr call(Interpreter & interpreter, ObjList && args) = 0;
 
 protected:
 	scope_ptr closure;

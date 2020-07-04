@@ -1,7 +1,7 @@
 #include "Object/NativeFunc.h"
 #include "backend/Interpreter.h"
 
-void NativeFunc::call(Interpreter & ip, ObjList && args){
+obj_ptr NativeFunc::call(Interpreter & ip, ObjList && args){
 	ip.enter_scope(closure);
 
 	NFArgs func_args;
@@ -9,5 +9,5 @@ void NativeFunc::call(Interpreter & ip, ObjList && args){
 		func_args.emplace(params[i].name, std::move(args[i]));
 	}
 
-	body(std::move(func_args));
+	return body(std::move(func_args));
 }

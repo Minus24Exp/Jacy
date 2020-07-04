@@ -11,7 +11,7 @@ struct Param {
 
 using NFParams = std::vector<Param>;
 using NFArgs = std::unordered_map<std::string, obj_ptr>;
-using NFBody = std::function<void(NFArgs&&)>;
+using NFBody = std::function<obj_ptr(NFArgs&&)>;
 
 class NativeFunc : public Callable {
 public:
@@ -40,7 +40,15 @@ public:
 		return name;
 	}
 
-	void call(Interpreter & interpreter, ObjList && args) override;
+	bool cmp_args(const ObjList & args) const override {
+		if(args.size() != params.size()){
+			return false;
+		}
+
+		return true;
+	}
+
+	obj_ptr call(Interpreter & interpreter, ObjList && args) override;
 
 private:
 	std::string name;

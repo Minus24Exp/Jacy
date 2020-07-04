@@ -32,17 +32,15 @@ public:
 		return decl.id->get_name();
 	}
 
-	bool cmp_args(ObjList && args) const override {
+	bool cmp_args(const ObjList & args) const override {
 		if(args.size() != decl.params.size()){
 			return false;
 		}
 
-		for(size_t i = 0; i < decl.params.size(); i++){
-			
-		}
+		return true;
 	}
 
-	void call(Interpreter & ip, ObjList && args) override;
+	obj_ptr call(Interpreter & ip, ObjList && args) override;
 
 private:
 	FuncDecl & decl;

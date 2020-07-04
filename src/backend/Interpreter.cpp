@@ -4,8 +4,10 @@ Interpreter::Interpreter(){
 	value = nullptr;
 	scope = std::make_shared<Scope>();
 
-	scope->define("print", make_nf(scope, "print", { {"o"} }, [](NFArgs && args){
-		std::cout << args["o"]->to_string() << std::endl;
+	scope->define("print", make_nf(scope, "print", { {"o"} }, [](NFArgs && args) -> obj_ptr {
+		std::cout << args.at("o").get()->to_string() << std::endl;
+
+		return make_null();
 	}));
 }
 
@@ -116,7 +118,13 @@ void Interpreter::visit(FuncCall * func_call){
 		return;
 	}
 
-	static_cast<Callable*>(lhs.get())->call(*this, std::move(args));
+	Callable * callable = static_cast<Callable*>(lhs.get());
+
+	if(!callable->cmp_args(args)){
+		throw YoctoException("Invalid arguments");
+	}
+
+	value = callable->call(*this, std::move(args));
 }
 
 void Interpreter::visit(InfixOp * infix_op){
