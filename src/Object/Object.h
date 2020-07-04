@@ -14,7 +14,7 @@ enum class ObjectType {
 	Int,
 	Float,
 	String,
-	Func
+	Callable
 };
 
 class Object {

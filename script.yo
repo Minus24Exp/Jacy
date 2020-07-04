@@ -1,1 +1,5 @@
-var a = 0
+func a(b){
+	print(b)
+}
+
+print(a("1"))

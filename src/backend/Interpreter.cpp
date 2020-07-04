@@ -2,13 +2,30 @@
 
 Interpreter::Interpreter(){
 	value = nullptr;
-	scope = new Scope;
+	scope = std::make_shared<Scope>();
+
+	scope->define("print", make_nf(scope, "print", { {"o"} }, [](NFArgs && args){
+		std::cout << args["o"]->to_string() << std::endl;
+	}));
 }
 
 void Interpreter::interpret(const StmtList & tree){
 	for(const auto & stmt : tree){
 		execute(stmt.get());
 	}
+}
+
+void Interpreter::enter_scope(scope_ptr sub_scope){
+	if(sub_scope){
+		sub_scope->set_parent(scope);
+		scope = sub_scope;
+	}else{
+		scope = std::make_shared<Scope>(scope);
+	}
+}
+
+void Interpreter::exit_scope(){
+	scope = scope->get_parent();
 }
 
 void Interpreter::execute(Statement * stmt){
@@ -21,28 +38,11 @@ obj_ptr Interpreter::eval(Expression * expr){
 }
 
 void Interpreter::execute_block(Block * block, scope_ptr sub_scope){
-	scope_ptr previous = scope;
-	scope = sub_scope;
+	enter_scope(sub_scope);
 	for(const auto & stmt : block->stmts){
 		execute(stmt.get());
 	}
-	scope = previous;
-}
-
-void Interpreter::call(Func * func, ObjList && args){
-	scope_ptr sub_scope = std::make_shared<Scope>(func->closure);
-	scope_ptr previous = scope;
-
-	for(size_t i = 0; i < func->decl.params.size(); i++){
-		sub_scope->define(func->decl.params[i].id->get_name(), std::move(args[i]));
-	}
-
-	try{
-		execute_block(func->decl.body.get(), sub_scope);
-	}catch(Object & ret_val){
-		scope = previous;
-		return;
-	}
+	exit_scope();
 }
 
 void Interpreter::visit(ExprStmt * expr_stmt){
@@ -84,7 +84,6 @@ void Interpreter::visit(Identifier * id){
 }
 
 void Interpreter::visit(VarDecl * var_decl){
-	std::cout << "visit var_decl" << std::endl;
 	if(var_decl->assign_expr){
 		value = eval(var_decl->assign_expr.get());
 		scope->define(var_decl->id->get_name(), value->clone());
@@ -96,12 +95,11 @@ void Interpreter::visit(VarDecl * var_decl){
 }
 
 void Interpreter::visit(Block * block){
-	scope_ptr sub_scope = std::make_shared<Scope>(scope);
-	execute_block(block, sub_scope);
+	execute_block(block);
 }
 
 void Interpreter::visit(FuncDecl * func_decl){
-	obj_ptr func = std::make_unique<Func>(*func_decl, scope);
+	obj_ptr func = std::make_unique<Func>(scope, *func_decl);
 	scope->define(func_decl->id->get_name(), std::move(func));
 }
 
@@ -113,9 +111,12 @@ void Interpreter::visit(FuncCall * func_call){
 	}
 
 	// TODO: Add check for function type
-	Func * func = static_cast<Func*>(lhs.get());
+	if(lhs->type != ObjectType::Callable){
+		throw YoctoException("Invalid left-hand side in function call");
+		return;
+	}
 
-	call(func, std::move(args));
+	static_cast<Callable*>(lhs.get())->call(*this, std::move(args));
 }
 
 void Interpreter::visit(InfixOp * infix_op){

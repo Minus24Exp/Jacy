@@ -4,39 +4,48 @@
 #include "tree/FuncDecl.h"
 #include "backend/Scope.h"
 #include "Object/Object.h"
+#include "Object/Callable.h"
 
-class Func : public Object {
+class Func : public Callable {
 public:
-	Func(FuncDecl & decl, scope_ptr closure)
-		: Object(ObjectType::Func),
-		  decl(decl),
-		  closure(closure) {}
+	Func(scope_ptr closure, FuncDecl & decl)
+		: Callable(closure), decl(decl) {}
 	
 	virtual ~Func() = default;
 
-	bool truthy() const override {
-		return true;
-	}
-
-	bool equals(Object * other) const override {
-		return other->type == ObjectType::Func;
-	}
+	// Object //
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<Func>(new Func(decl, closure));
+		return std::unique_ptr<Func>(new Func(closure, decl));
 	}
 
 	std::string to_string() const override {
-		return "<func"+ decl.id->get_name() +">";
+		return "<func:"+ decl.id->get_name() +">";
 	}
 
-	size_t argc(){
+	// Callable //
+	size_t argc() const override {
 		return decl.params.size();
 	}
 
-	FuncDecl & decl;
-	scope_ptr closure;
+	std::string get_name() const override {
+		return decl.id->get_name();
+	}
 
+	bool cmp_args(ObjList && args) const override {
+		if(args.size() != decl.params.size()){
+			return false;
+		}
+
+		for(size_t i = 0; i < decl.params.size(); i++){
+			
+		}
+	}
+
+	void call(Interpreter & ip, ObjList && args) override;
+
+private:
+	FuncDecl & decl;
 };
 
 #endif

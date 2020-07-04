@@ -16,11 +16,15 @@ public:
 
 	void interpret(const StmtList & tree);
 
+	void enter_scope(scope_ptr sub_scope = nullptr);
+	void exit_scope();
+	scope_ptr get_scope() const {
+		return scope;
+	}
+
 	void execute(Statement * stmt);
 	obj_ptr eval(Expression * expr);
-	void execute_block(Block * block, scope_ptr sub_scope);
-
-	void call(Func * func, ObjList && args);
+	void execute_block(Block * block, scope_ptr sub_scope = nullptr);
 
 	void visit(ExprStmt * expr_stmt) override;
 	void visit(Literal * literal) override;

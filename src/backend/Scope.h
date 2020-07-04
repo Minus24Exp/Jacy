@@ -16,6 +16,14 @@ public:
 	Scope() : parent(nullptr) {}
 	Scope(scope_ptr parent) : parent(parent) {}
 
+	scope_ptr get_parent() const {
+		return parent;
+	}
+
+	void set_parent(scope_ptr parent){
+		this->parent = parent;
+	}
+
 	void define(const std::string & name, obj_ptr value){
 		values[name] = std::move(value);
 	}

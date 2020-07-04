@@ -2,6 +2,7 @@
 #include "Object/Float.h"
 #include "Object/Func.h"
 #include "Object/Int.h"
+#include "Object/NativeFunc.h"
 #include "Object/Null.h"
 #include "Object/String.h"
 #include "Object/Object.h"
