@@ -120,3 +120,11 @@ void Printer::visit(IfExpr * if_expr){
 		std::cout << "\n}";
 	}
 }
+
+void Printer::visit(While * w){
+	std::cout << "while(";
+	w->cond->accept(*this);
+	std::cout << "){\n";
+	w->body->accept(*this);
+	std::cout << "\n}";
+}

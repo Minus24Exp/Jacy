@@ -22,6 +22,7 @@ public:
 	void visit(FuncCall * func_call) override;
 	void visit(Infix * infix) override;
 	void visit(IfExpr * if_expr) override;
+	void visit(While * w) override;
 
 private:
 	void print_indent();

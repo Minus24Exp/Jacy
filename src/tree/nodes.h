@@ -6,6 +6,7 @@
 #include "tree/FuncCall.h"
 #include "tree/Infix.h"
 #include "tree/IfExpr.h"
+#include "tree/While.h"
 
 #include "tree/Node.h"
 

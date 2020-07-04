@@ -64,6 +64,8 @@ enum class Keyword {
     Func,
 
     If, Elif, Else,
+
+    While,
     
     MAX
 };
@@ -78,7 +80,10 @@ const std::vector <std::string> keywords {
     "true", "false",
     "var", "val",
     "func",
-    "if", "elif", "else"
+    
+    "if", "elif", "else",
+
+    "while"
 };
 
 inline Keyword str_to_kw(const std::string & str){

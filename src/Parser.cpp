@@ -122,6 +122,10 @@ stmt_ptr Parser::parse_stmt(){
 				return parse_func_decl();
 				break;
 			}
+			case Keyword::While:{
+				return parse_while();
+				break;
+			}
 		}
 	}
 
@@ -300,7 +304,7 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 }
 
 expr_ptr Parser::parse_if_expr(){
-	skip_kw(Keyword::If, true, true);
+	skip_kw(Keyword::If, false, true);
 	
 	bool paren = true;
 	if(is_op(Operator::LParen)){
@@ -330,6 +334,31 @@ expr_ptr Parser::parse_if_expr(){
 	}
 
 	return std::make_shared<IfExpr>(cond, then_branch, else_branch);
+}
+
+stmt_ptr Parser::parse_while(){
+	skip_kw(Keyword::While, false, true);
+
+	bool paren = true;
+	if(is_op(Operator::LParen)){
+		skip_op(Operator::LParen, true, true);
+	}else{
+		paren = false;
+	}
+
+	expr_ptr cond = parse_expr();
+
+	bool allow_one_line = false;
+	if(paren){
+		skip_op(Operator::RParen, true, true);
+		allow_one_line = true;
+	}else if(is_nl()){
+		allow_one_line = true;
+	}
+
+	block_ptr body = parse_block(allow_one_line);
+
+	return std::make_shared<While>(cond, body);
 }
 
 ////////////

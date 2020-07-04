@@ -171,11 +171,17 @@ void Interpreter::visit(Infix * infix){
 }
 
 void Interpreter::visit(IfExpr * if_expr){
-	value = eval(if_expr->cond.get());
+	auto cond = eval(if_expr->cond.get());
 
-	if(value->truthy()){
+	if(cond->truthy()){
 		execute_block(if_expr->if_branch.get());
 	}else if(if_expr->else_branch){
 		execute_block(if_expr->else_branch.get());
+	}
+}
+
+void Interpreter::visit(While * w){
+	while(eval(w->cond.get())->truthy()){
+		execute_block(w->body.get());
 	}
 }

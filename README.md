@@ -87,7 +87,9 @@ Operator overloading can be implemented with operator magic functions:
 Move all literal object to one `Literal.h` ro reduce files count.
 
 ## Think about it
-If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`.
+- General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`
+- Parser: Some stmts and exprs like `if` and `while` use the same syntax sugar as different ways to capture condition, maybe it's possible to move this syntax parsing to general function (maybe not...)
+- Parser: What about functions `skip_if_op` and `skip_if_kw`?
 
 ## Personal reminders
 - If there's Segmentation fault about unique_ptr, probably problem is in try to copy or multiple storing.

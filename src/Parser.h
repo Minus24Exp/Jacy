@@ -50,6 +50,7 @@ private:
 	stmt_ptr parse_func_decl();
 	expr_ptr parse_func_call(expr_ptr left);
 	expr_ptr parse_if_expr();
+	stmt_ptr parse_while();
 
 	// Errors
 	void error(const std::string & msg);
