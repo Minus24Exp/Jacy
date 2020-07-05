@@ -195,7 +195,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
 		// there must be semi
 
 		return std::make_shared<Block>(block_start, stmts);
-	}
+	}	
 
 	// Multi-line //
 	skip_op(Operator::LBrace, false, true);
@@ -288,7 +288,15 @@ stmt_ptr Parser::parse_func_decl(){
 			skip_op(Operator::Comma, true, true);
 		}
 		id_ptr param_id = parse_id();
-		params.push_back({param_id});
+
+		// Check for default value
+		expr_ptr default_val = nullptr;
+		if(is_op(Operator::Assign)){
+			skip_op(Operator::Assign, true, true);
+			default_val = parse_expr();
+		}
+
+		params.push_back({ param_id, default_val });
 	}
 
 	bool allow_one_line = false;
@@ -361,6 +369,8 @@ expr_ptr Parser::parse_if_expr(){
 	}
 
 	block_ptr then_branch = parse_block(allow_one_line);
+
+	skip_nl(true);
 
 	block_ptr else_branch = nullptr;
 	if(is_kw(Keyword::Else)){

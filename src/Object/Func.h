@@ -31,8 +31,12 @@ public:
 	}
 
 	bool cmp_args(const ObjList & args) const override {
-		if(args.size() != decl.params.size()){
-			return false;
+		for(int i = 0; i < decl.params.size(); i++){
+			// Check if there's parameter without
+			// default value that does not receive argument
+			if(i >= args.size() && !decl.params[i].default_val){
+				return false;
+			}
 		}
 
 		return true;

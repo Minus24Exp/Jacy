@@ -32,7 +32,7 @@ public:
 
 class UnexpectedTokenException : public YoctoException {
 public:
-	UnexpectedTokenException(Token t) : YoctoException("Unexpected token " + t.to_string()) {}
+	UnexpectedTokenException(Token t) : YoctoException("Unexpected " + t.to_string()) {}
 };
 
 class ExpectedException : public YoctoException {

@@ -44,10 +44,86 @@ Or, it could be written as one-line body if put braces:
 if a { print(a) }
 elif b { print(b) }
 else { print('nope') }
+// or
+if a => print(a)
+elif b => print(b)
+else print('nope')
+// or
+if a => { print(a) }
+elif b => { print(b) }
+else { print('nope') }
 ```
+
+So, all control flow statements can have one-line block if:
+1. Block is in braces
+2. Block is on the next line (`else` does not require it)
+3. Block has `=>` before (in this case it's possible to put block on the same line)
+
+Important note: As `else` does not absolutely require `=>` for one-line blocks, it cannot have it,
+it means that `else => print(something)` will cause error.
 
 Important note: As `elif` converts to `else if` at lexing level then all errors about it will
 reference to `else`. Maybe I'll solve it in the future.
+
+#### `while` statement
+`while` works the same as `while` in other languages.
+It also have the same rules for one-line blocks as `if` (watch `if` section).
+
+All examples are equal:
+```
+while(a) print(a)
+// or
+while a
+	print(a)
+// or
+while a => print(a)
+// or
+while(a) => print(a)
+// or
+while(a){
+	print(a)
+}
+// or
+while a {
+	print(a)
+}
+```
+
+#### Functions, `func` keyword
+In Yocto function can be declared with `func` keyword:
+```
+func a //...
+```
+Arguments can be captured in parenthesis or not. Examples are equal:
+```
+func a(p1, p2) {
+	print(p1)
+	print(p2)
+}
+// or
+func a p1, p2 {
+	print(p1)
+	print(p2)
+}
+```
+As `if` and `while`, function declaration can be one-line too, with the same rules:
+```
+func a(p1, p2) => print(p1, p2)
+// or
+func a p1, p2 => print(p1, p2)
+```
+
+It's also possible to declare function that does not receive arguments this way:
+```
+func a{
+	print('no args')
+}
+// or
+func a => print('no args')
+```
+
+#### Function calls
+In Yocto function calls require parenthesis(`()`), it's not possible to do it as in Ruby, even no-argument functions require parenthesis.
 
 ### Types
 

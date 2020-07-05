@@ -6,6 +6,7 @@
 
 struct FuncParam {
 	id_ptr id;
+	expr_ptr default_val;
 };
 
 using ParamList = std::vector<FuncParam>;
