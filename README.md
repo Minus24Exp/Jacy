@@ -55,10 +55,11 @@ reference to `else`. Maybe I'll solve it in the future.
 (primitives are objects too, everything is an object)
 
 They're three primitives:
-- string
-- bool
-- int
-- float (64-bit precision)
+- Null
+- String
+- Bool
+- Int
+- Float (64-bit precision `double`)
 
 ### Types conversion
 For explicit type convertion every object has or can overload special convertion functions (they are pretty same to Ruby's):
@@ -84,7 +85,6 @@ Operator overloading can be implemented with operator magic functions:
 - NEVER skip newline after last operator in statement (statements )
 
 ## TODO
-Move all literal object to one `Literal.h` ro reduce files count.
 
 ## Think about it
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`

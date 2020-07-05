@@ -14,9 +14,7 @@ class Interpreter;
 
 class Callable : public Object {
 public:
-	Callable(scope_ptr closure)
-			: Object(closure, ObjectType::Callable) {}
-
+	Callable(scope_ptr closure) : Object(ObjectType::Callable), closure(closure) {}
 	virtual ~Callable() = default;
 
 	// Object //
@@ -42,6 +40,8 @@ public:
 	virtual bool cmp_args(const ObjList & args) const = 0;
 
 	virtual obj_ptr call(Interpreter & interpreter, ObjList && args) = 0;
+
+	scope_ptr closure;
 };
 
 #endif

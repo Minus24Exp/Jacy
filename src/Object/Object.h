@@ -5,8 +5,6 @@
 #include <vector>
 #include <unordered_map>
 
-#include "backend/Scope.h"
-
 class Object;
 using obj_ptr = std::unique_ptr<Object>;
 using ObjList = std::vector<obj_ptr>;
@@ -21,9 +19,21 @@ enum class ObjectType {
 	Callable
 };
 
+static inline std::string objtype2str(const ObjectType & type){
+	switch(type){
+		case ObjectType::Null: return "Null";
+		case ObjectType::Bool: return "Bool";
+		case ObjectType::Int: return "Int";
+		case ObjectType::Float: return "Float";
+		case ObjectType::String: return "String";
+		case ObjectType::Callable: return "Callable";
+		default: return "<unknown>";
+	}
+}
+
 class Object {
 public:
-	Object(scope_ptr closure, const ObjectType & type);
+	Object(const ObjectType & type) : type(type) {}
 	virtual ~Object() = default;
 
 	ObjectType type;
@@ -52,12 +62,7 @@ public:
 		fields[name] = std::move(obj);
 	}
 
-	scope_ptr get_closure() const {
-		return closure;
-	}
-
 protected:
-	scope_ptr closure;
 	ObjFields fields;
 };
 

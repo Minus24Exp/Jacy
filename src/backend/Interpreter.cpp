@@ -71,23 +71,23 @@ void Interpreter::visit(ExprStmt * expr_stmt){
 void Interpreter::visit(Literal * literal){
 	switch(literal->token.type){
 		case TokenType::Null:{
-			value.reset(new Null(scope));
+			value.reset(new Null);
 			break;
 		}
 		case TokenType::Bool:{
-			value.reset(new Bool(scope, literal->token.Bool()));
+			value.reset(new Bool(literal->token.Bool()));
 			break;
 		}
 		case TokenType::Int:{
-			value.reset(new Int(scope, literal->token.Int()));
+			value.reset(new Int(literal->token.Int()));
 			break;
 		}
 		case TokenType::Float:{
-			value.reset(new Float(scope, literal->token.Float()));
+			value.reset(new Float(literal->token.Float()));
 			break;
 		}
 		case TokenType::Str:{
-			value.reset(new String(scope, literal->token.String()));
+			value.reset(new String(literal->token.String()));
 			break;
 		}
 	}
@@ -107,7 +107,7 @@ void Interpreter::visit(VarDecl * var_decl){
 		value = eval(var_decl->assign_expr.get());
 		scope->define(var_decl->id->get_name(), value->clone());
 	}else{
-		scope->define(var_decl->id->get_name(), std::make_unique<Null>(scope));
+		scope->define(var_decl->id->get_name(), make_null());
 	}
 
 	value = nullptr;
@@ -124,6 +124,7 @@ void Interpreter::visit(FuncDecl * func_decl){
 
 void Interpreter::visit(FuncCall * func_call){
 	obj_ptr lhs = eval(func_call->left.get());
+
 	ObjList args;
 	for(const auto & arg : func_call->args){
 		args.push_back(eval(arg.get()));
@@ -151,7 +152,7 @@ void Interpreter::visit(FuncCall * func_call){
 		// Note: This is just a helper for built-in functions
 		// They can return nullptr, and then here it will be converted to Null.
 		// But, nullptr does not equal to Null
-		value = make_null(scope);
+		value = make_null();
 	}
 }
 

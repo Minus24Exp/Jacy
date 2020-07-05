@@ -8,7 +8,7 @@ obj_ptr Func::call(Interpreter & ip, ObjList && args){
 		ip.get_scope()->define(decl.params[i].id->get_name(), std::move(args[i]));
 	}
 
-	obj_ptr return_val = make_null(closure);
+	obj_ptr return_val = make_null();
 
 	try {
 		ip.execute_block(decl.body.get(), ip.get_scope());

@@ -8,9 +8,7 @@
 
 class Func : public Callable {
 public:
-	Func(scope_ptr closure, FuncDecl & decl)
-		: Callable(closure), decl(decl) {}
-	
+	Func(scope_ptr closure, FuncDecl & decl) : Callable(closure), decl(decl) {}
 	virtual ~Func() = default;
 
 	// Object //
