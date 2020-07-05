@@ -16,7 +16,7 @@ enum class ExprType {
 };
 
 struct Expr : Node {
-	Expr(ExprType type) : type(type) {}
+	Expr(const Position & pos, ExprType type) : Node(pos), type(type) {}
 	virtual ~Expr() = default;
 
 	virtual void accept(BaseVisitor & visitor) = 0;

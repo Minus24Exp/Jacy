@@ -4,6 +4,7 @@
 #include <exception>
 #include <string>
 #include "Token.h"
+#include "tree/Node.h"
 
 class YoctoException : public std::exception {
 public:
@@ -50,7 +51,8 @@ public:
 
 class RuntimeException : public YoctoException {
 public:
-	RuntimeException(const std::string & msg) : YoctoException("Runtime error: " + msg) {}
+	RuntimeException(const std::string & msg, Node * n)
+		: YoctoException("Runtime error: "+ msg +" at "+ std::to_string(n->pos.line) +":"+ std::to_string(n->pos.column)) {}
 };
 
 #endif

@@ -17,7 +17,7 @@ enum class StmtType {
 };
 
 struct Stmt : Node {
-	Stmt(StmtType type) : type(type) {}
+	Stmt(const Position & pos, StmtType type) : Node(pos), type(type) {}
 	virtual ~Stmt() = default;
 
 	virtual void accept(BaseVisitor & visitor) = 0;
@@ -28,7 +28,7 @@ struct Stmt : Node {
 struct ExprStmt : Stmt {
 	expr_ptr expr;
 
-	ExprStmt(expr_ptr expr) : Stmt(StmtType::Expr), expr(expr) {}
+	ExprStmt(const Position & pos, expr_ptr expr) : Stmt(pos, StmtType::Expr), expr(expr) {}
 	virtual ~ExprStmt() = default;
 
 	virtual void accept(BaseVisitor & visitor) override {

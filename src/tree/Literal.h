@@ -10,7 +10,7 @@
 struct Literal : Expr {
 	Token token;
 
-	Literal(const Token & token) : Expr(ExprType::Literal), token(token) {}
+	Literal(const Token & token) : Expr(token.pos, ExprType::Literal), token(token) {}
 	virtual ~Literal() = default;
 
 	void accept(BaseVisitor & visitor) override {

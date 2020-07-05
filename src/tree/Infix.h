@@ -52,8 +52,8 @@ struct Infix : Expr {
 	Token op;
 	expr_ptr right;
 
-	Infix(expr_ptr left, const Token & op, expr_ptr right)
-		   : Expr(ExprType::Infix), left(left), op(op), right(right) {}
+	Infix(const Position & pos, expr_ptr left, const Token & op, expr_ptr right)
+		   : Expr(pos, ExprType::Infix), left(left), op(op), right(right) {}
 
 	virtual ~Infix() = default;
 

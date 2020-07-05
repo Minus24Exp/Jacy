@@ -16,8 +16,8 @@ struct VarDecl : Stmt {
 	id_ptr id;
 	expr_ptr assign_expr;
 
-	VarDecl(const VarDeclType & decl, id_ptr id, expr_ptr assign_expr)
-		: Stmt(StmtType::VarDecl), decl(decl), id(id), assign_expr(assign_expr) {}
+	VarDecl(const Position & pos, const VarDeclType & decl, id_ptr id, expr_ptr assign_expr)
+		: Stmt(pos, StmtType::VarDecl), decl(decl), id(id), assign_expr(assign_expr) {}
 
 	void accept(BaseVisitor & visitor) override {
 		visitor.visit(this);

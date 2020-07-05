@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "BaseVisitor.h"
+#include "Exception.h"
 #include "tree/nodes.h"
 #include "backend/Scope.h"
 #include "object/objects.h"
@@ -37,6 +38,8 @@ public:
 	void visit(Infix * infix) override;
 	void visit(IfExpr * if_expr) override;
 	void visit(While * w) override;
+
+	void runtime_error(const std::string & msg, Node * n);
 
 private:
 	obj_ptr value;

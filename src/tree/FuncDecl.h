@@ -15,8 +15,8 @@ struct FuncDecl : Stmt {
 	ParamList params;
 	block_ptr body;
 
-	FuncDecl(id_ptr id, const ParamList & params, block_ptr body)
-		: Stmt(StmtType::FuncDecl), id(id), params(params), body(body) {}
+	FuncDecl(const Position & pos, id_ptr id, const ParamList & params, block_ptr body)
+		: Stmt(pos, StmtType::FuncDecl), id(id), params(params), body(body) {}
 
 	void accept(BaseVisitor & visitor) override {
 		visitor.visit(this);

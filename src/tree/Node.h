@@ -6,10 +6,12 @@
 #include "BaseVisitor.h"
 
 struct Node {
-	Node() {}
+	Node(const Position & pos) : pos(pos) {}
 	virtual ~Node() = default;
 
 	virtual void accept(BaseVisitor & visitor) = 0;
+
+	Position pos;
 };
 
 #endif

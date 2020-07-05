@@ -59,7 +59,7 @@ void Interpreter::eval_assign(Infix * infix){
 			break;
 		}
 		default:{
-			throw YoctoException("Invalid left-hand side in assignment");
+			runtime_error("Invalid left-hand side in assignment", infix->left.get());
 		}
 	}
 }
@@ -96,7 +96,7 @@ void Interpreter::visit(Literal * literal){
 void Interpreter::visit(Identifier * id){
 	Object * obj = scope->get(id->get_name());
 	if(!obj){
-		throw YoctoException(id->get_name() + " is not defined");
+		runtime_error(id->get_name() + " is not defined", id);
 		return;
 	}
 	value = obj->clone();
@@ -131,14 +131,15 @@ void Interpreter::visit(FuncCall * func_call){
 
 	// TODO: Add check for function type
 	if(lhs->type != ObjectType::Callable){
-		throw YoctoException("Invalid left-hand side in function call");
+		runtime_error("Invalid left-hand side in function call", func_call->left.get());
 		return;
 	}
 
 	Callable * callable = static_cast<Callable*>(lhs.get());
 
 	if(!callable->cmp_args(args)){
-		throw YoctoException("Invalid arguments");
+		// TODO: Improve args comparison
+		runtime_error("Invalid arguments", func_call);
 	}
 
 	// TODO: !!! Add exception handling for call
@@ -184,4 +185,8 @@ void Interpreter::visit(While * w){
 	while(eval(w->cond.get())->truthy()){
 		execute_block(w->body.get());
 	}
+}
+
+void Interpreter::runtime_error(const std::string & msg, Node * n){
+	throw RuntimeException(msg, n);
 }

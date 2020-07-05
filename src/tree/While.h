@@ -7,7 +7,7 @@ struct While : Stmt {
 	expr_ptr cond;
 	block_ptr body;
 
-	While(expr_ptr cond, block_ptr body) : Stmt(StmtType::While), cond(cond), body(body) {}
+	While(const Position & pos, expr_ptr cond, block_ptr body) : Stmt(pos, StmtType::While), cond(cond), body(body) {}
 	virtual ~While() = default;
 
 	void accept(BaseVisitor & visitor) override {
