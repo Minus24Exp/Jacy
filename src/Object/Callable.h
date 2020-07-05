@@ -12,9 +12,26 @@
 
 class Interpreter;
 
+struct Param {
+	std::string name;
+	obj_ptr default_val;
+
+	Param(const std::string & name) : name(name), default_val(nullptr) {}
+	Param(const std::string & name, obj_ptr dv) : name(name), default_val(std::move(dv)) {}
+};
+
+using Params = std::vector<Param>;
+
 class Callable : public Object {
 public:
-	Callable(scope_ptr closure) : Object(ObjectType::Callable), closure(closure) {}
+	Callable(scope_ptr closure,
+			 const std::string & name,
+			 Params && params
+			) : Object(ObjectType::Callable),
+		  		closure(closure),
+		  		name(name),
+		  		params(std::move(params)) {}
+
 	virtual ~Callable() = default;
 
 	// Object //
@@ -33,15 +50,18 @@ public:
 	virtual std::string to_string() const = 0;
 
 	// Callable //
-	virtual std::string get_name() const = 0;
-
-	virtual size_t argc() const = 0;
-
-	virtual bool cmp_args(const ObjList & args) const = 0;
+	std::string get_name() const {
+		return name;
+	}
+	
+	bool cmp_args(const ObjList & args) const;
 
 	virtual obj_ptr call(Interpreter & interpreter, ObjList && args) = 0;
 
+protected:
 	scope_ptr closure;
+	std::string name;
+	Params params;
 };
 
 #endif

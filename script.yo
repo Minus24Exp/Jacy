@@ -1,3 +1,5 @@
-func a => print('ahahaha')
+func a(p = 1){
+	print(p)
+}
 
 a()

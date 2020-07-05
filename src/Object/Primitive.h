@@ -20,7 +20,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<Null>(new Null());
+		return std::make_unique<Null>();
 	}
 
 	std::string to_string() const override {
@@ -56,7 +56,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<Bool>(new Bool(value));
+		return std::make_unique<Bool>(value);
 	}
 
 	std::string to_string() const override {
@@ -87,7 +87,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<Int>(new Int(value));
+		return std::make_unique<Int>(value);
 	}
 
 	std::string to_string() const override {
@@ -118,7 +118,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<Float>(new Float(value));
+		return std::make_unique<Float>(value);
 	}
 
 	std::string to_string() const override {
@@ -149,7 +149,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::unique_ptr<String>(new String(value));
+		return std::make_unique<String>(value);
 	}
 
 	std::string to_string() const override {

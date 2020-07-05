@@ -8,44 +8,35 @@
 
 class Func : public Callable {
 public:
-	Func(scope_ptr closure, FuncDecl & decl) : Callable(closure), decl(decl) {}
+	Func(scope_ptr closure,
+	     const std::string & name,
+	     Params && params,
+	     block_ptr body
+	  	) : Callable(closure, name, std::move(params)),
+	  		body(body) {}
+
 	virtual ~Func() = default;
 
 	// Object //
-
 	obj_ptr clone() const override {
-		return std::unique_ptr<Func>(new Func(closure, decl));
+		// As params contains unique_ptr of default values I need to create a copy of it
+		Params params_copy;
+		params_copy.reserve(params.size());
+		for(const auto & p : params){
+			params_copy.push_back(Param(p.name, p.default_val->clone()));
+		}
+		return std::make_unique<Func>(closure, name, std::move(params_copy), body);
 	}
 
 	std::string to_string() const override {
-		return "<func:"+ decl.id->get_name() +">";
+		return "<func:"+ name +">";
 	}
 
 	// Callable //
-	size_t argc() const override {
-		return decl.params.size();
-	}
-
-	std::string get_name() const override {
-		return decl.id->get_name();
-	}
-
-	bool cmp_args(const ObjList & args) const override {
-		for(int i = 0; i < decl.params.size(); i++){
-			// Check if there's parameter without
-			// default value that does not receive argument
-			if(i >= args.size() && !decl.params[i].default_val){
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	obj_ptr call(Interpreter & ip, ObjList && args) override;
 
 private:
-	FuncDecl & decl;
+	block_ptr body;
 };
 
 #endif

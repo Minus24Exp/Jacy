@@ -115,8 +115,17 @@ void Interpreter::visit(Block * block){
 }
 
 void Interpreter::visit(FuncDecl * func_decl){
-	obj_ptr func = std::make_unique<Func>(scope, *func_decl);
-	scope->define(func_decl->id->get_name(), std::move(func));
+	std::string name = func_decl->id->get_name();
+
+	Params params;
+	for(auto & p : func_decl->params){
+		auto default_val = eval(p.default_val.get());
+		Param param(p.id->get_name(), std::move(default_val));
+		params.push_back(std::move(param));
+	}
+
+	obj_ptr func = std::make_unique<Func>(scope, name, std::move(params), func_decl->body);
+	scope->define(name, std::move(func));
 }
 
 void Interpreter::visit(FuncCall * func_call){

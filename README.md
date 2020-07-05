@@ -161,6 +161,8 @@ Operator overloading can be implemented with operator magic functions:
 - NEVER skip newline after last operator in statement (statements )
 
 ## TODO
+- Solve problem with unique_ptr in default arguments (now they're raw pointers)
+- Create `ParamList` class to store params and avoid annoying problems with `unique_ptr`
 
 ## Think about it
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`
