@@ -70,7 +70,7 @@ void Parser::skip_op(const Operator & op, const bool & skip_l_nl, const bool & s
 	if(is_op(op)){
 		advance();
 	}else{
-		expected_error(op_to_str(op));
+		expected_error("`"+ op_to_str(op) + "`");
 	}
 	if(skip_r_nl){
 		skip_nl(true);
@@ -84,7 +84,7 @@ void Parser::skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & sk
 	if(is_kw(kw)){
 		advance();
 	}else{
-		expected_error(kw_to_str(kw));
+		expected_error("`"+ kw_to_str(kw) +"`");
 	}
 	if(skip_r_nl){
 		skip_nl(true);
@@ -189,9 +189,11 @@ block_ptr Parser::parse_block(bool allow_one_line){
 		// Is it okay?
 		skip_nl(true);
 		stmts.push_back(parse_stmt());
-		if(!eof()){
-			skip_semis();
-		}
+
+		// Note: there's no need to expect semis after one-line block
+		// because block is always part of statement and after all statements
+		// there must be semi
+
 		return std::make_shared<Block>(block_start, stmts);
 	}
 
@@ -266,13 +268,18 @@ stmt_ptr Parser::parse_func_decl(){
 	skip_kw(Keyword::Func, false, true);
 	id_ptr id = parse_id();
 
-	skip_op(Operator::LParen, true, true);
+	bool paren = true;
+	if(is_op(Operator::LParen)){
+		skip_op(Operator::LParen, true, true);
+	}else{
+		paren = false;
+	}
 	
 	ParamList params;
-
 	bool first = true;
 	while(!eof()){
-		if(is_op(Operator::RParen)){
+		if((paren && is_op(Operator::RParen))
+		|| (!paren && (is_op(Operator::Arrow) || is_op(Operator::LBrace)))){
 			break;
 		}
 		if(first){
@@ -283,9 +290,18 @@ stmt_ptr Parser::parse_func_decl(){
 		id_ptr param_id = parse_id();
 		params.push_back({param_id});
 	}
-	skip_op(Operator::RParen, true, true);
 
-	block_ptr body = parse_block();
+	bool allow_one_line = false;
+	if(paren){
+		skip_op(Operator::RParen, true, true);
+	}
+
+	if(is_op(Operator::Arrow)){
+		skip_op(Operator::Arrow, true, true);
+		allow_one_line = true;
+	}
+
+	block_ptr body = parse_block(allow_one_line);
 
 	return std::make_shared<FuncDecl>(func_decl_start, id, params, body);
 }
@@ -296,8 +312,8 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 	skip_op(Operator::LParen, true, true);
 
 	ExprList args;
-
 	bool first = true;
+
 	while(!eof()){
 		if(is_op(Operator::RParen)){
 			break;
@@ -339,6 +355,11 @@ expr_ptr Parser::parse_if_expr(){
 		allow_one_line = true;
 	}
 
+	if(is_op(Operator::Arrow)){
+		skip_op(Operator::Arrow, true, true);
+		allow_one_line = true;
+	}
+
 	block_ptr then_branch = parse_block(allow_one_line);
 
 	block_ptr else_branch = nullptr;
@@ -369,6 +390,11 @@ stmt_ptr Parser::parse_while(){
 		skip_op(Operator::RParen, true, true);
 		allow_one_line = true;
 	}else if(is_nl()){
+		allow_one_line = true;
+	}
+
+	if(is_op(Operator::Arrow)){
+		skip_op(Operator::Arrow, true, true);
 		allow_one_line = true;
 	}
 

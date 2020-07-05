@@ -212,8 +212,14 @@ TokenStream Lexer::lex(){
 		}else{
 			switch(peek()){
 				case '=':{
-					add_token(Operator::Assign);
-					advance();
+					if(peekNext() == '>'){
+						add_token(Operator::Arrow);
+						advance();
+						advance();
+					}else{
+						add_token(Operator::Assign);
+						advance();
+					}
 					break;
 				}
 				case '+':{

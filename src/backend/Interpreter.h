@@ -9,6 +9,7 @@
 #include "tree/nodes.h"
 #include "backend/Scope.h"
 #include "object/objects.h"
+#include "backend/Global.h"
 
 class Interpreter : public BaseVisitor {
 public:

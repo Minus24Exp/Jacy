@@ -5,6 +5,9 @@
 #include <unordered_map>
 #include "object/Callable.h"
 
+class NativeFunc;
+using nf_ptr = std::unique_ptr<NativeFunc>;
+
 struct Param {
 	std::string name;
 };

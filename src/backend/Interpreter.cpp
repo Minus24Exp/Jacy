@@ -4,11 +4,8 @@ Interpreter::Interpreter(){
 	value = nullptr;
 	scope = std::make_shared<Scope>();
 
-	scope->define("print", make_nf(scope, "print", { {"o"} }, [this](NFArgs && args) -> obj_ptr {
-		std::cout << args["o"]->to_string() << std::endl;
-
-		return nullptr;
-	}));
+	Global global(*this);
+	global.reg();
 }
 
 void Interpreter::interpret(const StmtList & tree){

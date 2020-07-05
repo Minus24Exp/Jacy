@@ -38,7 +38,9 @@ enum class Operator {
 
     Comma, Colon, Dot,
 
-    Semi
+    Semi,
+
+    Arrow
 };
 
 const std::vector <std::string> operators {
@@ -50,7 +52,9 @@ const std::vector <std::string> operators {
 
     ",", ":", ".",
 
-    ";"
+    ";",
+
+    "=>"
 };
 
 inline std::string op_to_str(const Operator & op){

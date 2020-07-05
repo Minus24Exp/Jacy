@@ -1,5 +1,2 @@
-func a(p){
-	print(p)
-}
-
-a()
+var a = 1
+if a => print(a)
