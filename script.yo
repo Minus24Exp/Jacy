@@ -1,4 +1,8 @@
-func a p = 5, p1 {
+func default(){
+	
+}
+
+func a p = default() {
 	print(p)
 	print(p1)
 }

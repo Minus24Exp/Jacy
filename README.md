@@ -122,6 +122,21 @@ func a{
 func a => print('no args')
 ```
 
+##### Default values
+Default values can be written with any of ways below:
+```
+func a(p1 = 'a', p2 = 'b'){
+	print(p1)
+	print(p2)
+}
+// or
+func a p1 = 'a', p2 = 'b' // ...
+```
+Anyway, here's one common rule: **After parameter with default value all parameters MUST have default value**
+In Ruby it's possible to set default value for first argument and not to set it for second one.
+But, firstly, Yocto interpreter is not so smart, and secondly, I think it's not as much convenient as bad practice and may be confused.
+So, most likely, in Yocto it will never be implemented.
+
 #### Function calls
 In Yocto function calls require parenthesis(`()`), it's not possible to do it as in Ruby, even no-argument functions require parenthesis.
 
@@ -168,6 +183,7 @@ Operator overloading can be implemented with operator magic functions:
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`
 - Parser: Some stmts and exprs like `if` and `while` use the same syntax sugar as different ways to capture condition, maybe it's possible to move this syntax parsing to general function (maybe not...)
 - Parser: What about functions `skip_if_op` and `skip_if_kw`?
+- General: If one day I'll add infix functions, then I can remove operators at all, and make all punctuation operator to punctuation tokens.
 
 ## Personal reminders
 - If there's Segmentation fault about unique_ptr, probably problem is in try to copy or multiple storing.

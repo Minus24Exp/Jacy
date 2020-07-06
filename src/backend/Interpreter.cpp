@@ -24,6 +24,13 @@ void Interpreter::enter_scope(scope_ptr sub_scope){
 }
 
 void Interpreter::exit_scope(){
+	std::cout << "Exit scope\n";
+	std::cout << "Pointers count:\n";
+
+	for(const auto & field : scope->get_values()){
+		std::cout << field.first << ": " << field.second.use_count() << std::endl;
+	}
+
 	scope = scope->get_parent();
 }
 
@@ -104,7 +111,7 @@ void Interpreter::visit(VarDecl * var_decl){
 		value = eval(var_decl->assign_expr.get());
 		scope->define(var_decl->id->get_name(), value->clone());
 	}else{
-		scope->define(var_decl->id->get_name(), make_null());
+		scope->define(var_decl->id->get_name(), null_obj);
 	}
 
 	value = nullptr;
@@ -123,11 +130,10 @@ void Interpreter::visit(FuncDecl * func_decl){
 		if(p.default_val){
 			default_val = eval(p.default_val.get());
 		}
-		Param param(p.id->get_name(), std::move(default_val));
-		params.push_back(std::move(param));
+		params.push_back({p.id->get_name(), std::move(default_val)});
 	}
 
-	obj_ptr func = std::make_unique<Func>(scope, name, std::move(params), func_decl->body);
+	obj_ptr func = std::make_shared<Func>(scope, name, params, func_decl->body);
 	scope->define(name, std::move(func));
 }
 
@@ -161,7 +167,7 @@ void Interpreter::visit(FuncCall * func_call){
 		// Note: This is just a helper for built-in functions
 		// They can return nullptr, and then here it will be converted to Null.
 		// But, nullptr does not equal to Null
-		value = make_null();
+		value = null_obj;
 	}
 }
 

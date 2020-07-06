@@ -9,7 +9,7 @@ class Scope;
 using scope_ptr = std::shared_ptr<Scope>;
 
 class Object;
-using obj_ptr = std::unique_ptr<Object>;
+using obj_ptr = std::shared_ptr<Object>;
 
 class Scope {
 public:
@@ -49,6 +49,21 @@ public:
 
 		if(parent){
 			return parent->get(name);
+		}
+
+		return nullptr;
+	}
+
+	// Debug (only) //
+	std::unordered_map<std::string, obj_ptr> get_values() const {
+		return values;
+	}
+	Object * get_local(const std::string & name) const {
+		// Get values from this scope without lookup
+		auto it = values.find(name);
+
+		if(it != value.end()){
+			return it->second.get();
 		}
 
 		return nullptr;

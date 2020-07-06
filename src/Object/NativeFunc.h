@@ -15,21 +15,21 @@ class NativeFunc : public Callable {
 public:
 	NativeFunc(scope_ptr closure,
 			   const std::string & name,
-			   Params && params,
+			   const Params & params,
 			   const NFBody & body
-			  ) : Callable(closure, name, std::move(params)),
+			  ) : Callable(closure, name, params),
 				  body(body) {}
 	virtual ~NativeFunc() = default;
 
 	// Object //
 	obj_ptr clone() const override {
-		// As params contains unique_ptr of default values I need to create a copy of it
-		Params params_copy;
-		params_copy.reserve(params.size());
-		for(const auto & p : params){
-			params_copy.push_back(Param(p.name, p.default_val ? p.default_val->clone() : nullptr));
-		}
-		return std::make_unique<NativeFunc>(closure, name, std::move(params_copy), body);
+		// // As params contains unique_ptr of default values I need to create a copy of it
+		// Params params_copy;
+		// params_copy.reserve(params.size());
+		// for(const auto & p : params){
+		// 	params_copy.push_back(Param(p.name, p.default_val ? p.default_val->clone() : nullptr));
+		// }
+		return std::make_shared<NativeFunc>(closure, name, params, body);
 	}
 
 	std::string to_string() const override {
@@ -45,10 +45,10 @@ private:
 
 static inline obj_ptr make_nf(scope_ptr closure,
 							  const std::string & name,
-							  Params && params,
+							  const Params & params,
 							  const NFBody & body)
 {
-	return std::make_unique<NativeFunc>(closure, name, std::move(params), body);
+	return std::make_shared<NativeFunc>(closure, name, params, body);
 }
 
 #endif

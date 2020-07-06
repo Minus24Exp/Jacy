@@ -10,22 +10,22 @@ class Func : public Callable {
 public:
 	Func(scope_ptr closure,
 	     const std::string & name,
-	     Params && params,
+	     const Params & params,
 	     block_ptr body
-	  	) : Callable(closure, name, std::move(params)),
+	  	) : Callable(closure, name, params),
 	  		body(body) {}
 
 	virtual ~Func() = default;
 
 	// Object //
 	obj_ptr clone() const override {
-		// As params contains unique_ptr of default values I need to create a copy of it
-		Params params_copy;
-		params_copy.reserve(params.size());
-		for(const auto & p : params){
-			params_copy.push_back(Param(p.name, p.default_val ? p.default_val->clone() : nullptr));
-		}
-		return std::make_unique<Func>(closure, name, std::move(params_copy), body);
+		// // As params contains unique_ptr of default values I need to create a copy of it
+		// Params params_copy;
+		// params_copy.reserve(params.size());
+		// for(const auto & p : params){
+		// 	params_copy.push_back(Param(p.name, p.default_val ? p.default_val->clone() : nullptr));
+		// }
+		return std::make_shared<Func>(closure, name, params, body);
 	}
 
 	std::string to_string() const override {

@@ -13,7 +13,7 @@ obj_ptr Func::call(Interpreter & ip, ObjList && args){
 		}
 	}
 
-	obj_ptr return_val = make_null();
+	obj_ptr return_val = null_obj;
 
 	try {
 		ip.execute_block(body.get(), ip.get_scope());

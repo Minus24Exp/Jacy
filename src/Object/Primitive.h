@@ -20,7 +20,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::make_unique<Null>();
+		return std::make_shared<Null>();
 	}
 
 	std::string to_string() const override {
@@ -28,9 +28,10 @@ public:
 	}
 };
 
-static inline obj_ptr make_null(){
-	return std::make_unique<Null>();
-}
+// Note: Null is not singleton itself
+// But NEVER create new Null, always use null_obj
+
+const auto null_obj = std::make_shared<Null>();
 
 //////////
 // Bool //
@@ -56,7 +57,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::make_unique<Bool>(value);
+		return std::make_shared<Bool>(value);
 	}
 
 	std::string to_string() const override {
@@ -87,7 +88,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::make_unique<Int>(value);
+		return std::make_shared<Int>(value);
 	}
 
 	std::string to_string() const override {
@@ -118,7 +119,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::make_unique<Float>(value);
+		return std::make_shared<Float>(value);
 	}
 
 	std::string to_string() const override {
@@ -149,7 +150,7 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::make_unique<String>(value);
+		return std::make_shared<String>(value);
 	}
 
 	std::string to_string() const override {

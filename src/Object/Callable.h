@@ -17,7 +17,7 @@ struct Param {
 	obj_ptr default_val;
 
 	Param(const std::string & name) : name(name), default_val(nullptr) {}
-	Param(const std::string & name, obj_ptr dv) : name(name), default_val(std::move(dv)) {}
+	Param(const std::string & name, obj_ptr dv) : name(name), default_val(dv) {}
 };
 
 using Params = std::vector<Param>;
@@ -26,11 +26,11 @@ class Callable : public Object {
 public:
 	Callable(scope_ptr closure,
 			 const std::string & name,
-			 Params && params
+			 const Params & params
 			) : Object(ObjectType::Callable),
 		  		closure(closure),
 		  		name(name),
-		  		params(std::move(params)) {}
+		  		params(params) {}
 
 	virtual ~Callable() = default;
 
