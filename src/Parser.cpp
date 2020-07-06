@@ -275,7 +275,7 @@ stmt_ptr Parser::parse_func_decl(){
 		paren = false;
 	}
 	
-	ParamList params;
+	FuncParams params;
 	bool first = true;
 	while(!eof()){
 		if((paren && is_op(Operator::RParen))

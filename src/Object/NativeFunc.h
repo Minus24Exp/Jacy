@@ -27,7 +27,7 @@ public:
 		Params params_copy;
 		params_copy.reserve(params.size());
 		for(const auto & p : params){
-			params_copy.push_back(Param(p.name, p.default_val->clone()));
+			params_copy.push_back(Param(p.name, p.default_val ? p.default_val->clone() : nullptr));
 		}
 		return std::make_unique<NativeFunc>(closure, name, std::move(params_copy), body);
 	}

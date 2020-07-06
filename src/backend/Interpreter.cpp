@@ -119,7 +119,10 @@ void Interpreter::visit(FuncDecl * func_decl){
 
 	Params params;
 	for(auto & p : func_decl->params){
-		auto default_val = eval(p.default_val.get());
+		obj_ptr default_val = nullptr; 
+		if(p.default_val){
+			default_val = eval(p.default_val.get());
+		}
 		Param param(p.id->get_name(), std::move(default_val));
 		params.push_back(std::move(param));
 	}

@@ -9,14 +9,14 @@ struct FuncParam {
 	expr_ptr default_val;
 };
 
-using ParamList = std::vector<FuncParam>;
+using FuncParams = std::vector<FuncParam>;
 
 struct FuncDecl : Stmt {
 	id_ptr id;
-	ParamList params;
+	FuncParams params;
 	block_ptr body;
 
-	FuncDecl(const Position & pos, id_ptr id, const ParamList & params, block_ptr body)
+	FuncDecl(const Position & pos, id_ptr id, const FuncParams & params, block_ptr body)
 		: Stmt(pos, StmtType::FuncDecl), id(id), params(params), body(body) {}
 
 	void accept(BaseVisitor & visitor) override {
