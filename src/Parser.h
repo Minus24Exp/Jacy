@@ -10,10 +10,22 @@
 
 class Parser {
 public:
-	Parser(const TokenStream & tokens);
-	virtual ~Parser() = default;
+	static Parser & get_instance(){
+		static Parser instance;
+		return instance;
+	}
 
-	StmtList parse();
+    Parser(const Parser&) = delete;
+    Parser(Parser&&) = delete;
+    Parser & operator=(const Parser&) = delete;
+    Parser & operator=(Parser&&) = delete;
+
+private:
+    Parser() = default;
+    ~Parser() = default;
+
+public:
+	StmtList parse(const TokenStream & tokens);
 
 private:
 	TokenStream tokens;

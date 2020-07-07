@@ -1,14 +1,26 @@
 #include "Yocto.h"
 
-Yocto::Yocto(){}
+Yocto::Yocto() : lexer(Lexer::get_instance()),
+	   			 parser(Parser::get_instance()),
+	   			 ip(Interpreter::get_instance()) {}
 
 void Yocto::run_prompt(){
+	std::string line;
 	while(!std::cin.eof()){
 		std::cout << "> ";
-		std::string line;
+
+		line.clear();
 		std::getline(std::cin, line);
-		run(line);
-		std::cout << std::endl;
+
+		// TODO: Fix problem with special keys like arrow
+
+		// Intercept exceptions for REPL
+		// REPL just prints them and doesn't stop
+		try{
+			run(line);
+		}catch(YoctoException & e){
+			std::cout << e.what() << std::endl;
+		}
 	}
 }
 
@@ -29,6 +41,12 @@ void Yocto::run_script(const std::string & path){
 }
 
 void Yocto::run(const std::string & script){
+	TokenStream tokens = lexer.lex(script);
+	StmtList tree = parser.parse(tokens);
+	ip.interpret(tree);
+}
+
+void Yocto::run_debug(const std::string & script){
 
 	// TODO: Create base exceptions for Lexer, Parser, Interpreter
 	// and catch them separatly
@@ -36,31 +54,28 @@ void Yocto::run(const std::string & script){
 	const auto bench = std::chrono::high_resolution_clock::now;
 
 	// Lexing
-	Lexer lexer(script);
 	auto lexer_start = bench();
-	TokenStream tokens = lexer.lex();
+	TokenStream tokens = lexer.lex(script);
 	auto lexer_end = bench();
 
-	// std::cout << "Tokens:" << std::endl;
-	// for(auto & t : tokens){
-	// 	std::cout << t.to_string() << std::endl;
-	// }
+	std::cout << "Tokens:" << std::endl;
+	for(auto & t : tokens){
+		std::cout << t.to_string() << std::endl;
+	}
 
 	// Parse tokens
-	Parser parser(tokens);
 	auto parser_start = bench();
-	StmtList tree = parser.parse();
+	StmtList tree = parser.parse(tokens);
 	auto parser_end = bench();
 
 	// Print tree
-	// Printer printer;
-	// std::cout << "\nParse Tree:" << std::endl;
-	// printer.print(tree);
-	// std::cout << std::endl;
+	Printer printer;
+	std::cout << "\nParse Tree:" << std::endl;
+	printer.print(tree);
+	std::cout << std::endl;
 
-	Interpreter interpreter;
 	auto ip_start = bench();
-	interpreter.interpret(tree);
+	ip.interpret(tree);
 	auto ip_end = bench();
 
 	std::cout << "\n\nBenchmarks:" << std::endl;

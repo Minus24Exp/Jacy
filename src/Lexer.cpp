@@ -1,12 +1,5 @@
 #include "Lexer.h"
 
-Lexer::Lexer(const std::string & script){
-	this->script = script;
-	index = 0;
-	line = 1;
-	column = 1;
-}
-
 char Lexer::peek(){
 	return script[index];
 }
@@ -158,7 +151,12 @@ void Lexer::lex_number(){
 	}
 }
 
-TokenStream Lexer::lex(){
+TokenStream Lexer::lex(const std::string & script){
+	this->script = script;
+	tokens.clear();
+	index = 0;
+	line = 1;
+	column = 1;
 
 	while(!eof()){
 		token_line = line;

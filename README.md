@@ -176,8 +176,6 @@ Operator overloading can be implemented with operator magic functions:
 - NEVER skip newline after last operator in statement (statements )
 
 ## TODO
-- Solve problem with unique_ptr in default arguments (now they're raw pointers)
-- Create `ParamList` class to store params and avoid annoying problems with `unique_ptr`
 - Add multi-threading (not in Yocto), to lex and parse at the same time as Interpreter register globals.
 - Add namespaces
 

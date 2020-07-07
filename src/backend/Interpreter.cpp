@@ -2,7 +2,7 @@
 
 Interpreter::Interpreter(){
 	value = nullptr;
-	scope = std::make_shared<Scope>();
+	enter_scope();
 
 	Global global(*this);
 	global.reg();
@@ -24,6 +24,9 @@ void Interpreter::enter_scope(scope_ptr new_scope){
 
 void Interpreter::exit_scope(){
 	scope = scope->get_parent();
+	if(!scope){
+		throw YoctoException("Attempt to exit global scope");
+	}
 }
 
 void Interpreter::execute(Stmt * stmt){

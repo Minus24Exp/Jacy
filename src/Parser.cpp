@@ -1,10 +1,5 @@
 #include "Parser.h"
 
-Parser::Parser(const TokenStream & tokens){
-	index = 0;
-	this->tokens = tokens;
-}
-
 Token Parser::peek(){
 	return tokens[index];
 }
@@ -94,7 +89,11 @@ void Parser::skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & sk
 /////////////
 // Parsers //
 /////////////
-StmtList Parser::parse(){
+StmtList Parser::parse(const TokenStream & tokens){
+	tree.clear();
+	index = 0;
+	this->tokens = tokens;
+
 	while(!eof()){
 		while(is_nl()){
 			advance();

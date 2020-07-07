@@ -13,9 +13,21 @@
 
 class Interpreter : public BaseVisitor {
 public:
-	Interpreter();
-	virtual ~Interpreter() = default;
+	static Interpreter & get_instance(){
+		static Interpreter instance;
+		return instance;
+	}
 
+	Interpreter(const Interpreter&) = delete;
+	Interpreter(Interpreter&&) = delete;
+	Interpreter & operator=(const Interpreter&) = delete;
+	Interpreter & operator=(Interpreter&&) = delete;
+
+private:
+	Interpreter();
+	~Interpreter() = default;
+
+public:
 	void interpret(const StmtList & tree);
 
 	void enter_scope(scope_ptr new_scope = nullptr);

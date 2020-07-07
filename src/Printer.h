@@ -1,5 +1,5 @@
-#ifndef PARSETREEPRINTER_H
-#define PARSETREEPRINTER_H
+#ifndef PRINTER_H
+#define PRINTER_H
 
 #include <iostream>
 
