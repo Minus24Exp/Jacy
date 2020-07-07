@@ -1,9 +1,5 @@
-func default(){
-	
-}
-
-func a p = default() {
-	print(p)
+func a(p1){
+	p1 = 4
 	print(p1)
 }
 

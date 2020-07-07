@@ -22,6 +22,12 @@ struct Param {
 
 using Params = std::vector<Param>;
 
+enum class CmpArgsResult {
+	Ok,
+	TooFew,
+	TooMany
+};
+
 class Callable : public Object {
 public:
 	Callable(scope_ptr closure,
@@ -30,7 +36,14 @@ public:
 			) : Object(ObjectType::Callable),
 		  		closure(closure),
 		  		name(name),
-		  		params(params) {}
+		  		params(params)
+	{
+		// Set count of required arguments count (used by errors)
+		required_argc = std::count_if(params.begin(), params.end(), [](const auto & p){
+			if(p.default_val) return false;
+			return true;
+		});
+	}
 
 	virtual ~Callable() = default;
 
@@ -50,11 +63,21 @@ public:
 	virtual std::string to_string() const = 0;
 
 	// Callable //
+	
+	// Get count of required arguments
+	size_t get_required_argc() const {
+		return required_argc;
+	}
+
+	size_t get_max_argc() const {
+		return params.size();
+	}
+
 	std::string get_name() const {
 		return name;
 	}
 	
-	bool cmp_args(const ObjList & args) const;
+	CmpArgsResult cmp_args(const ObjList & args) const;
 
 	virtual obj_ptr call(Interpreter & interpreter, ObjList && args) = 0;
 
@@ -62,6 +85,7 @@ protected:
 	scope_ptr closure;
 	std::string name;
 	Params params;
+	size_t required_argc;
 };
 
 #endif

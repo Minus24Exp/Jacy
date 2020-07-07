@@ -179,7 +179,7 @@ id_ptr Parser::parse_id(){
 }
 
 block_ptr Parser::parse_block(bool allow_one_line){
-	Position block_start = peek().pos;
+	Position block_pos = peek().pos;
 	StmtList stmts;
 
 	// One-line //
@@ -194,7 +194,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
 		// because block is always part of statement and after all statements
 		// there must be semi
 
-		return std::make_shared<Block>(block_start, stmts);
+		return std::make_shared<Block>(block_pos, stmts);
 	}	
 
 	// Multi-line //
@@ -217,7 +217,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
 	}
 	skip_op(Operator::RBrace, true, false);
 
-	return std::make_shared<Block>(block_start, stmts);
+	return std::make_shared<Block>(block_pos, stmts);
 }
 
 expr_ptr Parser::parse_infix(expr_ptr left, int prec){
@@ -239,7 +239,7 @@ expr_ptr Parser::parse_infix(expr_ptr left, int prec){
 }
 
 stmt_ptr Parser::parse_var_decl(){
-	Position var_decl_start = peek().pos;
+	Position var_decl_pos = peek().pos;
 
 	VarDeclType decl = VarDeclType::Var;
 	if(is_kw(Keyword::Var)){
@@ -259,11 +259,11 @@ stmt_ptr Parser::parse_var_decl(){
 		assign_expr = parse_expr();
 	}
 
-	return std::make_shared<VarDecl>(var_decl_start, decl, id, assign_expr);
+	return std::make_shared<VarDecl>(var_decl_pos, decl, id, assign_expr);
 }
 
 stmt_ptr Parser::parse_func_decl(){
-	Position func_decl_start = peek().pos;
+	Position func_decl_pos = peek().pos;
 
 	skip_kw(Keyword::Func, false, true);
 	id_ptr id = parse_id();
@@ -311,11 +311,11 @@ stmt_ptr Parser::parse_func_decl(){
 
 	block_ptr body = parse_block(allow_one_line);
 
-	return std::make_shared<FuncDecl>(func_decl_start, id, params, body);
+	return std::make_shared<FuncDecl>(func_decl_pos, id, params, body);
 }
 
 expr_ptr Parser::parse_func_call(expr_ptr left){
-	Position func_call_start = peek().pos;
+	Position func_call_pos = peek().pos;
 
 	skip_op(Operator::LParen, true, true);
 
@@ -336,11 +336,11 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 
 	skip_op(Operator::RParen, true, false);
 
-	return std::make_shared<FuncCall>(func_call_start, left, args);
+	return std::make_shared<FuncCall>(func_call_pos, left, args);
 }
 
 expr_ptr Parser::parse_if_expr(){
-	Position if_start = peek().pos;
+	Position if_pos = peek().pos;
 
 	skip_kw(Keyword::If, false, true);
 	
@@ -378,11 +378,11 @@ expr_ptr Parser::parse_if_expr(){
 		else_branch = parse_block(true);
 	}
 
-	return std::make_shared<IfExpr>(if_start, cond, then_branch, else_branch);
+	return std::make_shared<IfExpr>(if_pos, cond, then_branch, else_branch);
 }
 
 stmt_ptr Parser::parse_while(){
-	Position while_start = peek().pos;
+	Position while_pos = peek().pos;
 
 	skip_kw(Keyword::While, false, true);
 
@@ -410,7 +410,7 @@ stmt_ptr Parser::parse_while(){
 
 	block_ptr body = parse_block(allow_one_line);
 
-	return std::make_shared<While>(while_start, cond, body);
+	return std::make_shared<While>(while_pos, cond, body);
 }
 
 ////////////

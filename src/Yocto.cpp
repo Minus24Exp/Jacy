@@ -29,6 +29,10 @@ void Yocto::run_script(const std::string & path){
 }
 
 void Yocto::run(const std::string & script){
+
+	// TODO: Create base exceptions for Lexer, Parser, Interpreter
+	// and catch them separatly
+
 	const auto bench = std::chrono::high_resolution_clock::now;
 
 	// Lexing

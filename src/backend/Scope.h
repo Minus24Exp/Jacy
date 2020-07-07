@@ -4,12 +4,11 @@
 #include "Exception.h"
 #include <memory>
 #include <unordered_map>
+#include <iostream>
+#include "backend/Local.h"
 
 class Scope;
 using scope_ptr = std::shared_ptr<Scope>;
-
-class Object;
-using obj_ptr = std::shared_ptr<Object>;
 
 class Scope {
 public:
@@ -24,27 +23,41 @@ public:
 		this->parent = parent;
 	}
 
-	void define(const std::string & name, obj_ptr value){
-		values[name] = std::move(value);
-	}
-
-	void assign(const std::string & name, obj_ptr value){
-		auto it = values.find(name);
-		
-		if(it != values.end()){
-			values[name] = std::move(value);
-		}else if(parent){
-			parent->assign(name, std::move(value));
+	// Returns true if variable is not defined, false otherwise
+	bool define(const std::string & name, const Local & loc){
+		if(locals.find(name) == locals.end()){
+			locals.emplace(name, loc);
+			return true;
 		}else{
-			throw YoctoException(name + " is not defined");
+			return false;
 		}
 	}
 
-	Object * get(const std::string & name) const {
-		auto it = values.find(name);
+	// Returns:
+	// 1 if variable was defined and able to assign
+	// 0 if variable was not defined
+	// -1 if variable cannot be reassigned
+	int assign(const std::string & name, obj_ptr val){
+		auto it = locals.find(name);
 		
-		if(it != values.end()){
-			return it->second.get();
+		if(it != locals.end()){
+			if(it->second.decl_type == LocalDeclType::Val && it->second.val != nullptr){
+				return -1;
+			}
+			locals.at(name).val = val;
+			return 1;
+		}else if(parent){
+			return parent->assign(name, val);
+		}else{
+			return 0;
+		}
+	}
+
+	obj_ptr get(const std::string & name) const {
+		auto it = locals.find(name);
+		
+		if(it != locals.end()){
+			return it->second.val;
 		}
 
 		if(parent){
@@ -54,23 +67,15 @@ public:
 		return nullptr;
 	}
 
-	// Debug (only) //
-	std::unordered_map<std::string, obj_ptr> get_values() const {
-		return values;
-	}
-	Object * get_local(const std::string & name) const {
-		// Get values from this scope without lookup
-		auto it = values.find(name);
-
-		if(it != value.end()){
-			return it->second.get();
+	// Helpers //
+	void define_nf(const std::string & name, const obj_ptr & nf){
+		if(!define(name, {LocalDeclType::Val, nf})){
+			throw YoctoException("Attempt to redefine native function "+ name);
 		}
-
-		return nullptr;
 	}
 
 private:
-	std::unordered_map<std::string, obj_ptr> values;
+	std::unordered_map<std::string, Local> locals;
 	scope_ptr parent;
 };
 

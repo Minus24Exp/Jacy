@@ -18,7 +18,7 @@ public:
 
 	void interpret(const StmtList & tree);
 
-	void enter_scope(scope_ptr sub_scope = nullptr);
+	void enter_scope(scope_ptr new_scope = nullptr);
 	void exit_scope();
 	scope_ptr get_scope() const {
 		return scope;
@@ -26,7 +26,7 @@ public:
 
 	void execute(Stmt * stmt);
 	obj_ptr eval(Expr * expr);
-	void execute_block(Block * block, scope_ptr sub_scope = nullptr);
+	void execute_block(Block * block, scope_ptr new_scope = nullptr);
 	void eval_assign(Infix * infix);
 
 	void visit(ExprStmt * expr_stmt) override;

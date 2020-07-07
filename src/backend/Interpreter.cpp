@@ -14,23 +14,15 @@ void Interpreter::interpret(const StmtList & tree){
 	}
 }
 
-void Interpreter::enter_scope(scope_ptr sub_scope){
-	if(sub_scope){
-		sub_scope->set_parent(scope);
-		scope = sub_scope;
+void Interpreter::enter_scope(scope_ptr new_scope){
+	if(new_scope){
+		scope = std::move(new_scope);
 	}else{
 		scope = std::make_shared<Scope>(scope);
 	}
 }
 
 void Interpreter::exit_scope(){
-	std::cout << "Exit scope\n";
-	std::cout << "Pointers count:\n";
-
-	for(const auto & field : scope->get_values()){
-		std::cout << field.first << ": " << field.second.use_count() << std::endl;
-	}
-
 	scope = scope->get_parent();
 }
 
@@ -43,8 +35,8 @@ obj_ptr Interpreter::eval(Expr * expr){
 	return std::move(value);
 }
 
-void Interpreter::execute_block(Block * block, scope_ptr sub_scope){
-	enter_scope(sub_scope);
+void Interpreter::execute_block(Block * block, scope_ptr new_scope){
+	enter_scope(new_scope);
 	for(const auto & stmt : block->stmts){
 		execute(stmt.get());
 	}
@@ -54,12 +46,18 @@ void Interpreter::execute_block(Block * block, scope_ptr sub_scope){
 void Interpreter::eval_assign(Infix * infix){
 	// Assignment is right-associative
 	// So evaluate rhs
-	
 	obj_ptr rhs = eval(infix->right.get());
 
 	switch(infix->left->type){
 		case ExprType::Id:{
-			scope->assign(static_cast<Identifier*>(infix->left.get())->get_name(), std::move(rhs));
+			const auto id = std::static_pointer_cast<Identifier>(infix->left);
+			int assign = scope->assign(id->get_name(), std::move(rhs));
+
+			if(assign == 0){
+				runtime_error(id->get_name() +" is not defined", id.get());
+			}else if(assign == -1){
+				runtime_error("Unable to reassign val "+ id->get_name(), id.get());
+			}
 			break;
 		}
 		default:{
@@ -98,20 +96,37 @@ void Interpreter::visit(Literal * literal){
 }
 
 void Interpreter::visit(Identifier * id){
-	Object * obj = scope->get(id->get_name());
+	obj_ptr obj = scope->get(id->get_name());
 	if(!obj){
 		runtime_error(id->get_name() + " is not defined", id);
 		return;
 	}
-	value = obj->clone();
+	value = obj;
 }
 
 void Interpreter::visit(VarDecl * var_decl){
+	// Important difference between nullptr and null_obj
+	// if variable is defined, but not assigned then
+	// it's nullptr, and if it's `val` then it can be assigned
+	// somewhere after
+
+	value = nullptr;
+
 	if(var_decl->assign_expr){
 		value = eval(var_decl->assign_expr.get());
-		scope->define(var_decl->id->get_name(), value->clone());
-	}else{
-		scope->define(var_decl->id->get_name(), null_obj);
+	}
+
+	// TODO: Think about cloning...
+	LocalDeclType decl_type = LocalDeclType::Var;
+	if(var_decl->decl == VarDeclType::Val){
+		decl_type = LocalDeclType::Val;
+	}
+
+	bool defined = scope->define(var_decl->id->get_name(), {decl_type, value});
+	if(!defined){
+		// If tried to redefine
+		runtime_error("Redifinition of variable "+ var_decl->id->get_name(), var_decl);
+		return;
 	}
 
 	value = nullptr;
@@ -122,7 +137,7 @@ void Interpreter::visit(Block * block){
 }
 
 void Interpreter::visit(FuncDecl * func_decl){
-	std::string name = func_decl->id->get_name();
+	std::string func_name = func_decl->id->get_name();
 
 	Params params;
 	for(auto & p : func_decl->params){
@@ -130,11 +145,15 @@ void Interpreter::visit(FuncDecl * func_decl){
 		if(p.default_val){
 			default_val = eval(p.default_val.get());
 		}
-		params.push_back({p.id->get_name(), std::move(default_val)});
+		params.push_back({p.id->get_name(), default_val});
 	}
 
-	obj_ptr func = std::make_shared<Func>(scope, name, params, func_decl->body);
-	scope->define(name, std::move(func));
+	obj_ptr func = std::make_shared<Func>(scope, func_name, params, std::move(func_decl->body));
+
+	bool defined = scope->define(func_name, {LocalDeclType::Val, func});
+	if(!defined){
+		runtime_error("Redifinition of function "+ func_name, func_decl);
+	}
 }
 
 void Interpreter::visit(FuncCall * func_call){
@@ -153,9 +172,23 @@ void Interpreter::visit(FuncCall * func_call){
 
 	Callable * callable = static_cast<Callable*>(lhs.get());
 
-	if(!callable->cmp_args(args)){
-		// TODO: Improve args comparison
-		runtime_error("Invalid arguments", func_call);
+	// Compare args and check for errors
+	const auto required_argc_s = std::to_string(callable->get_required_argc());
+	const auto max_argc_s = std::to_string(callable->get_max_argc());
+	const auto given_argc_s = std::to_string(args.size());
+	switch(callable->cmp_args(args)){
+		case CmpArgsResult::TooFew:{
+			runtime_error("Too few arguments in function call "+ callable->to_string()
+						 +" (at least " + required_argc_s +" expected, "
+						 + given_argc_s +" given)", func_call);
+			break;
+		}
+		case CmpArgsResult::TooMany:{
+			runtime_error("Too many arguments in function call "+ callable->to_string()
+						 +" (maximum "+ max_argc_s +" expected, "
+						 + given_argc_s +" given)", func_call);
+			break;
+		}
 	}
 
 	// TODO: !!! Add exception handling for call
