@@ -11,6 +11,15 @@
 #include "object/objects.h"
 #include "backend/Global.h"
 
+// ReturnValue is used to catch return statement
+// It has to be separate type to determine it correctly in catch
+struct ReturnValue {
+	obj_ptr value;
+	// We need to track return value position
+	// to catch errors for return statement outside of function
+	Position pos;
+};
+
 class Interpreter : public BaseVisitor {
 public:
 	static Interpreter & get_instance(){
@@ -51,7 +60,10 @@ public:
 	void visit(Infix * infix) override;
 	void visit(IfExpr * if_expr) override;
 	void visit(While * w) override;
+	void visit(ReturnStmt * return_stmt) override;
+	void visit(ClassDecl * class_decl) override;
 
+	void runtime_error(const std::string & msg, const Position & pos);
 	void runtime_error(const std::string & msg, Node * n);
 
 private:

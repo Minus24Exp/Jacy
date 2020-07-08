@@ -23,6 +23,8 @@ public:
 	void visit(Infix * infix) override;
 	void visit(IfExpr * if_expr) override;
 	void visit(While * w) override;
+	void visit(ReturnStmt * return_stmt) override;
+	void visit(ClassDecl * class_decl) override;
 
 private:
 	void print_indent();

@@ -40,6 +40,7 @@ private:
 	bool eof();
 	bool is_typeof(const TokenType & type);
 	bool is_nl();
+	bool is_semis();
 	bool is_op(const Operator & op);
 	bool is_kw(const Keyword & kw);
 
@@ -63,6 +64,7 @@ private:
 	expr_ptr parse_func_call(expr_ptr left);
 	expr_ptr parse_if_expr();
 	stmt_ptr parse_while();
+	stmt_ptr parse_class_decl();
 
 	// Errors
 	void error(const std::string & msg);

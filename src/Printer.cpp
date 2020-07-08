@@ -100,11 +100,9 @@ void Printer::visit(FuncCall * func_call){
 }
 
 void Printer::visit(Infix * infix){
-	std::cout << "(";
 	infix->left->accept(*this);
 	std::cout << " " << op_to_str(infix->op.op()) << " ";
 	infix->right->accept(*this);
-	std::cout << ")";
 }
 
 void Printer::visit(IfExpr * if_expr){
@@ -122,9 +120,39 @@ void Printer::visit(IfExpr * if_expr){
 }
 
 void Printer::visit(While * w){
+	print_indent();
 	std::cout << "while(";
 	w->cond->accept(*this);
 	std::cout << "){\n";
 	w->body->accept(*this);
 	std::cout << "\n}";
+}
+
+void Printer::visit(ReturnStmt * return_stmt){
+	print_indent();
+	std::cout << "return ";
+	return_stmt->accept(*this);
+}
+
+void Printer::visit(ClassDecl * class_decl){
+	print_indent();
+	std::cout << "class ";
+	class_decl->id->accept(*this);
+	
+	if(class_decl->super_id){
+		std::cout << " : ";		
+		class_decl->super_id->accept(*this);
+	}
+
+	std::cout << " {\n";
+	
+	indent++;
+	for(const auto & field : class_decl->fields){
+		field->accept(*this);
+		std::cout << std::endl;
+	}
+	indent--;
+
+	print_indent();
+	std::cout << "}";
 }

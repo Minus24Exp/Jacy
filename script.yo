@@ -1,3 +1,7 @@
-var a = 1
+class A {
+	var value = 1
 
-print(a)
+	func print_it(){
+		print(value)
+	}
+}

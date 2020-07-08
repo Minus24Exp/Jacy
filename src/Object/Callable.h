@@ -77,7 +77,7 @@ public:
 		return name;
 	}
 	
-	CmpArgsResult cmp_args(const ObjList & args) const;
+	virtual CmpArgsResult cmp_args(const ObjList & args) const;
 
 	virtual obj_ptr call(Interpreter & interpreter, ObjList && args) = 0;
 

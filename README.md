@@ -175,9 +175,17 @@ Operator overloading can be implemented with operator magic functions:
 ### Parser
 - NEVER skip newline after last operator in statement (statements )
 
+## Notes
+
+### How does class constructor works
+The function `new` always exists and can be called as `ClassName()`.
+But, the user-defined constructor calls after the default constructor.
+
 ## TODO
+- After first version "release" do general parsing tests and other tests too
 - Add multi-threading (not in Yocto), to lex and parse at the same time as Interpreter register globals.
 - Add namespaces
+- Class extensions
 
 ## Think about it
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`

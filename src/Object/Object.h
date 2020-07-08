@@ -8,7 +8,6 @@
 class Object;
 using obj_ptr = std::shared_ptr<Object>;
 using ObjList = std::vector<obj_ptr>;
-using ObjFields = std::unordered_map<std::string, obj_ptr>;
 
 enum class ObjectType {
 	Null,
@@ -16,7 +15,9 @@ enum class ObjectType {
 	Int,
 	Float,
 	String,
-	Callable
+	Callable,
+	Class,
+	Instance
 };
 
 static inline std::string objtype2str(const ObjectType & type){
@@ -44,26 +45,16 @@ public:
 
 	virtual bool equals(Object * other) const = 0;
 	virtual obj_ptr clone() const = 0;
+
+	// Note: to_string is not the same as `to_s`
+	// it's used by error handlers and etc.
+	// Maybe, if I'll implement some kind of `repr`
+	// function like in Pyhton, then it will be
+	// used there
 	virtual std::string to_string() const {
 		return "<Object>";
 	}
 
-	Object * get(const std::string & name) const {
-		// TODO: Add superclass
-
-		if(fields.find(name) != fields.end()){
-			return fields.at(name).get();
-		}
-		return nullptr;
-	}
-
-	void set(const std::string & name, obj_ptr obj){
-		// TODO: Think about cases when field is not reassignable
-		fields[name] = obj;
-	}
-
-protected:
-	ObjFields fields;
 };
 
 #endif

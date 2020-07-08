@@ -30,9 +30,9 @@ public:
 	IllegalArgumentException(const std::string & details) : YoctoException("Illegal argument: "+ details) {}
 };
 
-class UnexpectedTokenException : public YoctoException {
+class UnexpectedException : public YoctoException {
 public:
-	UnexpectedTokenException(Token t) : YoctoException("Unexpected " + t.to_string()) {}
+	UnexpectedException(Token t) : YoctoException("Unexpected " + t.to_string()) {}
 };
 
 class ExpectedException : public YoctoException {
@@ -51,8 +51,8 @@ public:
 
 class RuntimeException : public YoctoException {
 public:
-	RuntimeException(const std::string & msg, Node * n)
-		: YoctoException("Runtime error: "+ msg +" at "+ std::to_string(n->pos.line) +":"+ std::to_string(n->pos.column)) {}
+	RuntimeException(const std::string & msg, const Position & pos)
+		: YoctoException("Runtime error: "+ msg +" at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
 };
 
 #endif

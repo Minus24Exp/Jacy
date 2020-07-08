@@ -16,13 +16,12 @@ obj_ptr Func::call(Interpreter & ip, ObjList && args){
 		}
 	}
 
-	obj_ptr return_val = null_obj;
+	obj_ptr return_val = nullptr;
 
 	try {
 		ip.execute_block(body.get(), ip.get_scope());
-	}catch(Object & val){
-		// TODO: Add return value
-		// return_val = std::make_unique<Object>(&val);
+	}catch(ReturnValue & val){
+		return_val = val.value ? val.value : null_obj;
 	}
 
 	// I don't `exit_scope`, because I need to move to the previous scope,

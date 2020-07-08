@@ -9,8 +9,14 @@ Interpreter::Interpreter(){
 }
 
 void Interpreter::interpret(const StmtList & tree){
-	for(const auto & stmt : tree){
-		execute(stmt.get());
+	try{
+		for(const auto & stmt : tree){
+			execute(stmt.get());
+		}
+	}catch(ReturnValue & return_value){
+		// We need to catch return_value, if return statement
+		// was not in function
+		runtime_error("Unexpected return statement", return_value.pos);
 	}
 }
 
@@ -198,7 +204,7 @@ void Interpreter::visit(FuncCall * func_call){
 	// It will be really useful for NativeFunc
 
 	value = callable->call(*this, std::move(args));
-	
+
 	if(!value){
 		// Note: This is just a helper for built-in functions
 		// They can return nullptr, and then here it will be converted to Null.
@@ -239,6 +245,47 @@ void Interpreter::visit(While * w){
 	}
 }
 
+void Interpreter::visit(ReturnStmt * return_stmt){
+	if(return_stmt->expr){
+		value = eval(return_stmt->expr.get());
+	}else{
+		value = null_obj;
+	}
+	throw ReturnValue{value, return_stmt->pos};
+}
+
+void Interpreter::visit(ClassDecl * class_decl){
+	class_ptr super = nullptr;
+	std::string class_name = class_decl->id->get_name();
+
+	if(class_decl->super_id){
+		std::string super_name = class_decl->super_id->get_name();
+		super = std::dynamic_pointer_cast<Class>(scope->get(super_name));
+		if(!super){
+			runtime_error("Unable to use "+ super_name +" as super class", class_decl->super_id.get());
+		}
+	}
+
+	enter_scope();
+
+	for(const auto & decl : class_decl->fields){
+		decl->accept(*this);
+	}
+
+	obj_ptr _class = std::make_shared<Class>(scope, class_name, super);
+
+	exit_scope();
+
+	scope->define(class_name, {LocalDeclType::Val, _class});
+}
+
+////////////
+// Errors //
+////////////
+void Interpreter::runtime_error(const std::string & msg, const Position & pos){
+	throw RuntimeException(msg, pos);
+}
+
 void Interpreter::runtime_error(const std::string & msg, Node * n){
-	throw RuntimeException(msg, n);
+	runtime_error(msg, n->pos);
 }

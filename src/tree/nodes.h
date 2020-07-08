@@ -7,6 +7,8 @@
 #include "tree/Infix.h"
 #include "tree/IfExpr.h"
 #include "tree/While.h"
+#include "tree/ReturnStmt.h"
+#include "tree/ClassDecl.h"
 
 #include "tree/Node.h"
 

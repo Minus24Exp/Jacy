@@ -23,6 +23,10 @@ bool Parser::is_nl(){
 	return is_typeof(TokenType::Nl);
 }
 
+bool Parser::is_semis(){
+	return is_nl() || is_op(Operator::Semi);
+}
+
 bool Parser::is_op(const Operator & op){
 	return is_typeof(TokenType::Op) && peek().op() == op;
 }
@@ -49,10 +53,10 @@ void Parser::skip_nl(const bool & optional){
 }
 
 void Parser::skip_semis(){
-	if(is_nl() || is_op(Operator::Semi)){
+	if(is_semis()){
 		do{
 			advance();
-		}while(is_nl() || is_op(Operator::Semi));
+		}while(is_semis());
 	}else{
 		expected_error("`;` or [new line]");
 	}
@@ -124,6 +128,19 @@ stmt_ptr Parser::parse_stmt(){
 			case Keyword::While:{
 				return parse_while();
 				break;
+			}
+			case Keyword::Return:{
+				Position return_stmt_pos = peek().pos;
+				advance();
+				expr_ptr expr = nullptr;
+				if(!is_semis()){
+					// not empty return
+					expr = parse_expr();
+				}
+				return std::make_shared<ReturnStmt>(return_stmt_pos, expr);
+			}
+			case Keyword::Class:{
+				return parse_class_decl();
 			}
 		}
 	}
@@ -412,6 +429,49 @@ stmt_ptr Parser::parse_while(){
 	return std::make_shared<While>(while_pos, cond, body);
 }
 
+stmt_ptr Parser::parse_class_decl(){
+	Position class_decl_pos = peek().pos;
+
+	skip_kw(Keyword::Class, false, true);
+
+	id_ptr id = parse_id();
+
+	skip_nl(true);
+
+	id_ptr super_id = nullptr;
+	if(is_op(Operator::Colon)){
+		skip_op(Operator::Colon, true, true);
+		super_id = parse_id();
+	}
+
+	skip_op(Operator::LBrace, true, true);
+
+	// Parse declarations
+	// Note: Think about nested classes
+	
+	StmtList decls;
+	while(!eof()){
+		skip_nl(true);
+
+		if(is_op(Operator::RBrace)){
+			break;
+		}
+
+		if(is_kw(Keyword::Val) || is_kw(Keyword::Var)){
+			decls.push_back(parse_var_decl());
+		}else if(is_kw(Keyword::Func)){
+			decls.push_back(parse_func_decl());
+		}else{
+			expected_error("function or variable declaration");
+		}
+		skip_semis();	
+	}
+
+	skip_op(Operator::RBrace, true, false);
+
+	return std::make_shared<ClassDecl>(class_decl_pos, id, super_id, decls);
+}
+
 ////////////
 // Errors //
 ////////////
@@ -420,7 +480,7 @@ void Parser::error(const std::string & msg){
 }
 
 void Parser::unexpected_error(){
-	throw UnexpectedTokenException(peek());
+	throw UnexpectedException(peek());
 }
 
 void Parser::expected_error(const std::string & expected){

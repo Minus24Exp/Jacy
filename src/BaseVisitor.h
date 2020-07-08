@@ -15,6 +15,8 @@ struct FuncCall;
 struct Infix;
 struct IfExpr;
 struct While;
+struct ReturnStmt;
+struct ClassDecl;
 
 class BaseVisitor {
 public:
@@ -31,6 +33,8 @@ public:
 	virtual void visit(Infix * infix) = 0;
 	virtual void visit(IfExpr * if_expr) = 0;
 	virtual void visit(While * w) = 0;
+	virtual void visit(ReturnStmt * return_stmt) = 0;
+	virtual void visit(ClassDecl * class_decl) = 0;
 	
 };
 

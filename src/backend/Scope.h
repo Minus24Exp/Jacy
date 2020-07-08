@@ -10,6 +10,8 @@
 class Scope;
 using scope_ptr = std::shared_ptr<Scope>;
 
+using LocalMap = std::unordered_map<std::string, Local>;
+
 class Scope {
 public:
 	Scope() : parent(nullptr) {}
@@ -67,6 +69,10 @@ public:
 		return nullptr;
 	}
 
+	LocalMap get_locals() const {
+		return locals;
+	}
+
 	// Helpers //
 	void define_nf(const std::string & name, const obj_ptr & nf){
 		if(!define(name, {LocalDeclType::Val, nf})){
@@ -75,7 +81,7 @@ public:
 	}
 
 private:
-	std::unordered_map<std::string, Local> locals;
+	LocalMap locals;
 	scope_ptr parent;
 };
 

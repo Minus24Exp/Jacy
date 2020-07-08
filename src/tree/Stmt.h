@@ -13,7 +13,9 @@ enum class StmtType {
 	Block,
 	FuncDecl,
 	VarDecl,
-	While
+	While,
+	Return,
+	Class
 };
 
 struct Stmt : Node {
