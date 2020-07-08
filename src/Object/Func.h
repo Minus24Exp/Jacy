@@ -1,7 +1,7 @@
 #ifndef FUNC_H
 #define FUNC_H
 
-#include "tree/FuncDecl.h"
+#include "tree/Stmt/FuncDecl.h"
 #include "backend/Scope.h"
 #include "object/Object.h"
 #include "object/Callable.h"

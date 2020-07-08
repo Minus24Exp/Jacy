@@ -1,7 +1,7 @@
 #ifndef INFIX_H
 #define INFIX_H
 
-#include "tree/Expr.h"
+#include "tree/Expr/Expr.h"
 
 enum class InfixPrec {
 	Zero,

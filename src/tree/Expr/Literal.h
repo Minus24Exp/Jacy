@@ -1,7 +1,7 @@
 #ifndef LITERAL_H
 #define LITERAL_H
 
-#include "tree/Expr.h"
+#include "tree/Expr/Expr.h"
 #include "Token.h"
 
 // I don't want to create many classes for all literal tokens

@@ -1,16 +1,19 @@
-#include "tree/Block.h"
-#include "tree/Literal.h"
-#include "tree/Identifier.h"
-#include "tree/VarDecl.h"
-#include "tree/FuncDecl.h"
-#include "tree/FuncCall.h"
-#include "tree/Infix.h"
-#include "tree/IfExpr.h"
-#include "tree/While.h"
-#include "tree/ReturnStmt.h"
-#include "tree/ClassDecl.h"
-#include "tree/SetExpr.h"
-#include "tree/GetExpr.h"
+// Statements //
+#include "tree/Stmt/Block.h"
+#include "tree/Stmt/VarDecl.h"
+#include "tree/Stmt/FuncDecl.h"
+#include "tree/Stmt/ReturnStmt.h"
+#include "tree/Stmt/WhileStmt.h"
+#include "tree/Stmt/ClassDecl.h"
+
+// Expressions //
+#include "tree/Expr/Literal.h"
+#include "tree/Expr/Identifier.h"
+#include "tree/Expr/Infix.h"
+#include "tree/Expr/FuncCall.h"
+#include "tree/Expr/IfExpr.h"
+#include "tree/Expr/SetExpr.h"
+#include "tree/Expr/GetExpr.h"
 
 #include "tree/Node.h"
 

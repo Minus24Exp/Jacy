@@ -36,7 +36,7 @@ private:
 	Token peek();
 	Token advance();
 
-	// Chekers
+	// Chekers //
 	bool eof();
 	bool is_typeof(const TokenType & type);
 	bool is_nl();
@@ -46,25 +46,26 @@ private:
 
 	bool is_infix_op();
 
-	// Skippers
+	// Skippers //
 	void skip_nl(const bool & optional = false);
 	void skip_semis();
 	void skip_op(const Operator & op, const bool & skip_l_nl, const bool & skip_r_nl);
 	void skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl);
 
-	// Parsers
+	// Parsers //
 	stmt_ptr parse_stmt();
+	block_ptr parse_block(bool allow_one_line = false);
+	stmt_ptr parse_var_decl();
+	stmt_ptr parse_func_decl();
+	stmt_ptr parse_while_stmt();
+	stmt_ptr parse_class_decl();
+
 	expr_ptr parse_expr();
 	expr_ptr parse_atom();
 	id_ptr parse_id();
-	block_ptr parse_block(bool allow_one_line = false);
 	expr_ptr parse_infix(expr_ptr left, int prec);
-	stmt_ptr parse_var_decl();
-	stmt_ptr parse_func_decl();
 	expr_ptr parse_func_call(expr_ptr left);
 	expr_ptr parse_if_expr();
-	stmt_ptr parse_while();
-	stmt_ptr parse_class_decl();
 
 	// Errors
 	void error(const std::string & msg);

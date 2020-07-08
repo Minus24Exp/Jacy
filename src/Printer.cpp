@@ -121,7 +121,7 @@ void Printer::visit(IfExpr * if_expr){
 	}
 }
 
-void Printer::visit(While * w){
+void Printer::visit(WhileStmt * w){
 	print_indent();
 	std::cout << "while(";
 	w->cond->accept(*this);
@@ -160,7 +160,7 @@ void Printer::visit(ClassDecl * class_decl){
 }
 
 void Printer::visit(SetExpr * set_expr){
-	set_expr->object->accept(*this);
+	set_expr->left->accept(*this);
 	std::cout << ".";
 	set_expr->member->accept(*this);
 	std::cout << " = ";

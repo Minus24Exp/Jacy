@@ -112,6 +112,9 @@ StmtList Parser::parse(const TokenStream & tokens){
 	return tree;
 }
 
+////////////////
+// Statements //
+////////////////
 stmt_ptr Parser::parse_stmt(){
 
 	if(is_typeof(TokenType::Kw)){
@@ -126,7 +129,7 @@ stmt_ptr Parser::parse_stmt(){
 				break;
 			}
 			case Keyword::While:{
-				return parse_while();
+				return parse_while_stmt();
 				break;
 			}
 			case Keyword::Return:{
@@ -148,52 +151,7 @@ stmt_ptr Parser::parse_stmt(){
 	return std::make_shared<ExprStmt>(peek().pos, parse_expr());
 }
 
-expr_ptr Parser::parse_expr(){
-	expr_ptr left = parse_atom();
-
-	while(!eof()){
-		if(is_op(Operator::LParen)){
-			left = parse_func_call(left);
-		}else if(is_infix_op()){
-			return parse_infix(left, 0);
-			// TODO: Add else if postfix (and break!)
-		}else{
-			break;
-		}
-	}
-	
-	return left;
-}
-
-expr_ptr Parser::parse_atom(){
-	if(is_typeof(TokenType::Int) || is_typeof(TokenType::Float) || is_typeof(TokenType::Str) || is_typeof(TokenType::Bool)){
-		Token current = peek();
-		advance();
-		return std::make_shared<Literal>(current);
-	}
-
-	if(is_typeof(TokenType::Id)){
-		return parse_id();
-	}
-
-	if(is_kw(Keyword::If)){
-		return parse_if_expr();
-	}
-
-	unexpected_error();
-	return nullptr;
-}
-
-id_ptr Parser::parse_id(){
-	if(!is_typeof(TokenType::Id)){
-		expected_error("identifier");
-	}
-
-	id_ptr id = std::make_shared<Identifier>(peek());
-	advance();
-	return id;
-}
-
+// Block //
 block_ptr Parser::parse_block(bool allow_one_line){
 	Position block_pos = peek().pos;
 	StmtList stmts;
@@ -236,27 +194,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
 	return std::make_shared<Block>(block_pos, stmts);
 }
 
-expr_ptr Parser::parse_infix(expr_ptr left, int prec){
-	// Note: For infix, position is pretty useless, because all
-	// errors will be about left, op or right, and they have
-	// their own positions
-
-	if(is_infix_op()){
-		Token op_token = peek();
-		int right_prec = get_infix_prec(op_token.op());
-		if(right_prec > prec){
-			advance();
-			if(left->type == ExprType::Get){
-
-			}
-			expr_ptr maybe_infix = std::make_shared<Infix>(op_token.pos, left, op_token, parse_infix(parse_atom(), right_prec));
-			return parse_infix(maybe_infix, prec);
-		}
-	}
-
-	return left;
-}
-
+// VarDecl //
 stmt_ptr Parser::parse_var_decl(){
 	Position var_decl_pos = peek().pos;
 
@@ -281,6 +219,7 @@ stmt_ptr Parser::parse_var_decl(){
 	return std::make_shared<VarDecl>(var_decl_pos, decl, id, assign_expr);
 }
 
+// FuncDecl //
 stmt_ptr Parser::parse_func_decl(){
 	Position func_decl_pos = peek().pos;
 
@@ -333,74 +272,8 @@ stmt_ptr Parser::parse_func_decl(){
 	return std::make_shared<FuncDecl>(func_decl_pos, id, params, body);
 }
 
-expr_ptr Parser::parse_func_call(expr_ptr left){
-	Position func_call_pos = peek().pos;
-
-	skip_op(Operator::LParen, true, true);
-
-	ExprList args;
-	bool first = true;
-
-	while(!eof()){
-		if(is_op(Operator::RParen)){
-			break;
-		}
-		if(first){
-			first = false;
-		}else{
-			skip_op(Operator::Comma, true, true);
-		}
-		args.push_back(parse_expr());
-	}
-
-	skip_op(Operator::RParen, true, false);
-
-	return std::make_shared<FuncCall>(func_call_pos, left, args);
-}
-
-expr_ptr Parser::parse_if_expr(){
-	Position if_pos = peek().pos;
-
-	skip_kw(Keyword::If, false, true);
-	
-	bool paren = true;
-	if(is_op(Operator::LParen)){
-		skip_op(Operator::LParen, true, true);
-	}else{
-		paren = false;
-	}
-
-	expr_ptr cond = parse_expr();
-
-	bool allow_one_line = false;
-	if(paren){
-		skip_op(Operator::RParen, true, true);
-		allow_one_line = true;
-	}else if(is_nl()){
-		// If `if` condition is not capture in parenthesis,
-		// then only if there's new-line after it the body can be one-line
-		allow_one_line = true;
-	}
-
-	if(is_op(Operator::Arrow)){
-		skip_op(Operator::Arrow, true, true);
-		allow_one_line = true;
-	}
-
-	block_ptr then_branch = parse_block(allow_one_line);
-
-	skip_nl(true);
-
-	block_ptr else_branch = nullptr;
-	if(is_kw(Keyword::Else)){
-		skip_kw(Keyword::Else, true, true);
-		else_branch = parse_block(true);
-	}
-
-	return std::make_shared<IfExpr>(if_pos, cond, then_branch, else_branch);
-}
-
-stmt_ptr Parser::parse_while(){
+// WhileStmt //
+stmt_ptr Parser::parse_while_stmt(){
 	Position while_pos = peek().pos;
 
 	skip_kw(Keyword::While, false, true);
@@ -429,9 +302,10 @@ stmt_ptr Parser::parse_while(){
 
 	block_ptr body = parse_block(allow_one_line);
 
-	return std::make_shared<While>(while_pos, cond, body);
+	return std::make_shared<WhileStmt>(while_pos, cond, body);
 }
 
+// ClassDecl //
 stmt_ptr Parser::parse_class_decl(){
 	Position class_decl_pos = peek().pos;
 
@@ -473,6 +347,158 @@ stmt_ptr Parser::parse_class_decl(){
 	skip_op(Operator::RBrace, true, false);
 
 	return std::make_shared<ClassDecl>(class_decl_pos, id, super_id, decls);
+}
+
+
+/////////////////
+// Expressions //
+/////////////////
+expr_ptr Parser::parse_expr(){
+	expr_ptr left = parse_atom();
+
+	while(!eof()){
+		if(is_op(Operator::LParen)){
+			left = parse_func_call(left);
+		}else if(is_infix_op()){
+			return parse_infix(left, 0);
+			// TODO: Add else if postfix (and break!)
+		}else{
+			break;
+		}
+	}
+	
+	return left;
+}
+
+expr_ptr Parser::parse_atom(){
+	if(is_typeof(TokenType::Int) || is_typeof(TokenType::Float) || is_typeof(TokenType::Str) || is_typeof(TokenType::Bool)){
+		Token current = peek();
+		advance();
+		return std::make_shared<Literal>(current);
+	}
+
+	if(is_typeof(TokenType::Id)){
+		return parse_id();
+	}
+
+	if(is_kw(Keyword::If)){
+		return parse_if_expr();
+	}
+
+	unexpected_error();
+	return nullptr;
+}
+
+// Identifier //
+id_ptr Parser::parse_id(){
+	if(!is_typeof(TokenType::Id)){
+		expected_error("identifier");
+	}
+
+	id_ptr id = std::make_shared<Identifier>(peek());
+	advance();
+	return id;
+}
+
+// Infix //
+expr_ptr Parser::parse_infix(expr_ptr left, int prec){
+	// Note: For infix, position is pretty useless, because all
+	// errors will be about left, op or right, and they have
+	// their own positions
+
+	if(is_infix_op()){
+		Token op_token = peek();
+		int right_prec = get_infix_prec(op_token.op());
+		if(right_prec > prec){
+			advance();
+			
+			if(op_token.op() == Operator::Dot){
+				// Parse `object.member`
+				id_ptr id = parse_id();
+				left = std::make_shared<GetExpr>(op_token.pos, left, id);
+			}
+
+			if(op_token.op() == Operator::Assign && left->type == ExprType::Get){
+				// parse `object.member = value`
+				std::shared_ptr<GetExpr> lhs = std::static_pointer_cast<GetExpr>(left);
+				return std::make_shared<SetExpr>(op_token.pos, lhs->left, lhs->member, parse_expr());
+			}
+
+			expr_ptr maybe_infix = std::make_shared<Infix>(op_token.pos, left, op_token, parse_infix(parse_atom(), right_prec));
+			return parse_infix(maybe_infix, prec);
+		}
+	}
+
+	return left;
+}
+
+// FuncCall //
+expr_ptr Parser::parse_func_call(expr_ptr left){
+	Position func_call_pos = peek().pos;
+
+	skip_op(Operator::LParen, true, true);
+
+	ExprList args;
+	bool first = true;
+
+	while(!eof()){
+		if(is_op(Operator::RParen)){
+			break;
+		}
+		if(first){
+			first = false;
+		}else{
+			skip_op(Operator::Comma, true, true);
+		}
+		args.push_back(parse_expr());
+	}
+
+	skip_op(Operator::RParen, true, false);
+
+	return std::make_shared<FuncCall>(func_call_pos, left, args);
+}
+
+// IfExpr //
+expr_ptr Parser::parse_if_expr(){
+	Position if_pos = peek().pos;
+
+	skip_kw(Keyword::If, false, true);
+	
+	bool paren = true;
+	if(is_op(Operator::LParen)){
+		skip_op(Operator::LParen, true, true);
+	}else{
+		paren = false;
+	}
+
+	expr_ptr cond = parse_expr();
+
+	bool allow_one_line = false;
+	if(paren){
+		skip_op(Operator::RParen, true, true);
+		allow_one_line = true;
+	}else if(is_nl()){
+		// If `if` condition is not capture in parenthesis,
+		// then only if there's new-line after it the body can be one-line
+		allow_one_line = true;
+	}
+
+	if(is_op(Operator::Arrow)){
+		skip_op(Operator::Arrow, true, true);
+		allow_one_line = true;
+	}
+
+	block_ptr then_branch = parse_block(allow_one_line);
+
+	skip_nl(true);
+
+	block_ptr else_branch = nullptr;
+	if(is_kw(Keyword::Else)){
+		skip_kw(Keyword::Else, true, true);
+		else_branch = parse_block(true);
+	}
+
+	return std::make_shared<IfExpr>(if_pos, cond, then_branch, else_branch);
 }
 
 ////////////

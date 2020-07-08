@@ -1,8 +1,8 @@
 #ifndef CLASSDECL_H
 #define CLASSDECL_H
 
-#include "tree/Stmt.h"
-#include "tree/Identifier.h"
+#include "tree/Stmt/Stmt.h"
+#include "tree/Expr/Identifier.h"
 
 struct ClassDecl : Stmt {
 	id_ptr id;

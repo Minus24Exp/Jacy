@@ -1,7 +1,7 @@
 #ifndef RETURNSTMT_H
 #define RETURNSTMT_H
 
-#include "tree/Stmt.h"
+#include "tree/Stmt/Stmt.h"
 
 struct ReturnStmt : Stmt {
 	expr_ptr expr;

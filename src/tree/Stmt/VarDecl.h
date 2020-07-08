@@ -1,8 +1,8 @@
 #ifndef VARDECL_H
 #define VARDECL_H
 
-#include "tree/Identifier.h"
-#include "tree/Stmt.h"
+#include "tree/Expr/Identifier.h"
+#include "tree/Stmt/Stmt.h"
 
 // Note: I used enum for declaration type, but not a bool
 // because I want to add `const` in the future

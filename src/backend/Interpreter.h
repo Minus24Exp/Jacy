@@ -52,20 +52,26 @@ public:
 	// Infix //
 	void eval_assign(Infix * infix);
 	void eval_member_access(Infix * infix);
-
+	
+	// Statements //
 	void visit(ExprStmt * expr_stmt) override;
-	void visit(Literal * literal) override;
-	void visit(Identifier * id) override;
-	void visit(VarDecl * var_decl) override;
 	void visit(Block * block) override;
+	void visit(VarDecl * var_decl) override;
 	void visit(FuncDecl * func_decl) override;
-	void visit(FuncCall * func_call) override;
-	void visit(Infix * infix) override;
-	void visit(IfExpr * if_expr) override;
-	void visit(While * w) override;
 	void visit(ReturnStmt * return_stmt) override;
+	void visit(WhileStmt * w) override;
 	void visit(ClassDecl * class_decl) override;
 
+	// Expressions //
+	void visit(Literal * literal) override;
+	void visit(Identifier * id) override;
+	void visit(Infix * infix) override;
+	void visit(FuncCall * func_call) override;
+	void visit(IfExpr * if_expr) override;
+	void visit(SetExpr * set_expr) override;
+	void visit(GetExpr * get_expr) override;
+
+	// Errors //
 	void runtime_error(const std::string & msg, const Position & pos);
 	void runtime_error(const std::string & msg, Node * n);
 

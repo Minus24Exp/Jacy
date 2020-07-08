@@ -1,8 +1,8 @@
 #ifndef IFEXPR_H
 #define IFEXPR_H
 
-#include <vector>
-#include "tree/Expr.h"
+#include "tree/Expr/Expr.h"
+#include "tree/Stmt/Block.h"
 
 struct IfExpr : Expr {
 	expr_ptr cond;

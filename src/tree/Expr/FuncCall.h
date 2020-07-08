@@ -1,7 +1,7 @@
 #ifndef FUNCCALL_H
 #define FUNCCALL_H
 
-#include "tree/Expr.h"
+#include "tree/Expr/Expr.h"
 
 struct FuncCall : Expr {
 	expr_ptr left;

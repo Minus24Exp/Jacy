@@ -79,34 +79,109 @@ void Interpreter::eval_assign(Infix * infix){
 	}
 }
 
-void Interpreter::eval_member_access(Infix * infix){
-	// Note: Left-associative
-	
-	obj_ptr lhs = eval(infix->left.get());
+////////////////
+// Statements //
+////////////////
+void Interpreter::visit(ExprStmt * expr_stmt){
+	value = eval(expr_stmt->expr.get());
+}
 
-	if(lhs->type != ObjectType::Instance){
-		runtime_error("Unable to access member of "+ lhs->to_string(), infix);
+// Block //
+void Interpreter::visit(Block * block){
+	execute_block(block);
+}
+
+// VarDecl //
+void Interpreter::visit(VarDecl * var_decl){
+	// Important difference between nullptr and null_obj
+	// if variable is defined, but not assigned then
+	// it's nullptr, and if it's `val` then it can be assigned
+	// somewhere after
+
+	value = nullptr;
+
+	if(var_decl->assign_expr){
+		value = eval(var_decl->assign_expr.get());
+	}
+
+	// TODO: Think about cloning...
+	LocalDeclType decl_type = LocalDeclType::Var;
+	if(var_decl->decl == VarDeclType::Val){
+		decl_type = LocalDeclType::Val;
+	}
+
+	bool defined = scope->define(var_decl->id->get_name(), {decl_type, value});
+	if(!defined){
+		// If tried to redefine
+		runtime_error("Redifinition of variable "+ var_decl->id->get_name(), var_decl);
 		return;
 	}
 
-	instance_ptr instance = std::static_pointer_cast<Instance>(lhs);
-
-	if(infix->right->type != ExprType::Id){
-		runtime_error("Invalid right-hand side in member access", infix);
-	}
-
-	id_ptr id = std::static_pointer_cast<Identifier>(infix->right);
-	std::string name = id->get_name();
-
-	if(!instance->has(name)){
-		runtime_error(lhs->to_string() +" does not have member "+ name, infix);
-	}
-
-	value = instance->get(name);
+	value = nullptr;
 }
 
-void Interpreter::visit(ExprStmt * expr_stmt){
-	value = eval(expr_stmt->expr.get());
+// FuncDecl //
+void Interpreter::visit(FuncDecl * func_decl){
+	std::string func_name = func_decl->id->get_name();
+
+	Params params;
+	for(auto & p : func_decl->params){
+		obj_ptr default_val = nullptr; 
+		if(p.default_val){
+			default_val = eval(p.default_val.get());
+		}
+		params.push_back({p.id->get_name(), default_val});
+	}
+
+	obj_ptr func = std::make_shared<Func>(scope, func_name, params, std::move(func_decl->body));
+
+	bool defined = scope->define(func_name, {LocalDeclType::Val, func});
+	if(!defined){
+		runtime_error("Redifinition of function "+ func_name, func_decl);
+	}
+}
+
+// ReturnStmt //
+void Interpreter::visit(ReturnStmt * return_stmt){
+	if(return_stmt->expr){
+		value = eval(return_stmt->expr.get());
+	}else{
+		value = null_obj;
+	}
+	throw ReturnValue{value, return_stmt->pos};
+}
+
+// WhileStmt //
+void Interpreter::visit(WhileStmt * w){
+	while(eval(w->cond.get())->truthy()){
+		execute_block(w->body.get());
+	}
+}
+
+// ClassDecl //
+void Interpreter::visit(ClassDecl * class_decl){
+	class_ptr super = nullptr;
+	std::string class_name = class_decl->id->get_name();
+
+	if(class_decl->super_id){
+		std::string super_name = class_decl->super_id->get_name();
+		super = std::dynamic_pointer_cast<Class>(scope->get(super_name));
+		if(!super){
+			runtime_error("Unable to use "+ super_name +" as super class", class_decl->super_id.get());
+		}
+	}
+
+	enter_scope();
+
+	for(const auto & decl : class_decl->fields){
+		decl->accept(*this);
+	}
+
+	obj_ptr _class = std::make_shared<Class>(scope, class_name, super);
+
+	exit_scope();
+
+	scope->define(class_name, {LocalDeclType::Val, _class});
 }
 
 void Interpreter::visit(Literal * literal){
@@ -141,58 +216,6 @@ void Interpreter::visit(Identifier * id){
 		return;
 	}
 	value = obj;
-}
-
-void Interpreter::visit(VarDecl * var_decl){
-	// Important difference between nullptr and null_obj
-	// if variable is defined, but not assigned then
-	// it's nullptr, and if it's `val` then it can be assigned
-	// somewhere after
-
-	value = nullptr;
-
-	if(var_decl->assign_expr){
-		value = eval(var_decl->assign_expr.get());
-	}
-
-	// TODO: Think about cloning...
-	LocalDeclType decl_type = LocalDeclType::Var;
-	if(var_decl->decl == VarDeclType::Val){
-		decl_type = LocalDeclType::Val;
-	}
-
-	bool defined = scope->define(var_decl->id->get_name(), {decl_type, value});
-	if(!defined){
-		// If tried to redefine
-		runtime_error("Redifinition of variable "+ var_decl->id->get_name(), var_decl);
-		return;
-	}
-
-	value = nullptr;
-}
-
-void Interpreter::visit(Block * block){
-	execute_block(block);
-}
-
-void Interpreter::visit(FuncDecl * func_decl){
-	std::string func_name = func_decl->id->get_name();
-
-	Params params;
-	for(auto & p : func_decl->params){
-		obj_ptr default_val = nullptr; 
-		if(p.default_val){
-			default_val = eval(p.default_val.get());
-		}
-		params.push_back({p.id->get_name(), default_val});
-	}
-
-	obj_ptr func = std::make_shared<Func>(scope, func_name, params, std::move(func_decl->body));
-
-	bool defined = scope->define(func_name, {LocalDeclType::Val, func});
-	if(!defined){
-		runtime_error("Redifinition of function "+ func_name, func_decl);
-	}
 }
 
 void Interpreter::visit(FuncCall * func_call){
@@ -257,11 +280,6 @@ void Interpreter::visit(Infix * infix){
 		eval_assign(infix);
 		return;
 	}
-
-	if(infix->op.op() == Operator::Dot){
-		eval_member_access(infix);
-		return;
-	}
 }
 
 void Interpreter::visit(IfExpr * if_expr){
@@ -274,44 +292,29 @@ void Interpreter::visit(IfExpr * if_expr){
 	}
 }
 
-void Interpreter::visit(While * w){
-	while(eval(w->cond.get())->truthy()){
-		execute_block(w->body.get());
-	}
+void Interpreter::visit(SetExpr * set_expr){
+	std::cout << "visit set_expr" << std::endl;
 }
 
-void Interpreter::visit(ReturnStmt * return_stmt){
-	if(return_stmt->expr){
-		value = eval(return_stmt->expr.get());
-	}else{
-		value = null_obj;
-	}
-	throw ReturnValue{value, return_stmt->pos};
-}
+void Interpreter::visit(GetExpr * get_expr){
+	// Note: Left-associative
+	
+	obj_ptr lhs = eval(get_expr->left.get());
 
-void Interpreter::visit(ClassDecl * class_decl){
-	class_ptr super = nullptr;
-	std::string class_name = class_decl->id->get_name();
-
-	if(class_decl->super_id){
-		std::string super_name = class_decl->super_id->get_name();
-		super = std::dynamic_pointer_cast<Class>(scope->get(super_name));
-		if(!super){
-			runtime_error("Unable to use "+ super_name +" as super class", class_decl->super_id.get());
-		}
+	if(lhs->type != ObjectType::Instance){
+		runtime_error("Invalid left-hand side in member access: "+ lhs->to_string() +", object expected", get_expr);
+		return;
 	}
 
-	enter_scope();
+	instance_ptr instance = std::static_pointer_cast<Instance>(lhs);
 
-	for(const auto & decl : class_decl->fields){
-		decl->accept(*this);
+	std::string name = get_expr->member->get_name();
+
+	if(!instance->has(name)){
+		runtime_error(lhs->to_string() +" does not have member "+ name, get_expr);
 	}
 
-	obj_ptr _class = std::make_shared<Class>(scope, class_name, super);
-
-	exit_scope();
-
-	scope->define(class_name, {LocalDeclType::Val, _class});
+	value = instance->get(name);
 }
 
 ////////////

@@ -1,8 +1,8 @@
 #ifndef FUNCDECL_H
 #define FUNCDECL_H
 
-#include "tree/Identifier.h"
-#include "tree/Block.h"
+#include "tree/Expr/Identifier.h"
+#include "tree/Stmt/Block.h"
 
 struct FuncParam {
 	id_ptr id;
