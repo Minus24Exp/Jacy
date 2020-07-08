@@ -1,6 +1,8 @@
 #include "object/NativeFunc.h"
 #include "backend/Interpreter.h"
 
+// TODO: !Important! capture `this` in native functions
+
 obj_ptr NativeFunc::call(Interpreter & ip, ObjList && args){
 	// For now I don't need to control scopes in NativeFunc
 	// until the moment I implement Classes

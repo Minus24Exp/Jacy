@@ -39,6 +39,12 @@ public:
 	// Callable //
 	obj_ptr call(Interpreter & interpreter, ObjList && args) override;
 
+	obj_ptr bind(obj_ptr instance) override {
+		scope_ptr scope = std::make_shared<Scope>(closure);
+		scope->define("this", {LocalDeclType::Val, instance});
+		return std::make_shared<NativeFunc>(scope, name, params, body);
+	}
+
 private:
 	NFBody body;
 };

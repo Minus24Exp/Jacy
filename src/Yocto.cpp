@@ -35,7 +35,7 @@ void Yocto::run_script(const std::string & path){
 	ss << file.rdbuf();
 	std::string script = ss.str();
 
-	run_debug(script);
+	run(script);
 
 	file.close();
 }

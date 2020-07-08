@@ -3,7 +3,6 @@
 
 obj_ptr Class::call(Interpreter & ip, ObjList && args){
 	// TODO: !!! User-defined constructor
-	// TODO: !!! Super class fields inheritance
 
-	return std::make_shared<Instance>(closure->get_locals());
+	return std::make_shared<Instance>(std::shared_ptr<Class>(this), fields);
 }

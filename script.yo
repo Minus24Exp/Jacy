@@ -8,6 +8,6 @@ class A {
 
 var a = A()
 
-a.value = 2
+a.value = 100
 
-print(a.value)
+a.print_it()

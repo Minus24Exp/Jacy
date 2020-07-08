@@ -144,14 +144,17 @@ void Interpreter::visit(ClassDecl * class_decl){
 		}
 	}
 
-	enter_scope();
-
-	for(const auto & decl : class_decl->fields){
-		decl->accept(*this);
+	if(super){
+		enter_scope();
+		scope->define("super", {LocalDeclType::Val, super});
 	}
 
-	obj_ptr _class = std::make_shared<Class>(scope, class_name, super);
-
+	// Enter virtual scope to store class fields
+	enter_scope();
+	for(const auto & f : class_decl->fields){
+		execute(f.get());
+	}
+	class_ptr _class = std::make_shared<Class>(scope, class_name, super, scope->get_locals());
 	exit_scope();
 
 	scope->define(class_name, {LocalDeclType::Val, _class});
@@ -276,7 +279,24 @@ void Interpreter::visit(Assign * assign){
 
 // SetExpr //
 void Interpreter::visit(SetExpr * set_expr){
-	std::cout << "visit set_expr" << std::endl;
+	obj_ptr rhs = eval(set_expr->value.get());
+
+	obj_ptr lhs = eval(set_expr->left.get());
+
+	if(lhs->type != ObjectType::Instance){
+		runtime_error("Invalid left-hand side in member access: "+ lhs->to_string() +", object expected", set_expr);
+		return;
+	}
+
+	instance_ptr instance = std::static_pointer_cast<Instance>(lhs);
+
+	std::string name = set_expr->id->get_name();
+
+	if(!instance->has(name)){
+		runtime_error(lhs->to_string() +" does not have member "+ name, set_expr);
+	}
+
+	instance->set(name, rhs);
 }
 
 // GetExpr //
