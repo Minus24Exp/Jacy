@@ -35,10 +35,6 @@ bool Parser::is_kw(const Keyword & kw){
 	return is_typeof(TokenType::Kw) && peek().kw() == kw;
 }
 
-bool Parser::is_infix_op(){
-	return is_typeof(TokenType::Op) && get_infix_prec(peek().op()) != static_cast<int>(InfixPrec::None);
-}
-
 //////////////
 // Skippers //
 //////////////
@@ -341,7 +337,7 @@ stmt_ptr Parser::parse_class_decl(){
 		}else{
 			expected_error("function or variable declaration");
 		}
-		skip_semis();	
+		skip_semis();
 	}
 
 	skip_op(Operator::RBrace, true, false);
@@ -354,38 +350,188 @@ stmt_ptr Parser::parse_class_decl(){
 // Expressions //
 /////////////////
 expr_ptr Parser::parse_expr(){
-	expr_ptr left = parse_atom();
+	return assignment();
+}
 
-	while(!eof()){
-		if(is_op(Operator::LParen)){
-			left = parse_func_call(left);
-		}else if(is_infix_op()){
-			return parse_infix(left, 0);
-			// TODO: Add else if postfix (and break!)
-		}else{
-			break;
+expr_ptr Parser::assignment(){
+	Position pos = peek().pos;
+
+	expr_ptr expr = Or();
+
+	// TODO: Add compound assignment operators
+
+	if(is_op(Operator::Assign)){
+		advance();
+
+		expr_ptr value = parse_expr();
+
+		if(expr->type == ExprType::Id){
+			id_ptr id = std::static_pointer_cast<Identifier>(expr);
+			return std::make_shared<Assign>(pos, id, value);
 		}
+
+		if(expr->type == ExprType::Get){
+			std::shared_ptr<GetExpr> get_expr = std::static_pointer_cast<GetExpr>(expr);
+			return std::make_shared<SetExpr>(pos, get_expr->left, get_expr->id, value);
+		}
+
+		unexpected_error();
 	}
-	
+
+	return expr;
+}
+
+expr_ptr Parser::Or(){
+	expr_ptr left = And();
+
+	while(is_op(Operator::Or)){
+		const auto op_token = peek();
+		advance();
+		expr_ptr right = And();
+		left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+	}
+
 	return left;
 }
 
-expr_ptr Parser::parse_atom(){
-	if(is_typeof(TokenType::Int) || is_typeof(TokenType::Float) || is_typeof(TokenType::Str) || is_typeof(TokenType::Bool)){
+expr_ptr Parser::And(){
+	expr_ptr left = eq();
+
+	while(is_op(Operator::And)){
+		const auto op_token = peek();
+		advance();
+		expr_ptr right = eq();
+		left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+	}
+
+	return left;
+}
+
+expr_ptr Parser::eq(){
+	expr_ptr left = comp();
+
+	while(is_op(Operator::Eq) || is_op(Operator::NotEq)){
+		const auto op_token = peek();
+		advance();
+		expr_ptr right = comp();
+		left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+	}
+
+	return left;
+}
+
+expr_ptr Parser::comp(){
+	expr_ptr left = add();
+
+	while(is_op(Operator::LT)
+	   || is_op(Operator::GT)
+	   || is_op(Operator::LE)
+	   || is_op(Operator::GE))
+	{
+		const auto op_token = peek();
+		advance();
+		expr_ptr right = add();
+		left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+	}
+
+	return left;
+}
+
+expr_ptr Parser::add(){
+	expr_ptr left = mult();
+
+	while(is_op(Operator::Add) || is_op(Operator::Sub)){
+		const auto op_token = peek();
+		advance();
+		expr_ptr right = mult();
+		left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+	}
+
+	return left;
+}
+
+expr_ptr Parser::mult(){
+	expr_ptr left = prefix();
+
+	while(is_op(Operator::Mul) || is_op(Operator::Div)){
+		const auto op_token = peek();
+		advance();
+		expr_ptr right = prefix();
+		left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+	}
+
+	return left;
+}
+
+expr_ptr Parser::prefix(){
+	if(is_op(Operator::Not) || is_op(Operator::Sub)){
+		const auto op_token = peek();
+		advance();
+		expr_ptr right = prefix();
+		return std::make_shared<Prefix>(op_token.pos, op_token, right);
+	}
+	
+	return postfix();
+}
+
+expr_ptr Parser::postfix(){
+	// Postfix is not only `Postfix` operator
+	// It's also function call, member access, array access.
+	Position pos = peek().pos;
+
+	expr_ptr left = primary();
+
+	while(true){
+		if(is_op(Operator::LParen)){
+			left = parse_func_call(left);
+		}else if(is_op(Operator::Dot)){
+			advance();
+			id_ptr id = parse_id();
+			left = std::make_shared<GetExpr>(pos, left, id);
+		}else{
+			break;
+		}
+
+		// TODO: Postfix operators
+	}
+
+	return left;
+}
+
+expr_ptr Parser::primary(){
+	// Literal
+	if(is_typeof(TokenType::Int)
+	|| is_typeof(TokenType::Float)
+	|| is_typeof(TokenType::Str)
+	|| is_typeof(TokenType::Bool))
+	{
 		Token current = peek();
 		advance();
 		return std::make_shared<Literal>(current);
 	}
 
+	// Identifier
 	if(is_typeof(TokenType::Id)){
 		return parse_id();
 	}
 
+	// Grouping
+	if(is_op(Operator::LParen)){
+		skip_op(Operator::LParen, false, true);
+		expr_ptr expr = parse_expr();
+		skip_op(Operator::RParen, true, false);
+
+		// TODO: !!! Think do I need special node for grouping? (precedence problem?) 
+		return expr;
+	}
+
+	// If expression
 	if(is_kw(Keyword::If)){
 		return parse_if_expr();
 	}
 
 	unexpected_error();
+
 	return nullptr;
 }
 
@@ -400,37 +546,6 @@ id_ptr Parser::parse_id(){
 	return id;
 }
 
-// Infix //
-expr_ptr Parser::parse_infix(expr_ptr left, int prec){
-	// Note: For infix, position is pretty useless, because all
-	// errors will be about left, op or right, and they have
-	// their own positions
-
-	if(is_infix_op()){
-		Token op_token = peek();
-		int right_prec = get_infix_prec(op_token.op());
-		if(right_prec > prec){
-			advance();
-			
-			if(op_token.op() == Operator::Dot){
-				// Parse `object.member`
-				id_ptr id = parse_id();
-				left = std::make_shared<GetExpr>(op_token.pos, left, id);
-			}
-
-			if(op_token.op() == Operator::Assign && left->type == ExprType::Get){
-				// parse `object.member = value`
-				std::shared_ptr<GetExpr> lhs = std::static_pointer_cast<GetExpr>(left);
-				return std::make_shared<SetExpr>(op_token.pos, lhs->left, lhs->member, parse_expr());
-			}
-
-			expr_ptr maybe_infix = std::make_shared<Infix>(op_token.pos, left, op_token, parse_infix(parse_atom(), right_prec));
-			return parse_infix(maybe_infix, prec);
-		}
-	}
-
-	return left;
-}
 
 // FuncCall //
 expr_ptr Parser::parse_func_call(expr_ptr left){

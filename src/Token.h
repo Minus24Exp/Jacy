@@ -40,6 +40,11 @@ enum class Operator {
 
 	Semi,
 
+	Or, And,
+
+	Not, Eq, NotEq,
+	LT, GT, LE, GE,
+
 	Arrow
 };
 
@@ -53,6 +58,11 @@ const std::vector <std::string> operators {
 	",", ":", ".",
 
 	";",
+
+	"||", "&&",
+
+	"!", "==", "!=",
+	"<", ">", "<=", ">=",
 
 	"=>"
 };

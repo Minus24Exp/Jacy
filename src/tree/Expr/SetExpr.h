@@ -6,11 +6,11 @@
 
 struct SetExpr : public Expr {
 	expr_ptr left;
-	id_ptr member;
+	id_ptr id;
 	expr_ptr value;
 
-	SetExpr(const Position & pos, expr_ptr left, id_ptr member, expr_ptr value)
-		: Expr(pos, ExprType::Set), left(left), member(member), value(value) {}
+	SetExpr(const Position & pos, expr_ptr left, id_ptr id, expr_ptr value)
+		: Expr(pos, ExprType::Set), left(left), id(id), value(value) {}
 	virtual ~SetExpr() = default;
 
 	void accept(BaseVisitor & visitor) override {

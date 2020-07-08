@@ -10,10 +10,13 @@
 #include "tree/Expr/Literal.h"
 #include "tree/Expr/Identifier.h"
 #include "tree/Expr/Infix.h"
-#include "tree/Expr/FuncCall.h"
-#include "tree/Expr/IfExpr.h"
+#include "tree/Expr/Prefix.h"
+#include "tree/Expr/Postfix.h"
+#include "tree/Expr/Assign.h"
 #include "tree/Expr/SetExpr.h"
 #include "tree/Expr/GetExpr.h"
+#include "tree/Expr/FuncCall.h"
+#include "tree/Expr/IfExpr.h"
 
 #include "tree/Node.h"
 

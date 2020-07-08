@@ -4,7 +4,7 @@ char Lexer::peek(){
 	return script[index];
 }
 
-char Lexer::peekNext(){
+char Lexer::peek_next(){
 	return script[index + 1];
 }
 
@@ -210,8 +210,12 @@ TokenStream Lexer::lex(const std::string & script){
 		}else{
 			switch(peek()){
 				case '=':{
-					if(peekNext() == '>'){
+					if(peek_next() == '>'){
 						add_token(Operator::Arrow);
+						advance();
+						advance();
+					}else if(peek_next() == '='){
+						add_token(Operator::Eq);
 						advance();
 						advance();
 					}else{
@@ -236,17 +240,17 @@ TokenStream Lexer::lex(const std::string & script){
 					break;
 				}
 				case '/':{
-					if(peekNext() == '/'){
+					if(peek_next() == '/'){
 						while(!eof()){
 							advance();
 							if(is_nl(peek())){
 								break;
 							}
 						}
-					}else if(peekNext() == '*'){
+					}else if(peek_next() == '*'){
 						while(!eof()){
 							advance();
-							if(peek() == '*' && peekNext() == '/'){
+							if(peek() == '*' && peek_next() == '/'){
 								break;
 							}
 						}
@@ -299,13 +303,59 @@ TokenStream Lexer::lex(const std::string & script){
 					break;
 				}
 				case '.':{
-					if(is_digit(peekNext())){
+					if(is_digit(peek_next())){
 						lex_number();
 					}else{
 						add_token(Operator::Dot);
 						advance();
 					}
 					break;
+				}
+				case '&':{
+					if(peek_next() == '&'){
+						add_token(Operator::And);
+						advance();
+						advance();
+					}
+					break;
+				}
+				case '!':{
+					if(peek_next() == '='){
+						add_token(Operator::NotEq);
+						advance();
+						advance();
+					}else{
+						add_token(Operator::Not);
+						advance();
+					}
+				}
+				case '|':{
+					if(peek_next() == '|'){
+						add_token(Operator::Or);
+						advance();
+						advance();
+					}
+					break;
+				}
+				case '<':{
+					if(peek_next() == '='){
+						add_token(Operator::LE);
+						advance();
+						advance();
+					}else{
+						add_token(Operator::LT);
+						advance();
+					}
+				}
+				case '>':{
+					if(peek_next() == '='){
+						add_token(Operator::GE);
+						advance();
+						advance();
+					}else{
+						add_token(Operator::GT);
+						advance();
+					}
 				}
 				default:{
 					unexpected_error();

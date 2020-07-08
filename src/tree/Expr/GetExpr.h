@@ -6,10 +6,10 @@
 
 struct GetExpr : public Expr {
 	expr_ptr left;
-	id_ptr member;
+	id_ptr id;
 
-	GetExpr(const Position & pos, expr_ptr left, id_ptr member)
-		: Expr(pos, ExprType::Get), left(left), member(member) {}
+	GetExpr(const Position & pos, expr_ptr left, id_ptr id)
+		: Expr(pos, ExprType::Get), left(left), id(id) {}
 	virtual ~GetExpr() = default;
 
 	void accept(BaseVisitor & visitor) override {

@@ -8,14 +8,16 @@ using expr_ptr = std::shared_ptr<Expr>;
 using ExprList = std::vector<expr_ptr>;
 
 enum class ExprType {
-	Id,
-	Call,
-	If,
-	Infix,
 	Literal,
-	// Get/Set are member access (`.`)
+	Id,
+	Prefix,
+	Infix,
+	Postfix,
+	Assign,
+	Set,
 	Get,
-	Set
+	Call,
+	If
 };
 
 struct Expr : Node {

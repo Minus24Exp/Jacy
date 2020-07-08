@@ -26,10 +26,13 @@ public:
 	void visit(Literal * literal) override;
 	void visit(Identifier * id) override;
 	void visit(Infix * infix) override;
-	void visit(FuncCall * func_call) override;
-	void visit(IfExpr * if_expr) override;
+	void visit(Prefix * prefix) override;
+	void visit(Postfix * postfix) override;
+	void visit(Assign * assign) override;
 	void visit(SetExpr * set_expr) override;
 	void visit(GetExpr * get_expr) override;
+	void visit(FuncCall * func_call) override;
+	void visit(IfExpr * if_expr) override;
 
 private:
 	void print_indent();

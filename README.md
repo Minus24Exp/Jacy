@@ -186,6 +186,7 @@ But, the user-defined constructor calls after the default constructor.
 - Add multi-threading (not in Yocto), to lex and parse at the same time as Interpreter register globals.
 - Add namespaces
 - Class extensions
+- Think about and make if possible: "Change visitors pass by pointer to pass by reference to avoid segfault with nullptr"
 
 ## Think about it
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`

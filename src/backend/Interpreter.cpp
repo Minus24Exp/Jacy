@@ -52,33 +52,6 @@ void Interpreter::execute_block(Block * block, scope_ptr new_scope){
 	exit_scope();
 }
 
-///////////
-// Infix //
-///////////
-void Interpreter::eval_assign(Infix * infix){
-	// Note: right-associative
-	obj_ptr rhs = eval(infix->right.get());	
-
-	std::cout << "assignment rhs: " << rhs->to_string() << std::endl;
-
-	switch(infix->left->type){
-		case ExprType::Id:{
-			const auto id = std::static_pointer_cast<Identifier>(infix->left);
-			int assign = scope->assign(id->get_name(), std::move(rhs));
-
-			if(assign == 0){
-				runtime_error(id->get_name() +" is not defined", id.get());
-			}else if(assign == -1){
-				runtime_error("Unable to reassign val "+ id->get_name(), id.get());
-			}
-			break;
-		}
-		default:{
-			runtime_error("Invalid left-hand side in assignment", infix->left.get());
-		}
-	}
-}
-
 ////////////////
 // Statements //
 ////////////////
@@ -184,6 +157,9 @@ void Interpreter::visit(ClassDecl * class_decl){
 	scope->define(class_name, {LocalDeclType::Val, _class});
 }
 
+/////////////////
+// Expressions //
+/////////////////
 void Interpreter::visit(Literal * literal){
 	switch(literal->token.type){
 		case TokenType::Null:{
@@ -209,6 +185,7 @@ void Interpreter::visit(Literal * literal){
 	}
 }
 
+// Identifier //
 void Interpreter::visit(Identifier * id){
 	obj_ptr obj = scope->get(id->get_name());
 	if(!obj){
@@ -218,6 +195,7 @@ void Interpreter::visit(Identifier * id){
 	value = obj;
 }
 
+// FuncCall //
 void Interpreter::visit(FuncCall * func_call){
 	obj_ptr lhs = eval(func_call->left.get());
 
@@ -266,36 +244,42 @@ void Interpreter::visit(FuncCall * func_call){
 	}
 }
 
+// Infix //
 void Interpreter::visit(Infix * infix){
-	// Assignment is infix too.
-	// I don't want to separate it from other operators on parsing level,
-	// because of convenient precedence parsing,
-	// so I do it here.
-	// Assignment works pretty different from other operators,
-	// for simple `id = value` assignment there's one way,
-	// for `obj.field = value` there's different way.
-	// and so on.
+	std::cout << "visit infix" << std::endl;
+}
 
-	if(infix->op.op() == Operator::Assign){
-		eval_assign(infix);
-		return;
+// Prefix //
+void Interpreter::visit(Prefix * prefix){
+	std::cout << "visit prefix" << std::endl;
+}
+
+// Postfix //
+void Interpreter::visit(Postfix * postfix){
+	std::cout << "visit postfix" << std::endl;
+}
+
+// Assign //
+void Interpreter::visit(Assign * assign){
+	// Note: right-associative
+	obj_ptr rhs = eval(assign->value.get());	
+
+	std::string name = assign->id->get_name();
+	int result = scope->assign(name, std::move(rhs));
+
+	if(result == 0){
+		runtime_error(name +" is not defined", assign);
+	}else if(result == -1){
+		runtime_error("Unable to reassign val "+ name, assign);
 	}
 }
 
-void Interpreter::visit(IfExpr * if_expr){
-	auto cond = eval(if_expr->cond.get());
-
-	if(cond->truthy()){
-		execute_block(if_expr->if_branch.get());
-	}else if(if_expr->else_branch){
-		execute_block(if_expr->else_branch.get());
-	}
-}
-
+// SetExpr //
 void Interpreter::visit(SetExpr * set_expr){
 	std::cout << "visit set_expr" << std::endl;
 }
 
+// GetExpr //
 void Interpreter::visit(GetExpr * get_expr){
 	// Note: Left-associative
 	
@@ -308,13 +292,24 @@ void Interpreter::visit(GetExpr * get_expr){
 
 	instance_ptr instance = std::static_pointer_cast<Instance>(lhs);
 
-	std::string name = get_expr->member->get_name();
+	std::string name = get_expr->id->get_name();
 
 	if(!instance->has(name)){
 		runtime_error(lhs->to_string() +" does not have member "+ name, get_expr);
 	}
 
 	value = instance->get(name);
+}
+
+// IfExpr //
+void Interpreter::visit(IfExpr * if_expr){
+	auto cond = eval(if_expr->cond.get());
+
+	if(cond->truthy()){
+		execute_block(if_expr->if_branch.get());
+	}else if(if_expr->else_branch){
+		execute_block(if_expr->else_branch.get());
+	}
 }
 
 ////////////

@@ -41,7 +41,7 @@ public:
     uint32_t index;
 
     char peek();
-    char peekNext();
+    char peek_next();
     char advance();
 
     uint32_t line;

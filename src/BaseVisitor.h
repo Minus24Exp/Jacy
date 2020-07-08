@@ -17,10 +17,13 @@ struct ClassDecl;
 struct Literal;
 struct Identifier;
 struct Infix;
-struct FuncCall;
-struct IfExpr;
+struct Prefix;
+struct Postfix;
+struct Assign;
 struct SetExpr;
 struct GetExpr;
+struct FuncCall;
+struct IfExpr;
 
 class BaseVisitor {
 public:
@@ -40,10 +43,13 @@ public:
 	virtual void visit(Literal * literal) = 0;
 	virtual void visit(Identifier * id) = 0;
 	virtual void visit(Infix * infix) = 0;
-	virtual void visit(FuncCall * func_call) = 0;
-	virtual void visit(IfExpr * if_expr) = 0;
+	virtual void visit(Prefix * prefix) = 0;
+	virtual void visit(Postfix * postfix) = 0;
+	virtual void visit(Assign * assign) = 0;
 	virtual void visit(SetExpr * set_expr) = 0;
 	virtual void visit(GetExpr * get_expr) = 0;
+	virtual void visit(FuncCall * func_call) = 0;
+	virtual void visit(IfExpr * if_expr) = 0;
 	
 };
 
