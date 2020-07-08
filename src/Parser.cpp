@@ -246,6 +246,9 @@ expr_ptr Parser::parse_infix(expr_ptr left, int prec){
 		int right_prec = get_infix_prec(op_token.op());
 		if(right_prec > prec){
 			advance();
+			if(left->type == ExprType::Get){
+
+			}
 			expr_ptr maybe_infix = std::make_shared<Infix>(op_token.pos, left, op_token, parse_infix(parse_atom(), right_prec));
 			return parse_infix(maybe_infix, prec);
 		}

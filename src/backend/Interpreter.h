@@ -48,7 +48,10 @@ public:
 	void execute(Stmt * stmt);
 	obj_ptr eval(Expr * expr);
 	void execute_block(Block * block, scope_ptr new_scope = nullptr);
+
+	// Infix //
 	void eval_assign(Infix * infix);
+	void eval_member_access(Infix * infix);
 
 	void visit(ExprStmt * expr_stmt) override;
 	void visit(Literal * literal) override;

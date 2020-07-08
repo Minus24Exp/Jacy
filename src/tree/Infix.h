@@ -17,7 +17,7 @@ enum class InfixPrec {
 	Term,
 	Factor,
 	// EXP,
-	// ACCESS,
+	MemberAccess,
 	None
 };
 
@@ -37,6 +37,10 @@ inline int get_infix_prec(const Operator & op){
 		case Operator::Div:
 		case Operator::Mod:{
 			prec = InfixPrec::Factor;
+			break;
+		}
+		case Operator::Dot:{
+			prec = InfixPrec::MemberAccess;
 			break;
 		}
 		default:{

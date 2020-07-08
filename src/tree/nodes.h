@@ -9,6 +9,8 @@
 #include "tree/While.h"
 #include "tree/ReturnStmt.h"
 #include "tree/ClassDecl.h"
+#include "tree/SetExpr.h"
+#include "tree/GetExpr.h"
 
 #include "tree/Node.h"
 

@@ -25,6 +25,8 @@ public:
 	void visit(While * w) override;
 	void visit(ReturnStmt * return_stmt) override;
 	void visit(ClassDecl * class_decl) override;
+	void visit(SetExpr * set_expr) override;
+	void visit(GetExpr * get_expr) override;
 
 private:
 	void print_indent();

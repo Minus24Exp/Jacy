@@ -17,6 +17,8 @@ struct IfExpr;
 struct While;
 struct ReturnStmt;
 struct ClassDecl;
+struct SetExpr;
+struct GetExpr;
 
 class BaseVisitor {
 public:
@@ -35,6 +37,8 @@ public:
 	virtual void visit(While * w) = 0;
 	virtual void visit(ReturnStmt * return_stmt) = 0;
 	virtual void visit(ClassDecl * class_decl) = 0;
+	virtual void visit(SetExpr * set_expr) = 0;
+	virtual void visit(GetExpr * get_expr) = 0;
 	
 };
 

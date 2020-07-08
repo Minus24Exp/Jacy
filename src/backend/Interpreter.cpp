@@ -52,10 +52,14 @@ void Interpreter::execute_block(Block * block, scope_ptr new_scope){
 	exit_scope();
 }
 
+///////////
+// Infix //
+///////////
 void Interpreter::eval_assign(Infix * infix){
-	// Assignment is right-associative
-	// So evaluate rhs
-	obj_ptr rhs = eval(infix->right.get());
+	// Note: right-associative
+	obj_ptr rhs = eval(infix->right.get());	
+
+	std::cout << "assignment rhs: " << rhs->to_string() << std::endl;
 
 	switch(infix->left->type){
 		case ExprType::Id:{
@@ -73,6 +77,32 @@ void Interpreter::eval_assign(Infix * infix){
 			runtime_error("Invalid left-hand side in assignment", infix->left.get());
 		}
 	}
+}
+
+void Interpreter::eval_member_access(Infix * infix){
+	// Note: Left-associative
+	
+	obj_ptr lhs = eval(infix->left.get());
+
+	if(lhs->type != ObjectType::Instance){
+		runtime_error("Unable to access member of "+ lhs->to_string(), infix);
+		return;
+	}
+
+	instance_ptr instance = std::static_pointer_cast<Instance>(lhs);
+
+	if(infix->right->type != ExprType::Id){
+		runtime_error("Invalid right-hand side in member access", infix);
+	}
+
+	id_ptr id = std::static_pointer_cast<Identifier>(infix->right);
+	std::string name = id->get_name();
+
+	if(!instance->has(name)){
+		runtime_error(lhs->to_string() +" does not have member "+ name, infix);
+	}
+
+	value = instance->get(name);
 }
 
 void Interpreter::visit(ExprStmt * expr_stmt){
@@ -225,6 +255,11 @@ void Interpreter::visit(Infix * infix){
 
 	if(infix->op.op() == Operator::Assign){
 		eval_assign(infix);
+		return;
+	}
+
+	if(infix->op.op() == Operator::Dot){
+		eval_member_access(infix);
 		return;
 	}
 }

@@ -25,6 +25,14 @@ public:
 		return "<Instance>";
 	}
 
+	bool has(const std::string & name){
+		return fields.find(name) != fields.end();
+	}
+
+	obj_ptr get(const std::string & name) const {
+		return fields.at(name).val;
+	}
+
 private:
 	LocalMap fields;
 };

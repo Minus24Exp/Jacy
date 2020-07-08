@@ -5,3 +5,9 @@ class A {
 		print(value)
 	}
 }
+
+var a = A()
+
+a.value = 2
+
+print(a.value)

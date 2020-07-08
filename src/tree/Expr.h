@@ -12,7 +12,10 @@ enum class ExprType {
 	Call,
 	If,
 	Infix,
-	Literal
+	Literal,
+	// Get/Set are member access (`.`)
+	Get,
+	Set
 };
 
 struct Expr : Node {

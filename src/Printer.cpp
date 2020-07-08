@@ -100,9 +100,11 @@ void Printer::visit(FuncCall * func_call){
 }
 
 void Printer::visit(Infix * infix){
+	std::cout << "(";
 	infix->left->accept(*this);
 	std::cout << " " << op_to_str(infix->op.op()) << " ";
 	infix->right->accept(*this);
+	std::cout << ")";
 }
 
 void Printer::visit(IfExpr * if_expr){
@@ -155,4 +157,18 @@ void Printer::visit(ClassDecl * class_decl){
 
 	print_indent();
 	std::cout << "}";
+}
+
+void Printer::visit(SetExpr * set_expr){
+	set_expr->object->accept(*this);
+	std::cout << ".";
+	set_expr->member->accept(*this);
+	std::cout << " = ";
+	set_expr->value->accept(*this);
+}
+
+void Printer::visit(GetExpr * get_expr){
+	get_expr->left->accept(*this);
+	std::cout << ".";
+	get_expr->member->accept(*this);
 }
