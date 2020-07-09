@@ -1,6 +1,7 @@
 #include "backend/Global.h"
 #include "backend/Interpreter.h"
 
+
 // Easter egg
 obj_ptr YOCTO(NFArgs && args){
 	std::cout <<
@@ -22,10 +23,14 @@ obj_ptr io_print(NFArgs && args){
 void Global::reg(){
 	const auto scope = ip.get_scope();
 
-	auto yocto_easter_egg = make_nf(scope, "YOCTO", {}, YOCTO);
-	scope->define_nf("YOCTO", yocto_easter_egg);
+	// Primitives //
+	scope->define("NullClass", {LocalDeclType::Val, NullClass});
+
 
 	// IO //
-	auto print = make_nf(scope, "print", { {"o"} }, io_print);
-	scope->define_nf("print", print);
+	scope->define_nf("print", make_nf(scope, "print", { {"o"} }, io_print));
+
+
+	// Easter egg
+	scope->define_nf("YOCTO", make_nf(scope, "YOCTO", {}, YOCTO));
 }

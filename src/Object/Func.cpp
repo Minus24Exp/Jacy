@@ -20,7 +20,7 @@ obj_ptr Func::call(Interpreter & ip, ObjList && args){
 	try {
 		ip.execute_block(body.get(), ip.get_scope());
 	}catch(ReturnValue & val){
-		return_val = val.value ? val.value : null_obj;
+		return_val = val.value;
 	}
 
 	// I don't `exit_scope`, because I need to move to the previous scope,

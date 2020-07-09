@@ -10,9 +10,9 @@ using instance_ptr = std::shared_ptr<Instance>;
 class Instance : public Object, public Scope {
 public:
 	Instance(scope_ptr closure, Class * _class)
-		: Object(ObjectType::Instance),
-		  closure(closure),
-		  Scope(closure, _class->get_instance_fields())
+			: Object(ObjectType::Instance),
+		  	  closure(closure),
+		  	  Scope(closure, _class->get_instance_fields())
 	{
 		this->_class = std::shared_ptr<Class>(_class);
 	}

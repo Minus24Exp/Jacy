@@ -13,8 +13,12 @@ public:
 		: Object(ObjectType::Class),
 		  decl_scope(decl_scope),
 		  name(name),
-		  super(super),
-		  fields(decl_scope->get_locals()) {}
+		  super(super)
+	{
+		if(decl_scope){
+			fields = decl_scope->get_locals();
+		}
+	}
 	virtual ~Class() = default;
 
 	// Object //
@@ -55,16 +59,17 @@ public:
 	// TODO: Add static
 	// LocalMap get_static_fields() const {}
 
+protected:
+	scope_ptr decl_scope;
+	std::string name;
+	class_ptr super;
+	LocalMap fields;
+
 private:
 	// Class cannot be copied
 	obj_ptr clone() const override {
 		return nullptr;
 	}
-
-	scope_ptr decl_scope;
-	std::string name;
-	class_ptr super;
-	LocalMap fields;
 };
 
 #endif

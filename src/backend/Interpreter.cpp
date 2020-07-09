@@ -2,6 +2,8 @@
 
 Interpreter::Interpreter(){
 	value = nullptr;
+	null_obj = NullClass->call(*this, {});
+
 	enter_scope();
 
 	Global global(*this);
@@ -166,7 +168,7 @@ void Interpreter::visit(ClassDecl * class_decl){
 void Interpreter::visit(Literal * literal){
 	switch(literal->token.type){
 		case TokenType::Null:{
-			value.reset(new Null);
+			value = null_obj;
 			break;
 		}
 		case TokenType::Bool:{
@@ -237,11 +239,15 @@ void Interpreter::visit(FuncCall * func_call){
 	// It will be really useful for NativeFunc
 
 	value = callable->call(*this, std::move(args));
+
+	if(!value){
+		value = null_obj;
+	}
 }
 
 // Infix //
 void Interpreter::visit(Infix * infix){
-	std::cout << "visit infix" << std::endl;
+	obj_ptr lhs = eval(infix->left.get());
 }
 
 // Prefix //

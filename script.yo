@@ -1,14 +1,1 @@
-val global = 'global'
-
-class A{
-	var value = global
-
-	func change(){
-		value = 'changed'
-	}
-
-	func show(){
-		print(value)
-	}
-}
-
+print(null)

@@ -77,6 +77,8 @@ public:
 private:
 	obj_ptr value;
 	scope_ptr scope;
+
+	obj_ptr null_obj;
 };
 
 #endif

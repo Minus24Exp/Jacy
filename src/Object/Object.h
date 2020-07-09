@@ -21,19 +21,6 @@ enum class ObjectType {
 	Instance
 };
 
-static inline std::string objtype2str(const ObjectType & type){
-	switch(type){
-		case ObjectType::Null: return "Null";
-		case ObjectType::Bool: return "Bool";
-		case ObjectType::Int: return "Int";
-		case ObjectType::Float: return "Float";
-		case ObjectType::String: return "String";
-		case ObjectType::Func: return "Func";
-		case ObjectType::NativeFunc: return "NativeFunc";
-		default: return "<unknown>";
-	}
-}
-
 class Object {
 public:
 	Object(const ObjectType & type) : type(type) {}

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <iostream>
 
 // Note: In Yocto floating-point numbers are doubles
 enum class Operator;
@@ -175,6 +176,7 @@ struct Token {
 			case Keyword::Null:{
 				type = TokenType::Null;
 				val = 0;
+				break;
 			}
 			default:{
 				type = TokenType::Kw;
@@ -218,6 +220,10 @@ struct Token {
 		std::string str;
 
 		switch(type){
+			case TokenType::Null:{
+				str += "null";
+				break;
+			}
 			case TokenType::Bool:{
 				str += "bool";
 				break;

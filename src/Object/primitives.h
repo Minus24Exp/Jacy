@@ -1,14 +1,14 @@
 #ifndef PRIMITIVES_H
 #define PRIMITIVES_H
 
-#include "object/Object.h"
+#include "object/Class.h"
 
 //////////
 // Null //
 //////////
-class Null : public Object {
+class Null : public Class {
 public:
-	Null() : Object(ObjectType::Null) {}
+	Null() : Class(nullptr, "Null", nullptr) {}
 	virtual ~Null() = default;
 
 	bool truthy() const override {
@@ -16,29 +16,28 @@ public:
 	}
 
 	bool equals(Object * other) const override {
-		return other->type == ObjectType::Null;
-	}
-
-	obj_ptr clone() const override {
-		return std::make_shared<Null>();
+		return dynamic_cast<Null*>(other);
 	}
 
 	std::string to_string() const override {
 		return "<Null>";
 	}
+
+private:
+	// Null cannot be copied
+	obj_ptr clone() const override {
+		return nullptr;
+	}
 };
 
-// Note: Null is not singleton itself
-// But NEVER create new Null, always use null_obj
-
-const auto null_obj = std::make_shared<Null>();
+const auto NullClass = std::make_shared<Null>();
 
 //////////
 // Bool //
 //////////
-class Bool : public Object {
+class Bool : public Class {
 public:
-	Bool(const bool & b) : Object(ObjectType::Bool), value(b) {}
+	Bool(const bool & b) : Class(nullptr, "Bool", nullptr), value(b)  {}
 	virtual ~Bool() = default;
 
 	bool get_value() const {
@@ -50,10 +49,8 @@ public:
 	}
 
 	bool equals(Object * other) const override {
-		if(other->type != ObjectType::Bool){
-			return false;
-		}
-		return value == static_cast<Bool*>(other)->get_value();
+		Bool * b = dynamic_cast<Bool*>(other);
+		return b && value == b->get_value();
 	}
 
 	obj_ptr clone() const override {
@@ -67,6 +64,8 @@ public:
 private:
 	bool value;
 };
+
+const auto BoolClass = std::make_shared<Bool>();
 
 /////////
 // Int //
