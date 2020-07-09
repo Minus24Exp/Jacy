@@ -15,7 +15,8 @@ enum class ObjectType {
 	Int,
 	Float,
 	String,
-	Callable,
+	Func,
+	NativeFunc,
 	Class,
 	Instance
 };
@@ -27,7 +28,8 @@ static inline std::string objtype2str(const ObjectType & type){
 		case ObjectType::Int: return "Int";
 		case ObjectType::Float: return "Float";
 		case ObjectType::String: return "String";
-		case ObjectType::Callable: return "Callable";
+		case ObjectType::Func: return "Func";
+		case ObjectType::NativeFunc: return "NativeFunc";
 		default: return "<unknown>";
 	}
 }

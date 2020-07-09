@@ -1,43 +1,88 @@
-#ifndef PRINTER_H
-#define PRINTER_H
+#ifndef PARSER_H
+#define PARSER_H
 
+#include <vector>
 #include <iostream>
 
-#include "BaseVisitor.h"
+#include "Token.h"
 #include "tree/nodes.h"
+#include "Exception.h"
 
-class Printer : public BaseVisitor {
+class Parser {
 public:
-	Printer();
-	virtual ~Printer() = default;
+	static Parser & get_instance(){
+		static Parser instance;
+		return instance;
+	}
 
-	void print(const StmtList & tree);
-	
-	// Statements //
-	void visit(ExprStmt * expr_stmt) override;
-	void visit(Block * block) override;
-	void visit(VarDecl * var_decl) override;
-	void visit(FuncDecl * func_decl) override;
-	void visit(ReturnStmt * return_stmt) override;
-	void visit(WhileStmt * w) override;
-	void visit(ClassDecl * class_decl) override;
-
-	// Expressions //
-	void visit(Literal * literal) override;
-	void visit(Identifier * id) override;
-	void visit(Infix * infix) override;
-	void visit(Prefix * prefix) override;
-	void visit(Postfix * postfix) override;
-	void visit(Assign * assign) override;
-	void visit(SetExpr * set_expr) override;
-	void visit(GetExpr * get_expr) override;
-	void visit(FuncCall * func_call) override;
-	void visit(IfExpr * if_expr) override;
+    Parser(const Parser&) = delete;
+    Parser(Parser&&) = delete;
+    Parser & operator=(const Parser&) = delete;
+    Parser & operator=(Parser&&) = delete;
 
 private:
-	void print_indent();
+    Parser() = default;
+    ~Parser() = default;
 
-	size_t indent;
+public:
+	StmtList parse(const TokenStream & tokens);
+
+private:
+	TokenStream tokens;
+	uint32_t index;
+
+	StmtList tree;
+
+	Token peek();
+	Token advance();
+
+	// Chekers //
+	bool eof();
+	bool is_typeof(const TokenType & type);
+	bool is_nl();
+	bool is_semis();
+	bool is_op(const Operator & op);
+	bool is_kw(const Keyword & kw);
+
+	// Skippers //
+	void skip_nl(const bool & optional = false);
+	void skip_semis();
+	void skip_op(const Operator & op, const bool & skip_l_nl, const bool & skip_r_nl);
+	void skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl);
+
+	// Parsers //
+	
+	// Statements //
+	stmt_ptr parse_stmt();
+	block_ptr parse_block(bool allow_one_line = false);
+	stmt_ptr parse_var_decl();
+	stmt_ptr parse_func_decl();
+	stmt_ptr parse_while_stmt();
+	stmt_ptr parse_class_decl();
+
+	// Expressions //
+	expr_ptr parse_expr();
+
+	// Precedence parsers (down-top precedence parsing) //
+	expr_ptr assignment();
+	expr_ptr Or();
+	expr_ptr And();
+	expr_ptr eq();
+	expr_ptr comp();
+	expr_ptr add();
+	expr_ptr mult();
+	expr_ptr prefix();
+	expr_ptr postfix();
+	expr_ptr primary();
+
+	id_ptr parse_id();
+	expr_ptr parse_func_call(expr_ptr left);
+	expr_ptr parse_if_expr();
+
+	// Errors
+	void error(const std::string & msg);
+	void unexpected_error();
+	void expected_error(const std::string & expected);
 };
 
 #endif

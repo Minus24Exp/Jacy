@@ -1,5 +1,5 @@
-#ifndef PRIMITIVE_H
-#define PRIMITIVE_H
+#ifndef PRIMITIVES_H
+#define PRIMITIVES_H
 
 #include "object/Object.h"
 

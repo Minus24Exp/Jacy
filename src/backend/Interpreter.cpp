@@ -154,7 +154,7 @@ void Interpreter::visit(ClassDecl * class_decl){
 	for(const auto & f : class_decl->fields){
 		execute(f.get());
 	}
-	class_ptr _class = std::make_shared<Class>(scope, class_name, super, scope->get_locals());
+	class_ptr _class = std::make_shared<Class>(class_name, super, scope->get_locals());
 	exit_scope();
 
 	scope->define(class_name, {LocalDeclType::Val, _class});
@@ -207,13 +207,12 @@ void Interpreter::visit(FuncCall * func_call){
 		args.push_back(eval(arg.get()));
 	}
 
-	// TODO: Add check for function type
-	if(lhs->type != ObjectType::Callable){
+	Callable * callable = dynamic_cast<Callable*>(lhs.get());
+
+	if(!callable){
 		runtime_error("Invalid left-hand side in function call", func_call->left.get());
 		return;
 	}
-
-	Callable * callable = static_cast<Callable*>(lhs.get());
 
 	// Compare args and check for errors
 	const auto required_argc_s = std::to_string(callable->get_required_argc());
@@ -221,15 +220,15 @@ void Interpreter::visit(FuncCall * func_call){
 	const auto given_argc_s = std::to_string(args.size());
 	switch(callable->cmp_args(args)){
 		case CmpArgsResult::TooFew:{
-			runtime_error("Too few arguments in function call "+ callable->to_string()
-						 +" (at least " + required_argc_s +" expected, "
-						 + given_argc_s +" given)", func_call);
+			runtime_error("Too few arguments in function call"
+						  " (at least " + required_argc_s +" expected, "
+						  + given_argc_s +" given)", func_call);
 			break;
 		}
 		case CmpArgsResult::TooMany:{
-			runtime_error("Too many arguments in function call "+ callable->to_string()
-						 +" (maximum "+ max_argc_s +" expected, "
-						 + given_argc_s +" given)", func_call);
+			runtime_error("Too many arguments in function call "
+						  " (maximum "+ max_argc_s +" expected, "
+						  + given_argc_s +" given)", func_call);
 			break;
 		}
 	}
@@ -238,13 +237,6 @@ void Interpreter::visit(FuncCall * func_call){
 	// It will be really useful for NativeFunc
 
 	value = callable->call(*this, std::move(args));
-
-	if(!value){
-		// Note: This is just a helper for built-in functions
-		// They can return nullptr, and then here it will be converted to Null.
-		// But, nullptr does not equal to Null
-		value = null_obj;
-	}
 }
 
 // Infix //
@@ -320,9 +312,10 @@ void Interpreter::visit(GetExpr * get_expr){
 
 	obj_ptr field = instance->get(name);
 
-	if(field->type == ObjectType::Callable){
-		
-		scope_ptr instance_scope = std::make_shared<Scope>(field->)
+	if(field->type == ObjectType::Func){
+		value = std::static_pointer_cast<Func>(field)->bind(instance);
+	}else if(field->type == ObjectType::NativeFunc){
+		value = std::static_pointer_cast<NativeFunc>(field)->bind(instance);
 	}else{
 		value = field;
 	}

@@ -1,0 +1,11 @@
+class A{
+	val value = 1
+
+	func show(){
+		print(this.show)
+	}
+}
+
+val a = A()
+
+a.show()

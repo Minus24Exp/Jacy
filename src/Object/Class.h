@@ -2,18 +2,19 @@
 #define CLASS_H
 
 #include "backend/Scope.h"
+#include "object/Callable.h"
 
 class Class;
 using class_ptr = std::shared_ptr<Class>;
 
-class Class : public Object {
+class Class : public Object, public Callable {
 public:
 	Class(const std::string & name, class_ptr super, const LocalMap & fields)
 		: Object(ObjectType::Class), name(name), super(super), fields(fields) {}
-	virtual ~Class() = defualt;
+	virtual ~Class() = default;
 
 	// Object //
-	bool equals(Object * other){
+	bool equals(Object * other) const override {
 		if(other->type != ObjectType::Class){
 			return false;
 		}
@@ -21,8 +22,22 @@ public:
 	}
 
 	std::string to_string() const override {
-		return "<class:"+ name +">"
+		return "<class:"+ name +">";
 	}
+
+	// Callable //
+	
+	// TODO: !!! Add user-defined constructors
+
+	size_t get_required_argc() const override {
+		return 0;
+	}
+
+	size_t get_max_argc() const override {
+		return 0;
+	}
+
+	obj_ptr call(Interpreter & ip, ObjList && args) override;
 
 	// Class //
 	std::string get_name() const {

@@ -1,10 +1,17 @@
 #ifndef INSTANCE_H
 #define INSTANCE_H
 
+#include "object/Class.h"
+
+class Instance;
+using instance_ptr = std::shared_ptr<Instance>;
+
 class Instance : public Object {
 public:
-	Instance(class_ptr _class) : Object(ObjectType::Instance), _class(_class) {
+	Instance(Class * _class) : Object(ObjectType::Instance) {
 		fields = _class->get_instance_fields();
+
+		this->_class = std::shared_ptr<Class>(_class);
 	}
 	virtual ~Instance() = default;
 
@@ -17,11 +24,11 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::make_shared<Instance>(_class);
+		return std::make_shared<Instance>(_class.get());
 	}
 
 	std::string to_string() const {
-		return "<object_"+ _class->get_name() +">"
+		return "<object_"+ _class->get_name() +">";
 	}
 
 	// Instance //
@@ -30,20 +37,11 @@ public:
 	}
 
 	obj_ptr get(const std::string & name) const {
-		const auto it = fields.find(name);
-
-		if(it == fields.end()){
+		if(!has(name)){
 			return nullptr;
 		}
 
-		if(it->second.val->type == ObjectType::Callable){
-			
-		}
-
-		if(has(name)){
-			return fields.at(name).val;
-		}
-		return nullptr;
+		return fields.at(name).val;
 	}
 
 	// TODO: Rewrite for return status

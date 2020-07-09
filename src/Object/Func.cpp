@@ -1,7 +1,6 @@
 #include "object/Func.h"
 #include "backend/Interpreter.h"
 
-
 obj_ptr Func::call(Interpreter & ip, ObjList && args){
 	// Create new scope from closure where function was declared
 	scope_ptr closure_scope = std::make_shared<Scope>(closure);
