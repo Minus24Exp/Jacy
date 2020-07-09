@@ -4,7 +4,6 @@
 #include "tree/Stmt/FuncDecl.h"
 #include "tree/Stmt/ReturnStmt.h"
 #include "tree/Stmt/WhileStmt.h"
-#include "tree/Stmt/ClassDecl.h"
 
 // Expressions //
 #include "tree/Expr/Literal.h"

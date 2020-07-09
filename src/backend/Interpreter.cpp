@@ -318,7 +318,14 @@ void Interpreter::visit(GetExpr * get_expr){
 		runtime_error(lhs->to_string() +" does not have member "+ name, get_expr);
 	}
 
-	value = instance->get(name);
+	obj_ptr field = instance->get(name);
+
+	if(field->type == ObjectType::Callable){
+		
+		scope_ptr instance_scope = std::make_shared<Scope>(field->)
+	}else{
+		value = field;
+	}
 }
 
 // IfExpr //

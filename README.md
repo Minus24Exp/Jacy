@@ -181,12 +181,16 @@ Operator overloading can be implemented with operator magic functions:
 The function `new` always exists and can be called as `ClassName()`.
 But, the user-defined constructor calls after the default constructor.
 
+
+
 ## TODO
 - After first version "release" do general parsing tests and other tests too
 - Add multi-threading (not in Yocto), to lex and parse at the same time as Interpreter register globals.
 - Add namespaces
 - Class extensions
 - Think about and make if possible: "Change visitors pass by pointer to pass by reference to avoid segfault with nullptr"
+- Make Object.equals "REAL"
+- Make Callable interface-like, and create Function abstract class that Method (Func) and NativeMethod (NativeFunc) will derive
 
 ## Think about it
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`

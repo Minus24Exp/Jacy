@@ -13,9 +13,6 @@
 class Callable;
 using callable_ptr = std::shared_ptr<Callable>;
 
-class Instance;
-using instance_ptr = std::shared_ptr<Instance>;
-
 struct Param {
 	std::string name;
 	obj_ptr default_val;
@@ -82,8 +79,6 @@ public:
 	std::string get_name() const {
 		return name;
 	}
-
-	virtual obj_ptr bind(obj_ptr instance) = 0;
 	
 	virtual CmpArgsResult cmp_args(const ObjList & args) const;
 
