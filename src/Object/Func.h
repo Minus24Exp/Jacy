@@ -69,7 +69,7 @@ public:
 	}
 
 	func_ptr bind(instance_ptr instance){
-		scope_ptr func_scope = std::make_shared<Scope>(closure);
+		scope_ptr func_scope = std::make_shared<Scope>(instance);
 		func_scope->define("this", {LocalDeclType::Val, instance});
 		return std::make_shared<Func>(func_scope, name, params, body);
 	}

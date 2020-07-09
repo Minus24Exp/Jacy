@@ -9,8 +9,12 @@ using class_ptr = std::shared_ptr<Class>;
 
 class Class : public Object, public Callable {
 public:
-	Class(const std::string & name, class_ptr super, const LocalMap & fields)
-		: Object(ObjectType::Class), name(name), super(super), fields(fields) {}
+	Class(scope_ptr decl_scope, const std::string & name, class_ptr super)
+		: Object(ObjectType::Class),
+		  decl_scope(decl_scope),
+		  name(name),
+		  super(super),
+		  fields(decl_scope->get_locals()) {}
 	virtual ~Class() = default;
 
 	// Object //
@@ -47,7 +51,7 @@ public:
 	LocalMap get_instance_fields() const {
 		return fields;
 	}
-
+	
 	// TODO: Add static
 	// LocalMap get_static_fields() const {}
 
@@ -57,6 +61,7 @@ private:
 		return nullptr;
 	}
 
+	scope_ptr decl_scope;
 	std::string name;
 	class_ptr super;
 	LocalMap fields;

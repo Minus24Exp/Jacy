@@ -16,6 +16,7 @@ class Scope {
 public:
 	Scope() : parent(nullptr) {}
 	Scope(scope_ptr parent) : parent(parent) {}
+	Scope(scope_ptr parent, const LocalMap & locals) : parent(parent), locals(locals) {}
 
 	scope_ptr get_parent() const {
 		return parent;
@@ -25,9 +26,13 @@ public:
 		this->parent = parent;
 	}
 
+	bool has(const std::string & name) const {
+		return locals.find(name) != locals.end();
+	}
+
 	// Returns true if variable is not defined, false otherwise
 	bool define(const std::string & name, const Local & loc){
-		if(locals.find(name) == locals.end()){
+		if(!has(name)){
 			locals.emplace(name, loc);
 			return true;
 		}else{

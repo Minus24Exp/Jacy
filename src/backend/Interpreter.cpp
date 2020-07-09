@@ -154,7 +154,7 @@ void Interpreter::visit(ClassDecl * class_decl){
 	for(const auto & f : class_decl->fields){
 		execute(f.get());
 	}
-	class_ptr _class = std::make_shared<Class>(class_name, super, scope->get_locals());
+	class_ptr _class = std::make_shared<Class>(scope, class_name, super);
 	exit_scope();
 
 	scope->define(class_name, {LocalDeclType::Val, _class});
@@ -284,11 +284,13 @@ void Interpreter::visit(SetExpr * set_expr){
 
 	std::string name = set_expr->id->get_name();
 
-	if(!instance->has(name)){
-		runtime_error(lhs->to_string() +" does not have member "+ name, set_expr);
-	}
+	int result = instance->assign(name, rhs);
 
-	instance->set(name, rhs);
+	if(result == 0){
+		runtime_error(lhs->to_string() +" does not have member "+ name, set_expr);
+	}else if(result == -1){
+		runtime_error("Unable to reassign val "+ name, set_expr);
+	}
 }
 
 // GetExpr //

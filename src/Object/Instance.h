@@ -2,15 +2,18 @@
 #define INSTANCE_H
 
 #include "object/Class.h"
+#include "backend/Scope.h"
 
 class Instance;
 using instance_ptr = std::shared_ptr<Instance>;
 
-class Instance : public Object {
+class Instance : public Object, public Scope {
 public:
-	Instance(Class * _class) : Object(ObjectType::Instance) {
-		fields = _class->get_instance_fields();
-
+	Instance(scope_ptr closure, Class * _class)
+		: Object(ObjectType::Instance),
+		  closure(closure),
+		  Scope(closure, _class->get_instance_fields())
+	{
 		this->_class = std::shared_ptr<Class>(_class);
 	}
 	virtual ~Instance() = default;
@@ -24,35 +27,15 @@ public:
 	}
 
 	obj_ptr clone() const override {
-		return std::make_shared<Instance>(_class.get());
+		return std::make_shared<Instance>(closure, _class.get());
 	}
 
 	std::string to_string() const {
 		return "<object_"+ _class->get_name() +">";
 	}
 
-	// Instance //
-	bool has(const std::string & name) const {
-		return fields.find(name) != fields.end();
-	}
-
-	obj_ptr get(const std::string & name) const {
-		if(!has(name)){
-			return nullptr;
-		}
-
-		return fields.at(name).val;
-	}
-
-	// TODO: Rewrite for return status
-	void set(const std::string & name, obj_ptr value){
-		if(has(name)){
-			fields.at(name).val = value;
-		}
-	}
-
 private:
-	LocalMap fields;
+	scope_ptr closure;
 	class_ptr _class;
 };
 

@@ -1,11 +1,15 @@
+val global = 'global'
+
 class A{
-	val value = 1
+	var value = global
+
+	func change(){
+		value = 'changed'
+	}
 
 	func show(){
-		print(this.show)
+		print(value)
 	}
 }
 
-val a = A()
-
-a.show()
+var value = 'not in class'
