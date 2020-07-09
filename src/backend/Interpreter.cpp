@@ -2,9 +2,9 @@
 
 Interpreter::Interpreter(){
 	value = nullptr;
-	null_obj = NullClass->call(*this, {});
-
 	enter_scope();
+
+	null_obj = make_instance(scope);
 
 	Global global(*this);
 	global.reg();

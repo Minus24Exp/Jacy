@@ -2,6 +2,9 @@
 #define PRIMITIVES_H
 
 #include "object/Class.h"
+#include "object/Instance.h"
+
+// Note: Primitives cannot be constructed in code
 
 //////////
 // Null //
@@ -23,7 +26,15 @@ public:
 		return "<Null>";
 	}
 
+	instance_ptr make_instance(scope_ptr closure){
+		return std::make_shared<Instance>(closure, this);
+	}
+
 private:
+	obj_ptr call(Interpreter & ip, ObjList && args) override {
+		return nullptr;
+	}
+
 	// Null cannot be copied
 	obj_ptr clone() const override {
 		return nullptr;
@@ -31,6 +42,11 @@ private:
 };
 
 const auto NullClass = std::make_shared<Null>();
+
+class NullObject : public Instance {
+public:
+	NullObject() : Instance(scope_ptr closure, NullClass.get()) {}
+}
 
 //////////
 // Bool //
