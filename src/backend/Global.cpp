@@ -23,10 +23,6 @@ obj_ptr io_print(NFArgs && args){
 void Global::reg(){
 	const auto scope = ip.get_scope();
 
-	// Primitives //
-	scope->define("NullClass", {LocalDeclType::Val, NullClass});
-
-
 	// IO //
 	scope->define_nf("print", make_nf(scope, "print", { {"o"} }, io_print));
 

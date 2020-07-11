@@ -4,8 +4,6 @@ Interpreter::Interpreter(){
 	value = nullptr;
 	enter_scope();
 
-	null_obj = make_instance(scope);
-
 	Global global(*this);
 	global.reg();
 }
@@ -248,6 +246,14 @@ void Interpreter::visit(FuncCall * func_call){
 // Infix //
 void Interpreter::visit(Infix * infix){
 	obj_ptr lhs = eval(infix->left.get());
+	obj_ptr rhs = eval(infix->right.get());
+
+	switch(infix->op.op()){
+		case Operator::Add:{
+
+			break;
+		}
+	}
 }
 
 // Prefix //

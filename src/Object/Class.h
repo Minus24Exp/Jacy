@@ -37,15 +37,15 @@ public:
 	
 	// TODO: !!! Add user-defined constructors
 
-	size_t get_required_argc() const override {
+	virtual size_t get_required_argc() const override {
 		return 0;
 	}
 
-	size_t get_max_argc() const override {
+	virtual size_t get_max_argc() const override {
 		return 0;
 	}
 
-	obj_ptr call(Interpreter & ip, ObjList && args) override;
+	virtual obj_ptr call(Interpreter & ip, ObjList && args) override;
 
 	// Class //
 	std::string get_name() const {

@@ -55,4 +55,10 @@ public:
 		: YoctoException("Runtime error: "+ msg +" at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
 };
 
+// Dev Error uses in cases there something was wrong with source code
+class DevError : public YoctoException {
+public:
+	DevError(const std::string & msg) : YoctoException("[Dev Error]: "+ msg) {}
+};
+
 #endif

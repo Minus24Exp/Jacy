@@ -2,58 +2,51 @@
 #define PRIMITIVES_H
 
 #include "object/Class.h"
-#include "object/Instance.h"
+#include "Exception.h"
+
+template <typename T>
+struct Primitive : Object {
+	Primitive(const T & value) : Object(ObjectType::Primitive), value(value) {}
+	virtual ~Primitive() = default;
+
+	T value;
+};
 
 // Note: Primitives cannot be constructed in code
 
 //////////
 // Null //
 //////////
-class Null : public Class {
+class Null : public Object {
 public:
-	Null() : Class(nullptr, "Null", nullptr) {}
+	Null() : Object(ObjectType::Null) {}
 	virtual ~Null() = default;
 
 	bool truthy() const override {
 		return false;
 	}
 
+	obj_ptr clone() const override {
+		return std::make_shared<Null>();
+	}
+
 	bool equals(Object * other) const override {
-		return dynamic_cast<Null*>(other);
+		return other->type == ObjectType::Null;
 	}
 
 	std::string to_string() const override {
 		return "<Null>";
 	}
-
-	instance_ptr make_instance(scope_ptr closure){
-		return std::make_shared<Instance>(closure, this);
-	}
-
-private:
-	obj_ptr call(Interpreter & ip, ObjList && args) override {
-		return nullptr;
-	}
-
-	// Null cannot be copied
-	obj_ptr clone() const override {
-		return nullptr;
-	}
 };
 
-const auto NullClass = std::make_shared<Null>();
-
-class NullObject : public Instance {
-public:
-	NullObject() : Instance(scope_ptr closure, NullClass.get()) {}
-}
+const auto null_obj = std::make_shared<Null>();
 
 //////////
 // Bool //
 //////////
-class Bool : public Class {
+class Bool : public Object {
 public:
-	Bool(const bool & b) : Class(nullptr, "Bool", nullptr), value(b)  {}
+	Bool(const bool & b) : Object(ObjectType::Bool), value(b)  {}
 	virtual ~Bool() = default;
 
 	bool get_value() const {
@@ -65,8 +58,10 @@ public:
 	}
 
 	bool equals(Object * other) const override {
-		Bool * b = dynamic_cast<Bool*>(other);
-		return b && value == b->get_value();
+		if(other->type != ObjectType::Bool){
+			return false;
+		}
+		return value == static_cast<Bool*>(other)->get_value();
 	}
 
 	obj_ptr clone() const override {
@@ -80,8 +75,6 @@ public:
 private:
 	bool value;
 };
-
-const auto BoolClass = std::make_shared<Bool>();
 
 /////////
 // Int //

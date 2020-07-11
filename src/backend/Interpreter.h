@@ -10,6 +10,7 @@
 #include "backend/Scope.h"
 #include "object/objects.h"
 #include "backend/Global.h"
+// #include "backend/functions.h"
 
 // ReturnValue is used to catch return statement
 // It has to be separate type to determine it correctly in catch
@@ -77,8 +78,6 @@ public:
 private:
 	obj_ptr value;
 	scope_ptr scope;
-
-	obj_ptr null_obj;
 };
 
 #endif

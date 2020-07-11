@@ -18,7 +18,8 @@ enum class ObjectType {
 	Func,
 	NativeFunc,
 	Class,
-	Instance
+	Instance,
+	Primitive
 };
 
 class Object {

@@ -1,4 +1,4 @@
-#include "src/Yocto.h"
+#include "Yocto.h"
 
 int main(int argc, const char * argv[]){
 

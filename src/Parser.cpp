@@ -500,7 +500,6 @@ expr_ptr Parser::postfix(){
 
 expr_ptr Parser::primary(){
 	// Literal
-	std::cout << "Parse primary: " << peek().to_string() << std::endl;
 	if(is_typeof(TokenType::Int)
 	|| is_typeof(TokenType::Float)
 	|| is_typeof(TokenType::Str)
