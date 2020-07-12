@@ -14,20 +14,20 @@
 
 class Yocto {
 public:
-	Yocto();
-	virtual ~Yocto() = default;
+    Yocto();
+    virtual ~Yocto() = default;
 
-	void run_prompt();
-	void run_script(const std::string & path);
+    void run_prompt();
+    void run_script(const std::string & path);
 
-	void run(const std::string & script);
-	
-	void run_debug(const std::string & script);
+    void run(const std::string & script);
+    
+    void run_debug(const std::string & script);
 
 private:
-	Lexer & lexer;
-	Parser & parser;
-	Interpreter & ip;
+    Lexer & lexer;
+    Parser & parser;
+    Interpreter & ip;
 };
 
 #endif

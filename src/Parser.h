@@ -10,10 +10,10 @@
 
 class Parser {
 public:
-	static Parser & get_instance(){
-		static Parser instance;
-		return instance;
-	}
+    static Parser & get_instance(){
+        static Parser instance;
+        return instance;
+    }
 
     Parser(const Parser&) = delete;
     Parser(Parser&&) = delete;
@@ -25,64 +25,64 @@ private:
     ~Parser() = default;
 
 public:
-	StmtList parse(const TokenStream & tokens);
+    StmtList parse(const TokenStream & tokens);
 
 private:
-	TokenStream tokens;
-	uint32_t index;
+    TokenStream tokens;
+    uint32_t index;
 
-	StmtList tree;
+    StmtList tree;
 
-	Token peek();
-	Token advance();
+    Token peek();
+    Token advance();
 
-	// Chekers //
-	bool eof();
-	bool is_typeof(const TokenType & type);
-	bool is_nl();
-	bool is_semis();
-	bool is_op(const Operator & op);
-	bool is_kw(const Keyword & kw);
+    // Chekers //
+    bool eof();
+    bool is_typeof(const TokenType & type);
+    bool is_nl();
+    bool is_semis();
+    bool is_op(const Operator & op);
+    bool is_kw(const Keyword & kw);
 
-	// Skippers //
-	void skip_nl(const bool & optional = false);
-	void skip_semis();
-	void skip_op(const Operator & op, const bool & skip_l_nl, const bool & skip_r_nl);
-	void skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl);
+    // Skippers //
+    void skip_nl(const bool & optional = false);
+    void skip_semis();
+    void skip_op(const Operator & op, const bool & skip_l_nl, const bool & skip_r_nl);
+    void skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl);
 
-	// Parsers //
-	
-	// Statements //
-	stmt_ptr parse_stmt();
-	block_ptr parse_block(bool allow_one_line = false);
-	stmt_ptr parse_var_decl();
-	stmt_ptr parse_func_decl();
-	stmt_ptr parse_while_stmt();
-	stmt_ptr parse_class_decl();
+    // Parsers //
+    
+    // Statements //
+    stmt_ptr parse_stmt();
+    block_ptr parse_block(bool allow_one_line = false);
+    stmt_ptr parse_var_decl();
+    stmt_ptr parse_func_decl();
+    stmt_ptr parse_while_stmt();
+    stmt_ptr parse_class_decl();
 
-	// Expressions //
-	expr_ptr parse_expr();
+    // Expressions //
+    expr_ptr parse_expr();
 
-	// Precedence parsers (down-top precedence parsing) //
-	expr_ptr assignment();
-	expr_ptr Or();
-	expr_ptr And();
-	expr_ptr eq();
-	expr_ptr comp();
-	expr_ptr add();
-	expr_ptr mult();
-	expr_ptr prefix();
-	expr_ptr postfix();
-	expr_ptr primary();
+    // Precedence parsers (down-top precedence parsing) //
+    expr_ptr assignment();
+    expr_ptr Or();
+    expr_ptr And();
+    expr_ptr eq();
+    expr_ptr comp();
+    expr_ptr add();
+    expr_ptr mult();
+    expr_ptr prefix();
+    expr_ptr postfix();
+    expr_ptr primary();
 
-	id_ptr parse_id();
-	expr_ptr parse_func_call(expr_ptr left);
-	expr_ptr parse_if_expr();
+    id_ptr parse_id();
+    expr_ptr parse_func_call(expr_ptr left);
+    expr_ptr parse_if_expr();
 
-	// Errors
-	void error(const std::string & msg);
-	void unexpected_error();
-	void expected_error(const std::string & expected);
+    // Errors
+    void error(const std::string & msg);
+    void unexpected_error();
+    void expected_error(const std::string & expected);
 };
 
 #endif

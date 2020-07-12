@@ -8,17 +8,17 @@ struct Identifier;
 using id_ptr = std::shared_ptr<Identifier>;
 
 struct Identifier : Expr {
-	Token token;
+    Token token;
 
-	Identifier(const Token & token) : Expr(token.pos, ExprType::Id), token(token) {}
+    Identifier(const Token & token) : Expr(token.pos, ExprType::Id), token(token) {}
 
-	std::string get_name(){
-		return token.String();
-	}
+    std::string get_name(){
+        return token.String();
+    }
 
-	void accept(BaseVisitor & visitor) override {
-		visitor.visit(this);
-	}
+    void accept(BaseVisitor & visitor) override {
+        visitor.visit(this);
+    }
 };
 
 #endif

@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="img/Yocto.png" width="250">	
+    <img src="img/Yocto.png" width="250">    
 </p>
 
 # Yocto
@@ -32,11 +32,11 @@ else print('nope')
 `if`/`elif` can have conditions without parenthesis:
 ```
 if a
-	print(a)
+    print(a)
 elif b
-	print(b)
+    print(b)
 else
-	print('nope')
+    print('nope')
 ```
 But, what's important, then there MUST be new-line after condition.
 Or, it could be written as one-line body if put braces:
@@ -74,18 +74,18 @@ All examples are equal:
 while(a) print(a)
 // or
 while a
-	print(a)
+    print(a)
 // or
 while a => print(a)
 // or
 while(a) => print(a)
 // or
 while(a){
-	print(a)
+    print(a)
 }
 // or
 while a {
-	print(a)
+    print(a)
 }
 ```
 
@@ -97,13 +97,13 @@ func a //...
 Arguments can be captured in parenthesis or not. Examples are equal:
 ```
 func a(p1, p2) {
-	print(p1)
-	print(p2)
+    print(p1)
+    print(p2)
 }
 // or
 func a p1, p2 {
-	print(p1)
-	print(p2)
+    print(p1)
+    print(p2)
 }
 ```
 As `if` and `while`, function declaration can be one-line too, with the same rules:
@@ -116,7 +116,7 @@ func a p1, p2 => print(p1, p2)
 It's also possible to declare function that does not receive arguments this way:
 ```
 func a{
-	print('no args')
+    print('no args')
 }
 // or
 func a => print('no args')
@@ -126,8 +126,8 @@ func a => print('no args')
 Default values can be written with any of ways below:
 ```
 func a(p1 = 'a', p2 = 'b'){
-	print(p1)
-	print(p2)
+    print(p1)
+    print(p2)
 }
 // or
 func a p1 = 'a', p2 = 'b' // ...

@@ -8,14 +8,14 @@
 // so why do not just use one class that contains a token?
 
 struct Literal : Expr {
-	Token token;
+    Token token;
 
-	Literal(const Token & token) : Expr(token.pos, ExprType::Literal), token(token) {}
-	virtual ~Literal() = default;
+    Literal(const Token & token) : Expr(token.pos, ExprType::Literal), token(token) {}
+    virtual ~Literal() = default;
 
-	void accept(BaseVisitor & visitor) override {
-		visitor.visit(this);
-	}
+    void accept(BaseVisitor & visitor) override {
+        visitor.visit(this);
+    }
 };
 
 #endif

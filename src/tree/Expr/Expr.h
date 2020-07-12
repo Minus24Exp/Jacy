@@ -8,25 +8,25 @@ using expr_ptr = std::shared_ptr<Expr>;
 using ExprList = std::vector<expr_ptr>;
 
 enum class ExprType {
-	Literal,
-	Id,
-	Prefix,
-	Infix,
-	Postfix,
-	Assign,
-	Set,
-	Get,
-	Call,
-	If
+    Literal,
+    Id,
+    Prefix,
+    Infix,
+    Postfix,
+    Assign,
+    Set,
+    Get,
+    Call,
+    If
 };
 
 struct Expr : Node {
-	Expr(const Position & pos, ExprType type) : Node(pos), type(type) {}
-	virtual ~Expr() = default;
+    Expr(const Position & pos, ExprType type) : Node(pos), type(type) {}
+    virtual ~Expr() = default;
 
-	virtual void accept(BaseVisitor & visitor) = 0;
+    virtual void accept(BaseVisitor & visitor) = 0;
 
-	ExprType type;
+    ExprType type;
 };
 
 #endif

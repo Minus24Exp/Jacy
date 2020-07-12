@@ -1,8 +1,20 @@
-#include "object/Class.h"
-#include "object/Instance.h"
+#include "Class.h"
 
-obj_ptr Class::call(Interpreter & ip, ObjList && args){
-	// TODO: Add user-defined constructors
+Class::Class(scope_ptr decl_scope, const std::string & name, class_ptr super)
+            : decl_scope(decl_scope), name(name), super(super) {}
 
-	return std::make_shared<Instance>(decl_scope, this);
+std::string Class::repr() const {
+    return "<class:"+ name +">";
+}
+
+size_t Class::required_argc() const {
+    return 0;
+}
+
+size_t Class::argc() const {
+    return 0;
+}
+
+obj_ptr Class::call(Interpreter & ip, const ObjList & args){
+    return std::make_shared<Object>(decl_scope, this);
 }

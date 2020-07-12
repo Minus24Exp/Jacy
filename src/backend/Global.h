@@ -11,13 +11,13 @@ class Interpreter;
 
 class Global {
 public:
-	Global(Interpreter & ip) : ip(ip) {}
-	virtual ~Global() = default;
+    Global(Interpreter & ip) : ip(ip) {}
+    virtual ~Global() = default;
 
-	void reg();
+    void reg();
 
 private:
-	Interpreter & ip;
+    Interpreter & ip;
 };
 
 #endif
