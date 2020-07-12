@@ -27,7 +27,7 @@ String::String(const std::string & s) : value(s) {
             throw 1;
         }
 
-        const auto N = other_i->get_value();
+        auto N = other_i->get_value();
 
         if(N < 0){
             N = 0;
@@ -40,16 +40,16 @@ String::String(const std::string & s) : value(s) {
         // I've optimized it as much as I can...
 
         if(value.size() > 1){
-            const auto period = value.size();
+            const auto len = value.size();
             std::string mul_str;
-            mul_str.reserve(N * period + 1);
+            mul_str.reserve(N * len + 1);
             mul_str += value;
 
             size_t m = 2;
             for(; m < N; m *= 2){
                 mul_str += mul_str;
             }
-            mul_str.append(mul_str.c_str(), (N - (m / 2)) * period);
+            mul_str.append(mul_str.c_str(), (N - (m / 2)) * len);
 
             return std::make_shared<String>(mul_str);
 

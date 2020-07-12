@@ -1,1 +1,6 @@
-val a = '1' * 1000000000
+func fac(n){
+    if(n == 0) return 1
+    else return n * fac(n - 1)
+}
+
+print(fac(12))

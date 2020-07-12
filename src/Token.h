@@ -7,10 +7,12 @@
 #include <string>
 #include <iostream>
 
+using yo_int = long long;
+
 // Note: In Yocto floating-point numbers are doubles
 enum class Operator;
 enum class Keyword;
-using TokenVal = std::variant<bool, int, double, std::string, Operator, Keyword>;
+using TokenVal = std::variant<std::monostate, bool, yo_int, double, std::string, Operator, Keyword>;
 
 struct Token;
 using TokenStream = std::vector<Token>;
@@ -69,7 +71,7 @@ const std::vector <std::string> operators {
 };
 
 inline std::string op_to_str(const Operator & op){
-    return operators.at(static_cast<int>(op));
+    return operators.at(static_cast<size_t>(op));
 }
 
 enum class Keyword {
@@ -91,7 +93,7 @@ enum class Keyword {
 
 // Overload operator less-than to check if identifier is Keyword
 inline bool operator<(Keyword kwl, Keyword kwr){
-    return static_cast<int>(kwl) < static_cast<int>(kwr);
+    return static_cast<size_t>(kwl) < static_cast<size_t>(kwr);
 }
 
 const std::vector <std::string> keywords {
@@ -116,7 +118,7 @@ inline Keyword str_to_kw(const std::string & str){
 }
 
 inline std::string kw_to_str(const Keyword & kw){
-    return keywords.at(static_cast<int>(kw));
+    return keywords.at(static_cast<size_t>(kw));
 }
 
 struct Position {
@@ -139,18 +141,10 @@ struct Token {
                 val = v;
                 break;
             }
-            case TokenType::Nl:{
-                val = 0;
-                break;
-            }
-            case TokenType::Eof:{
-                val = 0;
-                break;
-            }
         }
     }
 
-    Token(const int & i){
+    Token(const yo_int & i){
         type = TokenType::Int;
         val = i;
     }
@@ -175,7 +169,6 @@ struct Token {
             }
             case Keyword::Null:{
                 type = TokenType::Null;
-                val = 0;
                 break;
             }
             default:{
@@ -187,7 +180,6 @@ struct Token {
 
     Token(const TokenType & type){
         this->type = type;
-        val = false;
     }
 
     virtual ~Token() = default;
@@ -196,8 +188,8 @@ struct Token {
         return std::get<bool>(val);
     }
 
-    int Int(){
-        return std::get<int>(val);
+    yo_int Int(){
+        return std::get<yo_int>(val);
     }
 
     double Float(){

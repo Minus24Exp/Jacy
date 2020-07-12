@@ -78,7 +78,7 @@ void Lexer::add_token(const TokenType & type){
     add_token(Token(type));
 }
 
-void Lexer::add_token(const int & i){
+void Lexer::add_token(const yo_int & i){
     add_token(Token(i));
 }
 
@@ -103,7 +103,7 @@ void Lexer::lex_number(){
                     num += peek();
                 }while(is_hex(advance()));
 
-                add_token(std::stoi(num, 0, 16));
+                add_token(std::stoll(num, 0, 16));
                 return;
                 break;
             }
@@ -117,7 +117,7 @@ void Lexer::lex_number(){
                     num += peek();
                 }while(is_digit(advance()));
 
-                add_token(std::stoi(num, 0, 2));
+                add_token(std::stoll(num, 0, 2));
                 return;
                 break;
             }
@@ -147,7 +147,7 @@ void Lexer::lex_number(){
     if(num_type == TokenType::Float){
         add_token(std::stod(num));
     }else{
-        add_token(std::stoi(num));
+        add_token(std::stoll(num));
     }
 }
 

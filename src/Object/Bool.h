@@ -8,6 +8,11 @@ public:
     Bool(bool b);
     virtual ~Bool() = default;
 
+    // Object //
+    bool truthy() const override {
+        return value;
+    }
+
     std::string repr() const override {
         return "<Bool:"+ std::string(value ? "true" : "false") +">";
     }

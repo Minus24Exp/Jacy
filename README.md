@@ -191,7 +191,7 @@ But, the user-defined constructor calls after the default constructor.
 - Think about and make if possible: "Change visitors pass by pointer to pass by reference to avoid segfault with nullptr"
 - Make Object.equals "REAL"
 - Make Callable interface-like, and create Function abstract class that Method (Func) and NativeMethod (NativeFunc) will derive
-- I still cannot solve a problem with Primitives as classes, I need to store not an object, but some real value. But a cannot come up with good idea to solve it. So, now primitives are not like in Ruby, but like in Python ;(
+- Recursion depth limit !!!
 
 ## Think about it
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`

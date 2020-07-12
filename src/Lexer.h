@@ -35,7 +35,7 @@ public:
     void add_token(const Operator & op);
     void add_token(const Keyword & kw);
     void add_token(const TokenType & type);
-    void add_token(const int & i);
+    void add_token(const yo_int & i);
     void add_token(const double & d);
 
     uint32_t index;

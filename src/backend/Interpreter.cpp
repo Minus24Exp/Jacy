@@ -239,8 +239,7 @@ void Interpreter::visit(FuncCall * func_call){
         }
     }
 
-    // TODO: !!! Add exception handling for call
-    // It will be really useful for NativeFunc
+    // Recursion depth limit!
 
     value = callable->call(*this, std::move(args));
 
@@ -276,6 +275,10 @@ void Interpreter::visit(Infix * infix){
         }
         case Operator::Mod:{
             magic_func_name = "__mod";
+            break;
+        }
+        case Operator::Eq:{
+            magic_func_name = "__eq";
             break;
         }
         default:{
