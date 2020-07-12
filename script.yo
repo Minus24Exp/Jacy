@@ -1,7 +1,1 @@
-class A {
-    var value = 1
-
-    func show(){
-        print(value)
-    }
-}
+print(10 * '1')

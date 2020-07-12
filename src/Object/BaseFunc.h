@@ -7,6 +7,9 @@
  * BaseFunc - Base class for Func and NativeFunc
  */
 
+class BaseFunc;
+using base_func_ptr = std::shared_ptr<BaseFunc>;
+
 struct Param {
     std::string name;
     obj_ptr default_val;
@@ -36,6 +39,9 @@ public:
     virtual obj_ptr call(Interpreter & ip, const ObjList & args) = 0;
 
     // BaseFunc //
+    
+    // As far as bind called only from Object with shared from this,
+    // here must be `const Objct` shared_ptr
     virtual obj_ptr bind(obj_ptr instance) = 0;
 
 protected:

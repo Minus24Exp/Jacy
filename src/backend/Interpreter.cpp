@@ -146,10 +146,10 @@ void Interpreter::visit(ClassDecl * class_decl){
 
     scope->define(class_name, {LocalDeclType::Val, nullptr});
 
-    // if(super){
-    //     enter_scope();
-    //     scope->define("super", {LocalDeclType::Val, super});
-    // }
+    if(super){
+        enter_scope();
+        scope->define("super", {LocalDeclType::Val, super});
+    }
 
     // Enter virtual scope to store class fields
     enter_scope();
@@ -159,9 +159,9 @@ void Interpreter::visit(ClassDecl * class_decl){
     class_ptr _class = std::make_shared<Class>(scope, class_name, super);
     exit_scope();
 
-    // if(super){
-    //     exit_scope();
-    // }
+    if(super){
+        exit_scope();
+    }
 
     scope->assign(class_name, _class);
 }
@@ -175,22 +175,22 @@ void Interpreter::visit(Literal * literal){
             value = null_obj;
             break;
         }
-        // case TokenType::Bool:{
-        //     value.reset(new Bool(literal->token.Bool()));
-        //     break;
-        // }
+        case TokenType::Bool:{
+            value.reset(new Bool(literal->token.Bool()));
+            break;
+        }
         case TokenType::Int:{
             value.reset(new Int(literal->token.Int()));
             break;
         }
-        // case TokenType::Float:{
-        //     value.reset(new Float(literal->token.Float()));
-        //     break;
-        // }
-        // case TokenType::Str:{
-        //     value.reset(new String(literal->token.String()));
-        //     break;
-        // }
+        case TokenType::Float:{
+            value.reset(new Float(literal->token.Float()));
+            break;
+        }
+        case TokenType::Str:{
+            value.reset(new String(literal->token.String()));
+            break;
+        }
     }
 }
 
@@ -254,10 +254,60 @@ void Interpreter::visit(Infix * infix){
     obj_ptr lhs = eval(infix->left.get());
     obj_ptr rhs = eval(infix->right.get());
 
+    std::string op_name = op_to_str(infix->op.op());
+    std::string magic_func_name;
+
     switch(infix->op.op()){
         case Operator::Add:{
-
+            magic_func_name = "__add";
             break;
+        }
+        case Operator::Sub:{
+            magic_func_name = "__sub";
+            break;
+        }
+        case Operator::Mul:{
+            magic_func_name = "__mul";
+            break;
+        }
+        case Operator::Div:{
+            magic_func_name = "__div";
+            break;
+        }
+        case Operator::Mod:{
+            magic_func_name = "__mod";
+            break;
+        }
+        default:{
+            throw DevError("Unsupported operator: "+ op_name);
+        }
+    }
+
+    obj_ptr magic_func_field;
+
+    if(lhs->has(magic_func_name)){
+        magic_func_field = lhs->get(magic_func_name);
+    }else{
+        runtime_error("Invalid left-hand side in infix "+ op_name, infix);
+    }
+
+    base_func_ptr magic_func = std::dynamic_pointer_cast<BaseFunc>(magic_func_field);
+
+    if(!magic_func){
+        runtime_error(magic_func_name +" must be a function", infix);
+    }
+
+    try{
+        value = magic_func->call(*this, {rhs});
+    }catch(int error_status){
+        /**
+         * error_status
+         *
+         * 1 - invalid right-hand side
+         */
+        
+        if(error_status == 1){
+            runtime_error("Invalid right-hand side in infix "+ op_name, infix);
         }
     }
 }
@@ -275,10 +325,11 @@ void Interpreter::visit(Postfix * postfix){
 // Assign //
 void Interpreter::visit(Assign * assign){
     // Note: right-associative
-    obj_ptr rhs = eval(assign->value.get());    
+    obj_ptr rhs = eval(assign->value.get());
 
     std::string name = assign->id->get_name();
-    int result = scope->assign(name, std::move(rhs));
+
+    int result = scope->assign(name, rhs);
 
     if(result == 0){
         runtime_error(name +" is not defined", assign);
@@ -290,7 +341,6 @@ void Interpreter::visit(Assign * assign){
 // SetExpr //
 void Interpreter::visit(SetExpr * set_expr){
     obj_ptr rhs = eval(set_expr->value.get());
-
     obj_ptr lhs = eval(set_expr->left.get());
 
     std::string name = set_expr->id->get_name();
@@ -316,15 +366,7 @@ void Interpreter::visit(GetExpr * get_expr){
         runtime_error(lhs->repr() +" does not have member "+ name, get_expr);
     }
 
-    obj_ptr field = lhs->get(name);
-
-    std::shared_ptr<BaseFunc> maybe_func = std::dynamic_pointer_cast<BaseFunc>(field);
-
-    if(maybe_func){
-        value = maybe_func->bind(lhs);
-    }else{
-        value = field;
-    }
+    value = lhs->get(name);
 }
 
 // IfExpr //

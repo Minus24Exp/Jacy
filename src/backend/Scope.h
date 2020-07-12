@@ -24,12 +24,12 @@ public:
         this->parent = parent;
     }
 
-    bool has(const std::string & name) const {
+    virtual bool has(const std::string & name) const {
         return locals.find(name) != locals.end();
     }
 
     // Returns true if variable is not defined, false otherwise
-    bool define(const std::string & name, const Local & loc){
+    virtual bool define(const std::string & name, const Local & loc){
         if(!has(name)){
             locals.emplace(name, loc);
             return true;
@@ -42,7 +42,7 @@ public:
     // 1 if variable was defined and able to assign
     // 0 if variable was not defined
     // -1 if variable cannot be reassigned
-    int assign(const std::string & name, obj_ptr val){
+    virtual int assign(const std::string & name, obj_ptr val){
         auto it = locals.find(name);
         
         if(it != locals.end()){
@@ -58,7 +58,7 @@ public:
         }
     }
 
-    obj_ptr get(const std::string & name) const {
+    virtual obj_ptr get(const std::string & name) const {
         auto it = locals.find(name);
         
         if(it != locals.end()){
@@ -81,12 +81,12 @@ public:
     }
 
     // Helpers //
-    void define_nf(const std::string & name, const obj_ptr & nf){
+    void define_nf(const std::string & name, obj_ptr nf){
         if(!define(name, {LocalDeclType::Val, nf})){
             throw YoctoException("Attempt to redefine native function "+ name);
         }
     }
-
+    
 private:
     LocalMap locals;
     scope_ptr parent;

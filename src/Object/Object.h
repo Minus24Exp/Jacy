@@ -11,7 +11,7 @@ using ObjList = std::vector<obj_ptr>;
 
 class Class;
 
-class Object : public Scope {
+class Object : public Scope, public std::enable_shared_from_this<Object> {
 public:
     Object();
     Object(scope_ptr scope, Class * _class);
@@ -23,8 +23,11 @@ public:
     // Represent object as string
     virtual std::string repr() const;
 
+    // Scope //
+    obj_ptr get(const std::string & name) const override;
+
 private:
-    std::shared_ptr<Class> _class;
+    Class * _class;
 };
 
 #endif
