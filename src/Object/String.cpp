@@ -1,6 +1,8 @@
 #include "object/String.h"
 #include "object/Int.h"
 
+#include <sstream>
+
 String::String(const std::string & s) : value(s) {
     define_nf("to_s", make_nf(nullptr, "to_s", {}, [this](NFArgs && args){
         // The most useless thing ever? maybe...
@@ -25,11 +27,36 @@ String::String(const std::string & s) : value(s) {
             throw 1;
         }
 
-        std::string mul_str;
-        for(int i = 0; i < other_i->get_value(); i++){
-            mul_str += value;
+        const auto N = other_i->get_value();
+
+        if(N < 0){
+            N = 0;
         }
 
-        return std::make_shared<String>(mul_str);
+        if(N == 0){
+            return std::make_shared<String>("");
+        }
+
+        // I've optimized it as much as I can...
+
+        if(value.size() > 1){
+            const auto period = value.size();
+            std::string mul_str;
+            mul_str.reserve(N * period + 1);
+            mul_str += value;
+
+            size_t m = 2;
+            for(; m < N; m *= 2){
+                mul_str += mul_str;
+            }
+            mul_str.append(mul_str.c_str(), (N - (m / 2)) * period);
+
+            return std::make_shared<String>(mul_str);
+
+        }else if(value.size() == 1){
+            return std::make_shared<String>(std::string(N, value.front()));
+        }else{
+            return std::make_shared<String>(value);
+        }
     }));
 }
