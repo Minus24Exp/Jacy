@@ -3,6 +3,13 @@
 
 #include "object/Object.h"
 
+/**
+ * For now recursion depth limit is not tunable,
+ * and I won't change it in the future, I think 1000 is pretty enough.
+ * As far as C++ does not limit recursion depth, but just exit on stack
+ * size excess, it's too hard to handle it, sooo...
+ */
+
 const int REC_DEPTH_MAX = 1000;
 
 class Interpreter;
@@ -43,7 +50,7 @@ public:
     void update_recursion_depth(){
         recursion_depth++;
         if(recursion_depth > REC_DEPTH_MAX){
-            throw RecursionDepthExceeded();
+            throw RecursionDepthExceeded(REC_DEPTH_MAX);
         }
     }
 

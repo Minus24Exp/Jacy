@@ -1,5 +1,21 @@
-func a(){
-    a()
+class Base {
+    var value
+
+    func show(){
+        value = 0
+        print('base_show')
+        print(value)
+    }
 }
 
-a()
+class Derived : Base {
+    func show(){
+        value = 1
+        print('derived_show')
+        print(value)
+    }
+}
+
+val d = Derived()
+
+d.show()

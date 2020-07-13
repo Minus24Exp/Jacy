@@ -17,12 +17,12 @@ std::string Object::repr() const {
 }
 
 obj_ptr Object::get(const std::string & name) const {
-    // get in object must auto-bind functions
-    if(!has(name)){
+    obj_ptr field = Scope::get(name);
+
+    if(!field){
         return nullptr;
     }
 
-    obj_ptr field = Scope::get(name);
     base_func_ptr maybe_func = std::dynamic_pointer_cast<BaseFunc>(field);
 
     if(maybe_func){

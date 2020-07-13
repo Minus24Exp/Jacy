@@ -63,7 +63,7 @@ public:
 
 class RecursionDepthExceeded : public YoctoException {
 public:
-    RecursionDepthExceeded() : YoctoException("Maximum recursion depth exceeded") {}
+    RecursionDepthExceeded(int limit) : YoctoException("Maximum recursion depth exceeded (" + std::to_string(limit) + ")") {}
 };
 
 #endif

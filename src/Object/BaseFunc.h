@@ -39,9 +39,6 @@ public:
     virtual obj_ptr call(Interpreter & ip, const ObjList & args) = 0;
 
     // BaseFunc //
-
-    // As far as bind called only from Object with shared from this,
-    // here must be `const Objct` shared_ptr
     virtual obj_ptr bind(obj_ptr instance) = 0;
 
 protected:

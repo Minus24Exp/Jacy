@@ -24,53 +24,18 @@ public:
         this->parent = parent;
     }
 
-    virtual bool has(const std::string & name) const {
-        return locals.find(name) != locals.end();
-    }
+    virtual bool has(const std::string & name) const;
 
     // Returns true if variable is not defined, false otherwise
-    virtual bool define(const std::string & name, const Local & loc){
-        if(!has(name)){
-            locals.emplace(name, loc);
-            return true;
-        }else{
-            return false;
-        }
-    }
+    virtual bool define(const std::string & name, const Local & loc);
 
     // Returns:
     // 1 if variable was defined and able to assign
     // 0 if variable was not defined
     // -1 if variable cannot be reassigned
-    virtual int assign(const std::string & name, obj_ptr val){
-        auto it = locals.find(name);
-        
-        if(it != locals.end()){
-            if(it->second.decl_type == LocalDeclType::Val && it->second.val != nullptr){
-                return -1;
-            }
-            locals.at(name).val = val;
-            return 1;
-        }else if(parent){
-            return parent->assign(name, val);
-        }else{
-            return 0;
-        }
-    }
+    virtual int assign(const std::string & name, obj_ptr val);
 
-    virtual obj_ptr get(const std::string & name) const {
-        auto it = locals.find(name);
-        
-        if(it != locals.end()){
-            return it->second.val;
-        }
-
-        if(parent){
-            return parent->get(name);
-        }
-
-        return nullptr;
-    }
+    virtual obj_ptr get(const std::string & name) const;
 
     LocalMap get_locals() const {
         return locals;
@@ -81,11 +46,11 @@ public:
     }
 
     // Helpers //
-    void define_nf(const std::string & name, obj_ptr nf){
-        if(!define(name, {LocalDeclType::Val, nf})){
-            throw YoctoException("Attempt to redefine native function "+ name);
-        }
-    }
+    void define_nf(const std::string & name, obj_ptr nf);
+
+    // DEBUG //
+    void print() const;
+    void print_with_lookup() const;
     
 private:
     LocalMap locals;

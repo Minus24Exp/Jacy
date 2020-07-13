@@ -18,3 +18,12 @@ size_t Class::argc() const {
 obj_ptr Class::call(Interpreter & ip, const ObjList & args){
     return std::make_shared<Object>(decl_scope, this);
 }
+
+LocalMap Class::get_instance_fields() const {
+    LocalMap fields = decl_scope->get_locals();
+    if(super){
+        // Merge with super fields
+        fields.merge(super->get_instance_fields());
+    }
+    return fields;
+}

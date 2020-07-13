@@ -30,9 +30,7 @@ public:
         return name;
     }
 
-    LocalMap get_instance_fields() const {
-        return decl_scope->get_locals();
-    }
+    LocalMap get_instance_fields() const;
 
 private:
     scope_ptr decl_scope;
