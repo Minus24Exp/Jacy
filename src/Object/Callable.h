@@ -3,6 +3,8 @@
 
 #include "object/Object.h"
 
+const int REC_DEPTH_MAX = 1000;
+
 class Interpreter;
 
 /**
@@ -36,8 +38,23 @@ public:
         
         return ArgsCmpResult::Ok;
     }
+    
+    // Update recursion info and check for errors //
+    void update_recursion_depth(){
+        recursion_depth++;
+        if(recursion_depth > REC_DEPTH_MAX){
+            throw RecursionDepthExceeded();
+        }
+    }
+
+    void reset_recursion_depth(){
+        recursion_depth = 0;
+    }
 
     virtual obj_ptr call(Interpreter & ip, const ObjList & args) = 0;
+
+private:
+    int recursion_depth = 0;
 };
 
 #endif

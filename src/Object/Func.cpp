@@ -9,6 +9,8 @@ Func::Func(scope_ptr closure,
           body(body) {}
 
 obj_ptr Func::call(Interpreter & ip, const ObjList & args){
+    update_recursion_depth();
+
     // Create new scope from closure where function was declared
     scope_ptr closure_scope = std::make_shared<Scope>(closure);
     scope_ptr previous = ip.get_scope();

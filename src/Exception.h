@@ -61,4 +61,9 @@ public:
     DevError(const std::string & msg) : YoctoException("[Dev Error]: "+ msg) {}
 };
 
+class RecursionDepthExceeded : public YoctoException {
+public:
+    RecursionDepthExceeded() : YoctoException("Maximum recursion depth exceeded") {}
+};
+
 #endif

@@ -35,7 +35,7 @@ void Yocto::run_script(const std::string & path){
     ss << file.rdbuf();
     std::string script = ss.str();
 
-    run(script);
+    run_debug(script);
 
     file.close();
 }
@@ -58,10 +58,10 @@ void Yocto::run_debug(const std::string & script){
     TokenStream tokens = lexer.lex(script);
     auto lexer_end = bench();
 
-    std::cout << "Tokens:" << std::endl;
-    for(auto & t : tokens){
-        std::cout << t.to_string() << std::endl;
-    }
+    // std::cout << "Tokens:" << std::endl;
+    // for(auto & t : tokens){
+    //     std::cout << t.to_string() << std::endl;
+    // }
 
     // Parse tokens
     auto parser_start = bench();
@@ -69,10 +69,10 @@ void Yocto::run_debug(const std::string & script){
     auto parser_end = bench();
 
     // Print tree
-    Printer printer;
-    std::cout << "\nParse Tree:" << std::endl;
-    printer.print(tree);
-    std::cout << std::endl;
+    // Printer printer;
+    // std::cout << "\nParse Tree:" << std::endl;
+    // printer.print(tree);
+    // std::cout << std::endl;
 
     auto ip_start = bench();
     ip.interpret(tree);

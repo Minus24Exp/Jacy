@@ -15,6 +15,8 @@ std::string NativeFunc::repr() const {
 
 // BaseFunc //
 obj_ptr NativeFunc::call(Interpreter & ip, const ObjList & args){
+    update_recursion_depth();
+    
     NFArgs func_args;
     for(size_t i = 0; i < params.size(); i++){
         func_args.emplace(params[i].name, std::move(args[i]));

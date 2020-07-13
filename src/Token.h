@@ -7,7 +7,7 @@
 #include <string>
 #include <iostream>
 
-using yo_int = long long;
+using yo_int = long;
 
 // Note: In Yocto floating-point numbers are doubles
 enum class Operator;

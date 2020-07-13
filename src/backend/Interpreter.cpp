@@ -238,14 +238,26 @@ void Interpreter::visit(FuncCall * func_call){
             break;
         }
     }
+    
+    static Callable * last_callable = nullptr;
 
-    // Recursion depth limit!
+    if(last_callable != callable){
+        callable->reset_recursion_depth();
+    }
 
-    value = callable->call(*this, std::move(args));
+    last_callable = callable;
+
+    try{
+        value = callable->call(*this, std::move(args));
+    }catch(RecursionDepthExceeded & e){
+        runtime_error(e.what(), func_call);
+    }
 
     if(!value){
         value = null_obj;
     }
+
+    last_callable = nullptr;
 }
 
 // Infix //
