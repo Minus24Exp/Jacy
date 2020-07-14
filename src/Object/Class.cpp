@@ -15,7 +15,7 @@ size_t Class::argc() const {
     return 0;
 }
 
-obj_ptr Class::call(Interpreter & ip, const ObjList & args){
+obj_ptr Class::call(const ObjList & args){
     return std::make_shared<Object>(decl_scope, this);
 }
 

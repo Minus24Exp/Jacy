@@ -8,7 +8,11 @@
  */
 
 class BaseFunc;
-using base_func_ptr = std::shared_ptr<BaseFunc>;
+using func_ptr = std::shared_ptr<BaseFunc>;
+
+const auto cast_to_func = [](obj_ptr obj){
+    return std::dynamic_pointer_cast<BaseFunc>(obj);
+};
 
 struct Param {
     std::string name;
@@ -36,7 +40,12 @@ public:
     size_t required_argc() const override;
     size_t argc() const override;
 
-    virtual obj_ptr call(Interpreter & ip, const ObjList & args) = 0;
+    virtual obj_ptr call(const ObjList & args) = 0;
+
+    // Helper for no args //
+    obj_ptr call(){
+        return call({});
+    }
 
     // BaseFunc //
     virtual obj_ptr bind(obj_ptr instance) = 0;

@@ -17,7 +17,7 @@ public:
     virtual ~Func() = default;
     
     // BaseFunc //
-    obj_ptr call(Interpreter & ip, const ObjList & args) override;
+    obj_ptr call(const ObjList & args) override;
 
     obj_ptr bind(obj_ptr instance) override;
 

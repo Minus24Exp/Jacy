@@ -134,11 +134,6 @@ void Lexer::lex_number(){
         advance();
     }
 
-    if(!is_digit(peek())){
-        add_token(NumType::Int, num);
-        return;
-    }
-
     if(peek() == '.'){
         // As far as numbers are object we must check if there's number after dot
         // and to advance through it
@@ -146,12 +141,7 @@ void Lexer::lex_number(){
             add_token(NumType::Int, num);
             return;
         }
-    }
 
-    // If after dot was number then advance to dot
-    advance();
-
-    if(peek() == '.'){
         num_type = NumType::Float;
         num += peek();
         advance();

@@ -14,7 +14,7 @@ std::string NativeFunc::repr() const {
 }
 
 // BaseFunc //
-obj_ptr NativeFunc::call(Interpreter & ip, const ObjList & args){
+obj_ptr NativeFunc::call(const ObjList & args){
     update_recursion_depth();
     
     NFArgs func_args;

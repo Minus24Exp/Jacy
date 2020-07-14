@@ -8,7 +8,9 @@ Func::Func(scope_ptr closure,
         : BaseFunc(closure, name, params),
           body(body) {}
 
-obj_ptr Func::call(Interpreter & ip, const ObjList & args){
+obj_ptr Func::call(const ObjList & args){
+    Interpreter & ip = Interpreter::get_instance();
+
     update_recursion_depth();
 
     // Create new scope from closure where function was declared

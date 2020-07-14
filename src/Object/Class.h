@@ -23,7 +23,7 @@ public:
     size_t required_argc() const override;
     size_t argc() const override;
 
-    obj_ptr call(Interpreter & ip, const ObjList & args) override;
+    obj_ptr call(const ObjList & args) override;
 
     // Class //
     std::string get_name() const {

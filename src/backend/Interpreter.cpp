@@ -248,7 +248,7 @@ void Interpreter::visit(FuncCall * func_call){
     last_callable = callable;
 
     try{
-        value = callable->call(*this, std::move(args));
+        value = callable->call(std::move(args));
     }catch(RecursionDepthExceeded & e){
         runtime_error(e.what(), func_call);
     }
@@ -332,14 +332,14 @@ void Interpreter::visit(Infix * infix){
         runtime_error("Invalid left-hand side in infix "+ op_name, infix);
     }
 
-    base_func_ptr magic_func = std::dynamic_pointer_cast<BaseFunc>(magic_func_field);
+    func_ptr magic_func = std::dynamic_pointer_cast<BaseFunc>(magic_func_field);
 
     if(!magic_func){
         runtime_error(magic_func_name +" must be a function", infix);
     }
 
     try{
-        value = magic_func->call(*this, {rhs});
+        value = magic_func->call({rhs});
     }catch(int error_status){
         /**
          * error_status
@@ -374,14 +374,14 @@ void Interpreter::visit(Prefix * prefix){
         runtime_error("Invalid right-hand side in prefix " + op_name, prefix);
     }
 
-    base_func_ptr magic_func = std::dynamic_pointer_cast<BaseFunc>(rhs->get(magic_func_name));
+    func_ptr magic_func = std::dynamic_pointer_cast<BaseFunc>(rhs->get(magic_func_name));
 
     if(!magic_func){
         runtime_error(magic_func_name +" must be a function", prefix);
     }
 
     try{
-        value = magic_func->call(*this, {});
+        value = magic_func->call();
     }catch(int error_status){
         if(error_status == 1){
             runtime_error("Invalid right-hand side in prefix "+ op_name, prefix);

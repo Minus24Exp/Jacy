@@ -5,9 +5,6 @@
 #include <functional>
 #include "object/BaseFunc.h"
 
-class NativeFunc;
-using nf_ptr = std::shared_ptr<NativeFunc>;
-
 using NFArgs = std::unordered_map<std::string, obj_ptr>;
 using NFBody = std::function<obj_ptr(NFArgs && args)>;
 
@@ -23,17 +20,17 @@ public:
     std::string repr() const override;
 
     // BaseFunc //
-    obj_ptr call(Interpreter & ip, const ObjList & args) override;
+    obj_ptr call(const ObjList & args) override;
     obj_ptr bind(obj_ptr instance) override;
 
 private:
     NFBody body;
 };
 
-static inline nf_ptr make_nf(scope_ptr closure,
-                             const std::string & name,
-                             const ParamList & params,
-                             const NFBody & body)
+static inline std::shared_ptr<NativeFunc> make_nf(scope_ptr closure,
+                                                  const std::string & name,
+                                                  const ParamList & params,
+                                                  const NFBody & body)
 {
     return std::make_shared<NativeFunc>(closure, name, params, body);
 }

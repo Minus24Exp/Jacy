@@ -5,12 +5,10 @@
 #include <iostream>
 
 #include "BaseVisitor.h"
-#include "Exception.h"
-#include "tree/nodes.h"
 #include "backend/Scope.h"
-#include "object/objects.h"
 #include "backend/Global.h"
-// #include "backend/functions.h"
+#include "tree/nodes.h"
+#include "object/objects.h"
 
 // ReturnValue is used to catch return statement
 // It has to be separate type to determine it correctly in catch

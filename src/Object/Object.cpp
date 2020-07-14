@@ -23,7 +23,7 @@ obj_ptr Object::get(const std::string & name) const {
         return nullptr;
     }
 
-    base_func_ptr maybe_func = std::dynamic_pointer_cast<BaseFunc>(field);
+    func_ptr maybe_func = std::dynamic_pointer_cast<BaseFunc>(field);
 
     if(maybe_func){
         return maybe_func->bind(std::const_pointer_cast<Object>(shared_from_this()));

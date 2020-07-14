@@ -46,6 +46,7 @@ enum class Operator {
     // Punctuations
     LParen, RParen,
     LBrace, RBrace,
+    LBracket, RBracket,
 
     Comma, Colon, Dot,
 

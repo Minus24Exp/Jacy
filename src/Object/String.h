@@ -4,7 +4,9 @@
 #include "object/NativeFunc.h"
 
 class String;
-const auto cast_to_s = [](obj_ptr s){ return std::dynamic_pointer_cast<String>(s); };
+using string_ptr = std::shared_ptr<String>;
+
+const auto cast_to_s = [](obj_ptr s) -> string_ptr { return std::dynamic_pointer_cast<String>(s); };
 
 class String : public Object {
 public:

@@ -16,6 +16,19 @@ obj_ptr YOCTO(NFArgs && args){
 }
 
 obj_ptr io_print(NFArgs && args){
+    // If object has method `to_s` and it returns string then use it
+    if(args["o"]->has("to_s")){
+        func_ptr to_s = cast_to_func(args["o"]->get("to_s"));
+        if(to_s){
+            string_ptr string = cast_to_s(to_s->call());
+            if(string){
+                std::cout << string->get_value() << std::endl;
+                return nullptr;
+            }
+        }
+    }
+
+    // Otherwise represent object
     std::cout << args["o"]->repr() << std::endl;
     return nullptr;
 }

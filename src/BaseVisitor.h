@@ -6,6 +6,7 @@
 
 struct Node;
 
+struct Stmt;
 struct ExprStmt;
 struct VarDecl;
 struct Block;
@@ -14,6 +15,7 @@ struct ReturnStmt;
 struct WhileStmt;
 struct ClassDecl;
 
+struct Expr;
 struct Literal;
 struct Identifier;
 struct Infix;
