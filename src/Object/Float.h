@@ -3,6 +3,9 @@
 
 #include "object/NativeFunc.h"
 
+class Float;
+using float_ptr = std::shared_ptr<Float>;
+
 class Float : public Object {
 public:
     Float(double d);

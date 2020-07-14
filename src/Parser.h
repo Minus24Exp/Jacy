@@ -69,6 +69,7 @@ private:
     expr_ptr And();
     expr_ptr eq();
     expr_ptr comp();
+    expr_ptr range();
     expr_ptr add();
     expr_ptr mult();
     expr_ptr prefix();

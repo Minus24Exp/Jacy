@@ -293,8 +293,34 @@ void Interpreter::visit(Infix * infix){
             magic_func_name = "__eq";
             break;
         }
+        case Operator::RefEq:{
+            value = std::make_shared<Bool>(lhs == rhs);
+            return;
+            break;
+        }
+        case Operator::RefNotEq:{
+            value = std::make_shared<Bool>(lhs != rhs);
+            return;
+            break;
+        }
+        case Operator::Range:{
+            magic_func_name = "__range";
+            break;
+        }
+        case Operator::RangeLE:{
+            magic_func_name = "__range_le";
+            break;
+        }
+        case Operator::RangeRE:{
+            magic_func_name = "__range_re";
+            break;
+        }
+        case Operator::RangeBothE:{
+            magic_func_name = "__range_bothe";
+            break;
+        }
         default:{
-            throw DevError("Unsupported operator: "+ op_name);
+            throw DevError("Unsupported infix operator: `"+ op_name +"`");
         }
     }
 
@@ -329,7 +355,38 @@ void Interpreter::visit(Infix * infix){
 
 // Prefix //
 void Interpreter::visit(Prefix * prefix){
-    std::cout << "visit prefix" << std::endl;
+    obj_ptr rhs = eval(prefix->right.get());
+
+    std::string op_name = op_to_str(prefix->op.op());
+
+    std::string magic_func_name;
+    switch(prefix->op.op()){
+        case Operator::Not:{
+            magic_func_name = "__not";
+            break;
+        }
+        default:{
+            throw DevError("Unsupported prefix operator: "+ op_name);
+        }
+    }
+
+    if(!rhs->has(magic_func_name)){
+        runtime_error("Invalid right-hand side in prefix " + op_name, prefix);
+    }
+
+    base_func_ptr magic_func = std::dynamic_pointer_cast<BaseFunc>(rhs->get(magic_func_name));
+
+    if(!magic_func){
+        runtime_error(magic_func_name +" must be a function", prefix);
+    }
+
+    try{
+        value = magic_func->call(*this, {});
+    }catch(int error_status){
+        if(error_status == 1){
+            runtime_error("Invalid right-hand side in prefix "+ op_name, prefix);
+        }
+    }
 }
 
 // Postfix //

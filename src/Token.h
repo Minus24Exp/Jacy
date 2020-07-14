@@ -30,6 +30,14 @@ enum class TokenType {
     Eof
 };
 
+// Number types for lexing
+enum class NumType {
+    Int,
+    Float,
+    Bin,
+    Hex
+};
+
 enum class Operator {
     Assign,
 
@@ -48,6 +56,13 @@ enum class Operator {
     Not, Eq, NotEq,
     LT, GT, LE, GE,
 
+    RefEq, RefNotEq,
+
+    // RangeLE - Range left exclusive
+    // RangeRE - Range right exclusive
+    // RangeBothE - Range both exclusive
+    Range, RangeLE, RangeRE, RangeBothE,
+
     Arrow
 };
 
@@ -57,6 +72,7 @@ const std::vector <std::string> operators {
 
     "(", ")",
     "{", "}",
+    "[", "]",
 
     ",", ":", ".",
 
@@ -66,6 +82,10 @@ const std::vector <std::string> operators {
 
     "!", "==", "!=",
     "<", ">", "<=", ">=",
+
+    "===", "!==",
+
+    "...", ">..", "..<", ">.<",
 
     "=>"
 };
@@ -144,14 +164,29 @@ struct Token {
         }
     }
 
-    Token(const yo_int & i){
-        type = TokenType::Int;
-        val = i;
-    }
-
-    Token(const double & d){
-        type = TokenType::Float;
-        val = d;
+    Token(NumType num_type, const std::string & num){
+        switch(num_type){
+            case NumType::Int:{
+                type = TokenType::Int;
+                val = std::stol(num);
+                break;
+            }
+            case NumType::Float:{
+                type = TokenType::Float;
+                val = std::stod(num);
+                break;
+            }
+            case NumType::Bin:{
+                type = TokenType::Int;
+                val = std::stol(num, 0, 2);
+                break;
+            }
+            case NumType::Hex:{
+                type = TokenType::Int;
+                val = std::stol(num, 0, 16);
+                break;
+            }
+        }
     }
 
     Token(const Operator & op){

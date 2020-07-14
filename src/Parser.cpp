@@ -410,7 +410,9 @@ expr_ptr Parser::And(){
 expr_ptr Parser::eq(){
     expr_ptr left = comp();
 
-    while(is_op(Operator::Eq) || is_op(Operator::NotEq)){
+    while(is_op(Operator::Eq) || is_op(Operator::NotEq)
+       || is_op(Operator::RefEq) || is_op(Operator::RefNotEq))
+    {
         const auto op_token = peek();
         advance();
         expr_ptr right = comp();
@@ -421,12 +423,30 @@ expr_ptr Parser::eq(){
 }
 
 expr_ptr Parser::comp(){
-    expr_ptr left = add();
+    expr_ptr left = range();
 
     while(is_op(Operator::LT)
        || is_op(Operator::GT)
        || is_op(Operator::LE)
        || is_op(Operator::GE))
+    {
+        const auto op_token = peek();
+        advance();
+        expr_ptr right = range();
+        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+    }
+
+    return left;
+}
+
+expr_ptr Parser::range(){
+    expr_ptr left = add();
+
+    // TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
+    if(is_op(Operator::Range)
+    || is_op(Operator::RangeLE)
+    || is_op(Operator::RangeRE)
+    || is_op(Operator::RangeBothE))
     {
         const auto op_token = peek();
         advance();
@@ -531,7 +551,7 @@ expr_ptr Parser::primary(){
         return parse_if_expr();
     }
 
-    unexpected_error();
+    expected_error("primary expression");
 
     return nullptr;
 }

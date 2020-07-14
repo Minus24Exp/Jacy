@@ -7,6 +7,8 @@
 class Int;
 const auto cast_to_i = [](obj_ptr i){ return std::dynamic_pointer_cast<Int>(i); };
 
+class Float;
+
 class Int : public Object {
 public:
     Int(yo_int i);
@@ -19,6 +21,8 @@ public:
     yo_int get_value() const {
         return value;
     }
+
+    std::shared_ptr<Float> to_float() const;
 
 private:
     yo_int value;

@@ -4,17 +4,23 @@ char Lexer::peek(){
     return script[index];
 }
 
-char Lexer::peek_next(){
-    return script[index + 1];
+char Lexer::peek_next(int distance){
+    if(index + distance > script.size()){
+        // If trying to peek to far it's unexpected eof
+        unexpected_eof_error();
+    }
+    return script[index + distance];
 }
 
-char Lexer::advance(){
-    index++;
-    if(peek() == '\n'){
-        line++;
-        column = 1;
-    }else{
-        column++;
+char Lexer::advance(int inc){
+    for(int i = 0; i < inc; i++){
+        if(peek() == '\n'){
+            line++;
+            column = 1;
+        }else{
+            column++;
+        }
+        index++;
     }
     return peek();
 }
@@ -78,16 +84,12 @@ void Lexer::add_token(const TokenType & type){
     add_token(Token(type));
 }
 
-void Lexer::add_token(const yo_int & i){
-    add_token(Token(i));
-}
-
-void Lexer::add_token(const double & d){
-    add_token(Token(d));
+void Lexer::add_token(NumType num_type, const std::string & num){
+    add_token(Token(num_type, num));
 }
 
 void Lexer::lex_number(){
-    TokenType num_type = TokenType::Int;
+    NumType num_type = NumType::Int;
     std::string num;
 
     if(peek() == '0'){
@@ -103,7 +105,7 @@ void Lexer::lex_number(){
                     num += peek();
                 }while(is_hex(advance()));
 
-                add_token(std::stol(num, 0, 16));
+                add_token(NumType::Hex, num);
                 return;
                 break;
             }
@@ -117,7 +119,7 @@ void Lexer::lex_number(){
                     num += peek();
                 }while(is_digit(advance()));
 
-                add_token(std::stol(num, 0, 2));
+                add_token(NumType::Bin, num);
                 return;
                 break;
             }
@@ -132,8 +134,25 @@ void Lexer::lex_number(){
         advance();
     }
 
+    if(!is_digit(peek())){
+        add_token(NumType::Int, num);
+        return;
+    }
+
     if(peek() == '.'){
-        num_type = TokenType::Float;
+        // As far as numbers are object we must check if there's number after dot
+        // and to advance through it
+        if(!is_digit(peek_next())){
+            add_token(NumType::Int, num);
+            return;
+        }
+    }
+
+    // If after dot was number then advance to dot
+    advance();
+
+    if(peek() == '.'){
+        num_type = NumType::Float;
         num += peek();
         advance();
         if(!is_digit(peek())){
@@ -144,11 +163,7 @@ void Lexer::lex_number(){
         }while(is_digit(advance()));
     }
 
-    if(num_type == TokenType::Float){
-        add_token(std::stod(num));
-    }else{
-        add_token(std::stol(num));
-    }
+    add_token(num_type, num);
 }
 
 TokenStream Lexer::lex(const std::string & script){
@@ -212,12 +227,15 @@ TokenStream Lexer::lex(const std::string & script){
                 case '=':{
                     if(peek_next() == '>'){
                         add_token(Operator::Arrow);
-                        advance();
-                        advance();
+                        advance(2);
                     }else if(peek_next() == '='){
-                        add_token(Operator::Eq);
-                        advance();
-                        advance();
+                        if(peek_next(2) == '='){
+                            add_token(Operator::RefEq);
+                            advance(3);
+                        }else{
+                            add_token(Operator::Eq);
+                            advance(2);
+                        }
                     }else{
                         add_token(Operator::Assign);
                         advance();
@@ -254,8 +272,7 @@ TokenStream Lexer::lex(const std::string & script){
                                 break;
                             }
                         }
-                        advance(); // Skip `*`
-                        advance(); // Skip `/`
+                        advance(2);
                     }else{
                         add_token(Operator::Div);
                         advance();
@@ -305,6 +322,16 @@ TokenStream Lexer::lex(const std::string & script){
                 case '.':{
                     if(is_digit(peek_next())){
                         lex_number();
+                    }else if(peek_next() == '.'){
+                        if(peek_next(2) == '.'){
+                            add_token(Operator::Range);
+                            advance(3);
+                        }else if(peek_next(2) == '<'){
+                            add_token(Operator::RangeRE);
+                            advance(3);
+                        }else{
+                            unexpected_error();
+                        }
                     }else{
                         add_token(Operator::Dot);
                         advance();
@@ -314,48 +341,61 @@ TokenStream Lexer::lex(const std::string & script){
                 case '&':{
                     if(peek_next() == '&'){
                         add_token(Operator::And);
-                        advance();
-                        advance();
+                        advance(2);
                     }
                     break;
                 }
                 case '!':{
                     if(peek_next() == '='){
-                        add_token(Operator::NotEq);
-                        advance();
-                        advance();
+                        if(peek_next(2) == '='){
+                            add_token(Operator::RefNotEq);
+                            advance(3);
+                        }else{
+                            add_token(Operator::NotEq);
+                            advance(2);
+                        }
                     }else{
                         add_token(Operator::Not);
                         advance();
                     }
+                    break;
                 }
                 case '|':{
                     if(peek_next() == '|'){
                         add_token(Operator::Or);
-                        advance();
-                        advance();
+                        advance(2);
                     }
                     break;
                 }
                 case '<':{
                     if(peek_next() == '='){
                         add_token(Operator::LE);
-                        advance();
-                        advance();
+                        advance(2);
                     }else{
                         add_token(Operator::LT);
                         advance();
                     }
+                    break;
                 }
                 case '>':{
                     if(peek_next() == '='){
                         add_token(Operator::GE);
-                        advance();
-                        advance();
+                        advance(2);
+                    }else if(peek_next() == '.'){
+                        if(peek_next(2) == '.'){
+                            add_token(Operator::RangeLE);
+                            advance(3);
+                        }else if(peek_next(2) == '<'){
+                            add_token(Operator::RangeBothE);
+                            advance(3);
+                        }else{
+                            unexpected_error();
+                        }
                     }else{
                         add_token(Operator::GT);
                         advance();
                     }
+                    break;
                 }
                 default:{
                     unexpected_error();

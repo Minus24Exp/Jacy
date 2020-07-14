@@ -35,14 +35,13 @@ public:
     void add_token(const Operator & op);
     void add_token(const Keyword & kw);
     void add_token(const TokenType & type);
-    void add_token(const yo_int & i);
-    void add_token(const double & d);
+    void add_token(NumType num_type, const std::string & num);
 
     uint32_t index;
 
     char peek();
-    char peek_next();
-    char advance();
+    char peek_next(int distance = 1);
+    char advance(int inc = 1);
 
     uint32_t line;
     uint32_t column;

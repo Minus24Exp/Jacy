@@ -2,6 +2,7 @@
 #include "object/String.h"
 #include "object/Float.h"
 #include "object/Bool.h"
+#include "object/Range.h"
 
 Int::Int(yo_int i) : value(i) {
     define_nf("__add", make_nf(nullptr, "__add", { {"other"} }, [this](NFArgs && args){
@@ -67,4 +68,18 @@ Int::Int(yo_int i) : value(i) {
 
         return std::make_shared<Bool>(value == other_i->get_value());
     }));
+
+    define_nf("__range", make_nf(nullptr, "__range", { {"other"} }, [this](NFArgs && args){
+        std::shared_ptr<Int> other_i = cast_to_i(args["other"]);
+
+        if(!other_i){
+            throw 1;
+        }
+
+        return std::make_shared<Range>(to_float(), other_i->to_float(), RangeExclusion::Non);
+    }));
+}
+
+float_ptr Int::to_float() const {
+    return std::make_shared<Float>((double)value);
 }
