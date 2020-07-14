@@ -92,6 +92,11 @@ void Lexer::lex_number(){
     NumType num_type = NumType::Int;
     std::string num;
 
+    if(peek() == '-'){
+        num += '-';
+        advance();
+    }
+
     if(peek() == '0'){
         advance();
         switch(peek()){
@@ -238,8 +243,12 @@ TokenStream Lexer::lex(const std::string & script){
                     break;
                 }
                 case '-':{
-                    add_token(Operator::Sub);
-                    advance();
+                    if(is_digit(peek_next())){
+                        lex_number();
+                    }else{
+                        add_token(Operator::Sub);
+                        advance();
+                    }
                     break;
                 }
                 case '*':{

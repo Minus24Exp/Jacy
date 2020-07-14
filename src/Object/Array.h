@@ -3,10 +3,6 @@
 
 #include "object/Object.h"
 
-// I use size_t because it's right type for vector
-// but anyway Int contains long, so maybe Int index
-// can be not enough for large arrays...
-
 class Array;
 using array_ptr = std::shared_ptr<Array>;
 
@@ -26,20 +22,18 @@ public:
     // Functions for built-in behaviour
     ObjList get_elements() const;
     void set_elements(const ObjList & elements);
-    size_t size() const;
+    yo_int size() const;
 
     // Function for API
-    obj_ptr get_item(size_t index) const;
+    obj_ptr get_item(yo_int index) const;
 
     // return true if index not out of bound
-    bool set_item(size_t index, obj_ptr value);
+    bool set_item(yo_int index, obj_ptr value);
 
     void append(obj_ptr el);
 
     // Helpers //
-    inline size_t abs_index(size_t index) const {
-        return index < 0 ? size() - 1 : index;
-    }
+    yo_int abs_index(yo_int index) const;
 
 private:
     ObjList elements;

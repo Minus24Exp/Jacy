@@ -8,8 +8,8 @@ Array::Array(){
 
         str += "[";
         // TODO: Rewrite for varargs in future
-        size_t N = size();
-        for(size_t i = 0; i < N; i++){
+        yo_int N = size();
+        for(yo_int i = 0; i < N; i++){
             str += obj_to_str(elements[i])->get_value();
             if(i < N - 1){
                 str += ", ";
@@ -31,7 +31,8 @@ Array::Array(){
             throw YoctoException("Invalid type of index");
         }
 
-        size_t index = abs_index(index_obj->get_value());
+        yo_int index = abs_index(index_obj->get_value());
+
         if(index >= size()){
             throw YoctoException("Index out of array bounds");
         }
@@ -46,7 +47,7 @@ Array::Array(){
             throw YoctoException("Invalid type of index");
         }
 
-        size_t index = abs_index(index_obj->get_value());
+        yo_int index = abs_index(index_obj->get_value());
         if(index >= size()){
             throw YoctoException("Index out of array bounds");
         }
@@ -71,11 +72,20 @@ void Array::set_elements(const ObjList & elements){
     this->elements = elements;
 }
 
-size_t Array::size() const {
+yo_int Array::size() const {
     return elements.size();
 }
 
-obj_ptr Array::get_item(size_t index) const {
+yo_int Array::abs_index(yo_int index) const {
+    if(index < 0){
+        // Note: We, of course, need to sum size with negative index
+        return size() + index;
+    }else{
+        return index;
+    }
+}
+
+obj_ptr Array::get_item(yo_int index) const {
     // return nullptr if index of out bounds
     // Note: nullptr does not equal to null_obj,
     // so arrays can contain Null elements
@@ -85,7 +95,7 @@ obj_ptr Array::get_item(size_t index) const {
     return elements.at(index);
 }
 
-bool Array::set_item(size_t index, obj_ptr el){
+bool Array::set_item(yo_int index, obj_ptr el){
     if(index >= size()){
         return false;
     }
