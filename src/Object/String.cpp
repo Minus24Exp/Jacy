@@ -14,7 +14,7 @@ String::String(const std::string & s) : value(s) {
         std::shared_ptr<String> other_s = cast_to_s(args["other"]);
 
         if(!other_s){
-            throw 1;
+            throw YoctoException("Invalid right-hand type in string `+` operator, string expected");
         }
 
         return std::make_shared<String>(value + other_s->get_value());
@@ -24,7 +24,7 @@ String::String(const std::string & s) : value(s) {
         std::shared_ptr<Int> other_i = cast_to_i(args["other"]);
 
         if(!other_i){
-            throw 1;
+            throw YoctoException("Invalid right-hand type in string `*` operator, int expected");
         }
 
         auto N = other_i->get_value();

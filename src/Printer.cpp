@@ -192,3 +192,30 @@ void Printer::visit(IfExpr * if_expr){
         std::cout << "\n}";
     }
 }
+
+void Printer::visit(ArrayExpr * array){
+    std::cout << "[";
+    for(size_t i = 0; i < array->elements.size(); i++){
+        array->elements[i]->accept(*this);
+        if(i < array->elements.size() - 1){
+            std::cout << ", ";
+        }
+    }
+    std::cout << "]";
+}
+
+void Printer::visit(GetItem * get_item){
+    get_item->left->accept(*this);
+    std::cout << "[";
+    get_item->index->accept(*this);
+    std::cout << "]";
+}
+
+void Printer::visit(SetItem * set_item){
+    set_item->left->accept(*this);
+    std::cout << "[";
+    set_item->index->accept(*this);
+    std::cout << "]";
+    std::cout << " = ";
+    set_item->value->accept(*this);
+}

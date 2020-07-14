@@ -1,7 +1,6 @@
 #include "backend/Global.h"
 #include "backend/Interpreter.h"
 
-
 // Easter egg
 obj_ptr YOCTO(NFArgs && args){
     std::cout <<
@@ -15,21 +14,8 @@ obj_ptr YOCTO(NFArgs && args){
     return nullptr;
 }
 
-obj_ptr io_print(NFArgs && args){
-    // If object has method `to_s` and it returns string then use it
-    if(args["o"]->has("to_s")){
-        func_ptr to_s = cast_to_func(args["o"]->get("to_s"));
-        if(to_s){
-            string_ptr string = cast_to_s(to_s->call());
-            if(string){
-                std::cout << string->get_value() << std::endl;
-                return nullptr;
-            }
-        }
-    }
-
-    // Otherwise represent object
-    std::cout << args["o"]->repr() << std::endl;
+obj_ptr Yo_print(NFArgs && args){
+    std::cout << obj_to_str(args["o"])->get_value();
     return nullptr;
 }
 
@@ -37,7 +23,7 @@ void Global::reg(){
     const auto scope = ip.get_scope();
 
     // IO //
-    scope->define_nf("print", make_nf(scope, "print", { {"o"} }, io_print));
+    scope->define_nf("print", make_nf(scope, "print", { {"o"} }, Yo_print));
 
 
     // Easter egg

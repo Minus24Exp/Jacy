@@ -6,7 +6,10 @@ Func::Func(scope_ptr closure,
            const ParamList & params,
            block_ptr body)
         : BaseFunc(closure, name, params),
-          body(body) {}
+          body(body)
+{
+    
+}
 
 obj_ptr Func::call(const ObjList & args){
     Interpreter & ip = Interpreter::get_instance();

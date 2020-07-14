@@ -17,7 +17,10 @@ enum class ExprType {
     Set,
     Get,
     Call,
-    If
+    If,
+    GetItem,
+    SetItem,
+    Array
 };
 
 struct Expr : Node {

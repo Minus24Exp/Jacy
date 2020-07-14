@@ -361,7 +361,7 @@ expr_ptr Parser::assignment(){
     // TODO: Add compound assignment operators
 
     if(is_op(Operator::Assign)){
-        advance();
+        skip_op(Operator::Assign, false, true);
 
         expr_ptr value = parse_expr();
 
@@ -373,6 +373,11 @@ expr_ptr Parser::assignment(){
         if(expr->type == ExprType::Get){
             std::shared_ptr<GetExpr> get_expr = std::static_pointer_cast<GetExpr>(expr);
             return std::make_shared<SetExpr>(pos, get_expr->left, get_expr->id, value);
+        }
+
+        if(expr->type == ExprType::GetItem){
+            std::shared_ptr<GetItem> get_item = std::static_pointer_cast<GetItem>(expr);
+            return std::make_shared<SetItem>(pos, get_item->left, get_item->index, value);
         }
 
         unexpected_error();
@@ -387,6 +392,7 @@ expr_ptr Parser::Or(){
     while(is_op(Operator::Or)){
         const auto op_token = peek();
         advance();
+        skip_nl(true);
         expr_ptr right = And();
         left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
     }
@@ -400,6 +406,7 @@ expr_ptr Parser::And(){
     while(is_op(Operator::And)){
         const auto op_token = peek();
         advance();
+        skip_nl(true);
         expr_ptr right = eq();
         left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
     }
@@ -415,6 +422,7 @@ expr_ptr Parser::eq(){
     {
         const auto op_token = peek();
         advance();
+        skip_nl(true);
         expr_ptr right = comp();
         left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
     }
@@ -432,6 +440,7 @@ expr_ptr Parser::comp(){
     {
         const auto op_token = peek();
         advance();
+        skip_nl(true);
         expr_ptr right = range();
         left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
     }
@@ -450,6 +459,7 @@ expr_ptr Parser::range(){
     {
         const auto op_token = peek();
         advance();
+        skip_nl(true);
         expr_ptr right = add();
         left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
     }
@@ -463,6 +473,7 @@ expr_ptr Parser::add(){
     while(is_op(Operator::Add) || is_op(Operator::Sub)){
         const auto op_token = peek();
         advance();
+        skip_nl(true);
         expr_ptr right = mult();
         left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
     }
@@ -472,10 +483,11 @@ expr_ptr Parser::add(){
 
 expr_ptr Parser::mult(){
     expr_ptr left = prefix();
-
+    
     while(is_op(Operator::Mul) || is_op(Operator::Div)){
         const auto op_token = peek();
         advance();
+        skip_nl(true);
         expr_ptr right = prefix();
         left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
     }
@@ -495,24 +507,49 @@ expr_ptr Parser::prefix(){
 }
 
 expr_ptr Parser::postfix(){
-    // Postfix is not only `Postfix` operator
-    // It's also function call, member access, array access.
+
+    expr_ptr left = call();
+
+    while(true){
+        // TODO: Postfix operators
+        break;
+    }
+
+    return left;
+}
+
+expr_ptr Parser::call(){
+    expr_ptr left = member_access();
+
+    while(!eof()){
+        if(is_op(Operator::LParen)){
+            left = parse_func_call(left);
+        }else{
+            break;
+        }
+    }
+
+    return left;
+}
+
+expr_ptr Parser::member_access(){
     Position pos = peek().pos;
 
     expr_ptr left = primary();
 
-    while(true){
-        if(is_op(Operator::LParen)){
-            left = parse_func_call(left);
-        }else if(is_op(Operator::Dot)){
+    while(!eof()){
+        if(is_op(Operator::Dot)){
             advance();
             id_ptr id = parse_id();
             left = std::make_shared<GetExpr>(pos, left, id);
+        }else if(is_op(Operator::LBracket)){
+            skip_op(Operator::LBracket, false, true);
+            expr_ptr index = parse_expr();
+            skip_op(Operator::RBracket, true, false);
+            left = std::make_shared<GetItem>(pos, left, index);
         }else{
             break;
         }
-
-        // TODO: Postfix operators
     }
 
     return left;
@@ -544,6 +581,32 @@ expr_ptr Parser::primary(){
 
         // TODO: !!! Think do I need special node for grouping? (precedence problem?) 
         return expr;
+    }
+
+    Position pos = peek().pos;
+    // Array
+    if(is_op(Operator::LBracket)){
+        skip_op(Operator::LBracket, false, true);
+        
+        ExprList elements;
+        bool first = true;
+        while(!eof()){
+            if(is_op(Operator::RBracket)){
+                break;
+            }
+            if(first){
+                first = false;
+            }else{
+                skip_op(Operator::Comma, true, true);
+            }
+            // Note: Allow `[1,]` (comma without next element)
+            if(is_op(Operator::RBracket)){
+                break;
+            }
+            elements.push_back(parse_expr());
+        }
+        skip_op(Operator::RBracket, false, false);
+        return std::make_shared<ArrayExpr>(pos, elements);
     }
 
     // If expression

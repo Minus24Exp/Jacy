@@ -17,6 +17,9 @@
 #include "tree/Expr/GetExpr.h"
 #include "tree/Expr/FuncCall.h"
 #include "tree/Expr/IfExpr.h"
+#include "tree/Expr/ArrayExpr.h"
+#include "tree/Expr/GetItem.h"
+#include "tree/Expr/SetItem.h"
 
 #include "tree/Node.h"
 

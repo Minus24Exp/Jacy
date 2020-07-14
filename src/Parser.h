@@ -74,6 +74,9 @@ private:
     expr_ptr mult();
     expr_ptr prefix();
     expr_ptr postfix();
+    expr_ptr call();
+    expr_ptr member_access();
+
     expr_ptr primary();
 
     id_ptr parse_id();

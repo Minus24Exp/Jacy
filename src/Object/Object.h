@@ -5,11 +5,12 @@
 #include <vector>
 #include "backend/Scope.h"
 
+class String;
 class Object;
+class Class;
+
 using obj_ptr = std::shared_ptr<Object>;
 using ObjList = std::vector<obj_ptr>;
-
-class Class;
 
 class Object : public Scope, public std::enable_shared_from_this<Object> {
 public:
@@ -29,5 +30,7 @@ public:
 private:
     Class * _class;
 };
+
+std::shared_ptr<String> obj_to_str(obj_ptr obj);
 
 #endif

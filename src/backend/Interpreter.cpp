@@ -340,16 +340,8 @@ void Interpreter::visit(Infix * infix){
 
     try{
         value = magic_func->call({rhs});
-    }catch(int error_status){
-        /**
-         * error_status
-         *
-         * 1 - invalid right-hand side
-         */
-        
-        if(error_status == 1){
-            runtime_error("Invalid right-hand side in infix "+ op_name, infix);
-        }
+    }catch(YoctoException & e){
+        runtime_error(e.what(), infix);
     }
 }
 
@@ -382,10 +374,8 @@ void Interpreter::visit(Prefix * prefix){
 
     try{
         value = magic_func->call();
-    }catch(int error_status){
-        if(error_status == 1){
-            runtime_error("Invalid right-hand side in prefix "+ op_name, prefix);
-        }
+    }catch(YoctoException & e){
+        runtime_error(e.what(), prefix);
     }
 }
 
@@ -449,6 +439,64 @@ void Interpreter::visit(IfExpr * if_expr){
         execute_block(if_expr->if_branch.get());
     }else if(if_expr->else_branch){
         execute_block(if_expr->else_branch.get());
+    }
+}
+
+void Interpreter::visit(ArrayExpr * array){
+    array_ptr array_obj = std::make_shared<Array>();
+    ObjList elements;
+
+    for(const auto & expr : array->elements){
+        obj_ptr el = eval(expr.get());
+        elements.push_back(el);
+    }
+
+    array_obj->set_elements(elements);
+
+    value = array_obj;
+}
+
+void Interpreter::visit(GetItem * get_item){
+    obj_ptr index = eval(get_item->index.get());
+
+    obj_ptr lhs = eval(get_item->left.get());
+
+    if(!lhs->has("__getitem")){
+        runtime_error("Cannot get item from "+ obj_to_str(lhs)->get_value(), get_item);
+    }
+
+    func_ptr magic_func = cast_to_func(lhs->get("__getitem"));
+
+    if(!magic_func){
+        runtime_error("__getitem must a function", get_item);
+    }
+
+    try{
+        value = magic_func->call({ index });
+    }catch(YoctoException & e){
+        runtime_error(e.what(), get_item);
+    }
+}
+
+void Interpreter::visit(SetItem * set_item){
+    obj_ptr value = eval(set_item->value.get());
+    obj_ptr index = eval(set_item->index.get());
+    obj_ptr lhs = eval(set_item->left.get());
+
+    if(!lhs->has("__setitem")){
+        runtime_error("Cannot set item for "+ obj_to_str(lhs)->get_value(), set_item);
+    }
+
+    func_ptr magic_func = cast_to_func(lhs->get("__setitem"));
+
+    if(!magic_func){
+        runtime_error("__setitem must a function", set_item);
+    }
+
+    try{
+        value = magic_func->call({ index, value });
+    }catch(YoctoException & e){
+        runtime_error(e.what(), set_item);
     }
 }
 

@@ -33,6 +33,9 @@ public:
     void visit(GetExpr * get_expr) override;
     void visit(FuncCall * func_call) override;
     void visit(IfExpr * if_expr) override;
+    void visit(ArrayExpr * array) override;
+    void visit(GetItem * get_item) override;
+    void visit(SetItem * set_item) override;
 
 private:
     void print_indent();

@@ -5,9 +5,10 @@
 #include "Token.h"
 
 class Int;
-const auto cast_to_i = [](obj_ptr i){ return std::dynamic_pointer_cast<Int>(i); };
-
 class Float;
+
+using int_ptr = std::shared_ptr<Int>;
+const auto cast_to_i = [](obj_ptr obj){ return std::dynamic_pointer_cast<Int>(obj); };
 
 class Int : public Object {
 public:

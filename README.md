@@ -191,6 +191,7 @@ But, the user-defined constructor calls after the default constructor.
 - Make Callable interface-like, and create Function abstract class that Method (Func) and NativeMethod (NativeFunc) will derive
 - ~~Recursion depth limit !!!~~ (DONE) :)
 - Special number constants: -Infinity, +Infinity, NaN and etc.
+- !!! Built-in object inheritance !!!
 
 ## Think about it / Ideas
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`
@@ -204,6 +205,7 @@ But, the user-defined constructor calls after the default constructor.
     * `>..` for (a, b]
     * `>.<` for (a, b) (here's dot to make it more obvious that it's a range)
 - Worry: Ohhh, gooooood... I have 6 range functions for operator overloading
+- General: GetItem and SetItem can be just parsed to FuncCall's like `a[1]` -> `a.__getitem(1)` and I'll not have to use separate nodes and etc...
 
 ## Personal reminders
 - If there's Segmentation fault about unique_ptr, probably problem is in try to copy or multiple storing.

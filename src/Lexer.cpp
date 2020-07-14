@@ -299,6 +299,16 @@ TokenStream Lexer::lex(const std::string & script){
                     advance();
                     break;
                 }
+                case '[':{
+                    add_token(Operator::LBracket);
+                    advance();
+                    break;
+                }
+                case ']':{
+                    add_token(Operator::RBracket);
+                    advance();
+                    break;
+                }
                 case ',':{
                     add_token(Operator::Comma);
                     advance();
