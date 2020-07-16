@@ -1,12 +1,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <vector>
-#include <iostream>
-
-#include "Token.h"
-#include "tree/nodes.h"
 #include "Exception.h"
+#include "parser/Token.h"
+#include "tree/nodes.h"
 
 class Parser {
 public:

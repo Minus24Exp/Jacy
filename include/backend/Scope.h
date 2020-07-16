@@ -1,10 +1,11 @@
 #ifndef SCOPE_H
 #define SCOPE_H
 
-#include "Exception.h"
 #include <memory>
 #include <unordered_map>
 #include <iostream>
+
+#include "Exception.h"
 #include "backend/Local.h"
 
 class Scope;

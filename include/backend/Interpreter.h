@@ -1,10 +1,9 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 
-#include <memory>
 #include <iostream>
 
-#include "BaseVisitor.h"
+#include "tree/BaseVisitor.h"
 #include "backend/Scope.h"
 #include "backend/Global.h"
 #include "tree/nodes.h"

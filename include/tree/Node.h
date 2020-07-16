@@ -2,8 +2,8 @@
 #define NODE_H
 
 #include <memory>
-#include "Token.h"
-#include "BaseVisitor.h"
+#include "parser/Token.h"
+#include "tree/BaseVisitor.h"
 
 struct Node {
     Node(const Position & pos) : pos(pos) {}

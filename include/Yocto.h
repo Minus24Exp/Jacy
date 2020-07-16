@@ -8,9 +8,9 @@
 #include <unordered_map>
 
 #include "Exception.h"
-#include "Lexer.h"
-#include "Parser.h"
-#include "Printer.h"
+#include "parser/Lexer.h"
+#include "parser/Parser.h"
+#include "tree/Printer.h"
 #include "backend/Interpreter.h"
 
 class Yocto {

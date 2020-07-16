@@ -4,8 +4,8 @@
 #include <vector>
 #include <iostream>
 
-#include "Token.h"
 #include "Exception.h"
+#include "parser/Token.h"
 
 class Lexer {
 public:

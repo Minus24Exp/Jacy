@@ -1,4 +1,4 @@
-#include "Lexer.h"
+#include "parser/Lexer.h"
 
 char Lexer::peek(){
     return script[index];

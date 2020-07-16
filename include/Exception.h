@@ -3,7 +3,7 @@
 
 #include <exception>
 #include <string>
-#include "Token.h"
+#include "parser/Token.h"
 #include "tree/Node.h"
 
 class YoctoException : public std::exception {

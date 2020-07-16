@@ -2,7 +2,6 @@
 #define BASEVISITOR_H
 
 #include <vector>
-#include <memory>
 
 struct Node;
 

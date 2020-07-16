@@ -2,7 +2,6 @@
 #define INT_H
 
 #include "object/NativeFunc.h"
-#include "Token.h"
 
 class Int;
 class Float;

@@ -1,4 +1,4 @@
-#include "Class.h"
+#include "object/Class.h"
 
 Class::Class(scope_ptr decl_scope, const std::string & name, class_ptr super)
             : decl_scope(decl_scope), name(name), super(super) {}

@@ -2,7 +2,7 @@
 #define LITERAL_H
 
 #include "tree/Expr/Expr.h"
-#include "Token.h"
+#include "parser/Token.h"
 
 // I don't want to create many classes for all literal tokens
 // so why do not just use one class that contains a token?

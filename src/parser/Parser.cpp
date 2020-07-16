@@ -1,4 +1,4 @@
-#include "Parser.h"
+#include "parser/Parser.h"
 
 Token Parser::peek(){
     return tokens[index];
