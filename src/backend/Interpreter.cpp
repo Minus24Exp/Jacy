@@ -462,7 +462,7 @@ void Interpreter::visit(GetItem * get_item){
     obj_ptr lhs = eval(get_item->left.get());
 
     if(!lhs->has("__getitem")){
-        runtime_error("Cannot get item from "+ obj_to_str(lhs)->get_value(), get_item);
+        runtime_error("Cannot get item from "+ obj_to_str(lhs), get_item);
     }
 
     func_ptr magic_func = cast_to_func(lhs->get("__getitem"));
@@ -484,7 +484,7 @@ void Interpreter::visit(SetItem * set_item){
     obj_ptr lhs = eval(set_item->left.get());
 
     if(!lhs->has("__setitem")){
-        runtime_error("Cannot set item for "+ obj_to_str(lhs)->get_value(), set_item);
+        runtime_error("Cannot set item for "+ obj_to_str(lhs), set_item);
     }
 
     func_ptr magic_func = cast_to_func(lhs->get("__setitem"));

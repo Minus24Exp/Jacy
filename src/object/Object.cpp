@@ -36,18 +36,18 @@ obj_ptr Object::get(const std::string & name) const {
     }
 }
 
-string_ptr obj_to_str(obj_ptr obj){
+std::string obj_to_str(obj_ptr obj){
     // If object has method `to_s` and it returns string then use it
     if(obj->has("to_s")){
         func_ptr to_s = cast_to_func(obj->get("to_s"));
         if(to_s){
             string_ptr string = cast_to_s(to_s->call());
             if(string){
-                return string;
+                return string->get_value();
             }
         }
     }
 
     // Otherwise represent object
-    return std::make_shared<String>(obj->repr());
+    return obj->repr();
 }

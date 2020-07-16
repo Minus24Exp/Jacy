@@ -29,13 +29,13 @@ Yocto::Yocto(int argc, const char * argv[])
 
 void Yocto::launch(){
     if(main_file.empty()){
-        run_prompt();
+        run_repl();
     }else{
         run_script(main_file);
     }
 }
 
-void Yocto::run_prompt(){
+void Yocto::run_repl(){
     std::string line;
     while(!std::cin.eof()){
         std::cout << "> ";
@@ -43,7 +43,7 @@ void Yocto::run_prompt(){
         line.clear();
         std::getline(std::cin, line);
 
-        // TODO: Fix problem with special keys like arrow
+        // TODO: !!! Fix problem with special keys like arrow (ConEmu)
 
         // Intercept exceptions for REPL
         // REPL just prints them and doesn't stop
@@ -53,6 +53,16 @@ void Yocto::run_prompt(){
             }else{
                 run(line);
             }
+
+            // TODO: Print last value only if there's no print function
+
+            obj_ptr last_value = ip.get_value();
+            if(last_value){
+                std::cout << obj_to_str(last_value) << std::endl;
+            }else{
+                std::cout << "null" << std::endl;
+            }
+
         }catch(YoctoException & e){
             std::cout << e.what() << std::endl;
         }

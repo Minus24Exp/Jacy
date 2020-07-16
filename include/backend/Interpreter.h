@@ -43,6 +43,10 @@ public:
         return scope;
     }
 
+    obj_ptr get_value() const {
+        return value;
+    }
+
     void execute(Stmt * stmt);
     obj_ptr eval(Expr * expr);
     void execute_block(Block * block, scope_ptr new_scope = nullptr);

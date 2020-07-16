@@ -15,12 +15,12 @@ obj_ptr YOCTO(NFArgs && args){
 }
 
 obj_ptr Yo_print(NFArgs && args){
-    std::cout << obj_to_str(args["o"])->get_value();
+    std::cout << obj_to_str(args["o"]);
     return nullptr;
 }
 
 obj_ptr Yo_println(NFArgs && args){
-    std::cout << obj_to_str(args["o"])->get_value() << std::endl;
+    std::cout << obj_to_str(args["o"]) << std::endl;
     return nullptr;
 }
 

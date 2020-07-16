@@ -20,7 +20,7 @@ public:
 
     void launch();
 
-    void run_prompt();
+    void run_repl();
     void run_script(const std::string & path);
 
     void run(const std::string & script);

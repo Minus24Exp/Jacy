@@ -31,6 +31,6 @@ private:
     Class * _class;
 };
 
-std::shared_ptr<String> obj_to_str(obj_ptr obj);
+std::string obj_to_str(obj_ptr obj);
 
 #endif
