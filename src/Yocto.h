@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <chrono>
+#include <unordered_map>
 
 #include "Exception.h"
 #include "Lexer.h"
@@ -14,17 +15,21 @@
 
 class Yocto {
 public:
-    Yocto();
+    Yocto(int argc, const char * argv[]);
     virtual ~Yocto() = default;
+
+    void launch();
 
     void run_prompt();
     void run_script(const std::string & path);
 
     void run(const std::string & script);
-    
     void run_debug(const std::string & script);
 
 private:
+    std::string main_file;
+    bool debug;
+
     Lexer & lexer;
     Parser & parser;
     Interpreter & ip;

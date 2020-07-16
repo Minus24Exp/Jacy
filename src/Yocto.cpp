@@ -1,8 +1,39 @@
 #include "Yocto.h"
 
-Yocto::Yocto() : lexer(Lexer::get_instance()),
-                    parser(Parser::get_instance()),
-                    ip(Interpreter::get_instance()) {}
+Yocto::Yocto(int argc, const char * argv[])
+    : lexer(Lexer::get_instance()),
+      parser(Parser::get_instance()),
+      ip(Interpreter::get_instance())
+{
+    debug = false;
+
+    // Parser argv
+    for(int i = 1; i < argc; i++){
+        std::string arg(argv[i]);
+
+        if(arg[0] == '-'){
+            if(arg.substr(1) == "debug"){
+                debug = true;
+            }
+        }else{
+            if(arg.find(".yo")){
+                if(main_file.empty()){
+                    main_file = arg;
+                }else{
+                    throw YoctoException("Expected only one input file");
+                }
+            }
+        }
+    }
+}
+
+void Yocto::launch(){
+    if(main_file.empty()){
+        run_prompt();
+    }else{
+        run_script(main_file);
+    }
+}
 
 void Yocto::run_prompt(){
     std::string line;
@@ -17,7 +48,11 @@ void Yocto::run_prompt(){
         // Intercept exceptions for REPL
         // REPL just prints them and doesn't stop
         try{
-            run(line);
+            if(debug){
+                run_debug(line);
+            }else{
+                run(line);
+            }
         }catch(YoctoException & e){
             std::cout << e.what() << std::endl;
         }
@@ -35,7 +70,11 @@ void Yocto::run_script(const std::string & path){
     ss << file.rdbuf();
     std::string script = ss.str();
 
-    run(script);
+    if(debug){
+        run_debug(script);
+    }else{
+        run(script);
+    }
 
     file.close();
 }

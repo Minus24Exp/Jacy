@@ -7,6 +7,5 @@
 #include "object/Int.h"
 #include "object/Float.h"
 #include "object/String.h"
-#include "object/Array.h"
 
 #include "object/Object.h"

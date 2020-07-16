@@ -443,17 +443,17 @@ void Interpreter::visit(IfExpr * if_expr){
 }
 
 void Interpreter::visit(ArrayExpr * array){
-    array_ptr array_obj = std::make_shared<Array>();
-    ObjList elements;
+    // array_ptr array_obj = std::make_shared<Array>();
+    // ObjList elements;
 
-    for(const auto & expr : array->elements){
-        obj_ptr el = eval(expr.get());
-        elements.push_back(el);
-    }
+    // for(const auto & expr : array->elements){
+    //     obj_ptr el = eval(expr.get());
+    //     elements.push_back(el);
+    // }
 
-    array_obj->set_elements(elements);
+    // array_obj->set_elements(elements);
 
-    value = array_obj;
+    // value = array_obj;
 }
 
 void Interpreter::visit(GetItem * get_item){

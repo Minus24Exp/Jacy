@@ -9,17 +9,8 @@ int main(int argc, const char * argv[]){
     signal(SIGSEGV, signal_handler);
 
     try{
-        Yocto yocto;
-
-        if(argc == 1){
-            yocto.run_prompt();
-        }else if(argc == 2){
-            const std::string path(argv[1]);
-            yocto.run_script(path);
-        }else{
-            throw IllegalArgumentException("Expected only one argument");
-        }
-
+        Yocto yocto(argc, argv);
+        yocto.launch();
     }catch(YoctoException & e){
         std::cout << e.what() << std::endl;
     }catch(std::exception & e){

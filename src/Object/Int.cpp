@@ -2,7 +2,6 @@
 #include "object/String.h"
 #include "object/Float.h"
 #include "object/Bool.h"
-#include "object/Range.h"
 
 Int::Int(yo_int i) : value(i) {
     define_nf("to_s", make_nf(nullptr, "to_s", {}, [this](NFArgs && args){
@@ -67,16 +66,6 @@ Int::Int(yo_int i) : value(i) {
         }
 
         return std::make_shared<Bool>(value == other_i->get_value());
-    }));
-
-    define_nf("__range", make_nf(nullptr, "__range", { {"other"} }, [this](NFArgs && args){
-        std::shared_ptr<Int> other_i = cast_to_i(args["other"]);
-
-        if(!other_i){
-            throw YoctoException("Invalid right-hand type in int `...` operator");
-        }
-
-        return std::make_shared<Range>(to_float(), other_i->to_float(), RangeExclusion::Non);
     }));
 }
 
