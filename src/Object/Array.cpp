@@ -1,6 +1,7 @@
 #include "object/Array.h"
 #include "object/Int.h"
 #include "object/String.h"
+#include "object/Range.h"
 
 Array::Array(){
     define_nf("to_s", make_nf(nullptr, "to_s", {}, [this](NFArgs && args){
@@ -24,20 +25,38 @@ Array::Array(){
         return std::make_shared<Int>(size());
     }));
 
-    define_nf("__getitem", make_nf(nullptr, "__getitem", { {"index"} }, [this](NFArgs && args){
+    define_nf("__getitem", make_nf(nullptr, "__getitem", { {"index"} }, [this](NFArgs && args) -> obj_ptr {
         int_ptr index_obj = cast_to_i(args["index"]);
-       
-        if(!index_obj){
-            throw YoctoException("Invalid type of index");
+        range_ptr range_obj = cast_to_range(args["index"]);
+
+        if(index_obj){
+            yo_int index = abs_index(index_obj->get_value());
+
+            if(index >= size()){
+                throw YoctoException("Index out of array bounds");
+            }
+
+            return elements[index];
         }
 
-        yo_int index = abs_index(index_obj->get_value());
+        if(range_obj){
+            yo_int start = range_obj->get_real_start()->get_value();
+            yo_int end = range_obj->get_real_end()->get_value();
 
-        if(index >= size()){
-            throw YoctoException("Index out of array bounds");
+            if(start < 0){
+                throw YoctoException("Slicing Range start must be note less than zero");
+            }
+
+            if(end >= size()){
+                throw YoctoException("Slicing Range end out of list bounds");
+            }
+
+            return std::make_shared<Array>(std::vector<obj_ptr>(elements.begin() + start, elements.end() + end + 1));
         }
 
-        return elements[index];
+        throw YoctoException("Invalid type of index, int or range expected");
+
+        return nullptr;
     }));
 
     define_nf("__setitem", make_nf(nullptr, "__setitem", { {"index"}, {"value"} }, [this](NFArgs && args){
@@ -55,6 +74,8 @@ Array::Array(){
         return elements[index];
     }));
 }
+
+Array::Array(const ObjList & elements) : elements(elements) {}
 
 bool Array::truthy() const {
     return size() != 0;

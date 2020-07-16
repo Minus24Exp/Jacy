@@ -11,6 +11,7 @@ const auto cast_to_a = [](obj_ptr obj) -> array_ptr { return std::dynamic_pointe
 class Array : public Object {
 public:
 	Array();
+    Array(const ObjList & elements);
 	virtual ~Array() = default;
 	
     // Object //
