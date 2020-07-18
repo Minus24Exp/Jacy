@@ -271,54 +271,62 @@ void Interpreter::visit(Infix * infix){
     switch(infix->op.op()){
         case Operator::Add:{
             magic_func_name = "__add";
-            break;
-        }
+        } break;
         case Operator::Sub:{
             magic_func_name = "__sub";
-            break;
-        }
+        } break;
         case Operator::Mul:{
             magic_func_name = "__mul";
-            break;
-        }
+        } break;
         case Operator::Div:{
             magic_func_name = "__div";
-            break;
-        }
+        } break;
         case Operator::Mod:{
             magic_func_name = "__mod";
-            break;
-        }
+        } break;
         case Operator::Eq:{
             magic_func_name = "__eq";
-            break;
-        }
+        } break;
         case Operator::RefEq:{
             value = std::make_shared<Bool>(lhs == rhs);
             return;
-            break;
-        }
+        } break;
         case Operator::RefNotEq:{
             value = std::make_shared<Bool>(lhs != rhs);
             return;
-            break;
-        }
+        } break;
         case Operator::Range:{
             magic_func_name = "__range";
-            break;
-        }
+        } break;
         case Operator::RangeLE:{
             magic_func_name = "__range_le";
-            break;
-        }
+        } break;
         case Operator::RangeRE:{
             magic_func_name = "__range_re";
-            break;
-        }
+        } break;
         case Operator::RangeBothE:{
             magic_func_name = "__range_bothe";
-            break;
-        }
+        } break;
+        case Operator::Is:{
+            class_ptr rhs_class = cast_to_class(rhs);
+
+            if(!rhs_class){
+                runtime_error("Invalid right-hand side in `is` operator", infix);
+            }
+
+            value = std::make_shared<Bool>(lhs->is(rhs_class));
+            return;
+        } break;
+        case Operator::NotIs:{
+            class_ptr rhs_class = cast_to_class(rhs);
+
+            if(!rhs_class){
+                runtime_error("Invalid right-hand side in `!is` operator", infix);
+            }
+
+            value = std::make_shared<Bool>(!lhs->is(rhs_class));
+            return;
+        } break;
         default:{
             throw DevError("Unsupported infix operator: `"+ op_name +"`");
         }

@@ -15,7 +15,7 @@ using ObjList = std::vector<obj_ptr>;
 class Object : public Scope, public std::enable_shared_from_this<Object> {
 public:
     Object();
-    Object(scope_ptr scope, Class * _class);
+    Object(scope_ptr scope, std::shared_ptr<Class> _class);
     virtual ~Object() = default;
 
     // All objects except Null and Boolean with value `false` are truthy
@@ -24,11 +24,13 @@ public:
     // Represent object as string
     virtual std::string repr() const;
 
+    virtual bool is(std::shared_ptr<Class> check_class) const;
+
     // Scope //
     obj_ptr get(const std::string & name) const override;
 
 private:
-    Class * _class;
+    std::shared_ptr<Class> _class;
 };
 
 std::string obj_to_str(obj_ptr obj);

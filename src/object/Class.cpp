@@ -16,7 +16,7 @@ size_t Class::argc() const {
 }
 
 obj_ptr Class::call(const ObjList & args){
-    return std::make_shared<Object>(decl_scope, this);
+    return std::make_shared<Object>(decl_scope, shared_from_this());
 }
 
 LocalMap Class::get_instance_fields() const {

@@ -2,15 +2,20 @@
 #include "object/Class.h"
 #include "object/BaseFunc.h"
 #include "object/String.h"
+#include "object/Class.h"
+#include "object/Null.h"
 
-Object::Object() {}
-
-Object::Object(scope_ptr scope, Class * _class)
-    : Scope(scope, _class->get_instance_fields()),
-      _class(_class)
-{
-    
+Object::Object(){
+    if(_class){
+        define("class", {LocalDeclType::Val, std::shared_ptr<Class>(_class)});
+    }else{
+        define("class", {LocalDeclType::Val, null_obj});
+    }
 }
+
+Object::Object(scope_ptr scope, class_ptr _class)
+    : Scope(scope, _class->get_instance_fields()),
+      _class(_class) {}
 
 bool Object::truthy() const {
     return true;
@@ -18,6 +23,22 @@ bool Object::truthy() const {
 
 std::string Object::repr() const {
     return "<object_"+ _class->get_name() +">";
+}
+
+bool Object::is(class_ptr check_class) const {
+    class_ptr check = _class;
+
+    while(check){
+        if(check == check_class){
+            return true;
+        }else if(check->get_super()){
+            check = check->get_super();
+        }else{
+            return false;
+        }
+    }
+
+    return false;
 }
 
 obj_ptr Object::get(const std::string & name) const {

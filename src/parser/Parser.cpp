@@ -431,12 +431,28 @@ expr_ptr Parser::eq(){
 }
 
 expr_ptr Parser::comp(){
-    expr_ptr left = range();
+    expr_ptr left = named_checks();
 
     while(is_op(Operator::LT)
        || is_op(Operator::GT)
        || is_op(Operator::LE)
        || is_op(Operator::GE))
+    {
+        const auto op_token = peek();
+        advance();
+        skip_nl(true);
+        expr_ptr right = named_checks();
+        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+    }
+
+    return left;
+}
+
+expr_ptr Parser::named_checks(){
+    expr_ptr left = range();
+
+    while(is_op(Operator::Is)
+       || is_op(Operator::NotIs))
     {
         const auto op_token = peek();
         advance();

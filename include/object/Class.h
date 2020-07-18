@@ -11,6 +11,8 @@
 class Class;
 using class_ptr = std::shared_ptr<Class>;
 
+const auto cast_to_class = [](obj_ptr obj) -> class_ptr { return std::dynamic_pointer_cast<Class>(obj); };
+
 class Class : public Object, public Callable {
 public:
     Class(scope_ptr decl_scope, const std::string & name, class_ptr super);
@@ -31,6 +33,10 @@ public:
     }
 
     LocalMap get_instance_fields() const;
+
+    class_ptr get_super() const {
+        return super;
+    }
 
 private:
     scope_ptr decl_scope;

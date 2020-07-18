@@ -63,7 +63,9 @@ enum class Operator {
     // RangeBothE - Range both exclusive
     Range, RangeLE, RangeRE, RangeBothE,
 
-    Arrow
+    Arrow,
+
+    Is, NotIs
 };
 
 const std::vector <std::string> operators {
@@ -87,7 +89,9 @@ const std::vector <std::string> operators {
 
     "...", ">..", "..<", ">.<",
 
-    "=>"
+    "=>",
+
+    "is", "!is"
 };
 
 inline std::string op_to_str(const Operator & op){
