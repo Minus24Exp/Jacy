@@ -186,12 +186,8 @@ But, the user-defined constructor calls after the default constructor.
 - Add multi-threading (not in Yocto), to lex and parse at the same time as Interpreter register globals.
 - Add namespaces to source
 - Extension functions
-- Think about and make if possible: "Change visitors pass by pointer to pass by reference to avoid segfault with nullptr"
 - Make Object.equals "REAL"
-- Make Callable interface-like, and create Function abstract class that Method (Func) and NativeMethod (NativeFunc) will derive
-- ~~Recursion depth limit !!!~~ (DONE) :)
 - Special number constants: -Infinity, +Infinity, NaN and etc.
-- !!! Built-in object inheritance !!!
 
 ## Think about it / Ideas
 - General: If FuncDecl stored Token instead of Identifier then it will be possible to use not only ids for function names and e.g. operator overloading looked like: `func +()`
