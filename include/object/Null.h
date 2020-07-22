@@ -3,6 +3,10 @@
 
 #include "object/NativeFunc.h"
 
+class Null;
+extern std::shared_ptr<Class> cNull;
+extern std::shared_ptr<Null> null_obj;
+
 class Null : public Object {
 public:
     Null();
@@ -12,7 +16,5 @@ public:
         return "<Null>";
     }
 };
-
-const auto null_obj = std::make_shared<Null>();
 
 #endif

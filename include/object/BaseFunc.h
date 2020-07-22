@@ -24,6 +24,8 @@ struct Param {
 
 using ParamList = std::vector<Param>;
 
+extern std::shared_ptr<Class> cFunc;
+
 class BaseFunc : public Object, public Callable {
 public:
     BaseFunc(scope_ptr closure,
@@ -48,7 +50,7 @@ public:
     }
 
     // BaseFunc //
-    virtual obj_ptr bind(obj_ptr instance) = 0;
+    virtual obj_ptr bind(scope_ptr closure, obj_ptr instance) = 0;
 
 protected:
     scope_ptr closure;

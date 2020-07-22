@@ -5,17 +5,7 @@
 #include "object/Class.h"
 #include "object/Null.h"
 
-Object::Object(){
-    if(_class){
-        define("class", {LocalDeclType::Val, std::shared_ptr<Class>(_class)});
-    }else{
-        define("class", {LocalDeclType::Val, null_obj});
-    }
-}
-
-Object::Object(scope_ptr scope, class_ptr _class)
-    : Scope(scope, _class->get_instance_fields()),
-      _class(_class) {}
+Object::Object(ObjectType obj_type, class_ptr _class) : obj_type(obj_type), _class(_class) {}
 
 bool Object::truthy() const {
     return true;
@@ -41,19 +31,33 @@ bool Object::is(class_ptr check_class) const {
     return false;
 }
 
-obj_ptr Object::get(const std::string & name) const {
-    obj_ptr field = Scope::get(name);
+void Object::set_instance_fields(const LocalMap & fields){
+    instance_fields = fields;
+}
 
-    if(!field){
-        return nullptr;
+bool Object::has(const std::string & name) const {
+    return instance_fields.find(name) != instance_fields.end();
+}
+
+obj_ptr Object::get(const std::string & name) const {
+    if(has(name)){
+        return instance_fields.at(name).val;
     }
 
-    func_ptr maybe_func = std::dynamic_pointer_cast<BaseFunc>(field);
+    return nullptr;
+}
 
-    if(maybe_func){
-        return maybe_func->bind(std::const_pointer_cast<Object>(shared_from_this()));
+int Object::set(const std::string & name, obj_ptr value){
+    auto it = instance_fields.find(name);
+    
+    if(it != instance_fields.end()){
+        if(it->second.decl_type == LocalDeclType::Val && it->second.val != nullptr){
+            return -1;
+        }
+        instance_fields.at(name).val = value;
+        return 1;
     }else{
-        return field;
+        return 0;
     }
 }
 

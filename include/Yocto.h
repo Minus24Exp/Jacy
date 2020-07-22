@@ -12,6 +12,7 @@
 #include "parser/Parser.h"
 #include "tree/Printer.h"
 #include "backend/Interpreter.h"
+#include "backend/Global.h"
 
 class Yocto {
 public:

@@ -92,6 +92,10 @@ void Yocto::run_script(const std::string & path){
 void Yocto::run(const std::string & script){
     TokenStream tokens = lexer.lex(script);
     StmtList tree = parser.parse(tokens);
+
+    Global global;
+    global.reg();
+
     ip.interpret(tree);
 }
 

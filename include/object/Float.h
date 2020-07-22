@@ -6,6 +6,8 @@
 class Float;
 using float_ptr = std::shared_ptr<Float>;
 
+extern std::shared_ptr<Class> cFloat;
+
 class Float : public Object {
 public:
     Float(double d);

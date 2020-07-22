@@ -3,6 +3,8 @@
 
 #include "object/NativeFunc.h"
 
+extern std::shared_ptr<Class> cBool;
+
 class Bool : public Object {
 public:
     Bool(bool b);

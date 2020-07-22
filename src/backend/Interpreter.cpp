@@ -3,9 +3,6 @@
 Interpreter::Interpreter(){
     value = nullptr;
     enter_scope();
-
-    Global global(*this);
-    global.reg();
 }
 
 void Interpreter::interpret(const StmtList & tree){
@@ -151,12 +148,13 @@ void Interpreter::visit(ClassDecl * class_decl){
         scope->define("super", {LocalDeclType::Val, super});
     }
 
+    class_ptr _class = std::make_shared<Class>(class_name, super);
     // Enter virtual scope to store class fields
     enter_scope();
     for(const auto & f : class_decl->fields){
         execute(f.get());
     }
-    class_ptr _class = std::make_shared<Class>(scope, class_name, super);
+    _class->set_fields(scope->get_locals());
     exit_scope();
 
     if(super){
@@ -415,7 +413,7 @@ void Interpreter::visit(SetExpr * set_expr){
 
     std::string name = set_expr->id->get_name();
 
-    int result = lhs->assign(name, rhs);
+    int result = lhs->set(name, rhs);
 
     if(result == 0){
         runtime_error(lhs->repr() +" does not have member "+ name, set_expr);
@@ -437,6 +435,10 @@ void Interpreter::visit(GetExpr * get_expr){
     }
 
     value = lhs->get(name);
+
+    if(value->get_obj_type() != ObjectType::Func){
+        value = std::static_pointer_cast<BaseFunc>(value)->bind(scope, lhs);
+    }
 }
 
 // IfExpr //

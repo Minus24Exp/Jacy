@@ -9,6 +9,8 @@ class Float;
 using int_ptr = std::shared_ptr<Int>;
 const auto cast_to_i = [](obj_ptr obj){ return std::dynamic_pointer_cast<Int>(obj); };
 
+extern std::shared_ptr<Class> cInt;
+
 class Int : public Object {
 public:
     Int(yo_int i);

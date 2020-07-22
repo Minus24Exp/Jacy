@@ -5,7 +5,6 @@
 
 #include "tree/BaseVisitor.h"
 #include "backend/Scope.h"
-#include "backend/Global.h"
 #include "tree/nodes.h"
 #include "object/objects.h"
 

@@ -19,7 +19,7 @@ public:
     // BaseFunc //
     obj_ptr call(const ObjList & args) override;
 
-    obj_ptr bind(obj_ptr instance) override;
+    obj_ptr bind(scope_ptr closure, obj_ptr instance) override;
 
 private:
     block_ptr body;

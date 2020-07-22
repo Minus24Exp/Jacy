@@ -3,7 +3,8 @@
 BaseFunc::BaseFunc(scope_ptr closure,
                    const std::string & name,
                    const ParamList & params
-                  ) : closure(closure),
+                  ) : Object(ObjectType::Func, cFunc),
+                      closure(closure),
                       name(name),
                       params(params)
 {

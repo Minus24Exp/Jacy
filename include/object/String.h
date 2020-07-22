@@ -8,6 +8,8 @@ using string_ptr = std::shared_ptr<String>;
 
 const auto cast_to_s = [](obj_ptr s) -> string_ptr { return std::dynamic_pointer_cast<String>(s); };
 
+extern std::shared_ptr<Class> cString;
+
 class String : public Object {
 public:
     String(const std::string & s);
