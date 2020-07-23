@@ -127,6 +127,9 @@ void Yocto::run_debug(const std::string & script){
     printer.print(tree);
     std::cout << std::endl;
 
+    Global global;
+    global.reg();
+
     auto ip_start = bench();
     ip.interpret(tree);
     auto ip_end = bench();

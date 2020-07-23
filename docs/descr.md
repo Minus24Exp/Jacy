@@ -6,6 +6,8 @@ I hope it's possible...
 - Everything is an Object, primitives are objects too and all operators implemented as magic functions
 - The compiler always inside a function. The top-level code is always in some kinda `main()` function
 
+- At first, I wanted to make OOP same to C++, where instance fields and static fields won't require `this` keyword. But I rewrote Object structure and made it cleaner, so now `this` keyword is required.
+
 ### Control flow
 
 #### `if`/`elif`(`else if`)/`else`

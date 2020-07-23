@@ -83,7 +83,7 @@ void Interpreter::visit(VarDecl * var_decl){
     bool defined = scope->define(var_decl->id->get_name(), {decl_type, value});
     if(!defined){
         // If tried to redefine
-        runtime_error("Redifinition of variable "+ var_decl->id->get_name(), var_decl);
+        runtime_error("Redefinition of variable "+ var_decl->id->get_name(), var_decl);
         return;
     }
 
@@ -107,7 +107,7 @@ void Interpreter::visit(FuncDecl * func_decl){
 
     bool defined = scope->define(func_name, {LocalDeclType::Val, func});
     if(!defined){
-        runtime_error("Redifinition of function "+ func_name, func_decl);
+        runtime_error("Redefinition of function "+ func_name, func_decl);
     }
 }
 
@@ -247,7 +247,7 @@ void Interpreter::visit(FuncCall * func_call){
 
     try{
         value = callable->call(std::move(args));
-    }catch(RecursionDepthExceeded & e){
+    }catch(YoctoException & e){
         runtime_error(e.what(), func_call);
     }
 
@@ -402,7 +402,7 @@ void Interpreter::visit(Assign * assign){
     if(result == 0){
         runtime_error(name +" is not defined", assign);
     }else if(result == -1){
-        runtime_error("Unable to reassign val "+ name, assign);
+        runtime_error("Unable to reassign `val` "+ name, assign);
     }
 }
 
@@ -418,7 +418,7 @@ void Interpreter::visit(SetExpr * set_expr){
     if(result == 0){
         runtime_error(lhs->repr() +" does not have member "+ name, set_expr);
     }else if(result == -1){
-        runtime_error("Unable to reassign val "+ name, set_expr);
+        runtime_error("Unable to reassign `val` "+ name, set_expr);
     }
 }
 
@@ -436,7 +436,7 @@ void Interpreter::visit(GetExpr * get_expr){
 
     value = lhs->get(name);
 
-    if(value->get_obj_type() != ObjectType::Func){
+    if(value->get_obj_type() == ObjectType::Func){
         value = std::static_pointer_cast<BaseFunc>(value)->bind(scope, lhs);
     }
 }

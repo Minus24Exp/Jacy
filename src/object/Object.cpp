@@ -31,34 +31,58 @@ bool Object::is(class_ptr check_class) const {
     return false;
 }
 
-void Object::set_instance_fields(const LocalMap & fields){
-    instance_fields = fields;
+void Object::set_fields(const LocalMap & instance_fields){
+    // `set_fields` is called after all built-ins are registered
+    // so I need to check if some fields are built-ins
+    
+    // This is the place where all fields modifiers will be implemented
+
+    for(const auto i_field : instance_fields){
+        const auto name = i_field.first;
+        const auto redef_it = fields.find(name);
+
+        if(redef_it != fields.end()){
+            // Check for built-in redefinition
+            if(redef_it->second.decl_type == LocalDeclType::Builtin){
+                throw YoctoException("Redefinition of built-in "+ name);
+            }
+        }
+
+        fields.emplace(name, Local(i_field.second.decl_type, i_field.second.val));
+    }
 }
 
 bool Object::has(const std::string & name) const {
-    return instance_fields.find(name) != instance_fields.end();
+    return fields.find(name) != fields.end();
 }
 
 obj_ptr Object::get(const std::string & name) const {
     if(has(name)){
-        return instance_fields.at(name).val;
+        return fields.at(name).val;
     }
 
     return nullptr;
 }
 
 int Object::set(const std::string & name, obj_ptr value){
-    auto it = instance_fields.find(name);
-    
-    if(it != instance_fields.end()){
+    auto it = fields.find(name);
+
+    if(it != fields.end()){
         if(it->second.decl_type == LocalDeclType::Val && it->second.val != nullptr){
             return -1;
         }
-        instance_fields.at(name).val = value;
+        fields.at(name).val = value;
         return 1;
     }else{
         return 0;
     }
+}
+
+void Object::define_builtin(const std::string & name, obj_ptr value){
+    if(has(name)){
+        throw DevError("Redefinition of built-in "+ name);
+    }
+    fields.emplace(name, Local(LocalDeclType::Builtin, value));
 }
 
 std::string obj_to_str(obj_ptr obj){

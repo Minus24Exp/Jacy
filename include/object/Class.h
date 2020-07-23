@@ -14,7 +14,7 @@ class Class : public Object, public Callable {
 public:
     Class(const std::string & name, class_ptr super);
     virtual ~Class() = default;
-       
+
     // Object //
     std::string repr() const override;
 
@@ -33,25 +33,11 @@ public:
         return super;
     }
 
-    void set_fields(const LocalMap & fields);
-    LocalMap get_instance_fields() const;
-
-    // Only for built-ins //
-    bool has_field(const std::string & name) const {
-        return fields.find(name) != fields.end();
-    }
-    void define_field(const std::string & name, const Local & local){
-        if(!has_field(name)){
-            fields.emplace(name, local);
-        }else{
-            throw DevError("Redefinition of field `"+ name +"` in class"+ get_name());
-        }
-    }
-
 private:
-    LocalMap fields;
     std::string name;
     class_ptr super;
+
+    LocalMap get_instance_fields() const;
 };
 
 #endif

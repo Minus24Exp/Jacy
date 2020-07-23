@@ -40,22 +40,19 @@ public:
 
     virtual bool is(std::shared_ptr<Class> check_class) const;
 
-    void set_instance_fields(const LocalMap & fields);
+    void set_fields(const LocalMap & fields);
 
     bool has(const std::string & name) const;
     obj_ptr get(const std::string & name) const;
     int set(const std::string & name, obj_ptr value);
 
-private:
+    // For built-ins only //
+    void define_builtin(const std::string & name, obj_ptr value);
+
+protected:
     ObjectType obj_type;
     std::shared_ptr<Class> _class;
     LocalMap fields;
-
-    // Some classes interconnected,
-    // so I need to know that class is inited.
-    // As far as has/get/set will be called in Interpreter
-    // after globals are registered I set `class_ready` after first call of `get_instance_fields`
-    bool class_ready;
 };
 
 std::string obj_to_str(obj_ptr obj);

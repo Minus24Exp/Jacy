@@ -9,9 +9,15 @@ using obj_ptr = std::shared_ptr<Object>;
 class Local;
 using LocalMap = std::unordered_map<std::string, Local>;
 
+/**
+ * Var - mutable
+ * Val - immutable
+ * Builtin - immutable built-in
+ */
 enum class LocalDeclType {
     Var,
-    Val
+    Val,
+    Builtin
 };
 
 class Local {
