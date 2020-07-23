@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="img/Yocto.png" width="250">    
+    <img src="img/Yocto.png" width="200">    
 </p>
 
 # Yocto
