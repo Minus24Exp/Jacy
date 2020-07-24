@@ -5,7 +5,9 @@
 #include "object/Class.h"
 #include "object/Null.h"
 
-Object::Object(ObjectType obj_type, class_ptr _class) : obj_type(obj_type), _class(_class) {}
+Object::Object(ObjectType obj_type, class_ptr _class) : obj_type(obj_type), _class(_class) {
+    define_m_builtin("__class", _class);
+}
 
 bool Object::truthy() const {
     return true;
@@ -79,10 +81,17 @@ int Object::set(const std::string & name, obj_ptr value){
 }
 
 void Object::define_builtin(const std::string & name, obj_ptr value){
-    if(has(name)){
+    if(has(name) && fields.at(name).decl_type != LocalDeclType::MutBuiltin){
         throw DevError("Redefinition of built-in "+ name);
     }
     fields.emplace(name, Local(LocalDeclType::Builtin, value));
+}
+
+void Object::define_m_builtin(const std::string & name, obj_ptr value){
+    if(has(name) && fields.at(name).decl_type != LocalDeclType::MutBuiltin){
+        throw DevError("Redefinition of built-in "+ name);
+    }
+    fields.emplace(name, Local(LocalDeclType::MutBuiltin, value));
 }
 
 std::string obj_to_str(obj_ptr obj){

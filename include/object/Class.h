@@ -33,7 +33,12 @@ public:
         return super;
     }
 
+    bool has_instance_field(const std::string & name) const;
+    void set_instance_fields(const LocalMap & instance_fields);
+    void define_instance_field(const std::string & name, const Local & local);
+
 private:
+    LocalMap instance_fields;
     std::string name;
     class_ptr super;
 

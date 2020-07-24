@@ -4,7 +4,9 @@
 
 #include <iostream>
 
-Global::Global() : ip(Interpreter::get_instance()) {}
+Global::Global() : ip(Interpreter::get_instance()) {
+    g_scope = ip.get_scope();
+}
 
 std::shared_ptr<Null> null_obj;
 
@@ -46,34 +48,64 @@ obj_ptr Yo_repr(NFArgs && args){
     return nullptr;
 }
 
-void Global::reg(){
-    const auto scope = ip.get_scope();
-    
+void Global::reg(){    
     // Classes //
-    cObject = std::make_shared<Class>("Object", nullptr);
-
-    cClass = std::make_shared<Class>("Class", cObject);
-
-    cNull = std::make_shared<Class>("Null", cObject);
-
-    null_obj = std::make_shared<Null>();
-
-    cBool = std::make_shared<Class>("Bool", cObject);
-
-    cInt = std::make_shared<Class>("Int", cObject);
-
-    cFloat = std::make_shared<Class>("Float", cObject);
-
-    cString = std::make_shared<Class>("String", cObject);
+    reg_object();
+    reg_class();
+    reg_null();
+    reg_bool();
+    reg_int();
+    reg_float();
+    reg_string();
+    reg_func();
     
-    cFunc = std::make_shared<Class>("Func", cObject);
-
     // IO //
-    scope->define_nf("print", make_nf(scope, "print", { {"o"} }, Yo_print));
-    scope->define_nf("println", make_nf(scope, "println", { {"o"} }, Yo_println));
-    scope->define_nf("repr", make_nf(scope, "repr", { {"o"} }, Yo_repr));
-
+    g_scope->define_nf("print", make_nf(g_scope, "print", { {"o"} }, Yo_print));
+    g_scope->define_nf("println", make_nf(g_scope, "println", { {"o"} }, Yo_println));
+    g_scope->define_nf("repr", make_nf(g_scope, "repr", { {"o"} }, Yo_repr));
 
     // Easter egg
-    scope->define_nf("YOCTO", make_nf(scope, "YOCTO", {}, YOCTO));
+    g_scope->define_nf("YOCTO", make_nf(g_scope, "YOCTO", {}, YOCTO));
+}
+
+void Global::reg_object(){
+    cObject = std::make_shared<Class>("Object", nullptr);
+    g_scope->define("Object", {LocalDeclType::Val, cObject});
+}
+
+void Global::reg_class(){
+    cClass = std::make_shared<Class>("Class", cObject);
+    g_scope->define("Class", {LocalDeclType::Val, cClass});
+}
+
+void Global::reg_null(){
+    cNull = std::make_shared<Class>("NullClass", cObject);
+    g_scope->define("NullClass", {LocalDeclType::Val, cNull});
+
+    null_obj = std::make_shared<Null>();
+}
+
+void Global::reg_bool(){
+    cBool = std::make_shared<Class>("Bool", cObject);
+    g_scope->define("Bool", {LocalDeclType::Val, cBool});
+}
+
+void Global::reg_int(){
+    cInt = std::make_shared<Class>("Int", cObject);
+    g_scope->define("Int", {LocalDeclType::Val, cInt});
+}
+
+void Global::reg_float(){
+    cFloat = std::make_shared<Class>("Float", cObject);
+    g_scope->define("Float", {LocalDeclType::Val, cFloat});
+}
+
+void Global::reg_string(){
+    cString = std::make_shared<Class>("String", cObject);
+    g_scope->define("String", {LocalDeclType::Val, cString});
+}
+
+void Global::reg_func(){
+    cFunc = std::make_shared<Class>("Func", cObject);
+    g_scope->define("Func", {LocalDeclType::Val, cFunc});
 }

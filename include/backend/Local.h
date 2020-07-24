@@ -13,11 +13,13 @@ using LocalMap = std::unordered_map<std::string, Local>;
  * Var - mutable
  * Val - immutable
  * Builtin - immutable built-in
+ * MutBuiltin - mutable built-in (it can be only with other Builtin or MutBuiltin, not with Var/Val)
  */
 enum class LocalDeclType {
     Var,
     Val,
-    Builtin
+    Builtin,
+    MutBuiltin
 };
 
 class Local {

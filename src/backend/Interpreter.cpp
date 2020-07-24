@@ -143,23 +143,24 @@ void Interpreter::visit(ClassDecl * class_decl){
 
     scope->define(class_name, {LocalDeclType::Val, nullptr});
 
-    if(super){
-        enter_scope();
-        scope->define("super", {LocalDeclType::Val, super});
-    }
-
     class_ptr _class = std::make_shared<Class>(class_name, super);
+
     // Enter virtual scope to store class fields
     enter_scope();
+    
     for(const auto & f : class_decl->fields){
         execute(f.get());
     }
-    _class->set_fields(scope->get_locals());
-    exit_scope();
-
-    if(super){
-        exit_scope();
+    
+    try{
+        _class->set_instance_fields(scope->get_locals());
+    }catch(RuntimeException & e){
+        throw e;
+    }catch(YoctoException & e){
+        runtime_error(e.what(), class_decl);
     }
+
+    exit_scope();
 
     scope->assign(class_name, _class);
 }
@@ -247,6 +248,8 @@ void Interpreter::visit(FuncCall * func_call){
 
     try{
         value = callable->call(std::move(args));
+    }catch(RuntimeException & e){
+        throw e;
     }catch(YoctoException & e){
         runtime_error(e.what(), func_call);
     }
@@ -281,6 +284,9 @@ void Interpreter::visit(Infix * infix){
         } break;
         case Operator::Mod:{
             magic_func_name = "__mod";
+        } break;
+        case Operator::Exp:{
+            magic_func_name = "__pow";
         } break;
         case Operator::Eq:{
             magic_func_name = "__eq";
@@ -346,6 +352,8 @@ void Interpreter::visit(Infix * infix){
 
     try{
         value = magic_func->call({rhs});
+    }catch(RuntimeException & e){
+        throw e;
     }catch(YoctoException & e){
         runtime_error(e.what(), infix);
     }
@@ -380,6 +388,8 @@ void Interpreter::visit(Prefix * prefix){
 
     try{
         value = magic_func->call();
+    }catch(RuntimeException & e){
+        throw e;
     }catch(YoctoException & e){
         runtime_error(e.what(), prefix);
     }
@@ -483,6 +493,8 @@ void Interpreter::visit(GetItem * get_item){
 
     try{
         value = magic_func->call({ index });
+    }catch(RuntimeException & e){
+        throw e;
     }catch(YoctoException & e){
         runtime_error(e.what(), get_item);
     }
@@ -505,6 +517,8 @@ void Interpreter::visit(SetItem * set_item){
 
     try{
         value = magic_func->call({ index, value });
+    }catch(RuntimeException & e){
+        throw e;
     }catch(YoctoException & e){
         runtime_error(e.what(), set_item);
     }

@@ -45,9 +45,9 @@ public:
     bool has(const std::string & name) const;
     obj_ptr get(const std::string & name) const;
     int set(const std::string & name, obj_ptr value);
-
-    // For built-ins only //
+    
     void define_builtin(const std::string & name, obj_ptr value);
+    void define_m_builtin(const std::string & name, obj_ptr value);
 
 protected:
     ObjectType obj_type;

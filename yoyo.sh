@@ -1,6 +1,6 @@
 # Maybe one day I'll learn how to Makefile
 # 
-# yoyo is just a simple compile-run script, make doesn't work on my PC...
+# yoyo is just a simple compile-run script, `make` doesn't work on my PC...
 
 reset_ansi='\u001b[0m'
 red_ansi='\u001b[31m'

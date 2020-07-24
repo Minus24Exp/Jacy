@@ -255,8 +255,13 @@ TokenStream Lexer::lex(const std::string & script){
                     break;
                 }
                 case '*':{
-                    add_token(Operator::Mul);
-                    advance();
+                    if(peek_next() == '*'){
+                        add_token(Operator::Exp);
+                        advance(2);
+                    }else{
+                        add_token(Operator::Mul);
+                        advance();
+                    }
                     break;
                 }
                 case '/':{

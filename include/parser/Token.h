@@ -40,7 +40,7 @@ enum class NumType {
 enum class Operator {
     Assign,
 
-    Add, Sub, Mul, Div, Mod,
+    Add, Sub, Mul, Div, Mod, Exp,
 
     // Punctuations
     LParen, RParen,
@@ -70,7 +70,7 @@ enum class Operator {
 
 const std::vector <std::string> operators {
     "=",
-    "+", "-", "*", "/", "%",
+    "+", "-", "*", "/", "%", "**",
 
     "(", ")",
     "{", "}",
