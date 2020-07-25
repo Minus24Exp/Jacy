@@ -15,7 +15,8 @@ enum class StmtType {
     VarDecl,
     While,
     Return,
-    Class
+    Class,
+    Import
 };
 
 struct Stmt : Node {

@@ -141,6 +141,9 @@ stmt_ptr Parser::parse_stmt(){
             case Keyword::Class:{
                 return parse_class_decl();
             }
+            case Keyword::Import:{
+                return parse_import();
+            }
         }
     }
 
@@ -345,6 +348,25 @@ stmt_ptr Parser::parse_class_decl(){
     return std::make_shared<ClassDecl>(class_decl_pos, id, super_id, decls);
 }
 
+stmt_ptr Parser::parse_import(){
+    Position import_pos = peek().pos;
+    // No new-lines in import
+    skip_kw(Keyword::Import, false, false);
+
+    // TODO: Improve `import`
+    // 1. Multiple objects import
+    // 2. import as ...
+
+    if(!is_typeof(TokenType::String)){
+        expected_error("path to file (String)");
+    }
+
+    std::string path = peek().String();
+
+    advance();
+    
+    return std::make_shared<Import>(import_pos, path);
+}
 
 /////////////////
 // Expressions //
@@ -575,7 +597,7 @@ expr_ptr Parser::primary(){
     // Literal
     if(is_typeof(TokenType::Int)
     || is_typeof(TokenType::Float)
-    || is_typeof(TokenType::Str)
+    || is_typeof(TokenType::String)
     || is_typeof(TokenType::Bool)
     || is_typeof(TokenType::Null))
     {

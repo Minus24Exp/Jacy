@@ -26,6 +26,7 @@ private:
     void reg_float();
     void reg_string();
     void reg_func();
+    void reg_module();
 };
 
 #endif

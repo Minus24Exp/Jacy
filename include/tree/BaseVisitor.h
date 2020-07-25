@@ -13,6 +13,7 @@ struct FuncDecl;
 struct ReturnStmt;
 struct WhileStmt;
 struct ClassDecl;
+struct Import;
 
 struct Expr;
 struct Literal;
@@ -42,6 +43,7 @@ public:
     virtual void visit(ReturnStmt * return_stmt) = 0;
     virtual void visit(WhileStmt * w) = 0;
     virtual void visit(ClassDecl * class_decl) = 0;
+    virtual void visit(Import * import) = 0;
 
     // Expressions //
     virtual void visit(Literal * literal) = 0;

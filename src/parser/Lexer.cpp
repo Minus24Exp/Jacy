@@ -218,7 +218,7 @@ TokenStream Lexer::lex(const std::string & script){
             if(peek() != quote){
                 unexpected_error();
             }
-            add_token(TokenType::Str, str);
+            add_token(TokenType::String, str);
             advance();
         }else{
             switch(peek()){

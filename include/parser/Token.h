@@ -21,7 +21,7 @@ enum class TokenType {
     Bool,
     Int,
     Float,
-    Str,
+    String,
     Op,
     Kw,
     Id,
@@ -111,6 +111,8 @@ enum class Keyword {
     While,
 
     Class,
+
+    Import,
     
     MAX
 };
@@ -132,7 +134,9 @@ const std::vector <std::string> keywords {
 
     "while",
 
-    "class"
+    "class",
+
+    "import"
 };
 
 inline Keyword str_to_kw(const std::string & str){
@@ -161,7 +165,7 @@ struct Token {
 
         switch(type){
             case TokenType::Id:
-            case TokenType::Str:{
+            case TokenType::String:{
                 val = v;
                 break;
             }
@@ -271,7 +275,7 @@ struct Token {
                 str += "identifier";
                 break;
             }
-            case TokenType::Str:{
+            case TokenType::String:{
                 str += "string";
                 break;
             }
@@ -309,7 +313,7 @@ struct Token {
                 break;
             }
             case TokenType::Id:
-            case TokenType::Str:{
+            case TokenType::String:{
                 str += String();
                 break;
             }

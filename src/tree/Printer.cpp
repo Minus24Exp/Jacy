@@ -114,6 +114,10 @@ void Printer::visit(ClassDecl * class_decl){
     std::cout << "}";
 }
 
+void Printer::visit(Import * import){
+    std::cout << "import " << import->path;
+}
+
 /////////////////
 // Expressions //
 /////////////////
@@ -122,7 +126,7 @@ void Printer::visit(Literal * literal){
         case TokenType::Bool: std::cout << literal->token.Bool(); break;
         case TokenType::Int: std::cout << literal->token.Int(); break;
         case TokenType::Float: std::cout << literal->token.Float(); break;
-        case TokenType::Str: std::cout << "\"" << literal->token.String() << "\""; break;
+        case TokenType::String: std::cout << "\"" << literal->token.String() << "\""; break;
     }
 }
 

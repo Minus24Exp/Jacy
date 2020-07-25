@@ -48,7 +48,7 @@ private:
     void skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl);
 
     // Parsers //
-    
+
     // Statements //
     stmt_ptr parse_stmt();
     block_ptr parse_block(bool allow_one_line = false);
@@ -56,11 +56,12 @@ private:
     stmt_ptr parse_func_decl();
     stmt_ptr parse_while_stmt();
     stmt_ptr parse_class_decl();
+    stmt_ptr parse_import();
 
     // Expressions //
     expr_ptr parse_expr();
 
-    // Precedence parsers (down-top precedence parsing) //
+    // Precedence parsers (down-top) //
     expr_ptr assignment();
     expr_ptr Or();
     expr_ptr And();
@@ -74,6 +75,7 @@ private:
     expr_ptr postfix();
     expr_ptr call();
     expr_ptr member_access();
+    // 
 
     expr_ptr primary();
 

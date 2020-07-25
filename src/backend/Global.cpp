@@ -19,6 +19,7 @@ class_ptr cInt;
 class_ptr cFloat;
 class_ptr cString;
 class_ptr cFunc;
+class_ptr cModule;
 
 // Easter egg
 obj_ptr YOCTO(NFArgs && args){
@@ -58,6 +59,7 @@ void Global::reg(){
     reg_float();
     reg_string();
     reg_func();
+    reg_module();
     
     // IO //
     g_scope->define_nf("print", make_nf(g_scope, "print", { {"o"} }, Yo_print));
@@ -108,4 +110,9 @@ void Global::reg_string(){
 void Global::reg_func(){
     cFunc = std::make_shared<Class>("Func", cObject);
     g_scope->define("Func", {LocalDeclType::Val, cFunc});
+}
+
+void Global::reg_module(){
+    cModule = std::make_shared<Class>("Module", cModule);
+    g_scope->define("Module", {LocalDeclType::Val, cModule});
 }

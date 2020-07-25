@@ -165,6 +165,10 @@ void Interpreter::visit(ClassDecl * class_decl){
     scope->assign(class_name, _class);
 }
 
+void Interpreter::visit(Import * import){
+    std::cout << "visit import" << std::endl;
+}
+
 /////////////////
 // Expressions //
 /////////////////
@@ -186,7 +190,7 @@ void Interpreter::visit(Literal * literal){
             value.reset(new Float(literal->token.Float()));
             break;
         }
-        case TokenType::Str:{
+        case TokenType::String:{
             value.reset(new String(literal->token.String()));
             break;
         }
@@ -418,6 +422,8 @@ void Interpreter::visit(Assign * assign){
 
 // SetExpr //
 void Interpreter::visit(SetExpr * set_expr){
+    // Note: right-associative
+
     obj_ptr rhs = eval(set_expr->value.get());
     obj_ptr lhs = eval(set_expr->left.get());
 

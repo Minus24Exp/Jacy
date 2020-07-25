@@ -5,6 +5,7 @@
 #include "tree/Stmt/ReturnStmt.h"
 #include "tree/Stmt/WhileStmt.h"
 #include "tree/Stmt/ClassDecl.h"
+#include "tree/Stmt/Import.h"
 
 // Expressions //
 #include "tree/Expr/Literal.h"
