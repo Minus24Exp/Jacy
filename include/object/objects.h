@@ -9,4 +9,6 @@
 #include "object/Float.h"
 #include "object/String.h"
 
+#include "object/List.h"
+
 #include "object/Object.h"

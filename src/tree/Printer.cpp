@@ -197,11 +197,11 @@ void Printer::visit(IfExpr * if_expr){
     }
 }
 
-void Printer::visit(ArrayExpr * array){
+void Printer::visit(ListExpr * list){
     std::cout << "[";
-    for(size_t i = 0; i < array->elements.size(); i++){
-        array->elements[i]->accept(*this);
-        if(i < array->elements.size() - 1){
+    for(size_t i = 0; i < list->elements.size(); i++){
+        list->elements[i]->accept(*this);
+        if(i < list->elements.size() - 1){
             std::cout << ", ";
         }
     }

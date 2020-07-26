@@ -21,7 +21,8 @@ enum class ObjectType {
     Float,
     String,
     Func,
-    Module
+    Module,
+    List
 };
 
 extern std::shared_ptr<Class> cObject;

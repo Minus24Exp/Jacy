@@ -26,7 +26,7 @@ struct SetExpr;
 struct GetExpr;
 struct FuncCall;
 struct IfExpr;
-struct ArrayExpr;
+struct ListExpr;
 struct GetItem;
 struct SetItem;
 struct DictExpr;
@@ -57,7 +57,7 @@ public:
     virtual void visit(GetExpr * get_expr) = 0;
     virtual void visit(FuncCall * func_call) = 0;
     virtual void visit(IfExpr * if_expr) = 0;
-    virtual void visit(ArrayExpr * array) = 0;
+    virtual void visit(ListExpr * list) = 0;
     virtual void visit(GetItem * get_item) = 0;
     virtual void visit(SetItem * set_item) = 0;
     virtual void visit(DictExpr * dict) = 0;

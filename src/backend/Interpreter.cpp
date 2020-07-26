@@ -71,7 +71,6 @@ void Interpreter::visit(VarDecl * var_decl){
 
     if(var_decl->assign_expr){
         value = eval(var_decl->assign_expr.get());
-        std::cout << "VarDecl assign_expr: " << obj_to_str(value) << std::endl;
     }
 
     // TODO: Think about cloning...
@@ -468,18 +467,18 @@ void Interpreter::visit(IfExpr * if_expr){
     }
 }
 
-void Interpreter::visit(ArrayExpr * array){
-    array_ptr array_obj = std::make_shared<Array>();
+void Interpreter::visit(ListExpr * list_expr){
+    list_ptr list = std::make_shared<List>();
     ObjList elements;
 
-    for(const auto & expr : array->elements){
+    for(const auto & expr : list_expr->elements){
         obj_ptr el = eval(expr.get());
         elements.push_back(el);
     }
 
-    array_obj->set_elements(elements);
+    list->set_elements(elements);
 
-    value = array_obj;
+    value = list;
 }
 
 void Interpreter::visit(GetItem * get_item){

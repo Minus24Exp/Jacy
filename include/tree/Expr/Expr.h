@@ -20,7 +20,7 @@ enum class ExprType {
     If,
     GetItem,
     SetItem,
-    Array,
+    List,
     Dict
 };
 

@@ -27,6 +27,7 @@ private:
     void reg_string();
     void reg_func();
     void reg_module();
+    void reg_list();
 };
 
 #endif

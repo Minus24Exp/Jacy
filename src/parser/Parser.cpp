@@ -627,7 +627,7 @@ expr_ptr Parser::primary(){
         return parse_if_expr();
     }
     
-    // Array
+    // List
     if(is_op(Operator::LBracket)){
         skip_op(Operator::LBracket, false, true);
         
@@ -650,7 +650,7 @@ expr_ptr Parser::primary(){
             elements.push_back(parse_expr());
         }
         skip_op(Operator::RBracket, true, false);
-        return std::make_shared<ArrayExpr>(pos, elements);
+        return std::make_shared<ListExpr>(pos, elements);
     }
 
     // Dictionary

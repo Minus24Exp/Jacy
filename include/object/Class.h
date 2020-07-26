@@ -3,6 +3,14 @@
 
 #include "object/Callable.h"
 
+/**
+ * Class
+ *
+ * instance_fields - LocalMap for fields that will be defined in every instance of class
+ * To define field for instance use methods with `instance_field` suffix.
+ * To define field for class (as Object) use Object's `set`.
+ */
+
 class Class;
 using class_ptr = std::shared_ptr<Class>;
 
