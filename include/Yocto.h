@@ -27,6 +27,8 @@ public:
     void run(const std::string & script);
     void run_debug(const std::string & script);
 
+    module_ptr import_module(Import * import);
+
 private:
     std::string main_file;
     bool debug;

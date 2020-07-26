@@ -29,6 +29,7 @@ struct IfExpr;
 struct ArrayExpr;
 struct GetItem;
 struct SetItem;
+struct DictExpr;
 
 class BaseVisitor {
 public:
@@ -59,6 +60,7 @@ public:
     virtual void visit(ArrayExpr * array) = 0;
     virtual void visit(GetItem * get_item) = 0;
     virtual void visit(SetItem * set_item) = 0;
+    virtual void visit(DictExpr * dict) = 0;
     
 };
 

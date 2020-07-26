@@ -21,6 +21,7 @@
 #include "tree/Expr/ArrayExpr.h"
 #include "tree/Expr/GetItem.h"
 #include "tree/Expr/SetItem.h"
+#include "tree/Expr/DictExpr.h"
 
 #include "tree/Node.h"
 

@@ -112,7 +112,6 @@ StmtList Parser::parse(const TokenStream & tokens){
 // Statements //
 ////////////////
 stmt_ptr Parser::parse_stmt(){
-
     if(is_typeof(TokenType::Kw)){
         switch(peek().kw()){
             case Keyword::Var:
@@ -622,6 +621,12 @@ expr_ptr Parser::primary(){
     }
 
     Position pos = peek().pos;
+
+    // If expression
+    if(is_kw(Keyword::If)){
+        return parse_if_expr();
+    }
+    
     // Array
     if(is_op(Operator::LBracket)){
         skip_op(Operator::LBracket, false, true);
@@ -629,6 +634,7 @@ expr_ptr Parser::primary(){
         ExprList elements;
         bool first = true;
         while(!eof()){
+            skip_nl(true);
             if(is_op(Operator::RBracket)){
                 break;
             }
@@ -643,13 +649,36 @@ expr_ptr Parser::primary(){
             }
             elements.push_back(parse_expr());
         }
-        skip_op(Operator::RBracket, false, false);
+        skip_op(Operator::RBracket, true, false);
         return std::make_shared<ArrayExpr>(pos, elements);
     }
 
-    // If expression
-    if(is_kw(Keyword::If)){
-        return parse_if_expr();
+    // Dictionary
+    if(is_op(Operator::LBrace)){
+        skip_op(Operator::LBrace, false, true);
+
+        DictElementList elements;
+        bool first = true;
+        while(!eof()){
+            skip_nl(true);
+            if(is_op(Operator::RBrace)){
+                break;
+            }
+            if(first){
+                first = false;
+            }else{
+                skip_op(Operator::Comma, true, true);
+            }
+            if(is_op(Operator::RBrace)){
+                break;
+            }
+            expr_ptr key = parse_expr();
+            skip_op(Operator::Colon, true, true);
+            expr_ptr val = parse_expr();
+            elements.push_back({key, val});
+        }
+        skip_op(Operator::RBrace, true, false);
+        return std::make_shared<DictExpr>(pos, elements);
     }
 
     expected_error("primary expression");

@@ -74,6 +74,7 @@ public:
     void visit(ArrayExpr * array) override;
     void visit(GetItem * get_item) override;
     void visit(SetItem * set_item) override;
+    void visit(DictExpr * dict) override;
 
     // Errors //
     void runtime_error(const std::string & msg, const Position & pos);

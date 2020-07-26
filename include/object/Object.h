@@ -53,6 +53,8 @@ public:
 protected:
     ObjectType obj_type;
     std::shared_ptr<Class> _class;
+
+    // Instance fields
     LocalMap fields;
 };
 

@@ -2,7 +2,6 @@
 
 Interpreter::Interpreter(){
     value = nullptr;
-    enter_scope();
 }
 
 void Interpreter::interpret(const StmtList & tree){
@@ -72,6 +71,7 @@ void Interpreter::visit(VarDecl * var_decl){
 
     if(var_decl->assign_expr){
         value = eval(var_decl->assign_expr.get());
+        std::cout << "VarDecl assign_expr: " << obj_to_str(value) << std::endl;
     }
 
     // TODO: Think about cloning...
@@ -469,17 +469,17 @@ void Interpreter::visit(IfExpr * if_expr){
 }
 
 void Interpreter::visit(ArrayExpr * array){
-    // array_ptr array_obj = std::make_shared<Array>();
-    // ObjList elements;
+    array_ptr array_obj = std::make_shared<Array>();
+    ObjList elements;
 
-    // for(const auto & expr : array->elements){
-    //     obj_ptr el = eval(expr.get());
-    //     elements.push_back(el);
-    // }
+    for(const auto & expr : array->elements){
+        obj_ptr el = eval(expr.get());
+        elements.push_back(el);
+    }
 
-    // array_obj->set_elements(elements);
+    array_obj->set_elements(elements);
 
-    // value = array_obj;
+    value = array_obj;
 }
 
 void Interpreter::visit(GetItem * get_item){
@@ -528,6 +528,10 @@ void Interpreter::visit(SetItem * set_item){
     }catch(YoctoException & e){
         runtime_error(e.what(), set_item);
     }
+}
+
+void Interpreter::visit(DictExpr * dict){
+    std::cout << "visit DictExpr" << std::endl;
 }
 
 ////////////

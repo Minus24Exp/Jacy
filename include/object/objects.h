@@ -1,6 +1,7 @@
 #include "object/Class.h"
 #include "object/NativeFunc.h"
 #include "object/Func.h"
+#include "object/Module.h"
 
 #include "object/Null.h"
 #include "object/Bool.h"

@@ -20,7 +20,8 @@ enum class ExprType {
     If,
     GetItem,
     SetItem,
-    Array
+    Array,
+    Dict
 };
 
 struct Expr : Node {

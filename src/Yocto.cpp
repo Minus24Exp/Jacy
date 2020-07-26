@@ -16,7 +16,8 @@ Yocto::Yocto(int argc, const char * argv[])
                 debug = true;
             }
         }else{
-            if(arg.find(".yo")){
+            // Check if argument is Yocto file (ends with ".yo")
+            if(arg.size() > 3 && arg.compare(arg.size() - 3, 3, ".yo") == 0){
                 if(main_file.empty()){
                     main_file = arg;
                 }else{
@@ -28,6 +29,13 @@ Yocto::Yocto(int argc, const char * argv[])
 }
 
 void Yocto::launch(){
+    // Enter global scope
+    ip.enter_scope();
+
+    // Register globals
+    Global global;
+    global.reg();
+
     if(main_file.empty()){
         run_repl();
     }else{
@@ -92,15 +100,10 @@ void Yocto::run_script(const std::string & path){
 void Yocto::run(const std::string & script){
     TokenStream tokens = lexer.lex(script);
     StmtList tree = parser.parse(tokens);
-
-    Global global;
-    global.reg();
-
     ip.interpret(tree);
 }
 
 void Yocto::run_debug(const std::string & script){
-
     // TODO: Create base exceptions for Lexer, Parser, Interpreter
     // and catch them separatly
 
@@ -127,9 +130,6 @@ void Yocto::run_debug(const std::string & script){
     printer.print(tree);
     std::cout << std::endl;
 
-    Global global;
-    global.reg();
-
     auto ip_start = bench();
     ip.interpret(tree);
     auto ip_end = bench();
@@ -144,4 +144,14 @@ void Yocto::run_debug(const std::string & script){
 
     auto ip_duration = std::chrono::duration<double>(ip_end - ip_start).count();
     std::cout << "Evaluation: " << ip_duration << "s" << std::endl;
+}
+
+module_ptr Yocto::import_module(Import * import){
+    ip.enter_scope();
+
+    std::string as;
+
+    ip.exit_scope();
+
+    return nullptr;
 }

@@ -37,6 +37,7 @@ public:
     void visit(ArrayExpr * array) override;
     void visit(GetItem * get_item) override;
     void visit(SetItem * set_item) override;
+    void visit(DictExpr * dict) override;
 
 private:
     void print_indent();

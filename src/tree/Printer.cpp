@@ -223,3 +223,14 @@ void Printer::visit(SetItem * set_item){
     std::cout << " = ";
     set_item->value->accept(*this);
 }
+
+void Printer::visit(DictExpr * dict){
+    std::cout << "{\n";
+    for(const auto & it : dict->elements){
+        it.key->accept(*this);
+        std::cout << ": ";
+        it.val->accept(*this);
+        std::cout << ",\n";
+    }
+    std::cout << "\n}";
+}

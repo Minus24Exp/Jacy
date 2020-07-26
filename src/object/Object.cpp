@@ -95,6 +95,10 @@ void Object::define_m_builtin(const std::string & name, obj_ptr value){
 }
 
 std::string obj_to_str(obj_ptr obj){
+    if(!obj){
+        return "null";
+    }
+
     // If object has method `to_s` and it returns string then use it
     if(obj->has("to_s")){
         func_ptr to_s = cast_to_func(obj->get("to_s"));
