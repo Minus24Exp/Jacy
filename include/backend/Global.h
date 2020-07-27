@@ -29,6 +29,7 @@ private:
     void reg_module();
     void reg_list();
     void reg_dict();
+    void reg_range();
 };
 
 #endif

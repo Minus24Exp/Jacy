@@ -22,6 +22,7 @@ class_ptr cFunc;
 class_ptr cModule;
 class_ptr cList;
 class_ptr cDict;
+class_ptr cRange;
 
 // Easter egg
 obj_ptr YOCTO(NFArgs && args){
@@ -64,6 +65,7 @@ void Global::reg(){
     reg_module();
     reg_list();
     reg_dict();
+    reg_range();
     
     // IO //
     g_scope->define_nf("print", make_nf(g_scope, "print", { {"o"} }, Yo_print));
@@ -130,4 +132,9 @@ void Global::reg_list(){
 void Global::reg_dict(){
     cDict = std::make_shared<Class>("Dict", cDict);
     g_scope->define("Dict", {LocalDeclType::Val, cDict});
+}
+
+void Global::reg_range(){
+    cRange = std::make_shared<Class>("Range", cRange);
+    g_scope->define("Range", {LocalDeclType::Val, cRange});
 }

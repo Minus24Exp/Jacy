@@ -23,7 +23,8 @@ enum class ObjectType {
     Func,
     Module,
     List,
-    Dict
+    Dict,
+    Range
 };
 
 extern std::shared_ptr<Class> cObject;
@@ -44,7 +45,7 @@ public:
     // Represent object as string
     virtual std::string repr() const;
 
-    virtual bool is(std::shared_ptr<Class> check_class) const;
+    bool is(std::shared_ptr<Class> check_class) const;
 
     void set_fields(const LocalMap & fields);
 
