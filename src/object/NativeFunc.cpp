@@ -10,7 +10,7 @@ NativeFunc::NativeFunc(scope_ptr closure,
 
 // Object //
 std::string NativeFunc::repr() const {
-    return "<native_func:"+ name +">";
+    return "<NativeFunc:"+ name +">";
 }
 
 // BaseFunc //

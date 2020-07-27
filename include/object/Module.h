@@ -22,6 +22,10 @@ public:
     Module(const std::string & as, const LocalMap & insides);
     virtual ~Module() = default;
 
+    std::string repr() const {
+        return "<Module>";
+    }
+
     std::string imported_as() const {
         return as;
     }

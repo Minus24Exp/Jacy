@@ -1,6 +1,7 @@
 #include "object/List.h"
 #include "object/NativeFunc.h"
 #include "object/Int.h"
+#include "object/String.h"
 
 #include <iostream>
 
@@ -37,6 +38,21 @@ List::List() : Object(ObjectType::List, cList)
         }
 
         return elements[index];
+    }));
+
+    define_builtin("to_s", make_nf(nullptr, "to_s", {}, [this](NFArgs && args){
+        std::string str = "[";
+
+        for(auto it = elements.begin(); it != elements.end(); it++){
+            str += obj_to_str(*it);
+
+            if(it != std::prev(elements.end())){
+                str += ", ";
+            }
+        }
+        str += "]";
+
+        return std::make_shared<String>(str);
     }));
 }
 

@@ -11,10 +11,14 @@ Class::Class(const std::string & name, class_ptr super)
         define_builtin("super", null_obj);
     }
     define_builtin("name", std::make_shared<String>(name));
+
+    define_builtin("to_s", make_nf(nullptr, "to_s", {}, [this](NFArgs && args){
+        return std::make_shared<String>("<Class:'"+ this->name +"'>");
+    }));
 }
 
 std::string Class::repr() const {
-    return "<class:"+ name +">";
+    return "<Class:"+ name +">";
 }
 
 size_t Class::required_argc() const {
