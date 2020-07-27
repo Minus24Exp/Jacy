@@ -1,10 +1,16 @@
 #include "object/Dict.h"
 #include "object/NativeFunc.h"
+#include "object/Null.h"
 
 Dict::Dict() : Object(ObjectType::Dict, cDict)
 {
     define_builtin("__getitem", make_nf(nullptr, "__getitem", { {"key"} }, [this](NFArgs && args){
         return get_item(args["key"]);
+    }));
+
+    define_builtin("__setitem", make_nf(nullptr, "__setitem", { {"key"}, {"val"} }, [this](NFArgs && args){
+        set_item(args["key"], args["val"]);
+        return null_obj;
     }));
 }
 

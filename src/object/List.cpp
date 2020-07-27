@@ -23,6 +23,21 @@ List::List() : Object(ObjectType::List, cList)
 
         return elements[index];
     }));
+
+    define_builtin("__setitem", make_nf(nullptr, "__setitem", { {"index"}, {"value"} }, [this](NFArgs && args){
+        int_ptr index_obj = cast_to_i(args["index"]);
+        
+        if(!index_obj){
+            throw YoctoException("Invalid type of index");
+        }
+
+        yo_int index = norm_index(index_obj->get_value());
+        if(index >= size()){
+            throw YoctoException("Index out of list bounds");
+        }
+
+        return elements[index];
+    }));
 }
 
 bool List::truthy() const {
