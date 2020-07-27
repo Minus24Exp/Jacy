@@ -3,4 +3,7 @@
 
 #include <sstream>
 
-String::String(const std::string & s) : Object(ObjectType::String, cString), value(s) {}
+String::String(const std::string & s) : Object(ObjectType::String, cString), value(s)
+{
+    
+}

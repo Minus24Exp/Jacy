@@ -4,6 +4,49 @@
 #include "object/String.h"
 #include "object/Class.h"
 #include "object/Null.h"
+#include "object/Int.h"
+
+std::string obj_to_str(obj_ptr obj){
+    if(!obj){
+        return "null";
+    }
+
+    // If object has method `to_s` and it returns string then use it
+    if(obj->has("to_s")){
+        func_ptr to_s = cast_to_func(obj->get("to_s"));
+        if(to_s){
+            string_ptr string = cast_to_s(to_s->call());
+            if(string){
+                return string->get_value();
+            }
+        }
+    }
+
+    // Otherwise represent object
+    return obj->repr();
+}
+
+yo_int obj_hash(obj_ptr obj){
+    // null != null_ptr, so if obj is nullptr then there's a problem in source
+    if(!obj){
+        throw DevError("Passing null to obj_hash");
+    }
+
+    if(!obj->has("hash")){
+        throw YoctoException("Invalid key (key must have __hash function)");
+    }
+
+    func_ptr hash_func = cast_to_func(obj->get("hash"));
+
+    if(hash_func){
+        int_ptr int_obj = cast_to_i(hash_func->call());
+        if(int_obj){
+            return int_obj->get_value();
+        }
+    }
+
+    throw YoctoException("Invalid hash function (must return integer)");
+}
 
 Object::Object(ObjectType obj_type, class_ptr _class) : obj_type(obj_type), _class(_class) {
     define_m_builtin("__class", _class);
@@ -92,24 +135,4 @@ void Object::define_m_builtin(const std::string & name, obj_ptr value){
         throw DevError("Redefinition of built-in "+ name);
     }
     fields.emplace(name, Local(LocalDeclType::MutBuiltin, value));
-}
-
-std::string obj_to_str(obj_ptr obj){
-    if(!obj){
-        return "null";
-    }
-
-    // If object has method `to_s` and it returns string then use it
-    if(obj->has("to_s")){
-        func_ptr to_s = cast_to_func(obj->get("to_s"));
-        if(to_s){
-            string_ptr string = cast_to_s(to_s->call());
-            if(string){
-                return string->get_value();
-            }
-        }
-    }
-
-    // Otherwise represent object
-    return obj->repr();
 }

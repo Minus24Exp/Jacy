@@ -530,7 +530,6 @@ void Interpreter::visit(SetItem * set_item){
 }
 
 void Interpreter::visit(DictExpr * dict){
-    std::cout << "visit DictExpr" << std::endl;
 }
 
 ////////////

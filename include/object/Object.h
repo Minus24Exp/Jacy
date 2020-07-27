@@ -22,10 +22,14 @@ enum class ObjectType {
     String,
     Func,
     Module,
-    List
+    List,
+    Dict
 };
 
 extern std::shared_ptr<Class> cObject;
+
+std::string obj_to_str(obj_ptr obj);
+yo_int obj_hash(obj_ptr obj);
 
 class Object : public std::enable_shared_from_this<Object> {
 public:
@@ -58,7 +62,5 @@ protected:
     // Instance fields
     LocalMap fields;
 };
-
-std::string obj_to_str(obj_ptr obj);
 
 #endif

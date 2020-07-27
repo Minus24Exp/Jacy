@@ -28,6 +28,7 @@ private:
     void reg_func();
     void reg_module();
     void reg_list();
+    void reg_dict();
 };
 
 #endif
