@@ -529,7 +529,21 @@ void Interpreter::visit(SetItem * set_item){
     }
 }
 
-void Interpreter::visit(DictExpr * dict){
+void Interpreter::visit(DictExpr * dict_expr){
+    dict_ptr dict = std::make_shared<Dict>();
+
+    for(const auto & el : dict_expr->elements){
+        obj_ptr key = eval(el.key.get());
+        obj_ptr val = eval(el.val.get());
+
+        try{
+            dict->set_item(key, val);
+        }catch(YoctoException & e){
+            runtime_error(e.what(), el.key.get());
+        }
+    }
+
+    value = dict;
 }
 
 ////////////

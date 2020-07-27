@@ -10,5 +10,6 @@
 #include "object/String.h"
 
 #include "object/List.h"
+#include "object/Dict.h"
 
 #include "object/Object.h"

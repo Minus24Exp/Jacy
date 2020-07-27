@@ -1,13 +1,11 @@
 #include "object/Dict.h"
+#include "object/NativeFunc.h"
 
-Dict::Dict() : Object(ObjectType::Dict, cDict) {}
-
-void Dict::set_elements(const DictElements & elements){
-    this->elements = elements;
-}
-
-DictElements Dict::get_elements() const {
-    return elements;
+Dict::Dict() : Object(ObjectType::Dict, cDict)
+{
+    define_builtin("__getitem", make_nf(nullptr, "__getitem", { {"key"} }, [this](NFArgs && args){
+        return get_item(args["key"]);
+    }));
 }
 
 obj_ptr Dict::get_item(obj_ptr key) const {
