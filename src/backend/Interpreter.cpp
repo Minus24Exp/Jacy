@@ -182,7 +182,7 @@ void Interpreter::visit(Literal * literal){
             break;
         }
         case TokenType::Int:{
-            value.reset(new Int(literal->token.Int()));
+            value = make_int(literal->token.Int());
             break;
         }
         case TokenType::Float:{

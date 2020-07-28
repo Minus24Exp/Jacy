@@ -27,6 +27,8 @@ std::shared_ptr<Null> null_obj;
 bool_ptr true_obj;
 bool_ptr false_obj;
 
+std::unordered_map<int, int_ptr> int_constants;
+
 // Easter egg
 obj_ptr YOCTO(NFArgs && args){
     std::cout <<
