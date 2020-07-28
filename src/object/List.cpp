@@ -2,6 +2,7 @@
 #include "object/NativeFunc.h"
 #include "object/Int.h"
 #include "object/String.h"
+#include "object/Bool.h"
 
 #include <iostream>
 
@@ -53,6 +54,33 @@ List::List() : Object(ObjectType::List, cList)
         str += "]";
 
         return std::make_shared<String>(str);
+    }));
+
+    define_builtin("__contains", make_nf(nullptr, "__contains", { {"value"} }, [this](NFArgs && args){
+        for(const auto & el : elements){
+            // Check if element has `__eq` function that returns boolean
+            if(!el->has("__eq")){
+                continue;
+            }
+
+            obj_ptr __eq = el->get("__eq");
+
+            if(__eq->get_obj_type() != ObjectType::Func){
+                continue;
+            }
+
+            obj_ptr __eq_result = std::static_pointer_cast<BaseFunc>(el->get("__eq"))->call({args["value"]});
+            
+            if(__eq_result->get_obj_type() != ObjectType::Bool){
+                continue;
+            }
+
+            if(std::static_pointer_cast<Bool>(__eq_result)->get_value()){
+                return std::make_shared<Bool>(true);
+            }
+        }
+
+        return std::make_shared<Bool>(false);
     }));
 }
 

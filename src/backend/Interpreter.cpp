@@ -272,6 +272,12 @@ void Interpreter::visit(Infix * infix){
     std::string op_name = op_to_str(infix->op.op());
     std::string magic_func_name;
 
+    // Negate is used for built-in functions that have one name for truth check
+    bool negate = false;
+
+    // Is right associative
+    bool r_assoc = false;
+
     switch(infix->op.op()){
         case Operator::Add:{
             magic_func_name = "__add";
@@ -334,9 +340,22 @@ void Interpreter::visit(Infix * infix){
             value = std::make_shared<Bool>(!lhs->is(rhs_class));
             return;
         } break;
+        case Operator::In:{
+            magic_func_name = "__contains";
+            r_assoc = true;
+        } break;
+        case Operator::NotIn:{
+            magic_func_name = "__contains";
+            negate = true;
+            r_assoc = true;
+        } break;
         default:{
             throw DevError("Unsupported infix operator: `"+ op_name +"`");
         }
+    }
+
+    if(r_assoc){
+        lhs.swap(rhs);
     }
 
     obj_ptr magic_func_field;
@@ -355,6 +374,14 @@ void Interpreter::visit(Infix * infix){
 
     try{
         value = magic_func->call({rhs});
+
+        if(negate){
+            bool_ptr b = cast_to_b(value);
+            if(!b){
+                throw DevError("Negative function returns non-bool value");
+            }
+            value = b;
+        }
     }catch(RuntimeException & e){
         throw e;
     }catch(YoctoException & e){

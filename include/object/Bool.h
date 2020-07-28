@@ -3,6 +3,10 @@
 
 #include "object/NativeFunc.h"
 
+class Bool;
+using bool_ptr = std::shared_ptr<Bool>;
+const auto cast_to_b = [](obj_ptr obj) -> bool_ptr { return std::dynamic_pointer_cast<Bool>(obj); };
+
 extern std::shared_ptr<Class> cBool;
 
 class Bool : public Object {

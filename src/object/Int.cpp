@@ -53,6 +53,16 @@ Int::Int(yo_int i) : Object(ObjectType::Int, cInt), value(i)
 
         return std::make_shared<Range>(shared_from_this(), i_to, RangeExcl::Both);
     }));
+
+    define_builtin("__eq", make_nf(nullptr, "__eq", { {"other"} }, [this](NFArgs && args){
+        int_ptr i_to = cast_to_i(args["other"]);
+
+        if(!i_to){
+            throw YoctoException("Invalid right-hand side in range `int>.<obj`");
+        }
+
+        return std::make_shared<Bool>(i_to->get_value() == value);
+    }));
 }
 
 float_ptr Int::to_float() const {

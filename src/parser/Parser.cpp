@@ -473,7 +473,9 @@ expr_ptr Parser::named_checks(){
     expr_ptr left = range();
 
     while(is_op(Operator::Is)
-       || is_op(Operator::NotIs))
+       || is_op(Operator::NotIs)
+       || is_op(Operator::In)
+       || is_op(Operator::NotIn))
     {
         const auto op_token = peek();
         advance();

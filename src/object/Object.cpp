@@ -5,6 +5,7 @@
 #include "object/Class.h"
 #include "object/Null.h"
 #include "object/Int.h"
+#include "object/NativeFunc.h"
 
 std::string obj_to_str(obj_ptr obj){
     if(!obj){

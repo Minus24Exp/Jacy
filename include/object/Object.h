@@ -29,7 +29,10 @@ enum class ObjectType {
 
 extern std::shared_ptr<Class> cObject;
 
+// Try to convert object to str
 std::string obj_to_str(obj_ptr obj);
+
+// Try to call hash function
 yo_int obj_hash(obj_ptr obj);
 
 class Object : public std::enable_shared_from_this<Object> {

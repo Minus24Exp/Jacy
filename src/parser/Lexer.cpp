@@ -198,6 +198,9 @@ TokenStream Lexer::lex(const std::string & script){
             }else if(id == "is"){
                 // `is` operator
                 add_token(Operator::Is);
+            }else if(id == "in"){
+                // `in` operator
+                add_token(Operator::In);
             }else{
                 add_token(TokenType::Id, id);
             }
@@ -374,6 +377,9 @@ TokenStream Lexer::lex(const std::string & script){
                     }else if(peek_next() == 'i' && peek_next(2) == 's'){
                         // `!is` operator
                         add_token(Operator::NotIs);
+                        advance(3);
+                    }else if(peek_next() == 'i' && peek_next(2) == 'n'){
+                        add_token(Operator::NotIn);
                         advance(3);
                     }else{
                         add_token(Operator::Not);
