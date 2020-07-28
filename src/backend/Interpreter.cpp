@@ -178,7 +178,7 @@ void Interpreter::visit(Literal * literal){
             break;
         }
         case TokenType::Bool:{
-            value.reset(new Bool(literal->token.Bool()));
+            value = make_bool(literal->token.Bool());
             break;
         }
         case TokenType::Int:{
@@ -301,11 +301,11 @@ void Interpreter::visit(Infix * infix){
             magic_func_name = "__eq";
         } break;
         case Operator::RefEq:{
-            value = std::make_shared<Bool>(lhs == rhs);
+            value = make_bool(lhs == rhs);
             return;
         } break;
         case Operator::RefNotEq:{
-            value = std::make_shared<Bool>(lhs != rhs);
+            value = make_bool(lhs != rhs);
             return;
         } break;
         case Operator::Range:{
@@ -327,7 +327,7 @@ void Interpreter::visit(Infix * infix){
                 runtime_error("Invalid right-hand side in `is` operator", infix);
             }
 
-            value = std::make_shared<Bool>(lhs->is(rhs_class));
+            value = make_bool(lhs->is(rhs_class));
             return;
         } break;
         case Operator::NotIs:{
@@ -337,7 +337,7 @@ void Interpreter::visit(Infix * infix){
                 runtime_error("Invalid right-hand side in `!is` operator", infix);
             }
 
-            value = std::make_shared<Bool>(!lhs->is(rhs_class));
+            value = make_bool(!lhs->is(rhs_class));
             return;
         } break;
         case Operator::In:{

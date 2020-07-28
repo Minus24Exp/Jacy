@@ -8,8 +8,6 @@ Global::Global() : ip(Interpreter::get_instance()) {
     g_scope = ip.get_scope();
 }
 
-std::shared_ptr<Null> null_obj;
-
 // Classes //
 class_ptr cObject;
 class_ptr cClass;
@@ -23,6 +21,11 @@ class_ptr cModule;
 class_ptr cList;
 class_ptr cDict;
 class_ptr cRange;
+
+// Const values //
+std::shared_ptr<Null> null_obj;
+bool_ptr true_obj;
+bool_ptr false_obj;
 
 // Easter egg
 obj_ptr YOCTO(NFArgs && args){
@@ -96,6 +99,9 @@ void Global::reg_null(){
 void Global::reg_bool(){
     cBool = std::make_shared<Class>("Bool", cObject);
     g_scope->define("Bool", {LocalDeclType::Val, cBool});
+
+    true_obj = std::make_shared<Bool>(true);
+    false_obj = std::make_shared<Bool>(false);
 }
 
 void Global::reg_int(){

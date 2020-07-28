@@ -6,6 +6,7 @@
 #include "object/Null.h"
 #include "object/Int.h"
 #include "object/NativeFunc.h"
+#include "object/Bool.h"
 
 std::string obj_to_str(obj_ptr obj){
     if(!obj){
@@ -47,6 +48,28 @@ yo_int obj_hash(obj_ptr obj){
     }
 
     throw YoctoException("Invalid hash function (must return integer)");
+}
+
+// Try to call object's `__eq` function or return nullptr if it is not valid
+bool_ptr obj_eq(obj_ptr obj1, obj_ptr obj2){
+    // Check if element has `__eq` function that returns boolean
+    if(!obj1->has("__eq")){
+        return nullptr;
+    }
+
+    obj_ptr __eq = obj1->get("__eq");
+
+    if(__eq->get_obj_type() != ObjectType::Func){
+        return nullptr;
+    }
+
+    obj_ptr __eq_result = std::static_pointer_cast<BaseFunc>(obj1->get("__eq"))->call({obj2});
+
+    if(__eq_result->get_obj_type() != ObjectType::Bool){
+        return nullptr;
+    }
+
+    return std::static_pointer_cast<Bool>(__eq_result);
 }
 
 Object::Object(ObjectType obj_type, class_ptr _class) : obj_type(obj_type), _class(_class) {

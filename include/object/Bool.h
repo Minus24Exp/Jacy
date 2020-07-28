@@ -5,9 +5,13 @@
 
 class Bool;
 using bool_ptr = std::shared_ptr<Bool>;
-const auto cast_to_b = [](obj_ptr obj) -> bool_ptr { return std::dynamic_pointer_cast<Bool>(obj); };
 
 extern std::shared_ptr<Class> cBool;
+extern bool_ptr true_obj;
+extern bool_ptr false_obj;
+
+const auto cast_to_b = [](obj_ptr obj) -> bool_ptr { return std::dynamic_pointer_cast<Bool>(obj); };
+
 
 class Bool : public Object {
 public:
@@ -30,5 +34,12 @@ public:
 private:
     bool value;
 };
+
+static inline bool_ptr make_bool(bool value){
+    if(value){
+        return true_obj;
+    }
+    return false_obj;
+}
 
 #endif

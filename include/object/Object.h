@@ -8,6 +8,7 @@
 class String;
 class Object;
 class Class;
+class Bool;
 
 using obj_ptr = std::shared_ptr<Object>;
 using ObjList = std::vector<obj_ptr>;
@@ -34,6 +35,8 @@ std::string obj_to_str(obj_ptr obj);
 
 // Try to call hash function
 yo_int obj_hash(obj_ptr obj);
+
+std::shared_ptr<Bool> obj_eq(obj_ptr obj1, obj_ptr obj2);
 
 class Object : public std::enable_shared_from_this<Object> {
 public:

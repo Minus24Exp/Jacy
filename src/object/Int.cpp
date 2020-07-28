@@ -61,7 +61,7 @@ Int::Int(yo_int i) : Object(ObjectType::Int, cInt), value(i)
             throw YoctoException("Invalid right-hand side in range `int>.<obj`");
         }
 
-        return std::make_shared<Bool>(i_to->get_value() == value);
+        return make_bool(i_to->get_value() == value);
     }));
 }
 

@@ -28,7 +28,7 @@ List::List() : Object(ObjectType::List, cList)
 
     define_builtin("__setitem", make_nf(nullptr, "__setitem", { {"index"}, {"value"} }, [this](NFArgs && args){
         int_ptr index_obj = cast_to_i(args["index"]);
-        
+
         if(!index_obj){
             throw YoctoException("Invalid type of index");
         }
@@ -57,30 +57,17 @@ List::List() : Object(ObjectType::List, cList)
     }));
 
     define_builtin("__contains", make_nf(nullptr, "__contains", { {"value"} }, [this](NFArgs && args){
+        obj_ptr cmp_obj = args["value"];
         for(const auto & el : elements){
-            // Check if element has `__eq` function that returns boolean
-            if(!el->has("__eq")){
+            bool_ptr res = obj_eq(el, cmp_obj);
+            if(!res){
                 continue;
-            }
-
-            obj_ptr __eq = el->get("__eq");
-
-            if(__eq->get_obj_type() != ObjectType::Func){
-                continue;
-            }
-
-            obj_ptr __eq_result = std::static_pointer_cast<BaseFunc>(el->get("__eq"))->call({args["value"]});
-            
-            if(__eq_result->get_obj_type() != ObjectType::Bool){
-                continue;
-            }
-
-            if(std::static_pointer_cast<Bool>(__eq_result)->get_value()){
-                return std::make_shared<Bool>(true);
+            }else if(res->get_value()){
+                return make_bool(true);
             }
         }
 
-        return std::make_shared<Bool>(false);
+        return make_bool(false);
     }));
 }
 
