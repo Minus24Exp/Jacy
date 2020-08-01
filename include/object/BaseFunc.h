@@ -50,7 +50,7 @@ public:
     }
 
     // BaseFunc //
-    virtual obj_ptr bind(scope_ptr closure, obj_ptr instance) = 0;
+    virtual func_ptr bind(obj_ptr instance) = 0;
 
 protected:
     scope_ptr closure;

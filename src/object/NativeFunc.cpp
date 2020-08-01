@@ -34,7 +34,7 @@ obj_ptr NativeFunc::call(const ObjList & args){
     return ret_val;
 }
 
-obj_ptr NativeFunc::bind(scope_ptr closure, obj_ptr instance){
+func_ptr NativeFunc::bind(obj_ptr instance){
     scope_ptr func_scope = std::make_shared<Scope>(closure);
     func_scope->define("this", {LocalDeclType::Val, instance});
     return std::make_shared<NativeFunc>(func_scope, name, params, body);

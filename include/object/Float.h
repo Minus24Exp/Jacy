@@ -6,7 +6,9 @@
 class Float;
 extern std::shared_ptr<Class> cFloat;
 using float_ptr = std::shared_ptr<Float>;
-extern std::unordered_map<yo_int, int_ptr> int_constants;
+extern std::unordered_map<double, float_ptr> float_constants;
+
+const auto cast_to_f = [](obj_ptr obj) -> float_ptr { return std::dynamic_pointer_cast<Float>(obj); };
 
 class Float : public Object {
 public:

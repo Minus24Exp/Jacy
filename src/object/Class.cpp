@@ -1,6 +1,8 @@
 #include "object/Class.h"
 #include "object/String.h"
 #include "object/Null.h"
+#include "object/BaseFunc.h"
+#include "backend/Interpreter.h"
 
 Class::Class(const std::string & name, class_ptr super)
     : Object(ObjectType::Class, cClass), name(name), super(super)
@@ -30,15 +32,19 @@ size_t Class::argc() const {
 }
 
 obj_ptr Class::call(const ObjList & args){
-    class_ptr this_class_ptr = std::static_pointer_cast<Class>(shared_from_this());
     // As far as enable_shared_from_this is template I need to cast this to class
     // Maybe it's bad architecture... aaa
-    obj_ptr instance = std::make_shared<Object>(ObjectType::Object, this_class_ptr);
+    obj_ptr instance = std::make_shared<Object>(ObjectType::Object, std::static_pointer_cast<Class>(shared_from_this()));
 
     // I cannot use predefined fields since class variables may be change
     instance->set_fields(get_instance_fields());
 
     // TODO: Important! Add magic things checkers at class declaration
+
+    func_ptr __init = cast_to_func(instance->get("__init"));
+    if(__init){
+        __init->bind(instance)->call(args);        
+    }
 
     return instance;
 }

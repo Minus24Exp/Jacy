@@ -479,7 +479,7 @@ void Interpreter::visit(GetExpr * get_expr){
     value = lhs->get(name);
 
     if(value->get_obj_type() == ObjectType::Func){
-        value = std::static_pointer_cast<BaseFunc>(value)->bind(scope, lhs);
+        value = std::static_pointer_cast<BaseFunc>(value)->bind(lhs);
     }
 }
 

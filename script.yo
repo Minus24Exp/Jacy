@@ -1,1 +1,11 @@
-print('a' === 'a')
+class A {
+	var value = 1
+
+	func __init(){
+		print('instance created')
+	}
+}
+
+val a = A()
+
+print(a.value)

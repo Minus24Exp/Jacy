@@ -7,5 +7,7 @@ Yocto's literals:
 - Float (64-bit precision signed real number, `double`)
 - String
 
-## `null`, `NullClass`
+All the literals reference to the same object if they have same value.
 
+For example: `print('a' === 'a')` (`===` is reference equality)
+Will print `true`, because literals with the same value reference to the same object.

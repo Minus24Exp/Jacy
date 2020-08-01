@@ -45,7 +45,7 @@ obj_ptr Func::call(const ObjList & args){
     return return_val;
 }
 
-obj_ptr Func::bind(scope_ptr closure, obj_ptr instance){
+func_ptr Func::bind(obj_ptr instance){
     scope_ptr func_scope = std::make_shared<Scope>(closure);
     func_scope->define("this", {LocalDeclType::Val, instance});
     return std::make_shared<Func>(func_scope, name, params, body);
