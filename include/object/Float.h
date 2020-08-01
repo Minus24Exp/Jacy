@@ -4,9 +4,9 @@
 #include "object/NativeFunc.h"
 
 class Float;
-using float_ptr = std::shared_ptr<Float>;
-
 extern std::shared_ptr<Class> cFloat;
+using float_ptr = std::shared_ptr<Float>;
+extern std::unordered_map<yo_int, int_ptr> int_constants;
 
 class Float : public Object {
 public:
@@ -24,5 +24,14 @@ public:
 private:
     double value;
 };
+
+inline float_ptr make_float(double value){
+    if(float_constants.find(value) != float_constants.end()){
+        return float_constants.at(value);
+    }
+    float_ptr new_float = std::make_shared<Float>(value);
+    float_constants.emplace(value, new_float);
+    return new_float;
+}
 
 #endif
