@@ -20,7 +20,7 @@ cpp_files="src/*.cpp src/**/*.cpp"
 
 if [[ $1 = "compile" || $1 = "c" ]]; then
     echo -e "\n${underline_ansi}${magenta_ansi}[Compile source]${reset_ansi}\n"
-    eval "${cpp} ${debug_flags} -fmax-errors=${max_errors} ${ld_flags} ${cpp_files} -o ${target} ${cpp_flags}"
+    eval "${cpp} ${debug_flags} ${ld_flags} ${cpp_files} -o ${target} ${cpp_flags}"
 elif [[ $1 = "run" || $1 = "r" ]]; then
     echo -e "\n${yellow_ansi}[Run source]${reset_ansi}\n"
     # Cut first argument (this script name)
@@ -29,7 +29,7 @@ elif [[ $1 = "d" || $1 = "debug" ]]; then
     echo -e "\n${bold_ansi}${green_ansi}[Debug:'${target}']${reset_ansi}\n"
     eval "gdb ${target}"
 else
-echo "Argument expected:
+echo "Usage:
     'compile' or 'c' => compile source
     'run' or 'r' => run source
     'debug' or 'd' => debug target

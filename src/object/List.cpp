@@ -53,7 +53,7 @@ List::List() : Object(ObjectType::List, cList)
         }
         str += "]";
 
-        return std::make_shared<String>(str);
+        return make_string(str);
     }));
 
     define_builtin("__contains", make_nf(nullptr, "__contains", { {"value"} }, [this](NFArgs && args){

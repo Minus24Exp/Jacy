@@ -30,6 +30,6 @@ Range::Range(obj_ptr start, obj_ptr end, RangeExcl excl)
             str += obj_to_str(this->end);
         }
 
-        return std::make_shared<String>(str);
+        return make_string(str);
     }));
 }

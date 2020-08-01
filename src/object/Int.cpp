@@ -11,7 +11,7 @@ Int::Int(yo_int i) : Object(ObjectType::Int, cInt), value(i)
     }));
 
     define_builtin("to_s", make_nf(nullptr, "to_s", {}, [this](NFArgs && args){
-        return std::make_shared<String>(std::to_string(value));
+        return make_string(std::to_string(value));
     }));
 
     define_builtin("__range", make_nf(nullptr, "__range", { {"to"} }, [this](NFArgs && args){

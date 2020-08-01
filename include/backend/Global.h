@@ -30,9 +30,6 @@ private:
     void reg_list();
     void reg_dict();
     void reg_range();
-
-    // Constants //
-        
 };
 
 #endif

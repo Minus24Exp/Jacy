@@ -9,6 +9,6 @@ Float::Float(double d) : Object(ObjectType::Float, cFloat), value(d)
     }));
 
     define_builtin("to_s", make_nf(nullptr, "to_s", {}, [this](NFArgs && args){
-        return std::make_shared<String>(std::to_string(value));
+        return make_string(std::to_string(value));
     }));
 }

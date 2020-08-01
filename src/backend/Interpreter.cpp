@@ -190,7 +190,7 @@ void Interpreter::visit(Literal * literal){
             break;
         }
         case TokenType::String:{
-            value.reset(new String(literal->token.String()));
+            value = make_string(literal->token.String());
             break;
         }
     }

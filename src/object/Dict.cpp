@@ -27,7 +27,7 @@ Dict::Dict() : Object(ObjectType::Dict, cDict)
         }
         str += "}";
 
-        return std::make_shared<String>(str);
+        return make_string(str);
     }));
 }
 

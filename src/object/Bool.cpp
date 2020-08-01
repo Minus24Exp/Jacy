@@ -9,6 +9,6 @@ Bool::Bool(bool b) : Object(ObjectType::Bool, cBool), value(b)
     }));
 
     define_builtin("to_s", make_nf(nullptr, "to_s", {}, [this](NFArgs && args){
-        return std::make_shared<String>(value ? "true" : "false");
+        return make_string(value ? "true" : "false");
     }));
 }
