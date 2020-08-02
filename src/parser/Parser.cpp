@@ -100,8 +100,9 @@ StmtList Parser::parse(const TokenStream & tokens){
         }
         tree.push_back(parse_stmt());
 
-        if(!eof()){
+        if(!eof() && !virtual_semi){
             skip_semis();
+            virtual_semi = false;
         }
     }
 
@@ -167,7 +168,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
         // there must be semi
 
         return std::make_shared<Block>(block_pos, stmts);
-    }    
+    }
 
     // Multi-line //
     skip_op(Operator::LBrace, false, true);
@@ -187,6 +188,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
         }
         stmts.push_back(parse_stmt());
     }
+
     skip_op(Operator::RBrace, true, false);
 
     return std::make_shared<Block>(block_pos, stmts);
@@ -760,8 +762,8 @@ expr_ptr Parser::parse_if_expr(){
         skip_op(Operator::RParen, true, true);
         allow_one_line = true;
     }else if(is_nl()){
-        // If `if` condition is not capture in parenthesis,
-        // then only if there's new-line after it the body can be one-line
+        // If `if` condition is not captured in parenthesis,
+        // then only if there's new-line after it, body can be one-line
         allow_one_line = true;
     }
 
@@ -772,11 +774,16 @@ expr_ptr Parser::parse_if_expr(){
 
     block_ptr then_branch = parse_block(allow_one_line);
 
-    skip_nl(true);
+    // Allow to write one-line expressions
+    // like: val a = if true => 'yeps' else 'nope'
+    if(!is_kw(Keyword::Else)){
+        skip_semis();
+        virtual_semi = true;
+    }
 
     block_ptr else_branch = nullptr;
     if(is_kw(Keyword::Else)){
-        skip_kw(Keyword::Else, true, true);
+        skip_kw(Keyword::Else, false, true);
         else_branch = parse_block(true);
     }
 
