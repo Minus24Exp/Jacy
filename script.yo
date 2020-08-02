@@ -1,11 +1,5 @@
-class A {
-	var value = 1
-
-	func __init(){
-		print('instance created')
-	}
+func a(p){
+	print(p)
 }
 
-val a = A()
-
-print(a.value)
+1 |> a

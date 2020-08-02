@@ -391,6 +391,11 @@ TokenStream Lexer::lex(const std::string & script){
                     if(peek_next() == '|'){
                         add_token(Operator::Or);
                         advance(2);
+                    }else if(peek_next() == '>'){
+                        add_token(Operator::Pipe);
+                        advance(2);
+                    }else{
+                        unexpected_error();
                     }
                     break;
                 }

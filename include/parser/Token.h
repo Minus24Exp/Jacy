@@ -66,7 +66,9 @@ enum class Operator {
     Arrow,
 
     Is, NotIs,
-    In, NotIn
+    In, NotIn,
+
+    Pipe
 };
 
 const std::vector <std::string> operators {
@@ -93,7 +95,9 @@ const std::vector <std::string> operators {
     "=>",
 
     "is", "!is",
-    "in", "!in"
+    "in", "!in",
+
+    "|>"
 };
 
 inline std::string op_to_str(const Operator & op){

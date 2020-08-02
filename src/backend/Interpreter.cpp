@@ -349,6 +349,14 @@ void Interpreter::visit(Infix * infix){
             negate = true;
             r_assoc = true;
         } break;
+        case Operator::Pipe:{
+            if(rhs->get_obj_type() != ObjectType::Func){
+                runtime_error("Invalid right-hand side in pipe operator, function expected", infix->right.get());
+            }
+            const auto rhs_func = std::static_pointer_cast<BaseFunc>(rhs);
+            value = rhs_func->call({lhs});
+            return;
+        } break;
         default:{
             throw DevError("Unsupported infix operator: `"+ op_name +"`");
         }

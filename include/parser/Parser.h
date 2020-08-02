@@ -63,6 +63,7 @@ private:
 
     // Precedence parsers (down-top) //
     expr_ptr assignment();
+    expr_ptr pipe();
     expr_ptr Or();
     expr_ptr And();
     expr_ptr eq();

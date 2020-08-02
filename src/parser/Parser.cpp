@@ -377,7 +377,7 @@ expr_ptr Parser::parse_expr(){
 expr_ptr Parser::assignment(){
     Position pos = peek().pos;
 
-    expr_ptr expr = Or();
+    expr_ptr expr = pipe();
 
     // TODO: Add compound assignment operators
 
@@ -405,6 +405,20 @@ expr_ptr Parser::assignment(){
     }
 
     return expr;
+}
+
+expr_ptr Parser::pipe(){
+    Position pipe_pos = peek().pos;
+    expr_ptr left = Or();
+
+    while(is_op(Operator::Pipe)){
+        advance();
+        skip_nl(true);
+        expr_ptr right = Or();
+        left = std::make_shared<Infix>(pipe_pos, left, Operator::Pipe, right);
+    }
+
+    return left;
 }
 
 expr_ptr Parser::Or(){
