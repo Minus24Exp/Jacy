@@ -1,1 +1,13 @@
+class B {
+	var name = "Unknown"
+}
 
+class A : B {
+	func set_name(name) => this.name = name
+	func show => print(name)
+}
+
+val a = A()
+
+a.set_name('lel')
+a.show()

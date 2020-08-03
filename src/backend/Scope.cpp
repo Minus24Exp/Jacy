@@ -23,6 +23,9 @@ int Scope::assign(const std::string & name, obj_ptr val){
         }
         locals.at(name).val = val;
         return 1;
+    }else if(has("[virtual_this]")){
+        // Virtual-this
+        return get("[virtual_this]")->set(name, val);
     }else if(parent){
         return parent->assign(name, val);
     }else{
@@ -33,6 +36,14 @@ int Scope::assign(const std::string & name, obj_ptr val){
 obj_ptr Scope::get(const std::string & name) const {
     if(has(name)){
         return locals.at(name).val;
+    }
+
+    // Virtual-this
+    if(has("[virtual_this]")){
+        obj_ptr virtual_this = get("[virtual_this]");
+        if(virtual_this->has(name)){
+            return virtual_this->get(name);
+        }
     }
 
     if(parent){
