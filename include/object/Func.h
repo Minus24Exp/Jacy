@@ -13,7 +13,8 @@ public:
     Func(scope_ptr closure,
          const std::string & name,
          const ParamList & params,
-         block_ptr body);
+         block_ptr body,
+         FuncMode mode = FuncMode::Raw);
     virtual ~Func() = default;
     
     // BaseFunc //

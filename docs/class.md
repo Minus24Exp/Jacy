@@ -9,20 +9,20 @@ Example:
 ```
 // Using `this`
 class A {
-	val my_name = "Jacy"
+    val my_name = "Jacy"
 
-	func show {
-		print(this.my_name)
-	}
+    func show {
+        print(this.my_name)
+    }
 }
 
 // Using virtual-this
 class A {
-	val my_name = "Jacy"
+    val my_name = "Jacy"
 
-	func show {
-		print(my_name)
-	}
+    func show {
+        print(my_name)
+    }
 }
 ```
 
@@ -32,10 +32,10 @@ But the order of priority is "Name exists in function scope - use it, otherwise 
 Example:
 ```
 class A {
-	var name = "Unknown"
+    var name = "Unknown"
 
-	func set_name(name) => this.name = name
-	func show => print(name)
+    func set_name(name) => this.name = name
+    func show => print(name)
 }
 ```
 This is really useful, you only need to write `this` when there's variable with same name in scope.
@@ -44,11 +44,11 @@ It also perfectly works with inheritance.
 Example:
 ```
 class B {
-	var name = "Unknown"
+    var name = "Unknown"
 }
 
 class A : B {
-	func set_name(name) => this.name = name
-	func show => print(name)
+    func set_name(name) => this.name = name
+    func show => print(name)
 }
 ```

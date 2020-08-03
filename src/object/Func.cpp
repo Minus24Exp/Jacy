@@ -4,12 +4,10 @@
 Func::Func(scope_ptr closure,
            const std::string & name,
            const ParamList & params,
-           block_ptr body)
-        : BaseFunc(closure, name, params),
-          body(body)
-{
-    
-}
+           block_ptr body,
+           FuncMode mode)
+        : BaseFunc(closure, name, params, mode),
+          body(body) {}
 
 obj_ptr Func::call(const ObjList & args){
     Interpreter & ip = Interpreter::get_instance();

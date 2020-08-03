@@ -2,11 +2,13 @@
 
 BaseFunc::BaseFunc(scope_ptr closure,
                    const std::string & name,
-                   const ParamList & params
+                   const ParamList & params,
+                   FuncMode mode
                   ) : Object(ObjectType::Func, cFunc),
                       closure(closure),
                       name(name),
-                      params(params)
+                      params(params),
+                      mode(mode)
 {
     // Count arguments without default value
     required_args_count = std::count_if(params.begin(), params.end(), [](const auto & p){

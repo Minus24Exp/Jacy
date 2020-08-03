@@ -119,6 +119,8 @@ enum class Keyword {
     Class,
 
     Import,
+
+    Set, Get,
     
     MAX
 };
@@ -142,7 +144,9 @@ const std::vector <std::string> keywords {
 
     "class",
 
-    "import"
+    "import",
+
+    "set", "get"
 };
 
 inline Keyword str_to_kw(const std::string & str){

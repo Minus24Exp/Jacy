@@ -1,5 +1,6 @@
 #include "backend/Scope.h"
 #include "object/Object.h"
+#include "object/BaseFunc.h"
 
 bool Scope::has(const std::string & name) const {
     return locals.find(name) != locals.end();
@@ -16,11 +17,23 @@ bool Scope::define(const std::string & name, const Local & loc){
 
 int Scope::assign(const std::string & name, obj_ptr val){
     auto it = locals.find(name);
-    
+
     if(it != locals.end()){
-        if(it->second.decl_type == LocalDeclType::Val && it->second.val != nullptr){
+        obj_ptr local_val = locals.at(name).val;
+
+        if(local_val != nullptr && local_val->get_obj_type() == ObjectType::Func){
+            func_ptr maybe_setter = cast_to_func(local_val);
+            if(maybe_setter->get_mode() == FuncMode::Set){
+                maybe_setter->call({val});
+                return 1;
+            }
+        }
+
+        // For `val` nullptr means that it wasn't assigned yet
+        if(it->second.decl_type == LocalDeclType::Val && local_val != nullptr){
             return -1;
         }
+
         locals.at(name).val = val;
         return 1;
     }else if(has("[virtual_this]")){

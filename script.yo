@@ -1,13 +1,13 @@
-class B {
-	var name = "Unknown"
-}
+class A {
+	var name = 'unknown'
 
-class A : B {
-	func set_name(name) => this.name = name
-	func show => print(name)
+	set new_name(p1){
+		name = p1
+	}
 }
 
 val a = A()
 
-a.set_name('lel')
-a.show()
+a.new_name = "ahah"
+
+print(a.name)

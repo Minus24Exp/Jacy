@@ -102,7 +102,7 @@ void Interpreter::visit(FuncDecl * func_decl){
         params.push_back({p.id->get_name(), default_val});
     }
 
-    obj_ptr func = std::make_shared<Func>(scope, func_name, params, std::move(func_decl->body));
+    obj_ptr func = std::make_shared<Func>(scope, func_name, params, std::move(func_decl->body), func_decl->mode);
 
     bool defined = scope->define(func_name, {LocalDeclType::Val, func});
     if(!defined){

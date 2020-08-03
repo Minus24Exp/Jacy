@@ -2,6 +2,7 @@
 #define BASEFUNC_H
 
 #include "object/Callable.h"
+#include "tree/Stmt/FuncDecl.h"
 
 /**
  * BaseFunc - Base class for Func and NativeFunc
@@ -30,7 +31,8 @@ class BaseFunc : public Object, public Callable {
 public:
     BaseFunc(scope_ptr closure,
              const std::string & name,
-             const ParamList & params);
+             const ParamList & params,
+             FuncMode mode);
     virtual ~BaseFunc() = default;
 
     // Object //
@@ -52,10 +54,16 @@ public:
     // BaseFunc //
     virtual func_ptr bind(obj_ptr instance) = 0;
 
+    FuncMode get_mode() const {
+        return mode;
+    }
+
 protected:
     scope_ptr closure;
     std::string name;
     ParamList params;
+
+    FuncMode mode;
 
     size_t required_args_count;
 };

@@ -10,7 +10,7 @@ Some basics:
 To declare a function use `func` keyword:
 ```
 func show(){
-	print('print something')
+    print('print something')
 }
 ```
 

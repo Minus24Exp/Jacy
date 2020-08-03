@@ -7,11 +7,11 @@ Example:
 ```
 // C-like
 if(true){
-	print('yoyo')
+    print('yoyo')
 }
 // No-parentheses
 if true {
-	print('yoyo')
+    print('yoyo')
 }
 ```
 In the case of (not) using parentheses, you should choose one way and write all the code in the same style.
@@ -21,12 +21,12 @@ No words, just look at examples and choose what you like more:
 ```
 // Standard `if`
 if(true){
-	print('yoyoyo')
+    print('yoyoyo')
 }
 
 // No-paren `if`
 if true {
-	print('yoyoyo')
+    print('yoyoyo')
 }
 
 // One-line standard `if`
@@ -44,29 +44,29 @@ As far as not only if can be written without parentheses, look at these examples
 ```
 // While statement
 while(true){
-	print('yoyo, infinity')
+    print('yoyo, infinity')
 }
 while true {
-	print('aaaaa')
+    print('aaaaa')
 }
 while(true) print('oaoaoaoao')
 while true => print('10')
 
 // Function declaration
 func a(){
-	print('just a raw function')
+    print('just a raw function')
 }
 func a {
-	print('No parameters, so why do I need parentheses???')
+    print('No parameters, so why do I need parentheses???')
 }
 func a(p1){
-	print('Raw function with parameter')
+    print('Raw function with parameter')
 }
 func a p1 {
-	print('No parentheses, but parameter is here...')
+    print('No parentheses, but parameter is here...')
 }
 func a p1='default value' {
-	print('Yes, it is possible')
+    print('Yes, it is possible')
 }
 func a => print('oaoaoa, meow')
 func a p1 => print(p1 + ' is parameter')
@@ -78,8 +78,8 @@ Not only parentheses are avoidable. So... Just examples:
 ```
 // No-paren one-liner without braces
 if true
-	print('yeps')
+    print('yeps')
 while true
-	print('minus ram')
+    print('minus ram')
 // But, it's not possible to use this syntax with function declaration
 ```
