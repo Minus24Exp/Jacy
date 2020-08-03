@@ -144,7 +144,7 @@ stmt_ptr Parser::parse_stmt(){
         }
     }
 
-    return std::make_shared<ExprStmt>(peek().pos, parse_expr());
+    return std::make_shared<ExprStmt>(parse_expr());
 }
 
 // Block //
@@ -375,8 +375,6 @@ expr_ptr Parser::parse_expr(){
 }
 
 expr_ptr Parser::assignment(){
-    Position pos = peek().pos;
-
     expr_ptr expr = pipe();
 
     // TODO: Add compound assignment operators
@@ -388,17 +386,17 @@ expr_ptr Parser::assignment(){
 
         if(expr->type == ExprType::Id){
             id_ptr id = std::static_pointer_cast<Identifier>(expr);
-            return std::make_shared<Assign>(pos, id, value);
+            return std::make_shared<Assign>(id, value);
         }
 
         if(expr->type == ExprType::Get){
             std::shared_ptr<GetExpr> get_expr = std::static_pointer_cast<GetExpr>(expr);
-            return std::make_shared<SetExpr>(pos, get_expr->left, get_expr->id, value);
+            return std::make_shared<SetExpr>(get_expr->left, get_expr->id, value);
         }
 
         if(expr->type == ExprType::GetItem){
             std::shared_ptr<GetItem> get_item = std::static_pointer_cast<GetItem>(expr);
-            return std::make_shared<SetItem>(pos, get_item->left, get_item->index, value);
+            return std::make_shared<SetItem>(get_item->left, get_item->index, value);
         }
 
         unexpected_error();
@@ -408,14 +406,13 @@ expr_ptr Parser::assignment(){
 }
 
 expr_ptr Parser::pipe(){
-    Position pipe_pos = peek().pos;
     expr_ptr left = Or();
 
     while(is_op(Operator::Pipe)){
         advance();
         skip_nl(true);
         expr_ptr right = Or();
-        left = std::make_shared<Infix>(pipe_pos, left, Operator::Pipe, right);
+        left = std::make_shared<Infix>(left, Operator::Pipe, right);
     }
 
     return left;
@@ -429,7 +426,7 @@ expr_ptr Parser::Or(){
         advance();
         skip_nl(true);
         expr_ptr right = And();
-        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+        left = std::make_shared<Infix>(left, op_token, right);
     }
 
     return left;
@@ -443,7 +440,7 @@ expr_ptr Parser::And(){
         advance();
         skip_nl(true);
         expr_ptr right = eq();
-        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+        left = std::make_shared<Infix>(left, op_token, right);
     }
 
     return left;
@@ -459,7 +456,7 @@ expr_ptr Parser::eq(){
         advance();
         skip_nl(true);
         expr_ptr right = comp();
-        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+        left = std::make_shared<Infix>(left, op_token, right);
     }
 
     return left;
@@ -477,7 +474,7 @@ expr_ptr Parser::comp(){
         advance();
         skip_nl(true);
         expr_ptr right = named_checks();
-        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+        left = std::make_shared<Infix>(left, op_token, right);
     }
 
     return left;
@@ -495,7 +492,7 @@ expr_ptr Parser::named_checks(){
         advance();
         skip_nl(true);
         expr_ptr right = range();
-        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+        left = std::make_shared<Infix>(left, op_token, right);
     }
 
     return left;
@@ -514,7 +511,7 @@ expr_ptr Parser::range(){
         advance();
         skip_nl(true);
         expr_ptr right = add();
-        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+        left = std::make_shared<Infix>(left, op_token, right);
     }
 
     return left;
@@ -528,7 +525,7 @@ expr_ptr Parser::add(){
         advance();
         skip_nl(true);
         expr_ptr right = mult();
-        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+        left = std::make_shared<Infix>(left, op_token, right);
     }
 
     return left;
@@ -542,7 +539,7 @@ expr_ptr Parser::mult(){
         advance();
         skip_nl(true);
         expr_ptr right = prefix();
-        left = std::make_shared<Infix>(op_token.pos, left, op_token, right);
+        left = std::make_shared<Infix>(left, op_token, right);
     }
 
     return left;
@@ -553,7 +550,7 @@ expr_ptr Parser::prefix(){
         const auto op_token = peek();
         advance();
         expr_ptr right = prefix();
-        return std::make_shared<Prefix>(op_token.pos, op_token, right);
+        return std::make_shared<Prefix>(op_token, right);
     }
     
     return postfix();
@@ -586,20 +583,18 @@ expr_ptr Parser::call(){
 }
 
 expr_ptr Parser::member_access(){
-    Position pos = peek().pos;
-
     expr_ptr left = primary();
 
     while(!eof()){
         if(is_op(Operator::Dot)){
             advance();
             id_ptr id = parse_id();
-            left = std::make_shared<GetExpr>(pos, left, id);
+            left = std::make_shared<GetExpr>(left, id);
         }else if(is_op(Operator::LBracket)){
             skip_op(Operator::LBracket, false, true);
             expr_ptr index = parse_expr();
             skip_op(Operator::RBracket, true, false);
-            left = std::make_shared<GetItem>(pos, left, index);
+            left = std::make_shared<GetItem>(left, index);
         }else{
             break;
         }
@@ -716,8 +711,6 @@ id_ptr Parser::parse_id(){
 
 // FuncCall //
 expr_ptr Parser::parse_func_call(expr_ptr left){
-    Position func_call_pos = peek().pos;
-
     skip_op(Operator::LParen, true, true);
 
     ExprList args;
@@ -737,7 +730,7 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 
     skip_op(Operator::RParen, true, false);
 
-    return std::make_shared<FuncCall>(func_call_pos, left, args);
+    return std::make_shared<FuncCall>(left, args);
 }
 
 // IfExpr //

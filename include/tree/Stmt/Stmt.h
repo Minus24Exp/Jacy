@@ -31,7 +31,7 @@ struct Stmt : Node {
 struct ExprStmt : Stmt {
     expr_ptr expr;
 
-    ExprStmt(const Position & pos, expr_ptr expr) : Stmt(pos, StmtType::Expr), expr(expr) {}
+    ExprStmt(expr_ptr expr) : Stmt(expr->pos, StmtType::Expr), expr(expr) {}
     virtual ~ExprStmt() = default;
 
     virtual void accept(BaseVisitor & visitor) override {
