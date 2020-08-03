@@ -14,7 +14,8 @@
 class Class;
 using class_ptr = std::shared_ptr<Class>;
 
-const auto cast_to_class = [](obj_ptr obj) -> class_ptr { return std::dynamic_pointer_cast<Class>(obj); };
+const auto cast_to_class = [](obj_ptr obj) { return std::dynamic_pointer_cast<Class>(obj); };
+const auto s_cast_to_class = [](obj_ptr obj) { return std::static_pointer_cast<Class>(obj); };
 
 extern std::shared_ptr<Class> cClass;
 

@@ -11,6 +11,7 @@ extern bool_ptr true_obj;
 extern bool_ptr false_obj;
 
 const auto cast_to_b = [](obj_ptr obj) -> bool_ptr { return std::dynamic_pointer_cast<Bool>(obj); };
+const auto s_cast_to_b = [](obj_ptr obj) { return std::static_pointer_cast<Bool>(obj); };
 
 class Bool : public Object {
 public:

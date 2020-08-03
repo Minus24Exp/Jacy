@@ -1,13 +1,12 @@
 #include "object/BaseFunc.h"
 
-BaseFunc::BaseFunc(scope_ptr closure,
-                   const std::string & name,
-                   const ParamList & params
-                  ) : Object(ObjectType::Func, cFunc),
-                      closure(closure),
-                      name(name),
-                      params(params)
+BaseFunc::BaseFunc(scope_ptr closure, const std::string & name, const ParamList & params)
+    : Object(ObjectType::Func, cFunc),
+      closure(closure),
+      name(name),
+      params(params)
 {
+    initializer = name == "__init";
     // Count arguments without default value
     required_args_count = std::count_if(params.begin(), params.end(), [](const auto & p){
         if(p.default_val) return false;

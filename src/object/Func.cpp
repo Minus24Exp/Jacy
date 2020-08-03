@@ -36,7 +36,6 @@ obj_ptr Func::call(const ObjList & args){
 
     // I don't `exit_scope`, because I need to move to the previous scope,
     // but not to closure
-
     ip.enter_scope(previous);
 
     return return_val;
@@ -46,5 +45,10 @@ func_ptr Func::bind(obj_ptr instance){
     scope_ptr func_scope = std::make_shared<Scope>(closure);
     func_scope->define("this", {LocalDeclType::Val, instance});
     func_scope->define("[virtual_this]", {LocalDeclType::Val, instance});
+
+    if(instance->get_class()->get_super()){
+        func_scope->define("super", {LocalDeclType::Val, instance->get_class()->get_super()});
+    }
+
     return std::make_shared<Func>(func_scope, name, params, body);
 }

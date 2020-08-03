@@ -24,10 +24,24 @@ std::string Class::repr() const {
 }
 
 size_t Class::required_argc() const {
+    if(instance_fields.find("__init") == instance_fields.end()){
+        return 0;
+    }
+    func_ptr __init = cast_to_func(instance_fields.at("__init").val);
+    if(__init){
+        return __init->required_argc();
+    }
     return 0;
 }
 
 size_t Class::argc() const {
+    if(instance_fields.find("__init") == instance_fields.end()){
+        return 0;
+    }
+    func_ptr __init = cast_to_func(instance_fields.at("__init").val);
+    if(__init){
+        return __init->argc();
+    }
     return 0;
 }
 

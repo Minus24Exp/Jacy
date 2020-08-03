@@ -10,6 +10,7 @@ using int_ptr = std::shared_ptr<Int>;
 extern std::unordered_map<yo_int, int_ptr> int_constants;
 
 const auto cast_to_i = [](obj_ptr obj){ return std::dynamic_pointer_cast<Int>(obj); };
+const auto s_cast_to_i = [](obj_ptr obj) { return std::static_pointer_cast<Int>(obj); };
 
 class Float;
 

@@ -9,6 +9,7 @@ using float_ptr = std::shared_ptr<Float>;
 extern std::unordered_map<double, float_ptr> float_constants;
 
 const auto cast_to_f = [](obj_ptr obj) -> float_ptr { return std::dynamic_pointer_cast<Float>(obj); };
+const auto s_cast_to_f = [](obj_ptr obj) { return std::static_pointer_cast<Float>(obj); };
 
 class Float : public Object {
 public:

@@ -458,7 +458,7 @@ void Interpreter::visit(SetExpr * set_expr){
     int result = lhs->set(name, rhs);
 
     if(result == 0){
-        runtime_error(lhs->repr() +" does not have member "+ name, set_expr);
+        runtime_error(obj_to_str(lhs) +" does not have member "+ name, set_expr);
     }else if(result == -1){
         runtime_error("Unable to reassign `val` "+ name, set_expr);
     }
@@ -477,6 +477,10 @@ void Interpreter::visit(GetExpr * get_expr){
     }
 
     value = lhs->get(name);
+
+    if(value == nullptr){
+        runtime_error(name +"is not defined", get_expr);
+    }
 
     if(value->get_obj_type() == ObjectType::Func){
         value = std::static_pointer_cast<BaseFunc>(value)->bind(lhs);

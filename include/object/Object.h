@@ -44,6 +44,7 @@ public:
     virtual ~Object() = default;
 
     ObjectType get_obj_type() const { return obj_type; }
+    std::shared_ptr<Class> get_class() const { return _class; }
 
     // All objects except Null and Boolean with value `false` are truthy
     virtual bool truthy() const;

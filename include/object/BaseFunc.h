@@ -53,10 +53,16 @@ public:
     // BaseFunc //
     virtual func_ptr bind(obj_ptr instance) = 0;
 
+    bool is_init() const {
+        return initializer;
+    }
+
 protected:
     scope_ptr closure;
     std::string name;
     ParamList params;
+
+    bool initializer;
 
     size_t required_args_count;
 };

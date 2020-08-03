@@ -9,6 +9,7 @@ using string_ptr = std::shared_ptr<String>;
 extern std::unordered_map<std::string, string_ptr> string_constants;
 
 const auto cast_to_s = [](obj_ptr s) -> string_ptr { return std::dynamic_pointer_cast<String>(s); };
+const auto s_cast_to_s = [](obj_ptr obj) { return std::static_pointer_cast<String>(obj); };
 
 class String : public Object {
 public:
