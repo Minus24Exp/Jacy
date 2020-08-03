@@ -120,8 +120,6 @@ enum class Keyword {
 
     Import,
 
-    Set, Get,
-    
     MAX
 };
 
@@ -144,9 +142,7 @@ const std::vector <std::string> keywords {
 
     "class",
 
-    "import",
-
-    "set", "get"
+    "import"
 };
 
 inline Keyword str_to_kw(const std::string & str){
@@ -177,8 +173,7 @@ struct Token {
             case TokenType::Id:
             case TokenType::String:{
                 val = v;
-                break;
-            }
+            } break;
         }
     }
 
@@ -187,23 +182,19 @@ struct Token {
             case NumType::Int:{
                 type = TokenType::Int;
                 val = std::stol(num);
-                break;
-            }
+            } break;
             case NumType::Float:{
                 type = TokenType::Float;
                 val = std::stod(num);
-                break;
-            }
+            } break;
             case NumType::Bin:{
                 type = TokenType::Int;
                 val = std::stol(num, 0, 2);
-                break;
-            }
+            } break;
             case NumType::Hex:{
                 type = TokenType::Int;
                 val = std::stol(num, 0, 16);
-                break;
-            }
+            } break;
         }
     }
 
@@ -218,12 +209,10 @@ struct Token {
             case Keyword::False:{
                 type = TokenType::Bool;
                 val = kw == Keyword::True;
-                break;
-            }
+            } break;
             case Keyword::Null:{
                 type = TokenType::Null;
-                break;
-            }
+            } break;
             default:{
                 type = TokenType::Kw;
                 val = kw;
@@ -267,44 +256,34 @@ struct Token {
         switch(type){
             case TokenType::Null:{
                 str += "null";
-                break;
-            }
+            } break;
             case TokenType::Bool:{
                 str += "bool";
-                break;
-            }
+            } break;
             case TokenType::Int:{
                 str += "int";
-                break;
-            }
+            } break;
             case TokenType::Float:{
                 str += "float";
-                break;
-            }
+            } break;
             case TokenType::Id:{
                 str += "identifier";
-                break;
-            }
+            } break;
             case TokenType::String:{
                 str += "string";
-                break;
-            }
+            } break;
             case TokenType::Op:{
                 str += "operator";
-                break;
-            }
+            } break;
             case TokenType::Kw:{
                 str += "keyword";
-                break;
-            }
+            } break;
             case TokenType::Nl:{
                 str += "[new line]";
-                break;
-            }
+            } break;
             case TokenType::Eof:{
                 str += "[EOF]";
-                break;
-            }
+            } break;
         }
 
         // TODO: Fix quote for empty values
@@ -312,29 +291,23 @@ struct Token {
         switch(type){
             case TokenType::Bool:{
                 str += std::to_string(Bool());
-                break;
-            }
+            } break;
             case TokenType::Int:{
                 str += std::to_string(Int());
-                break;
-            }
+            } break;
             case TokenType::Float:{
                 str += std::to_string(Float());
-                break;
-            }
+            } break;
             case TokenType::Id:
             case TokenType::String:{
                 str += String();
-                break;
-            }
+            } break;
             case TokenType::Op:{
                 str += op_to_str(op());
-                break;
-            }
+            } break;
             case TokenType::Kw:{
                 str += kw_to_str(kw());
-                break;
-            }
+            } break;
         }
 
         str += "` at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column);

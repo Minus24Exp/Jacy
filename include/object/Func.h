@@ -1,7 +1,6 @@
 #ifndef FUNC_H
 #define FUNC_H
 
-#include "tree/Stmt/FuncDecl.h"
 #include "object/BaseFunc.h"
 
 /**
@@ -13,8 +12,7 @@ public:
     Func(scope_ptr closure,
          const std::string & name,
          const ParamList & params,
-         block_ptr body,
-         FuncMode mode = FuncMode::Raw);
+         block_ptr body);
     virtual ~Func() = default;
     
     // BaseFunc //

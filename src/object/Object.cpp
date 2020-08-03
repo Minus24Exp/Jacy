@@ -133,26 +133,14 @@ obj_ptr Object::get(const std::string & name) const {
     return nullptr;
 }
 
-int Object::set(const std::string & name, obj_ptr val){
+int Object::set(const std::string & name, obj_ptr value){
     auto it = fields.find(name);
 
     if(it != fields.end()){
-        obj_ptr field_val = fields.at(name).val;
-
-        // Check for setter
-        if(field_val != nullptr && field_val->get_obj_type() == ObjectType::Func){
-            func_ptr maybe_setter = cast_to_func(field_val);
-            if(maybe_setter->get_mode() == FuncMode::Set){
-                maybe_setter->bind(shared_from_this())->call({val});
-                return 1;
-            }
-        }
-
-        if(it->second.decl_type == LocalDeclType::Val && field_val != nullptr){
+        if(it->second.decl_type == LocalDeclType::Val && it->second.val != nullptr){
             return -1;
         }
-
-        fields.at(name).val = val;
+        fields.at(name).val = value;
         return 1;
     }else{
         return 0;

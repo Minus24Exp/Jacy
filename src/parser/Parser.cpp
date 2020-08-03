@@ -118,18 +118,13 @@ stmt_ptr Parser::parse_stmt(){
             case Keyword::Var:
             case Keyword::Val:{
                 return parse_var_decl();
-                break;
-            }
-            case Keyword::Func:
-            case Keyword::Set:
-            case Keyword::Get:{
+            } break;
+            case Keyword::Func:{
                 return parse_func_decl();
-                break;
-            }
+            } break;
             case Keyword::While:{
                 return parse_while_stmt();
-                break;
-            }
+            } break;
             case Keyword::Return:{
                 Position return_stmt_pos = peek().pos;
                 advance();
@@ -225,20 +220,7 @@ stmt_ptr Parser::parse_var_decl(){
 stmt_ptr Parser::parse_func_decl(){
     Position func_decl_pos = peek().pos;
 
-    FuncMode mode;
-
-    if(is_kw(Keyword::Func)){
-        skip_kw(Keyword::Func, false, true);
-        mode = FuncMode::Raw;
-    }else if(is_kw(Keyword::Set)){
-        skip_kw(Keyword::Set, false, true);
-        mode = FuncMode::Set;
-    }else if(is_kw(Keyword::Get)){
-        skip_kw(Keyword::Get, false, true);
-        mode = FuncMode::Get;
-    }else{
-        expected_error("function declaration keyword");
-    }
+    skip_kw(Keyword::Func, false, true);
 
     id_ptr id = parse_id();
 
@@ -273,12 +255,6 @@ stmt_ptr Parser::parse_func_decl(){
         params.push_back({ param_id, default_val });
     }
 
-    if(mode == FuncMode::Get && params.size() > 0){
-        error("Getter function can only have 0 arguments, "+ std::to_string(params.size()) +" given");
-    }else if(mode == FuncMode::Set && params.size() != 1){
-        error("Setter function can only have 1 argument, "+ std::to_string(params.size()) +" given");
-    }
-
     bool allow_one_line = false;
     if(paren){
         skip_op(Operator::RParen, true, true);
@@ -291,7 +267,7 @@ stmt_ptr Parser::parse_func_decl(){
 
     block_ptr body = parse_block(allow_one_line);
 
-    return std::make_shared<FuncDecl>(func_decl_pos, mode, id, params, body);
+    return std::make_shared<FuncDecl>(func_decl_pos, id, params, body);
 }
 
 // WhileStmt //
@@ -358,7 +334,7 @@ stmt_ptr Parser::parse_class_decl(){
 
         if(is_kw(Keyword::Val) || is_kw(Keyword::Var)){
             decls.push_back(parse_var_decl());
-        }else if(is_kw(Keyword::Func) || is_kw(Keyword::Set) || is_kw(Keyword::Get)){
+        }else if(is_kw(Keyword::Func)){
             decls.push_back(parse_func_decl());
         }else{
             expected_error("function or variable declaration");

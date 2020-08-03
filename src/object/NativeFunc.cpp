@@ -5,7 +5,7 @@ NativeFunc::NativeFunc(scope_ptr closure,
                        const std::string & name,
                        const ParamList & params,
                        const NFBody & body)
-                    : BaseFunc(closure, name, params, FuncMode::Raw),
+                    : BaseFunc(closure, name, params),
                       body(body) {}
 
 // Object //

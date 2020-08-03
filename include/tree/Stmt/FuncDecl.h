@@ -11,20 +11,13 @@ struct FuncParam {
 
 using FuncParams = std::vector<FuncParam>;
 
-enum class FuncMode {
-    Raw,
-    Set,
-    Get
-};
-
 struct FuncDecl : Stmt {
-    FuncMode mode;
     id_ptr id;
     FuncParams params;
     block_ptr body;
 
-    FuncDecl(const Position & pos, FuncMode mode, id_ptr id, const FuncParams & params, block_ptr body)
-        : Stmt(pos, StmtType::FuncDecl), mode(mode), id(id), params(params), body(body) {}
+    FuncDecl(const Position & pos, id_ptr id, const FuncParams & params, block_ptr body)
+        : Stmt(pos, StmtType::FuncDecl), id(id), params(params), body(body) {}
 
     void accept(BaseVisitor & visitor) override {
         visitor.visit(this);

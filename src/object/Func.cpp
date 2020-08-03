@@ -4,9 +4,8 @@
 Func::Func(scope_ptr closure,
            const std::string & name,
            const ParamList & params,
-           block_ptr body,
-           FuncMode mode)
-        : BaseFunc(closure, name, params, mode),
+           block_ptr body)
+        : BaseFunc(closure, name, params),
           body(body) {}
 
 obj_ptr Func::call(const ObjList & args){

@@ -102,7 +102,7 @@ void Interpreter::visit(FuncDecl * func_decl){
         params.push_back({p.id->get_name(), default_val});
     }
 
-    obj_ptr func = std::make_shared<Func>(scope, func_name, params, std::move(func_decl->body), func_decl->mode);
+    obj_ptr func = std::make_shared<Func>(scope, func_name, params, std::move(func_decl->body));
 
     bool defined = scope->define(func_name, {LocalDeclType::Val, func});
     if(!defined){
@@ -175,24 +175,19 @@ void Interpreter::visit(Literal * literal){
     switch(literal->token.type){
         case TokenType::Null:{
             value = null_obj;
-            break;
-        }
+        } break;
         case TokenType::Bool:{
             value = make_bool(literal->token.Bool());
-            break;
-        }
+        } break;
         case TokenType::Int:{
             value = make_int(literal->token.Int());
-            break;
-        }
+        } break;
         case TokenType::Float:{
             value = make_float(literal->token.Float());
-            break;
-        }
+        } break;
         case TokenType::String:{
             value = make_string(literal->token.String());
-            break;
-        }
+        } break;
     }
 }
 
@@ -231,14 +226,12 @@ void Interpreter::visit(FuncCall * func_call){
             runtime_error("Too few arguments in function call"
                           " (at least " + required_argc_s +" expected, "
                           + given_argc_s +" given)", func_call);
-            break;
-        }
+        } break;
         case ArgsCmpResult::TooMany:{
             runtime_error("Too many arguments in function call "
                           " (maximum "+ max_argc_s +" expected, "
                           + given_argc_s +" given)", func_call);
-            break;
-        }
+        } break;
     }
     
     static Callable * last_callable = nullptr;
@@ -407,8 +400,7 @@ void Interpreter::visit(Prefix * prefix){
     switch(prefix->op.op()){
         case Operator::Not:{
             magic_func_name = "__not";
-            break;
-        }
+        } break;
         default:{
             throw DevError("Unsupported prefix operator: "+ op_name);
         }
