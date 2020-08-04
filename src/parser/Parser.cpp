@@ -532,14 +532,27 @@ expr_ptr Parser::add(){
 }
 
 expr_ptr Parser::mult(){
-    expr_ptr left = prefix();
+    expr_ptr left = power();
     
     while(is_op(Operator::Mul) || is_op(Operator::Div)){
         const auto op_token = peek();
         advance();
         skip_nl(true);
-        expr_ptr right = prefix();
+        expr_ptr right = power();
         left = std::make_shared<Infix>(left, op_token, right);
+    }
+
+    return left;
+}
+
+expr_ptr Parser::power(){
+    expr_ptr left = prefix();
+
+    while(is_op(Operator::Exp)){
+        advance();
+        skip_nl(true);
+        expr_ptr right = prefix();
+        left = std::make_shared<Infix>(left, Operator::Exp, right);
     }
 
     return left;

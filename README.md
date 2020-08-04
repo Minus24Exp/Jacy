@@ -5,5 +5,4 @@
 # Yocto
 
 10⁻²⁴ size programming language written in pure C++.
-
-__Yocto implementation with AST-Walker.__
+(__Yocto implementation with AST-Walker.__)

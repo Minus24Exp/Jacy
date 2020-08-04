@@ -75,6 +75,7 @@ private:
     expr_ptr range();
     expr_ptr add();
     expr_ptr mult();
+    expr_ptr power();
     expr_ptr prefix();
     expr_ptr postfix();
     expr_ptr call();

@@ -43,8 +43,8 @@ public:
     }
 
     bool has_instance_field(const std::string & name) const;
-    void set_instance_fields(const LocalMap & instance_fields);
     void define_instance_field(const std::string & name, const Local & local);
+    void set_instance_fields(const LocalMap & instance_fields);
 
 private:
     LocalMap instance_fields;

@@ -3,6 +3,7 @@
 #include "object/Float.h"
 #include "object/Bool.h"
 #include "object/Range.h"
+#include <cmath>
 
 Int::Int(yo_int i) : Object(ObjectType::Int, cInt), value(i)
 {
@@ -14,54 +15,108 @@ Int::Int(yo_int i) : Object(ObjectType::Int, cInt), value(i)
         return make_string(std::to_string(value));
     }));
 
-    define_builtin("__range", make_nf(nullptr, "__range", { {"to"} }, [this](NFArgs && args){
-        int_ptr i_to = cast_to_i(args["to"]);
+    define_builtin("__add", make_nf(nullptr, "__add", { {"r_term"} }, [this](NFArgs && args) -> obj_ptr {
+        switch(args["r_term"]->get_obj_type()){
+            case ObjectType::Float:{
+                return make_float(value + s_cast_to_f(args["r_term"])->get_value());
+            }
+            case ObjectType::Int:{
+                return make_int(value + s_cast_to_i(args["r_term"])->get_value());
+            }
+            default: throw YoctoException("Invalid right-hand side in infix `+`");
+        }
+    }));
 
-        if(!i_to){
+    define_builtin("__sub", make_nf(nullptr, "__sub", { {"r_term"} }, [this](NFArgs && args) -> obj_ptr {
+        switch(args["r_term"]->get_obj_type()){
+            case ObjectType::Float:{
+                return make_float(value - s_cast_to_f(args["r_term"])->get_value());
+            }
+            case ObjectType::Int:{
+                return make_int(value - s_cast_to_i(args["r_term"])->get_value());
+            }
+            default: throw YoctoException("Invalid right-hand side in infix `-`");
+        }
+    }));
+
+    define_builtin("__mul", make_nf(nullptr, "__mul", { {"r_term"} }, [this](NFArgs && args) -> obj_ptr {
+        switch(args["r_term"]->get_obj_type()){
+            case ObjectType::Float:{
+                return make_float(value * s_cast_to_f(args["r_term"])->get_value());
+            }
+            case ObjectType::Int:{
+                return make_int(value * s_cast_to_i(args["r_term"])->get_value());
+            }
+            default: throw YoctoException("Invalid right-hand side in infix `*`");
+        }
+    }));
+
+    define_builtin("__div", make_nf(nullptr, "__div", { {"r_term"} }, [this](NFArgs && args) -> obj_ptr {
+        switch(args["r_term"]->get_obj_type()){
+            case ObjectType::Float:{
+                return make_float(value / s_cast_to_f(args["r_term"])->get_value());
+            }
+            case ObjectType::Int:{
+                return make_float(value / s_cast_to_i(args["r_term"])->get_value());
+            }
+            default: throw YoctoException("Invalid right-hand side in infix `/`");
+        }
+    }));
+
+    define_builtin("__pow", make_nf(nullptr, "__pow", { {"r_term"} }, [this](NFArgs && args) -> obj_ptr {
+        switch(args["r_term"]->get_obj_type()){
+            case ObjectType::Float:{
+                return make_float(pow(value, s_cast_to_f(args["r_term"])->get_value()));
+            }
+            case ObjectType::Int:{
+                return make_int(pow(value, s_cast_to_i(args["r_term"])->get_value()));
+            }
+            default: throw YoctoException("Invalid right-hand side in infix `**`");
+        }
+    }));
+
+    define_builtin("__range", make_nf(nullptr, "__range", { {"to"} }, [this](NFArgs && args){
+        if(args["to"]->get_obj_type() != ObjectType::Int){
             throw YoctoException("Invalid right-hand side in range `int...obj`");
         }
 
-        return std::make_shared<Range>(shared_from_this(), i_to, RangeExcl::None);
+        return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::None);
     }));
 
     define_builtin("__range_le", make_nf(nullptr, "__range_le", { {"to"} }, [this](NFArgs && args){
-        int_ptr i_to = cast_to_i(args["to"]);
-
-        if(!i_to){
+        if(args["to"]->get_obj_type() != ObjectType::Int){
             throw YoctoException("Invalid right-hand side in range `int>..obj`");
         }
 
-        return std::make_shared<Range>(shared_from_this(), i_to, RangeExcl::Left);
+        return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Left);
     }));
 
     define_builtin("__range_re", make_nf(nullptr, "__range_re", { {"to"} }, [this](NFArgs && args){
-        int_ptr i_to = cast_to_i(args["to"]);
-
-        if(!i_to){
+        if(args["to"]->get_obj_type() != ObjectType::Int){
             throw YoctoException("Invalid right-hand side in range `int..<obj`");
         }
 
-        return std::make_shared<Range>(shared_from_this(), i_to, RangeExcl::Right);
+        return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Right);
     }));
 
     define_builtin("__range_bothe", make_nf(nullptr, "__range_bothe", { {"to"} }, [this](NFArgs && args){
-        int_ptr i_to = cast_to_i(args["to"]);
-
-        if(!i_to){
+        if(args["to"]->get_obj_type() != ObjectType::Int){
             throw YoctoException("Invalid right-hand side in range `int>.<obj`");
         }
 
-        return std::make_shared<Range>(shared_from_this(), i_to, RangeExcl::Both);
+        return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Both);
     }));
 
     define_builtin("__eq", make_nf(nullptr, "__eq", { {"other"} }, [this](NFArgs && args){
-        int_ptr i_to = cast_to_i(args["other"]);
-
-        if(!i_to){
-            throw YoctoException("Invalid right-hand side in range `int>.<obj`");
+        switch(args["other"]->get_obj_type()){
+            case ObjectType::Float:{
+                return make_bool(value == s_cast_to_f(args["other"])->get_value());
+            }
+            case ObjectType::Int:{
+                return make_bool(value == s_cast_to_i(args["other"])->get_value());
+            }
         }
-
-        return make_bool(i_to->get_value() == value);
+        return false_obj;
     }));
 }
 
