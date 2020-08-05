@@ -165,7 +165,11 @@ void Interpreter::visit(ClassDecl * class_decl){
 }
 
 void Interpreter::visit(Import * import){
-    std::cout << "visit import" << std::endl;
+    enter_scope();
+
+    
+
+    exit_scope();
 }
 
 /////////////////

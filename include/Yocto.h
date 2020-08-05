@@ -16,18 +16,28 @@
 
 class Yocto {
 public:
-    Yocto(int argc, const char * argv[]);
-    virtual ~Yocto() = default;
+    static Yocto & get_instance(){
+        static Yocto instance;
+        return instance;
+    }
 
-    void launch();
+    Yocto(const Yocto&) = delete;
+    Yocto(Yocto&&) = delete;
+    Yocto & operator=(const Yocto&) = delete;
+    Yocto & operator=(Yocto&&) = delete;
+
+private:
+    Yocto();
+    ~Yocto() = default;
+
+public:
+    void launch(int argc, const char * argv[]);
 
     void run_repl();
     void run_script(const std::string & path);
 
     void run(const std::string & script);
     void run_debug(const std::string & script);
-
-    module_ptr import_module(Import * import);
 
 private:
     std::string main_file;

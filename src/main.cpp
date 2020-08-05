@@ -9,8 +9,7 @@ int main(int argc, const char * argv[]){
     signal(SIGSEGV, signal_handler);
 
     try{
-        Yocto yocto(argc, argv);
-        yocto.launch();
+        Yocto::get_instance().launch(argc, argv);
     }catch(YoctoException & e){
         std::cout << e.what() << std::endl;
     }catch(std::exception & e){

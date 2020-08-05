@@ -7,6 +7,7 @@
 #include "backend/Scope.h"
 #include "tree/nodes.h"
 #include "object/objects.h"
+#include <fstream>
 
 // ReturnValue is used to catch return statement
 // It has to be separate type to determine it correctly in catch

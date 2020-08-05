@@ -1,12 +1,14 @@
 #include "Yocto.h"
 
-Yocto::Yocto(int argc, const char * argv[])
+Yocto::Yocto()
     : lexer(Lexer::get_instance()),
       parser(Parser::get_instance()),
       ip(Interpreter::get_instance())
 {
     debug = false;
+}
 
+void Yocto::launch(int argc, const char * argv[]){
     // Parser argv
     for(int i = 1; i < argc; i++){
         std::string arg(argv[i]);
@@ -26,9 +28,7 @@ Yocto::Yocto(int argc, const char * argv[])
             }
         }
     }
-}
 
-void Yocto::launch(){
     // Enter global scope
     ip.enter_scope();
 
@@ -144,14 +144,4 @@ void Yocto::run_debug(const std::string & script){
 
     auto ip_duration = std::chrono::duration<double>(ip_end - ip_start).count();
     std::cout << "Evaluation: " << ip_duration << "s" << std::endl;
-}
-
-module_ptr Yocto::import_module(Import * import){
-    ip.enter_scope();
-
-    std::string as;
-
-    ip.exit_scope();
-
-    return nullptr;
 }
