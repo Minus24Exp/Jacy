@@ -1,0 +1,3 @@
+import "module.yo"
+
+module.module_print('aaa')

@@ -1,4 +1,5 @@
 #include "backend/Interpreter.h"
+#include "Yocto.h"
 
 Interpreter::Interpreter(){
     value = nullptr;
@@ -167,9 +168,22 @@ void Interpreter::visit(ClassDecl * class_decl){
 void Interpreter::visit(Import * import){
     enter_scope();
 
-    
+    try{
+        Yocto::get_instance().run_script(import->path);
+    }catch(YoctoException & e){
+        runtime_error(e.what(), import);
+    }
+
+    std::string as = "module";
+
+    module_ptr module = std::make_shared<Module>(as, scope->get_locals());
 
     exit_scope();
+
+    bool defined = scope->define(as, {LocalDeclType::Val, module});
+    if(!defined){
+        runtime_error(as +" is already defined", import);
+    }
 }
 
 /////////////////
