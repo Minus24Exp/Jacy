@@ -19,7 +19,7 @@ extern std::shared_ptr<Class> cModule;
 
 class Module : public Object {
 public:
-    Module(const LocalMap & insides, const std::string & path, const std::string & as);
+    Module(const LocalMap & insides, const std::string & path);
     virtual ~Module() = default;
 
     std::string repr() const {
@@ -28,7 +28,6 @@ public:
     
 private:
     std::string path;
-    std::string as;
 };
 
 #endif

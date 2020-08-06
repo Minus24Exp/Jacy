@@ -194,7 +194,6 @@ void Interpreter::visit(ClassDecl * class_decl){
 
 void Interpreter::visit(Import * import){
     std::string path = resolve_path(import->path);
-    std::string as = import->as->get_name();
 
     enter_scope();
     dir_stack.push(path_dir(path));
@@ -205,17 +204,31 @@ void Interpreter::visit(Import * import){
         runtime_error("File " + import->path +" not found", import);
     }
 
-    module_ptr module = std::make_shared<Module>(scope->get_locals(), path, as);
+    module_ptr module = std::make_shared<Module>(scope->get_locals(), path);
 
     exit_scope();
     dir_stack.pop();
 
-    // Note: `as` is nullptr if importing nothing, like `import "module_name"`
+    // Note: if `entities` is empty then where's nothing to import
+    // it just runs source of module
+    
+    if(!import->entities.empty()){
+        for(const auto & entity : import->entities){
+            bool defined = false;
 
-    if(import->as){
-        bool defined = scope->define(as, {LocalDeclType::Val, module});
-        if(!defined){
-            runtime_error(as +" is already defined", import);
+            if(entity.all){
+                defined = scope->define(entity.as->get_name(), {LocalDeclType::Val, module});
+            }else{
+                obj_ptr module_object = module->get(entity.object->get_name());
+                if(!module_object){
+                    runtime_error(entity.object->get_name() +" is not defined in "+ import->path, import);
+                }
+                defined = scope->define(entity.as->get_name(), {LocalDeclType::Val, module_object});
+            }
+
+            if(!defined){
+                runtime_error(entity.as->get_name() +" is already defined", import);
+            }
         }
     }
 }

@@ -360,32 +360,57 @@ stmt_ptr Parser::parse_import(){
     if(is_typeof(TokenType::String)){
         std::string path = peek().String();
         advance();
-        return std::make_shared<Import>(import_pos, path, nullptr);
+        return std::make_shared<Import>(import_pos, path);
     }
-    
-    if(is_op(Operator::Mul)){
-        advance();
 
+    // Complex import
+    ImportEntityList entities;
+    bool first = true;
+    while(!eof()){
+        skip_nl(true);
+        if(is_nl() || is_kw(Keyword::From)){
+            break;
+        }
+        if(first){
+            first = false;
+        }else{
+            skip_op(Operator::Comma, false, false);
+        }
+        if(is_nl() || is_kw(Keyword::From)){
+            break;
+        }
+
+        bool all = false;
+        id_ptr object = nullptr;
         id_ptr as = nullptr;
-        if(is_op(Operator::As)){
+        if(is_op(Operator::Mul)){
+            advance();
+            all = true;
+        }else{
+            object = parse_id();
+        }
+
+        // All (`*`) requires `as` annotation
+        if(all || is_op(Operator::As)){
             skip_op(Operator::As, false, false);
             as = parse_id();
+        }else{
+            as = object;
         }
 
-        skip_kw(Keyword::From, false, false);
-
-        if(!is_typeof(TokenType::String)){
-            expected_error("path to file (String)");
-        }
-        
-        std::string path = peek().String();
-        advance();
-
-        return std::make_shared<Import>(import_pos, path, as);
+        entities.push_back({ all, object, as });
     }
 
-    error("Invalid or unsupported type of import");
-    return nullptr;
+    skip_kw(Keyword::From, false, false);
+
+    if(!is_typeof(TokenType::String)){
+        expected_error("path to file (String)");
+    }
+
+    std::string path = peek().String();
+    advance();
+
+    return std::make_shared<Import>(import_pos, path, entities);
 }
 
 /////////////////
