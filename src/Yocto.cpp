@@ -32,6 +32,9 @@ void Yocto::launch(int argc, const char * argv[]){
     // Enter global scope
     ip.enter_scope();
 
+    // Push main executable dir
+    ip.push_dir(ip.path_dir(main_file));
+
     // Register globals
     Global global;
     global.reg();

@@ -8,6 +8,7 @@
 #include "tree/nodes.h"
 #include "object/objects.h"
 #include <fstream>
+#include <stack>
 
 // ReturnValue is used to catch return statement
 // It has to be separate type to determine it correctly in catch
@@ -47,6 +48,16 @@ public:
         return value;
     }
 
+    void push_dir(const std::string & dir){
+        dir_stack.push(dir);
+    }
+
+    // Get directory of file path
+    std::string path_dir(const std::string & path);
+
+    // Resolve path to yocto module
+    std::string resolve_path(std::string & path);
+
     void execute(Stmt * stmt);
     obj_ptr eval(Expr * expr);
     void execute_block(Block * block, scope_ptr new_scope = nullptr);
@@ -84,6 +95,9 @@ public:
 private:
     obj_ptr value;
     scope_ptr scope;
+
+    // Stack of module directories
+    std::stack<std::string> dir_stack;
 };
 
 #endif

@@ -25,6 +25,33 @@ void Interpreter::enter_scope(scope_ptr new_scope){
     }
 }
 
+std::string Interpreter::path_dir(const std::string & path){
+    return path.substr(0, path.find_last_of("/\\") + 1);
+}
+
+std::string Interpreter::resolve_path(std::string & path){
+    if(path[0] == '/'){
+        return path;
+    }
+
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    if(path[0] == '\\'){
+        return path;
+    }
+    if(path[1] == ':'){
+        return path;
+    }
+    #endif
+
+    std::string::size_type path_pos = path.rfind('.');
+
+    if(path_pos != std::string::npos && path.substr(path_pos + 1) != "yo"){
+        path += ".yo";
+    }
+
+    return dir_stack.top() + path;
+}
+
 void Interpreter::exit_scope(){
     scope = scope->get_parent();
     if(!scope){
@@ -166,24 +193,29 @@ void Interpreter::visit(ClassDecl * class_decl){
 }
 
 void Interpreter::visit(Import * import){
+    std::string path = resolve_path(import->path);
+    std::string as = import->as->get_name();
+
     enter_scope();
+    dir_stack.push(path_dir(path));
 
     try{
-        Yocto::get_instance().run_script(import->path);
-    }catch(YoctoException & e){
-        runtime_error(e.what(), import);
+        Yocto::get_instance().run_script(path);
+    }catch(FileNotFoundException & e){
+        runtime_error("File " + import->path +" not found", import);
     }
 
-    module_ptr module = std::make_shared<Module>(scope->get_locals());
+    module_ptr module = std::make_shared<Module>(scope->get_locals(), path, as);
 
     exit_scope();
+    dir_stack.pop();
 
     // Note: `as` is nullptr if importing nothing, like `import "module_name"`
 
     if(import->as){
-        bool defined = scope->define(import->as->get_name(), {LocalDeclType::Val, module});
+        bool defined = scope->define(as, {LocalDeclType::Val, module});
         if(!defined){
-            runtime_error(import->as->get_name() +" is already defined", import);
+            runtime_error(as +" is already defined", import);
         }
     }
 }
