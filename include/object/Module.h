@@ -19,19 +19,13 @@ extern std::shared_ptr<Class> cModule;
 
 class Module : public Object {
 public:
-    Module(const std::string & as, const LocalMap & insides);
+    Module(const LocalMap & insides);
     virtual ~Module() = default;
 
     std::string repr() const {
         return "<Module>";
     }
-
-    std::string imported_as() const {
-        return as;
-    }
-
-private:
-    std::string as;
+    
 };
 
 #endif

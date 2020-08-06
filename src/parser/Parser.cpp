@@ -353,18 +353,39 @@ stmt_ptr Parser::parse_import(){
     skip_kw(Keyword::Import, false, false);
 
     // TODO: Improve `import`
-    // 1. Multiple objects import
-    // 2. import as ...
+    // - Multiple objects import
 
-    if(!is_typeof(TokenType::String)){
-        expected_error("path to file (String)");
+    // Import nothing, just run source
+    // e.g. `import "path"`
+    if(is_typeof(TokenType::String)){
+        std::string path = peek().String();
+        advance();
+        return std::make_shared<Import>(import_pos, path, nullptr);
+    }
+    
+    if(is_op(Operator::Mul)){
+        advance();
+
+        id_ptr as = nullptr;
+        if(is_op(Operator::As)){
+            skip_op(Operator::As, false, false);
+            as = parse_id();
+        }
+
+        skip_kw(Keyword::From, false, false);
+
+        if(!is_typeof(TokenType::String)){
+            expected_error("path to file (String)");
+        }
+        
+        std::string path = peek().String();
+        advance();
+
+        return std::make_shared<Import>(import_pos, path, as);
     }
 
-    std::string path = peek().String();
-
-    advance();
-    
-    return std::make_shared<Import>(import_pos, path);
+    error("Invalid or unsupported type of import");
+    return nullptr;
 }
 
 /////////////////

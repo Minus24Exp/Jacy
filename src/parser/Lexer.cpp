@@ -199,6 +199,8 @@ TokenStream Lexer::lex(const std::string & script){
             }else if(id == "in"){
                 // `in` operator
                 add_token(Operator::In);
+            }else if(id == "as"){
+                add_token(Operator::As);
             }else{
                 add_token(TokenType::Id, id);
             }

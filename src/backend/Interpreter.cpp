@@ -174,15 +174,17 @@ void Interpreter::visit(Import * import){
         runtime_error(e.what(), import);
     }
 
-    std::string as = "module";
-
-    module_ptr module = std::make_shared<Module>(as, scope->get_locals());
+    module_ptr module = std::make_shared<Module>(scope->get_locals());
 
     exit_scope();
 
-    bool defined = scope->define(as, {LocalDeclType::Val, module});
-    if(!defined){
-        runtime_error(as +" is already defined", import);
+    // Note: `as` is nullptr if importing nothing, like `import "module_name"`
+
+    if(import->as){
+        bool defined = scope->define(import->as->get_name(), {LocalDeclType::Val, module});
+        if(!defined){
+            runtime_error(import->as->get_name() +" is already defined", import);
+        }
     }
 }
 

@@ -68,6 +68,8 @@ enum class Operator {
     Is, NotIs,
     In, NotIn,
 
+    As,
+
     Pipe
 };
 
@@ -97,6 +99,9 @@ const std::vector <std::string> operators {
     "is", "!is",
     "in", "!in",
 
+    // Note: `as` is operator, but it used as keyword by `import` statement
+    "as",
+
     "|>"
 };
 
@@ -120,6 +125,8 @@ enum class Keyword {
 
     Import,
 
+    From,
+
     MAX
 };
 
@@ -142,7 +149,9 @@ const std::vector <std::string> keywords {
 
     "class",
 
-    "import"
+    "import",
+
+    "from"
 };
 
 inline Keyword str_to_kw(const std::string & str){

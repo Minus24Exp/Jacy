@@ -1,3 +1,3 @@
-import "module.yo"
+import * as module from "module.yo"
 
 module.module_print('aaa')
