@@ -13,7 +13,7 @@ Example:
 var [a, b, c] = [1, 2, 3]
 ```
 
-Note: Destructuring does not with assignment, but only with variable declaration, so:
+Note: Destructuring does not with assignment, but only with variable declaration.
 > This won't compile
 ```
 var a
@@ -32,7 +32,7 @@ var {a, b, c} = {'a': 1, 'b': 2, 'c':, 3}
 var {a, b, c} = {'a': 'str', 'b': null, 'c': false}
 ```
 
-Note: Destructuring does not with assignment, but only with variable declaration, so:
+Note: Destructuring does not with assignment, but only with variable declaration.
 > This won't compile
 ```
 var a
