@@ -25,6 +25,13 @@ void Interpreter::enter_scope(scope_ptr new_scope){
     }
 }
 
+void Interpreter::exit_scope(){
+    scope = scope->get_parent();
+    if(!scope){
+        throw YoctoException("Attempt to exit global scope");
+    }
+}
+
 std::string Interpreter::path_dir(const std::string & path){
     return path.substr(0, path.find_last_of("/\\") + 1);
 }
@@ -43,20 +50,11 @@ std::string Interpreter::resolve_path(std::string & path){
     }
     #endif
 
-    std::string::size_type path_pos = path.rfind('.');
-
-    if(path_pos != std::string::npos && path.substr(path_pos + 1) != "yo"){
+    if(path.substr(path.find_last_of('.') + 1) != "yo"){
         path += ".yo";
     }
 
     return dir_stack.top() + path;
-}
-
-void Interpreter::exit_scope(){
-    scope = scope->get_parent();
-    if(!scope){
-        throw YoctoException("Attempt to exit global scope");
-    }
 }
 
 void Interpreter::execute(Stmt * stmt){
