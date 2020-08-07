@@ -1,6 +1,6 @@
 # Destructuring
 
-<mark>__This feature is not implemented__</mark>
+> __This feature is not implemented__
 
 Destructuring is very useful feature.
 
@@ -14,7 +14,7 @@ var [a, b, c] = [1, 2, 3]
 ```
 
 Note: Destructuring does not with assignment, but only with variable declaration, so:
-<mark>This won't compile</mark>
+> This won't compile
 ```
 var a
 [a] = [1]
@@ -33,7 +33,7 @@ var {a, b, c} = {'a': 'str', 'b': null, 'c': false}
 ```
 
 Note: Destructuring does not with assignment, but only with variable declaration, so:
-<mark>This won't compile</mark>
+> This won't compile
 ```
 var a
 {a} = {'a': 'str'}
