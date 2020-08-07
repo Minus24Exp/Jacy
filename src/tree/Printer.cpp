@@ -96,9 +96,9 @@ void Printer::visit(ClassDecl * class_decl){
     std::cout << "class ";
     class_decl->id->accept(*this);
     
-    if(class_decl->super_id){
-        std::cout << " : ";        
-        class_decl->super_id->accept(*this);
+    if(class_decl->super){
+        std::cout << " : ";
+        class_decl->super->accept(*this);
     }
 
     std::cout << " {\n";

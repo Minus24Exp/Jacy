@@ -6,11 +6,11 @@
 
 struct ClassDecl : Stmt {
     id_ptr id;
-    id_ptr super_id;
+    expr_ptr super;
     StmtList fields;
 
-    ClassDecl(const Position & pos, id_ptr id, id_ptr super_id, const StmtList & fields)
-        : Stmt(pos, StmtType::Class), id(id), super_id(super_id), fields(fields) {}
+    ClassDecl(const Position & pos, id_ptr id, expr_ptr super, const StmtList & fields)
+        : Stmt(pos, StmtType::Class), id(id), super(super), fields(fields) {}
     virtual ~ClassDecl() = default;
 
     void accept(BaseVisitor & visitor) override {

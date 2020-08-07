@@ -34,11 +34,11 @@ yo_int obj_hash(obj_ptr obj){
         throw DevError("Passing null to obj_hash");
     }
 
-    if(!obj->has("hash")){
+    if(!obj->has("__hash")){
         throw YoctoException("Invalid key (key must have __hash function)");
     }
 
-    func_ptr hash_func = cast_to_func(obj->get("hash"));
+    func_ptr hash_func = cast_to_func(obj->get("__hash"));
 
     if(hash_func){
         int_ptr int_obj = cast_to_i(hash_func->call());
@@ -47,7 +47,7 @@ yo_int obj_hash(obj_ptr obj){
         }
     }
 
-    throw YoctoException("Invalid hash function (must return integer)");
+    throw YoctoException("Invalid __hash function (must return integer)");
 }
 
 // Try to call object's `__eq` function or return nullptr if it is not valid

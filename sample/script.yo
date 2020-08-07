@@ -1,0 +1,9 @@
+class A {
+    
+}
+
+val d = {
+    'classA': A
+}
+
+class B : d['classA'] {}

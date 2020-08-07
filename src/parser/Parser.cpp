@@ -313,10 +313,10 @@ stmt_ptr Parser::parse_class_decl(){
 
     skip_nl(true);
 
-    id_ptr super_id = nullptr;
+    expr_ptr super = nullptr;
     if(is_op(Operator::Colon)){
         skip_op(Operator::Colon, true, true);
-        super_id = parse_id();
+        super = parse_expr();
     }
 
     skip_op(Operator::LBrace, true, true);
@@ -344,7 +344,7 @@ stmt_ptr Parser::parse_class_decl(){
 
     skip_op(Operator::RBrace, true, false);
 
-    return std::make_shared<ClassDecl>(class_decl_pos, id, super_id, decls);
+    return std::make_shared<ClassDecl>(class_decl_pos, id, super, decls);
 }
 
 stmt_ptr Parser::parse_import(){

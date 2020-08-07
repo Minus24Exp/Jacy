@@ -158,12 +158,12 @@ void Interpreter::visit(ClassDecl * class_decl){
     class_ptr super = nullptr;
     std::string class_name = class_decl->id->get_name();
 
-    if(class_decl->super_id){
-        std::string super_name = class_decl->super_id->get_name();
-        super = std::dynamic_pointer_cast<Class>(scope->get(super_name));
-        if(!super){
-            runtime_error("Unable to use "+ super_name +" as super class", class_decl->super_id.get());
+    if(class_decl->super){
+        obj_ptr super_expr = eval(class_decl->super.get());
+        if(super_expr->get_obj_type() != ObjectType::Class){
+            runtime_error("Invalid expression used as class super (must be type of Class)", class_decl->super.get());
         }
+        super = s_cast_to_class(super_expr);
     }
 
     scope->define(class_name, {LocalDeclType::Val, nullptr});
