@@ -1,0 +1,3 @@
+func module_print p1 {
+    print(p1)
+}
