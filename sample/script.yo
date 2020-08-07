@@ -6,4 +6,6 @@ val d = {
     'classA': A
 }
 
-class B : d['classA'] {}
+class B : d['classA'] {
+    
+}
