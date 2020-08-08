@@ -8,7 +8,8 @@
 
 class YoctoException : public std::exception {
 public:
-    YoctoException(const std::string & msg) : message(msg) {}
+    YoctoException(const std::string & msg)
+        : message(msg) {}
 
     virtual const char * what() const throw() {
         return message.c_str();
@@ -32,7 +33,7 @@ public:
 
 class UnexpectedException : public YoctoException {
 public:
-    UnexpectedException(Token t) : YoctoException("Unexpected " + t.to_string()) {}
+    UnexpectedException(Token t) : YoctoException("Unexpected "+ t.to_string()) {}
 };
 
 class ExpectedException : public YoctoException {
@@ -51,8 +52,8 @@ public:
 
 class RuntimeException : public YoctoException {
 public:
-    RuntimeException(const std::string & msg, const Position & pos)
-        : YoctoException("Runtime error: "+ msg +" at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
+    RuntimeException(const std::string & msg, const Position & pos, const std::string & in_file)
+        : YoctoException("Runtime error: "+ msg +"\n"+ in_file +":"+ std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
 };
 
 // Dev Error uses in cases there something was wrong with source code
@@ -63,7 +64,7 @@ public:
 
 class RecursionDepthExceeded : public YoctoException {
 public:
-    RecursionDepthExceeded(int limit) : YoctoException("Maximum recursion depth exceeded (" + std::to_string(limit) + ")") {}
+    RecursionDepthExceeded(int limit) : YoctoException("Maximum recursion depth exceeded ("+ std::to_string(limit) +")") {}
 };
 
 #endif

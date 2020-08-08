@@ -56,7 +56,7 @@ std::string Interpreter::resolve_path(const std::string & path){
         resolved += ".yo";
     }
 
-    return dir_stack.top() + resolved;
+    return (dir_stack.empty() ? "" : dir_stack.top()) + resolved;
 }
 
 void Interpreter::execute(Stmt * stmt){
@@ -226,9 +226,17 @@ void Interpreter::visit(ClassDecl * class_decl){
 }
 
 void Interpreter::visit(Import * import){
+    // Set last module name to imported module to track errors
+    // and save previous name to return back
+    std::string previous_module_name = last_module_name;
+    set_last_module_name(import->path);
+
     std::string path = resolve_path(import->path);
 
+    // Enter module scope
     enter_scope();
+
+    // Push module directory to directory stack
     dir_stack.push(path_dir(path));
 
     try {
@@ -239,7 +247,12 @@ void Interpreter::visit(Import * import){
 
     module_ptr module = std::make_shared<Module>(scope->get_locals(), path);
 
+    // Return back to previous module name
+    set_last_module_name(previous_module_name);
+    
+    // Exit module scope
     exit_scope();
+
     dir_stack.pop();
 
     // Note: if `entities` is empty then where's nothing to import
@@ -679,7 +692,7 @@ void Interpreter::visit(DictExpr * dict_expr){
 // Errors //
 ////////////
 void Interpreter::runtime_error(const std::string & msg, const Position & pos){
-    throw RuntimeException(msg, pos);
+    throw RuntimeException(msg, pos, last_module_name);
 }
 
 void Interpreter::runtime_error(const std::string & msg, Node * n){

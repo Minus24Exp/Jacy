@@ -14,6 +14,7 @@
 // It has to be separate type to determine it correctly in catch
 struct ReturnValue {
     obj_ptr value;
+
     // We need to track return value position
     // to catch errors for return statement outside of function
     Position pos;
@@ -93,12 +94,23 @@ public:
     void runtime_error(const std::string & msg, const Position & pos);
     void runtime_error(const std::string & msg, Node * n);
 
+    void set_last_module_name(const std::string & name){
+        last_module_name = name;
+    }
+
+    std::string get_last_module_name() const {
+        return last_module_name;
+    }
+
 private:
     obj_ptr value;
     scope_ptr scope;
 
     // Stack of module directories
     std::stack<std::string> dir_stack;
+
+    // Last entered module name (or main file)
+    std::string last_module_name;
 };
 
 #endif

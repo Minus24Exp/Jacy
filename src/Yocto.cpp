@@ -32,16 +32,19 @@ void Yocto::launch(int argc, const char * argv[]){
     // Enter global scope
     ip.enter_scope();
 
-    // Push main executable dir
-    ip.push_dir(ip.path_dir(main_file));
-
     // Register globals
     Global global;
     global.reg();
 
     if(main_file.empty()){
+        ip.set_last_module_name("(REPL)");
         run_repl();
     }else{
+        // Set last module name to main file name
+        ip.set_last_module_name(main_file);
+
+        // Push main executable dir
+        ip.push_dir(ip.path_dir(main_file));
         run_script(main_file);
     }
 }

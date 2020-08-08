@@ -1,4 +1,1 @@
-import * as mod1 from "module1"
-import "modules/inner"
-
-mod1.mod1_print('module 1')
+print(a)
