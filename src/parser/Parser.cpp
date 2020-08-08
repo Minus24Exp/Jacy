@@ -306,6 +306,7 @@ stmt_ptr Parser::parse_while_stmt(){
     return std::make_shared<WhileStmt>(while_pos, cond, body);
 }
 
+// ForStmt //
 stmt_ptr Parser::parse_for_stmt(){
     Position for_stmt_pos = peek().pos;
 
@@ -386,6 +387,7 @@ stmt_ptr Parser::parse_class_decl(){
     return std::make_shared<ClassDecl>(class_decl_pos, id, super, decls);
 }
 
+// Import //
 stmt_ptr Parser::parse_import(){
     Position import_pos = peek().pos;
     // No new-lines in import

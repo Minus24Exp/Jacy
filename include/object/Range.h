@@ -17,19 +17,19 @@ enum class RangeExcl {
     Both    // `>.<`
 };
 
+// Range //
 class Range : public Object {
 public:
     Range(RangeExcl excl);
     virtual ~Range() = default;
 
     // Object //
-    std::string repr() const override {
+    virtual std::string repr() const override {
         return "<Range>";
     }
 
-    virtual obj_ptr get_start() const = 0;
-    virtual obj_ptr get_end() const = 0;
-
+    // Range //
+    
     // Get exclusiveness
     RangeExcl get_excl() const {
         return excl;
@@ -37,6 +37,24 @@ public:
 
 private:
     RangeExcl excl;
+};
+
+// IntRange //
+class IntRange : public Range {
+public:
+    IntRange(std::shared_ptr<Int> start, std::shared_ptr<Int> end, RangeExcl excl);
+    virtual ~IntRange() = default;
+
+    // Object //
+    std::string repr() const override;
+
+    // IntRange //
+    yo_int get_start() const;
+    yo_int get_end() const;
+
+private:
+    yo_int start;
+    yo_int end;
 };
 
 #endif
