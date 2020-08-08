@@ -36,7 +36,9 @@ std::string Interpreter::path_dir(const std::string & path){
     return path.substr(0, path.find_last_of("/\\") + 1);
 }
 
-std::string Interpreter::resolve_path(std::string & path){
+std::string Interpreter::resolve_path(const std::string & path){
+    std::string resolved = path;
+
     if(path[0] == '/'){
         return path;
     }
@@ -51,10 +53,10 @@ std::string Interpreter::resolve_path(std::string & path){
     #endif
 
     if(path.substr(path.find_last_of('.') + 1) != "yo"){
-        path += ".yo";
+        resolved += ".yo";
     }
 
-    return dir_stack.top() + path;
+    return dir_stack.top() + resolved;
 }
 
 void Interpreter::execute(Stmt * stmt){
@@ -229,7 +231,7 @@ void Interpreter::visit(Import * import){
     enter_scope();
     dir_stack.push(path_dir(path));
 
-    try{
+    try {
         Yocto::get_instance().run_script(path);
     }catch(FileNotFoundException & e){
         runtime_error("File " + import->path +" not found", import);

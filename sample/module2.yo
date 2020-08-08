@@ -1,0 +1,1 @@
+func mod2_print p1 => print(p1)

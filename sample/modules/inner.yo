@@ -1,0 +1,3 @@
+import * as mod1 from "../module1"
+
+mod1.mod1_print('mod1 print from inner')

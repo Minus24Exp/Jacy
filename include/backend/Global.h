@@ -17,6 +17,9 @@ private:
     Interpreter & ip;
     std::shared_ptr<Scope> g_scope;
 
+    // Import native module to global
+    void import_module(const std::string & path);
+
     // Just split classes registration
     void reg_object();
     void reg_class();

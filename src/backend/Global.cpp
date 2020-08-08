@@ -1,6 +1,7 @@
 #include "backend/Global.h"
 #include "backend/Interpreter.h"
 #include "object/objects.h"
+#include "Yocto.h"
 
 #include <iostream>
 
@@ -59,7 +60,32 @@ obj_ptr Yo_repr(NFArgs && args){
     return nullptr;
 }
 
-void Global::reg(){    
+void Global::import_module(const std::string & path){
+    std::string resolved = ip.resolve_path(path);
+
+    ip.enter_scope();
+
+    try {
+        Yocto::get_instance().run_script(resolved);
+    }catch(FileNotFoundException & e){
+        throw DevError("File "+ resolved +" not found");
+    }
+
+    // Import everything to global scope as it is
+    
+    for(const auto & inside : ip.get_scope()->get_locals()){
+        g_scope->define(inside.first, inside.second);
+    }
+
+    ip.exit_scope();
+}
+
+void Global::reg(){
+    // Global modules //
+    
+    // Range
+    import_module("lib/range");
+
     // Classes //
     reg_object();
     reg_class();

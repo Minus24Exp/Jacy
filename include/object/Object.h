@@ -55,6 +55,9 @@ public:
     bool is(std::shared_ptr<Class> check_class) const;
 
     void set_fields(const LocalMap & fields);
+    LocalMap get_fields() const {
+        return fields;
+    }
 
     bool has(const std::string & name) const;
     obj_ptr get(const std::string & name) const;

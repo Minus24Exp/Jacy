@@ -56,7 +56,7 @@ public:
     std::string path_dir(const std::string & path);
 
     // Resolve path to yocto module
-    std::string resolve_path(std::string & path);
+    std::string resolve_path(const std::string & path);
 
     void execute(Stmt * stmt);
     obj_ptr eval(Expr * expr);

@@ -2,7 +2,6 @@
 #include "object/String.h"
 #include "object/Float.h"
 #include "object/Bool.h"
-#include "object/Range.h"
 #include <cmath>
 
 Int::Int(yo_int i) : Object(ObjectType::Int, cInt), value(i)
