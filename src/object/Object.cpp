@@ -160,3 +160,11 @@ void Object::define_m_builtin(const std::string & name, obj_ptr value){
     }
     fields.emplace(name, Local(LocalDeclType::MutBuiltin, value));
 }
+
+bool Object::has_method(const std::string & name) const {
+    if(has(name)){
+        return get(name)->get_obj_type() == ObjectType::Func;
+    }
+
+    return false;
+}

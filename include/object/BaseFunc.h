@@ -9,10 +9,15 @@
  */
 
 class BaseFunc;
+extern std::shared_ptr<Class> cFunc;
 using func_ptr = std::shared_ptr<BaseFunc>;
 
 const auto cast_to_func = [](obj_ptr obj){
     return std::dynamic_pointer_cast<BaseFunc>(obj);
+};
+
+const auto s_cast_to_func = [](obj_ptr obj){
+    return std::static_pointer_cast<BaseFunc>(obj);
 };
 
 struct Param {
@@ -24,8 +29,6 @@ struct Param {
 };
 
 using ParamList = std::vector<Param>;
-
-extern std::shared_ptr<Class> cFunc;
 
 class BaseFunc : public Object, public Callable {
 public:

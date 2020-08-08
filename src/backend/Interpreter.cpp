@@ -154,7 +154,36 @@ void Interpreter::visit(WhileStmt * w){
 }
 
 void Interpreter::visit(ForStmt * for_stmt){
-    std::cout << "interpret for" << std::endl;
+    obj_ptr in_obj = eval(for_stmt->In.get());
+
+    if(!in_obj->has_method("__iter")){
+        runtime_error(obj_to_str(in_obj) +" is not iterable", for_stmt->In.get());
+    }
+
+    func_ptr iter_func = s_cast_to_func(in_obj->get("__iter"));
+    obj_ptr iterator = iter_func->bind(in_obj)->call();
+
+    // Iterator must have `next` and `hasNext` methods
+    if(!iterator->has_method("next") || !iterator->has_method("hasNext")){
+        runtime_error(obj_to_str(in_obj) +" has invalid __iter method (must return iterator object with next and hasNext methods)", for_stmt->In.get());
+    }
+
+    func_ptr has_next = s_cast_to_func(iterator->get("hasNext"))->bind(iterator);
+    func_ptr next = s_cast_to_func(iterator->get("next"))->bind(iterator);
+
+    std::string for_obj_name = for_stmt->For->get_name();
+
+    enter_scope();
+
+    // `next` called at start
+    scope->define(for_obj_name, {LocalDeclType::Var, next->call()});
+
+    while(has_next->call()){
+        execute_block(for_stmt->body.get());
+        scope->assign(for_obj_name, next->call());
+    }
+
+    exit_scope();
 }
 
 // ClassDecl //

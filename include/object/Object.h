@@ -63,6 +63,9 @@ public:
     void define_builtin(const std::string & name, obj_ptr value);
     void define_m_builtin(const std::string & name, obj_ptr value);
 
+    // Helpers //
+    bool has_method(const std::string & name) const;
+
 protected:
     ObjectType obj_type;
     std::shared_ptr<Class> _class;
