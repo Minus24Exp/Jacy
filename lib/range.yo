@@ -1,0 +1,22 @@
+class IntIterator {
+    var value
+
+    func __init(start, end){
+        value = start
+        value = end
+    }
+
+    func hasNext {
+        return value < end
+    }
+
+    func next {
+        return value++
+    }
+}
+
+class IntRange {
+    func __iter {
+        return IntIterator();
+    }
+}
