@@ -4,9 +4,11 @@
 #include "object/Object.h"
 
 class Range;
+extern std::shared_ptr<Class> cRange;
 using range_ptr = std::shared_ptr<Range>;
 
-extern std::shared_ptr<Class> cRange;
+class Int;
+class Float;
 
 enum class RangeExcl {
     None,   // `...`
@@ -17,7 +19,7 @@ enum class RangeExcl {
 
 class Range : public Object {
 public:
-    Range(obj_ptr start, obj_ptr end, RangeExcl excl);
+    Range(RangeExcl excl);
     virtual ~Range() = default;
 
     // Object //
@@ -25,12 +27,15 @@ public:
         return "<Range>";
     }
 
-    obj_ptr get_start() const;
-    obj_ptr get_end() const;
+    virtual obj_ptr get_start() const = 0;
+    virtual obj_ptr get_end() const = 0;
+
+    // Get exclusiveness
+    RangeExcl get_excl() const {
+        return excl;
+    }
 
 private:
-    obj_ptr start;
-    obj_ptr end;
     RangeExcl excl;
 };
 

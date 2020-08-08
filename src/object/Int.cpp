@@ -75,37 +75,37 @@ Int::Int(yo_int i) : Object(ObjectType::Int, cInt), value(i)
         }
     }));
 
-    define_builtin("__range", make_nf(nullptr, "__range", { {"to"} }, [this](NFArgs && args){
-        if(args["to"]->get_obj_type() != ObjectType::Int){
-            throw YoctoException("Invalid right-hand side in range `int...obj`");
-        }
+    // define_builtin("__range", make_nf(nullptr, "__range", { {"to"} }, [this](NFArgs && args){
+    //     if(args["to"]->get_obj_type() != ObjectType::Int){
+    //         throw YoctoException("Invalid right-hand side in range `int...obj`");
+    //     }
 
-        return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::None);
-    }));
+    //     return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::None);
+    // }));
 
-    define_builtin("__range_le", make_nf(nullptr, "__range_le", { {"to"} }, [this](NFArgs && args){
-        if(args["to"]->get_obj_type() != ObjectType::Int){
-            throw YoctoException("Invalid right-hand side in range `int>..obj`");
-        }
+    // define_builtin("__range_le", make_nf(nullptr, "__range_le", { {"to"} }, [this](NFArgs && args){
+    //     if(args["to"]->get_obj_type() != ObjectType::Int){
+    //         throw YoctoException("Invalid right-hand side in range `int>..obj`");
+    //     }
 
-        return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Left);
-    }));
+    //     return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Left);
+    // }));
 
-    define_builtin("__range_re", make_nf(nullptr, "__range_re", { {"to"} }, [this](NFArgs && args){
-        if(args["to"]->get_obj_type() != ObjectType::Int){
-            throw YoctoException("Invalid right-hand side in range `int..<obj`");
-        }
+    // define_builtin("__range_re", make_nf(nullptr, "__range_re", { {"to"} }, [this](NFArgs && args){
+    //     if(args["to"]->get_obj_type() != ObjectType::Int){
+    //         throw YoctoException("Invalid right-hand side in range `int..<obj`");
+    //     }
 
-        return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Right);
-    }));
+    //     return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Right);
+    // }));
 
-    define_builtin("__range_bothe", make_nf(nullptr, "__range_bothe", { {"to"} }, [this](NFArgs && args){
-        if(args["to"]->get_obj_type() != ObjectType::Int){
-            throw YoctoException("Invalid right-hand side in range `int>.<obj`");
-        }
+    // define_builtin("__range_bothe", make_nf(nullptr, "__range_bothe", { {"to"} }, [this](NFArgs && args){
+    //     if(args["to"]->get_obj_type() != ObjectType::Int){
+    //         throw YoctoException("Invalid right-hand side in range `int>.<obj`");
+    //     }
 
-        return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Both);
-    }));
+    //     return std::make_shared<Range>(shared_from_this(), s_cast_to_i(args["to"]), RangeExcl::Both);
+    // }));
 
     define_builtin("__eq", make_nf(nullptr, "__eq", { {"other"} }, [this](NFArgs && args){
         switch(args["other"]->get_obj_type()){
