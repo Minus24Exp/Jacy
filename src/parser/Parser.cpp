@@ -125,6 +125,9 @@ stmt_ptr Parser::parse_stmt(){
             case Keyword::While:{
                 return parse_while_stmt();
             } break;
+            case Keyword::For:{
+                return parse_for_stmt();
+            } break;
             case Keyword::Return:{
                 Position return_stmt_pos = peek().pos;
                 advance();
@@ -274,16 +277,52 @@ stmt_ptr Parser::parse_func_decl(){
 stmt_ptr Parser::parse_while_stmt(){
     Position while_pos = peek().pos;
 
-    skip_kw(Keyword::While, false, true);
+    skip_kw(Keyword::While, false, false);
 
     bool paren = true;
     if(is_op(Operator::LParen)){
-        skip_op(Operator::LParen, true, true);
+        skip_op(Operator::LParen, false, true);
     }else{
         paren = false;
     }
 
     expr_ptr cond = parse_expr();
+
+    bool allow_one_line = false;
+    if(paren){
+        skip_op(Operator::RParen, false, true);
+        allow_one_line = true;
+    }else if(is_nl()){
+        allow_one_line = true;
+    }
+
+    if(is_op(Operator::Arrow)){
+        skip_op(Operator::Arrow, true, true);
+        allow_one_line = true;
+    }
+
+    block_ptr body = parse_block(allow_one_line);
+
+    return std::make_shared<WhileStmt>(while_pos, cond, body);
+}
+
+stmt_ptr Parser::parse_for_stmt(){
+    Position for_stmt_pos = peek().pos;
+
+    skip_kw(Keyword::For, false, false);
+
+    bool paren = true;
+    if(is_op(Operator::LParen)){
+        skip_op(Operator::LParen, false, true);
+    }else{
+        paren = false;
+    }
+
+    id_ptr For = parse_id();
+
+    skip_op(Operator::In, false, false);
+
+    expr_ptr In = parse_expr();
 
     bool allow_one_line = false;
     if(paren){
@@ -300,7 +339,7 @@ stmt_ptr Parser::parse_while_stmt(){
 
     block_ptr body = parse_block(allow_one_line);
 
-    return std::make_shared<WhileStmt>(while_pos, cond, body);
+    return std::make_shared<ForStmt>(for_stmt_pos, For, In, body);
 }
 
 // ClassDecl //

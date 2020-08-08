@@ -153,6 +153,10 @@ void Interpreter::visit(WhileStmt * w){
     }
 }
 
+void Interpreter::visit(ForStmt * for_stmt){
+    std::cout << "interpret for" << std::endl;
+}
+
 // ClassDecl //
 void Interpreter::visit(ClassDecl * class_decl){
     class_ptr super = nullptr;

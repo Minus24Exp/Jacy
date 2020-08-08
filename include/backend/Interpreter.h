@@ -69,6 +69,7 @@ public:
     void visit(FuncDecl * func_decl) override;
     void visit(ReturnStmt * return_stmt) override;
     void visit(WhileStmt * w) override;
+    void visit(ForStmt * for_stmt) override;
     void visit(ClassDecl * class_decl) override;
     void visit(Import * import) override;
 

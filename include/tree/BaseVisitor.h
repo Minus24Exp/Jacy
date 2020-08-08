@@ -12,6 +12,7 @@ struct Block;
 struct FuncDecl;
 struct ReturnStmt;
 struct WhileStmt;
+struct ForStmt;
 struct ClassDecl;
 struct Import;
 
@@ -43,6 +44,7 @@ public:
     virtual void visit(FuncDecl * func_decl) = 0;
     virtual void visit(ReturnStmt * return_stmt) = 0;
     virtual void visit(WhileStmt * w) = 0;
+    virtual void visit(ForStmt * for_stmt) = 0;
     virtual void visit(ClassDecl * class_decl) = 0;
     virtual void visit(Import * import) = 0;
 

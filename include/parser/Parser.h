@@ -58,6 +58,7 @@ private:
     stmt_ptr parse_var_decl();
     stmt_ptr parse_func_decl();
     stmt_ptr parse_while_stmt();
+    stmt_ptr parse_for_stmt();
     stmt_ptr parse_class_decl();
     stmt_ptr parse_import();
 

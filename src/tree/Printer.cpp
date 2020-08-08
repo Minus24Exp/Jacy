@@ -85,6 +85,17 @@ void Printer::visit(WhileStmt * w){
     std::cout << "\n}";
 }
 
+void Printer::visit(ForStmt * for_stmt){
+    print_indent();
+    std::cout << "for(";
+    for_stmt->For->accept(*this);
+    std::cout << " in ";
+    for_stmt->In->accept(*this);
+    std::cout << "){\n";
+    for_stmt->body->accept(*this);
+    std::cout << "\n}";
+}
+
 void Printer::visit(ReturnStmt * return_stmt){
     print_indent();
     std::cout << "return ";

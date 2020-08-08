@@ -127,6 +127,8 @@ enum class Keyword {
 
     From,
 
+    For,
+
     MAX
 };
 
@@ -151,7 +153,9 @@ const std::vector <std::string> keywords {
 
     "import",
 
-    "from"
+    "from",
+
+    "for"
 };
 
 inline Keyword str_to_kw(const std::string & str){
