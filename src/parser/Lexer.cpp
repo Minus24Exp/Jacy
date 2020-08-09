@@ -243,8 +243,13 @@ TokenStream Lexer::lex(const std::string & script){
                     }
                 } break;
                 case '+':{
-                    add_token(Operator::Add);
-                    advance();
+                    if(peek_next() == '='){
+                        add_token(Operator::AddAssign);
+                        advance(2);
+                    }else{
+                        add_token(Operator::Add);
+                        advance();   
+                    }
                 } break;
                 case '-':{
                     if(is_digit(peek_next())){

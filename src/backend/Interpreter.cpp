@@ -546,7 +546,47 @@ void Interpreter::visit(Assign * assign){
 
     std::string name = assign->id->get_name();
 
-    int result = scope->assign(name, rhs);
+    std::string augment_func_name;
+    switch(assign->assign_op){
+        case Operator::Assign: break;
+
+        case Operator::AddAssign:{
+            augment_func_name = "__add";
+        } break;
+
+        default:{
+            throw DevError("Attempt to use non-assign operator as augmented");
+        }
+    }
+
+    if(!scope->has(name)){
+        runtime_error(name +" is not defined", assign->id.get());
+    }
+
+    obj_ptr augment_value = nullptr;
+    if(!augment_func_name.empty()){
+        obj_ptr local = scope->get(name);
+
+        if(!rhs->has(augment_func_name)){
+            runtime_error("Invalid left-hand side in augmented assignment", assign->id.get());
+        }
+
+        func_ptr magic_func = std::dynamic_pointer_cast<BaseFunc>(rhs->get(augment_func_name));
+
+        if(!magic_func){
+            runtime_error(augment_func_name +" must be a function", assign->id.get());
+        }
+
+        try{
+            augment_value = magic_func->call({ rhs });
+        }catch(RuntimeException & e){
+            throw e;
+        }catch(YoctoException & e){
+            runtime_error(e.what(), assign);
+        }
+    }
+
+    int result = scope->assign(name, augment_value ? augment_value : rhs);
 
     if(result == 0){
         runtime_error(name +" is not defined", assign);

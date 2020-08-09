@@ -1,5 +1,9 @@
 class IntIterator {
     var value
+    var start
+    var end
+
+    var step = 1
 
     func __init(start, end){
         value = start
@@ -11,7 +15,8 @@ class IntIterator {
     }
 
     func next {
-        return value++
+        value += step
+        return value - step
     }
 }
 

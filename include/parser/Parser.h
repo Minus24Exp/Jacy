@@ -43,6 +43,7 @@ private:
     bool is_semis();
     bool is_op(const Operator & op);
     bool is_kw(const Keyword & kw);
+    bool is_assign_op();
 
     // Skippers //
     void skip_nl(const bool & optional = false);

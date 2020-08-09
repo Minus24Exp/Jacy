@@ -40,6 +40,9 @@ enum class NumType {
 enum class Operator {
     Assign,
 
+    // Augmented assignment
+    AddAssign,
+
     Add, Sub, Mul, Div, Mod, Exp,
 
     // Punctuations
@@ -75,6 +78,9 @@ enum class Operator {
 
 const std::vector <std::string> operators {
     "=",
+
+    "+=",
+
     "+", "-", "*", "/", "%", "**",
 
     "(", ")",

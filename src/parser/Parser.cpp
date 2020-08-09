@@ -35,6 +35,12 @@ bool Parser::is_kw(const Keyword & kw){
     return is_typeof(TokenType::Kw) && peek().kw() == kw;
 }
 
+bool Parser::is_assign_op(){
+    // Fixme: Maybe reduce checkers?
+    return is_op(Operator::Assign)
+        || is_op(Operator::AddAssign);
+}
+
 //////////////
 // Skippers //
 //////////////
@@ -211,6 +217,8 @@ stmt_ptr Parser::parse_var_decl(){
     id_ptr id = parse_id();
 
     expr_ptr assign_expr = nullptr;
+
+    // It's obvious, but mark that augmented assignment cannot appear in variable declaration
     if(is_op(Operator::Assign)){
         skip_op(Operator::Assign, true, true);
         assign_expr = parse_expr();
@@ -466,14 +474,17 @@ expr_ptr Parser::assignment(){
 
     // TODO: Add compound assignment operators
 
-    if(is_op(Operator::Assign)){
-        skip_op(Operator::Assign, false, true);
+    if(is_assign_op()){
+        Operator assign_op = peek().op();
+        advance();
+
+        // Fixme: skip_nl?
 
         expr_ptr value = parse_expr();
 
         if(expr->type == ExprType::Id){
             id_ptr id = std::static_pointer_cast<Identifier>(expr);
-            return std::make_shared<Assign>(id, value);
+            return std::make_shared<Assign>(id, value, assign_op);
         }
 
         if(expr->type == ExprType::Get){

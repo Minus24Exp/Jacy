@@ -1,3 +1,5 @@
-val r = Range()
+var a = 1
 
-r.show('kek')
+a += 1
+
+print(a)
