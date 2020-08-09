@@ -42,6 +42,8 @@ enum class Operator {
 
     Add, Sub, Mul, Div, Mod, Exp,
 
+    Inc, Dec,
+
     // Punctuations
     LParen, RParen,
     LBrace, RBrace,
@@ -76,6 +78,8 @@ enum class Operator {
 const std::vector <std::string> operators {
     "=",
     "+", "-", "*", "/", "%", "**",
+
+    "++", "--",
 
     "(", ")",
     "{", "}",

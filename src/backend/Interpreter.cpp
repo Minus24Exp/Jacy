@@ -512,6 +512,15 @@ void Interpreter::visit(Prefix * prefix){
         case Operator::Not:{
             magic_func_name = "__not";
         } break;
+        case Operator::Sub:{
+            magic_func_name = "__neg";
+        } break;
+        case Operator::Inc:{
+            magic_func_name = "__inc";
+        } break;
+        case Operator::Dec:{
+            magic_func_name = "__dec";
+        } break;
         default:{
             throw DevError("Unsupported prefix operator: "+ op_name);
         }

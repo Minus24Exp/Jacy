@@ -646,7 +646,11 @@ expr_ptr Parser::power(){
 }
 
 expr_ptr Parser::prefix(){
-    if(is_op(Operator::Not) || is_op(Operator::Sub)){
+    if(is_op(Operator::Not)
+    || is_op(Operator::Sub)
+    || is_op(Operator::Inc)
+    || is_op(Operator::Dec))
+    {
         const auto op_token = peek();
         advance();
         expr_ptr right = prefix();
@@ -657,15 +661,14 @@ expr_ptr Parser::prefix(){
 }
 
 expr_ptr Parser::postfix(){
-
-    expr_ptr left = call();
-
-    while(true){
-        // TODO: Postfix operators
-        break;
+    if(is_op(Operator::Inc) || is_op(Operator::Dec)){
+        const auto op_token = peek();
+        advance();
+        expr_ptr left = call();
+        return std::make_shared<Postfix>(left, op_token);
     }
 
-    return left;
+    return call();
 }
 
 expr_ptr Parser::call(){

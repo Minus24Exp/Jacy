@@ -1,1 +1,3 @@
-print(a)
+val r = Range()
+
+r.show('kek')
