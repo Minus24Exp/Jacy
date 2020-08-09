@@ -21,7 +21,6 @@ struct Literal;
 struct Identifier;
 struct Infix;
 struct Prefix;
-struct Postfix;
 struct Assign;
 struct SetExpr;
 struct GetExpr;
@@ -53,7 +52,6 @@ public:
     virtual void visit(Identifier * id) = 0;
     virtual void visit(Infix * infix) = 0;
     virtual void visit(Prefix * prefix) = 0;
-    virtual void visit(Postfix * postfix) = 0;
     virtual void visit(Assign * assign) = 0;
     virtual void visit(SetExpr * set_expr) = 0;
     virtual void visit(GetExpr * get_expr) = 0;

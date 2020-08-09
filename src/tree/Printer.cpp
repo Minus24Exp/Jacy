@@ -156,11 +156,6 @@ void Printer::visit(Prefix * prefix){
     prefix->right->accept(*this);
 }
 
-void Printer::visit(Postfix * postfix){
-    postfix->left->accept(*this);
-    std::cout << op_to_str(postfix->op.op());
-}
-
 void Printer::visit(Assign * assign){
     assign->id->accept(*this);
     std::cout << " = ";

@@ -515,19 +515,13 @@ void Interpreter::visit(Prefix * prefix){
         case Operator::Sub:{
             magic_func_name = "__neg";
         } break;
-        case Operator::Inc:{
-            magic_func_name = "__inc";
-        } break;
-        case Operator::Dec:{
-            magic_func_name = "__dec";
-        } break;
         default:{
             throw DevError("Unsupported prefix operator: "+ op_name);
         }
     }
 
     if(!rhs->has(magic_func_name)){
-        runtime_error("Invalid right-hand side in prefix " + op_name, prefix);
+        runtime_error("Invalid right-hand side in prefix " + op_name, prefix->right.get());
     }
 
     func_ptr magic_func = std::dynamic_pointer_cast<BaseFunc>(rhs->get(magic_func_name));
@@ -543,11 +537,6 @@ void Interpreter::visit(Prefix * prefix){
     }catch(YoctoException & e){
         runtime_error(e.what(), prefix);
     }
-}
-
-// Postfix //
-void Interpreter::visit(Postfix * postfix){
-    std::cout << "visit postfix" << std::endl;
 }
 
 // Assign //

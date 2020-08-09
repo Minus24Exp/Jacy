@@ -79,7 +79,6 @@ public:
     void visit(Identifier * id) override;
     void visit(Infix * infix) override;
     void visit(Prefix * prefix) override;
-    void visit(Postfix * postfix) override;
     void visit(Assign * assign) override;
     void visit(SetExpr * set_expr) override;
     void visit(GetExpr * get_expr) override;

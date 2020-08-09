@@ -10,9 +10,8 @@ using ExprList = std::vector<expr_ptr>;
 enum class ExprType {
     Literal,
     Id,
-    Prefix,
     Infix,
-    Postfix,
+    Prefix,
     Assign,
     Set,
     Get,

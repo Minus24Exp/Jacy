@@ -646,28 +646,14 @@ expr_ptr Parser::power(){
 }
 
 expr_ptr Parser::prefix(){
-    if(is_op(Operator::Not)
-    || is_op(Operator::Sub)
-    || is_op(Operator::Inc)
-    || is_op(Operator::Dec))
+    if(is_op(Operator::Not) || is_op(Operator::Sub))
     {
         const auto op_token = peek();
         advance();
-        expr_ptr right = prefix();
+        expr_ptr right = call();
         return std::make_shared<Prefix>(op_token, right);
     }
     
-    return postfix();
-}
-
-expr_ptr Parser::postfix(){
-    if(is_op(Operator::Inc) || is_op(Operator::Dec)){
-        const auto op_token = peek();
-        advance();
-        expr_ptr left = call();
-        return std::make_shared<Postfix>(left, op_token);
-    }
-
     return call();
 }
 
