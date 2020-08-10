@@ -1,5 +1,6 @@
 #include "backend/Scope.h"
 #include "object/Object.h"
+#include "object/BaseFunc.h"
 
 bool Scope::has(const std::string & name) const {
     return locals.find(name) != locals.end();
@@ -16,7 +17,7 @@ bool Scope::define(const std::string & name, const Local & loc){
 
 int Scope::assign(const std::string & name, obj_ptr val){
     auto it = locals.find(name);
-    
+
     if(it != locals.end()){
         if(it->second.decl_type == LocalDeclType::Val && it->second.val != nullptr){
             return -1;
@@ -34,6 +35,8 @@ int Scope::assign(const std::string & name, obj_ptr val){
 }
 
 obj_ptr Scope::get(const std::string & name) const {
+    std::cout << "virtual_this: " << has("[virtual_this]") << std::endl;
+    
     if(has(name)){
         return locals.at(name).val;
     }
@@ -42,7 +45,11 @@ obj_ptr Scope::get(const std::string & name) const {
     if(has("[virtual_this]")){
         obj_ptr virtual_this = get("[virtual_this]");
         if(virtual_this->has(name)){
-            return virtual_this->get(name);
+            obj_ptr field = virtual_this->get(name);
+            if(field->get_obj_type() == ObjectType::Func){
+                return s_cast_to_func(field);
+            }
+            return field;
         }
     }
 

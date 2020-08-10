@@ -1,5 +1,11 @@
-var a = 1
+class A {
+    var value
 
-a += 1
+    func __init(v){
+        value = v
+    }
+}
 
-print(a)
+val a = A('a')
+
+print(a.value)

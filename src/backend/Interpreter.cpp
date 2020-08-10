@@ -625,14 +625,14 @@ void Interpreter::visit(GetExpr * get_expr){
         runtime_error(lhs->repr() +" does not have member "+ name, get_expr);
     }
 
-    value = lhs->get(name);
+    obj_ptr field = lhs->get(name);
 
-    if(value == nullptr){
+    if(field == nullptr){
         runtime_error(name +"is not defined", get_expr);
     }
-
-    if(value->get_obj_type() == ObjectType::Func){
-        value = std::static_pointer_cast<BaseFunc>(value)->bind(lhs);
+    
+    if(field->get_obj_type() == ObjectType::Func){
+        value = s_cast_to_func(field)->bind(lhs);
     }
 }
 

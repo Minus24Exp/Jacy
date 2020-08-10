@@ -811,12 +811,13 @@ id_ptr Parser::parse_id(){
 
 // FuncCall //
 expr_ptr Parser::parse_func_call(expr_ptr left){
-    skip_op(Operator::LParen, true, true);
+    skip_op(Operator::LParen, false, true);
 
     ExprList args;
-    bool first = true;
 
+    bool first = true;
     while(!eof()){
+        skip_nl(true);
         if(is_op(Operator::RParen)){
             break;
         }
@@ -824,6 +825,9 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
             first = false;
         }else{
             skip_op(Operator::Comma, true, true);
+        }
+        if(is_op(Operator::RParen)){
+            break;
         }
         args.push_back(parse_expr());
     }

@@ -21,8 +21,6 @@ List::List() : Object(ObjectType::List, cList)
             throw YoctoException("Index out of list bounds");
         }
 
-        std::cout << "get by index: " << index << std::endl;
-
         return elements[index];
     }));
 

@@ -57,7 +57,7 @@ obj_ptr Class::call(const ObjList & args){
 
     func_ptr __init = cast_to_func(instance->get("__init"));
     if(__init){
-        __init->bind(instance)->call(args);        
+        __init->bind(instance)->call(args);
     }
 
     return instance;
