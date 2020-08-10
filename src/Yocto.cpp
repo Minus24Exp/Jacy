@@ -2,8 +2,7 @@
 
 Yocto::Yocto()
     : lexer(Lexer::get_instance()),
-      parser(Parser::get_instance()),
-      ip(Interpreter::get_instance())
+      parser(Parser::get_instance())
 {
     debug = false;
 }
@@ -29,22 +28,9 @@ void Yocto::launch(int argc, const char * argv[]){
         }
     }
 
-    // Enter global scope
-    ip.enter_scope();
-
-    // Register globals
-    Global global;
-    global.reg();
-
     if(main_file.empty()){
-        ip.set_last_module_name("(REPL)");
         run_repl();
     }else{
-        // Set last module name to main file name
-        ip.set_last_module_name(main_file);
-
-        // Push main executable dir
-        ip.push_dir(ip.path_dir(main_file));
         run_script(main_file);
     }
 }
@@ -66,15 +52,6 @@ void Yocto::run_repl(){
                 run_debug(line);
             }else{
                 run(line);
-            }
-
-            // TODO: Print last value only if there's no print function
-
-            obj_ptr last_value = ip.get_value();
-            if(last_value){
-                std::cout << obj_to_str(last_value) << std::endl;
-            }else{
-                std::cout << "null" << std::endl;
             }
 
         }catch(YoctoException & e){
@@ -106,7 +83,6 @@ void Yocto::run_script(const std::string & path){
 void Yocto::run(const std::string & script){
     TokenStream tokens = lexer.lex(script);
     StmtList tree = parser.parse(tokens);
-    ip.interpret(tree);
 }
 
 void Yocto::run_debug(const std::string & script){
@@ -136,10 +112,6 @@ void Yocto::run_debug(const std::string & script){
     printer.print(tree);
     std::cout << std::endl;
 
-    auto ip_start = bench();
-    ip.interpret(tree);
-    auto ip_end = bench();
-
     std::cout << "\n\nBenchmarks:" << std::endl;
 
     auto lexer_duration = std::chrono::duration<double>(lexer_end - lexer_start).count();
@@ -147,7 +119,4 @@ void Yocto::run_debug(const std::string & script){
 
     auto parser_duration = std::chrono::duration<double>(parser_end - parser_start).count();
     std::cout << "Parsing: " << parser_duration << "s" << std::endl;
-
-    auto ip_duration = std::chrono::duration<double>(ip_end - ip_start).count();
-    std::cout << "Evaluation: " << ip_duration << "s" << std::endl;
 }
