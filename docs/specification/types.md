@@ -2,7 +2,7 @@
 Objects that can be used as type:
 * user-defined classes
 * built-in types (are also classes)
-* `type` - type-alias variable declared with `type` keyword 
+* type-alias - variable declared with `type` keyword 
 
 Example:
 ```
