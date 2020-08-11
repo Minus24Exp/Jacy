@@ -26,3 +26,25 @@ Here's the syntax I need to apply:
 ```
 type intOrBool = Int | Bool
 ```
+
+## Comparison (types and inheritance)
+To compare two types (objects) just use `==` (equality) or `===` (reference equality) operators.
+So, as types are also objects, comparison is same.
+
+To check if object is instance of some type or inherit some type, use `is` operator.
+
+Example:
+```
+class A {}
+val a = A()
+print(a is A) // true
+
+val int_num = 1
+val float_num = 1.0
+print(int_num is Int) // true
+print(float_num is Float) // true
+
+type IntOrBool = Int | Bool
+print(1 is IntOrBool) // true
+print(true is IntOrBool) // true
+```
