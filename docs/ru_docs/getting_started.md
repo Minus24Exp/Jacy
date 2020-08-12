@@ -12,5 +12,5 @@ Yocto это динамический интерпретируемый язык 
 > > - [Переменные](basics/variables.md)
 > > - [Базовые типы](basics/basic_types.md)
 
-| [< Главная страница](https://github.com/hazer-hazer/Yocto) | [Комментарии >](comments.md) |
+| [< Главная страница](https://github.com/hazer-hazer/Yocto) | [Комментарии >](basics/comments.md) |
 | - | - |
