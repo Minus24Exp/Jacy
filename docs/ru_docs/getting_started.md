@@ -7,10 +7,10 @@ Yocto это динамический интерпретируемый язык 
 - Всё является объектом (даже примитивы: числа, строки и т.д.)
 
 Оглавление:
-> - 1. Основы
-> > - 1.1. [Комментарии](basics/comments.md)
-> > - 1.2. [Переменные](basics/variables.md)
-> > - 1.3. [Базовые типы](basics/basic_types.md)
+> - Основы
+> > - [Комментарии](basics/comments.md)
+> > - [Переменные](basics/variables.md)
+> > - [Базовые типы](basics/basic_types.md)
 
 | [< Главная страница](https://github.com/hazer-hazer/Yocto) | [Комментарии >](comments.md) |
 | - | - |
