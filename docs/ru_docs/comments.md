@@ -28,6 +28,5 @@
   И всё дальше тоже комментарий...
 ```
 
-| [< Начало работы](getting_started.md) | [&gt; Переменные](variables.md) |
+| [< Начало работы](getting_started.md) | [Переменные >](variables.md) |
 | - | - |
-| <img> | <img> |
