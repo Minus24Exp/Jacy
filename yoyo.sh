@@ -28,6 +28,11 @@ elif [[ $1 = "run" || $1 = "r" ]]; then
 elif [[ $1 = "d" || $1 = "debug" ]]; then
     echo -e "\n${bold_ansi}${green_ansi}[Debug:'${target}']${reset_ansi}\n"
     eval "gdb ${target}"
+elif [[ $1 = "git_all_docs_changes" ]]; then
+    echo -e "\n${bold_ansi}${green_ansi}Git add, commit and push docs${reset_ansi}\n"
+    eval "git add ."
+    eval "git commit -m \"docs changes\""
+    eval "git push -u origin master"
 else
 echo "Usage:
     'compile' or 'c' => compile source
