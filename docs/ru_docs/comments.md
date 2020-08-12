@@ -30,3 +30,4 @@
 
 | [< Начало работы](getting_started.md) | [&gt; Переменные](variables.md) |
 | - | - |
+| <img> | <img> |
