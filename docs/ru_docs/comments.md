@@ -30,5 +30,5 @@
 
 <p>
     <p style="text-align: left;"><a href="getting_started.md">&lt; Начало работы</a></p>
-    <p style="text-align: left;"><a href="variables.md">&gt; Переменные</a></p>
+    <p style="text-align: right;"><a href="variables.md">&gt; Переменные</a></p>
 </p>
