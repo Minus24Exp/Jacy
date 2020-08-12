@@ -10,7 +10,7 @@ Yocto это динамический интерпретируемый язык 
 > __Основы__
 > > - [Комментарии](basics/comments.md)
 > > - [Переменные](basics/variables.md)
-> > - [Базовые типы](basics/basic_types.md)
+> > - [Примитивы (базовые типы данных)](basics/primitives.md)
 
 | [< Главная страница](https://github.com/hazer-hazer/Yocto) | [Комментарии >](basics/comments.md) |
 | - | - |
