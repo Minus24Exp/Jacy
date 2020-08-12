@@ -44,5 +44,5 @@ val something
 something = 42
 ```
 
-| [< Комментарии](comments.md) | [Основные типы >](basic_types.md) |
+| [< Комментарии](comments.md) | [Основные типы >](primitives.md) |
 | - | - |
