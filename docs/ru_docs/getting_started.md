@@ -17,9 +17,9 @@ Yocto это динамический интерпретируемый язык 
 > > - [Float](basics/float.md)
 > > - [String](basics/string.md)
 > - __Типы__
-> > - [Вступление](basics/intro.md)
-> > - [Nullable типы](basics/nullable.md)
-> > - [Алиасы типов](basics/aliases.md)
+> > - [Вступление](types/intro.md)
+> > - [Nullable типы](types/nullable.md)
+> > - [Алиасы типов](types/aliases.md)
 
 | [< Главная страница](https://github.com/hazer-hazer/Yocto) | [Комментарии >](basics/comments.md) |
 | - | - |
