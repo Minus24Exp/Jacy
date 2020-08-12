@@ -7,5 +7,5 @@ __Диапозон__
 | -2.22507e-308 | 1.79769e+308 |
 
 
-| [< Int](int.md) | [String >](String.md) |
+| [< Int](int.md) | [String >](string.md) |
 | - | - |
