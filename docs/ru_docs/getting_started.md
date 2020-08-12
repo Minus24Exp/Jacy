@@ -15,7 +15,8 @@ Yocto это динамический интерпретируемый язык 
 > > - [Bool](basics/bool.md)
 > > - [Int](basics/int.md)
 > > - [Float](basics/float.md)
-> > - [String](basics/string.md) <br>
+> > - [String](basics/string.md)
+> 
 > __Типы__
 > > - [Вступление](basics/intro.md)
 > > - [Nullable типы](basics/nullable.md)
