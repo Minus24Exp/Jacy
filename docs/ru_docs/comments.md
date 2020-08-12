@@ -28,4 +28,4 @@
   И всё дальше тоже комментарий...
 ```
 
-| <button style="text-align: left;"><a href="getting_started.md">&lt; Начало работы</a></button> | <button style="text-align: right;"><a href="variables.md">&gt; Переменные</a></button> |
+| [< Начало работы](getting_started.md) | [&gt; Переменные](variables.md) |
