@@ -10,4 +10,3 @@
 | [Documentation](docs/en_docs/getting_started.md) |
 | - |
 | [Документация](docs/ru_docs/getting_started.md) |
-| - |
