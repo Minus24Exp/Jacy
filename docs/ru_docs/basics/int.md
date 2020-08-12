@@ -6,5 +6,5 @@ __Диапозон__
 | - | - |
 | -2,147,483,648 | 2,147,483,647 |
 
-| [< Bool](bool.md) | [Float >](int.md) |
+| [< Bool](bool.md) | [Float >](float.md) |
 | - | - |
