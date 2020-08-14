@@ -305,7 +305,7 @@ struct Token {
             } break;
         }
 
-        // TODO: Fix quote for empty values
+        // @TODO: Fix quote for empty values
         str += " `";
         switch(type){
             case TokenType::Bool:{

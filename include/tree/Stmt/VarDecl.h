@@ -7,7 +7,7 @@
 // Note: I used enum for declaration type, but not a bool
 // because I want to add `const` in the future
 
-// TODO: Add types
+// @TODO: Add types
 
 enum class VarDeclType { Var, Val };
 

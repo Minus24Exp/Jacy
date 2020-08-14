@@ -164,7 +164,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
     // One-line //
     // If one-line block is allowed then try to parse single stmt
     if(!is_op(Operator::LBrace) && allow_one_line){
-        // TODO: Think about this skip_nl
+        // @TODO: Think about this skip_nl
         // Is it okay?
         skip_nl(true);
         stmts.push_back(parse_stmt());
@@ -401,7 +401,7 @@ stmt_ptr Parser::parse_import(){
     // No new-lines in import
     skip_kw(Keyword::Import, false, false);
 
-    // TODO: Improve `import`
+    // @TODO: Improve `import`
     // - Multiple objects import
 
     // Import nothing, just run source
@@ -472,7 +472,7 @@ expr_ptr Parser::parse_expr(){
 expr_ptr Parser::assignment(){
     expr_ptr expr = pipe();
 
-    // TODO: Add compound assignment operators
+    // @TODO: Add compound assignment operators
 
     if(is_assign_op()){
         Operator assign_op = peek().op();
@@ -599,7 +599,7 @@ expr_ptr Parser::named_checks(){
 expr_ptr Parser::range(){
     expr_ptr left = add();
 
-    // TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
+    // @TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
     if(is_op(Operator::Range)
     || is_op(Operator::RangeLE)
     || is_op(Operator::RangeRE)
@@ -727,7 +727,7 @@ expr_ptr Parser::primary(){
         expr_ptr expr = parse_expr();
         skip_op(Operator::RParen, true, false);
 
-        // TODO: !!! Think do I need special node for grouping? (precedence problem?) 
+        // @TODO: !!! Think do I need special node for grouping? (precedence problem?) 
         return expr;
     }
 

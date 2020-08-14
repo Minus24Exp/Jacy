@@ -1,0 +1,11 @@
+digraph "ExpectedException"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{ExpectedException\n||+ ExpectedException()\l+ ExpectedException()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Exception for cases when something was expected but wrong thing was given."];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal"];
+  Node2 [label="{YoctoException\n||+ YoctoException()\l+ what()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_yocto_exception.html",tooltip="The base class of all exceptions in Yocto."];
+  Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal"];
+  Node3 [label="{std::exception\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip="STL class."];
+}

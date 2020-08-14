@@ -130,7 +130,7 @@ void Lexer::lex_number(){
         }
     }
 
-    // TODO: Fix floating hex numbers
+    // @TODO: Fix floating hex numbers
 
     while(is_digit(peek())){
         num += peek();

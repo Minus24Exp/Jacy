@@ -43,7 +43,7 @@ void Yocto::run_repl(){
         line.clear();
         std::getline(std::cin, line);
 
-        // TODO: !!! Fix problem with special keys like arrow (ConEmu)
+        // @TODO: !!! Fix problem with special keys like arrow (ConEmu)
 
         // Intercept exceptions for REPL
         // REPL just prints them and doesn't stop
@@ -86,7 +86,7 @@ void Yocto::run(const std::string & script){
 }
 
 void Yocto::run_debug(const std::string & script){
-    // TODO: Create base exceptions for Lexer, Parser, Interpreter
+    // @TODO: Create base exceptions for Lexer, Parser, Interpreter
     // and catch them separatly
 
     const auto bench = std::chrono::high_resolution_clock::now;

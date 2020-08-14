@@ -1,0 +1,54 @@
+digraph "BaseVisitor::visit"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="BaseVisitor::visit",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node2 [label="Assign::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_assign.html#ac9c5a805ee0d9d1c34ee76907a8767b9",tooltip=" "];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node3 [label="DictExpr::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_dict_expr.html#af004f42c3ff594fcb477fcfdc61a0584",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node4 [label="FuncCall::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_func_call.html#a23db876899d3a3c87cdfc3ded464a0ba",tooltip=" "];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node5 [label="GetExpr::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_get_expr.html#ab81225be846387f37108c962f56504e5",tooltip=" "];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node6 [label="GetItem::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_get_item.html#a7c2166ff1a52ceb800f893667d7f4d2c",tooltip=" "];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node7 [label="Identifier::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_identifier.html#ac39aaf4db4bcac60ff07ce1c17e2621a",tooltip=" "];
+  Node1 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node8 [label="IfExpr::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_if_expr.html#ac625e4e765d9f5fe3a2896370f89de9f",tooltip=" "];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node9 [label="Infix::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_infix.html#acbdb809a83cd9ddb1267a36e74237790",tooltip=" "];
+  Node1 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node10 [label="ListExpr::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_list_expr.html#a3b023940b56afe575e032c8c835b48ce",tooltip=" "];
+  Node1 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node11 [label="Literal::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_literal.html#ad3ed9d9eaba7e673cbbf0fff870c0d44",tooltip=" "];
+  Node1 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node12 [label="Prefix::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_prefix.html#a37fe8859ad3db0de90385b2857c4e7cd",tooltip=" "];
+  Node1 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node13 [label="SetExpr::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_set_expr.html#ae2ca71574ff61005897bac01260eabec",tooltip=" "];
+  Node1 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node14 [label="SetItem::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_set_item.html#aba9c59aaaccfee32b5d1f78027c1eb15",tooltip=" "];
+  Node1 -> Node15 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node15 [label="Block::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_block.html#ac52139a6b6c8c6641813ba37aa643f92",tooltip=" "];
+  Node1 -> Node16 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node16 [label="ClassDecl::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_class_decl.html#aef270b7ef12a27519fa64fe26eb3ae40",tooltip=" "];
+  Node1 -> Node17 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node17 [label="ForStmt::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_for_stmt.html#a97adf6ff0db0fe843d182a2af2e6c05b",tooltip=" "];
+  Node1 -> Node18 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node18 [label="FuncDecl::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_func_decl.html#acdb28da780892468cd241e04918be663",tooltip=" "];
+  Node1 -> Node19 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node19 [label="Import::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_import.html#a014d565919556ad695f90fded903d799",tooltip=" "];
+  Node1 -> Node20 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node20 [label="ReturnStmt::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_return_stmt.html#a612f895b9cfa1ca8c149f6fc1c705e87",tooltip=" "];
+  Node20 -> Node21 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node21 [label="Printer::visit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_printer.html#a30967573560c182d9d7181ce594bc49e",tooltip=" "];
+  Node1 -> Node22 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node22 [label="ExprStmt::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_expr_stmt.html#a76838d5daf215563ea2eae8ae35ba7ca",tooltip=" "];
+  Node1 -> Node23 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node23 [label="VarDecl::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_var_decl.html#a920926c9971af70eb680659de87ea5cd",tooltip=" "];
+  Node1 -> Node24 [dir="back",color="midnightblue",fontsize="10",style="solid"];
+  Node24 [label="WhileStmt::accept",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_while_stmt.html#a7cbfbab3b22a920145f43330bc789136",tooltip=" "];
+}
