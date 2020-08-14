@@ -12,6 +12,12 @@
 #include "parser/Parser.h"
 #include "tree/Printer.h"
 
+/**
+ * Yocto
+ * @brief The main class that controls all interpreter parts (lexer, parser, evaluator)
+ * 
+ * @details Singleton
+ */
 class Yocto {
 public:
     static Yocto & get_instance(){

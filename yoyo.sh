@@ -28,11 +28,24 @@ elif [[ $1 = "run" || $1 = "r" ]]; then
 elif [[ $1 = "d" || $1 = "debug" ]]; then
     echo -e "\n${bold_ansi}${green_ansi}[Debug:'${target}']${reset_ansi}\n"
     eval "gdb ${target}"
-elif [[ $1 = "git_all_docs_changes" ]]; then
-    echo -e "\n${bold_ansi}${green_ansi}Git add, commit and push docs${reset_ansi}\n"
+elif [[ $1 = "git_all" ]]; then
+    if [[ $2 == "" ]]; then
+        echo -e "${red_ansi}Please, specify commit message${reset_ansi}"
+        exit
+    fi
+
+    echo -e "${bold_ansi}${green_ansi}"
+
+    echo -e "git add .\n"
     eval "git add ."
-    eval "git commit -m \"docs changes\""
+
+    echo -e "git commit -m \"$2\"\n"
+    eval "git commit -m \"$2\""
+
+    echo -e "git push -u origin master\n"
     eval "git push -u origin master"
+
+    echo -e "${reset_ansi}"
 else
 echo "Usage:
     'compile' or 'c' => compile source
