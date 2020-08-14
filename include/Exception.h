@@ -6,6 +6,8 @@
 #include "parser/Token.h"
 #include "tree/Node.h"
 
+const int RECURSION_DEPTH_LIMIT = 1000;
+
 /**
  * @brief The base class of all exceptions in Yocto 
  * @details All other exceptions count as "Uncaught"
@@ -33,20 +35,9 @@ private:
 ///////////////////////
 
 /**
- * @brief Common exception that can be used by any part of interpreter
- * @details This is mostly like system exceptions: FileNotFoundExceptions and so on
- * 
- * @param msg String message
- */
-class CommonException : public YoctoException {
-public:
-    CommonException(const std::string & msg) : YoctoException(msg) {}
-};
-
-/**
  * FileNotFoundException
  */
-class FileNotFoundException : public Common {
+class FileNotFoundException : public YoctoException {
 public:
     FileNotFoundException() : YoctoException("File not found") {}
     FileNotFoundException(const std::string & details) : YoctoException("File not found: "+ details) {}
@@ -75,38 +66,71 @@ public:
 };
 
 /////////////////////////
-// Parsering Exceptions //
+// Parsring Exceptions //
 /////////////////////////
+
+class ParserException : public YoctoException {
+public:
+    ParserException(const std::string & msg) : YoctoException(msg) {}
+
+    ParserException(const std::string & pre_msg, Token t, const std::string & post_msg)
+        : ParserException(pre_msg +" "+ t.to_string() +" "+ post_msg) {}
+
+    ParserException(const std::string & pre_msg, Token t)
+        : ParserException(pre_msg, t, "") {}
+
+    ParserException(Token t, const std::string & post_msg)
+        : ParserException("", t, post_msg) {}
+};
 
 /**
  * UnexpectedTokenException
  */
-class UnexpectedTokenException : public YoctoException {
+class UnexpectedTokenException : public ParserException {
 public:
-    UnexpectedTokenException(Token t) : YoctoException("Unexpected "+ t.to_string()) {}
+    UnexpectedTokenException(Token t) : ParserException("Unexpected", t) {}
+    UnexpectedTokenException(const std::string & token_str) : ParserException("Unexpected "+ token_str) {}
 };
 
 /**
  * ExpectedException
  * @brief Unexpected end of file
  */
-class UnexpectedEofException : public YoctoException {
+class UnexpectedEofException : public ParserException {
 public:
-    UnexpectedEofException() : YoctoException("Unexpected end of file") {}
+    UnexpectedEofException() : ParserException("Unexpected end of file") {}
 };
 
 ////////////////////////
 // Runtime Exceptions //
 ////////////////////////
+
+/**
+ * RuntimeException
+ * 
+ * @param msg String error message
+ * @param pos Position where error occured
+ * @param in_file File where error occured
+ */
 class RuntimeException : public YoctoException {
 public:
     RuntimeException(const std::string & msg, const Position & pos, const std::string & in_file)
-        : YoctoException("Runtime error: "+ msg +"\n"+ in_file +":"+ std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
+        : YoctoException("Runtime error: "+ msg +"\n"+ in_file +":"+
+                        std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
 };
 
-class RecursionDepthExceeded : public YoctoException {
+/**
+ * RecursionDepthLimit
+ * @brief Error that occure when maximum recursion depth limit exceeded
+ * 
+ * @param pos Position where error occured
+ * @param in_file File where error occured
+ */
+class RecursionDepthExceeded : public RuntimeException {
 public:
-    RecursionDepthExceeded(int limit) : YoctoException("Maximum recursion depth exceeded ("+ std::to_string(limit) +")") {}
+    RecursionDepthExceeded(const Position & pos, const std::string & in_file)
+        : RuntimeException("Maximum recursion depth exceeded ("+
+                           std::to_string(RECURSION_DEPTH_LIMIT) +")", pos, in_file) {}
 };
 
 //////////////////////

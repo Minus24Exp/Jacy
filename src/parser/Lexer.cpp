@@ -104,7 +104,7 @@ void Lexer::lex_number(){
             case 'X':{
                 advance();
                 if(!is_hex(peek())){
-                    unexpected_error();
+                    unexpected_token_error();
                 }
                 do{
                     num += peek();
@@ -117,7 +117,7 @@ void Lexer::lex_number(){
             case 'B':{
                 advance();
                 if(!is_digit(peek())){
-                    unexpected_error();
+                    unexpected_token_error();
                 }
                 do{
                     num += peek();
@@ -149,7 +149,7 @@ void Lexer::lex_number(){
         num += peek();
         advance();
         if(!is_digit(peek())){
-            unexpected_error();
+            unexpected_token_error();
         }
         do{
             num += peek();
