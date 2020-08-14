@@ -6,7 +6,8 @@ I hope it's possible...
 - Everything is an Object, primitives are objects too and all operators implemented as magic functions
 - The compiler always inside a function. The top-level code is always in some kinda `main()` function
 
-- At first, I wanted to make OOP same to C++, where instance fields and static fields won't require `this` keyword. But I rewrote Object structure and made it cleaner, so now `this` keyword is required.
+- At first, I wanted to make OOP same to C++, where instance fields and static fields won't require `this` keyword.
+- But I rewrote Object structure and made it cleaner, so now `this` keyword is required.
 
 ### Control flow
 
@@ -154,7 +155,8 @@ List of primitives:
 - String
 
 Why I didn't implement boolean as two separate classes like in Ruby (TrueClass, FalseClass)?
-Mostly, because I want to have type hinting and it's more convenient to have a single class to use it as type. Anyway, this problem can be solved, I can create TrueClass/FalseClass and global type value for boolean to use in type hinting.
+Mostly, because I want to have type hinting and it's more convenient to have a single class to use it as type.
+Anyway, this problem can be solved, I can create TrueClass/FalseClass and global type value for boolean to use in type hinting.
 
 ### Types conversion
 For explicit type convertion every object has or can overload special convertion functions (they are same to Ruby's):
