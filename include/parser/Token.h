@@ -269,7 +269,7 @@ struct Token {
         return std::get<Keyword>(val);
     }
 
-    std::string to_string(){
+    std::string to_string(bool with_pos = true){
         std::string str;
 
         switch(type){
@@ -329,7 +329,10 @@ struct Token {
             } break;
         }
 
-        str += "` at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column);
+        if(with_pos){
+            str += "` at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column);
+        }
+
         return str;
     }
 

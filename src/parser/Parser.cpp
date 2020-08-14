@@ -893,7 +893,7 @@ void Parser::error(const std::string & msg){
 }
 
 void Parser::unexpected_error(){
-    throw UnexpectedException(peek());
+    throw UnexpectedTokenException(peek());
 }
 
 void Parser::expected_error(const std::string & expected){

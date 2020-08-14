@@ -219,7 +219,7 @@ TokenStream Lexer::lex(const std::string & script){
                 unexpected_eof_error();
             }
             if(peek() != quote){
-                unexpected_error();
+                unexpected_token_error();
             }
             add_token(TokenType::String, str);
             advance();
@@ -340,7 +340,7 @@ TokenStream Lexer::lex(const std::string & script){
                             add_token(Operator::RangeRE);
                             advance(3);
                         }else{
-                            unexpected_error();
+                            unexpected_token_error();
                         }
                     }else{
                         add_token(Operator::Dot);
@@ -382,7 +382,7 @@ TokenStream Lexer::lex(const std::string & script){
                         add_token(Operator::Pipe);
                         advance(2);
                     }else{
-                        unexpected_error();
+                        unexpected_token_error();
                     }
                 } break;
                 case '<':{
@@ -406,7 +406,7 @@ TokenStream Lexer::lex(const std::string & script){
                             add_token(Operator::RangeBothE);
                             advance(3);
                         }else{
-                            unexpected_error();
+                            unexpected_token_error();
                         }
                     }else{
                         add_token(Operator::GT);
@@ -414,7 +414,7 @@ TokenStream Lexer::lex(const std::string & script){
                     }
                 } break;
                 default:{
-                    unexpected_error();
+                    unexpected_token_error();
                 }
             }
         }
@@ -425,10 +425,10 @@ TokenStream Lexer::lex(const std::string & script){
     return tokens;
 }
 
-void Lexer::unexpected_error(){
-    std::string error = "Unexpected token `"+ std::string(1, peek()) + "`";
+void Lexer::unexpected_token_error(){
+    std::string error = "token `"+ std::string(1, peek()) +"`";
     error += " at "+ std::to_string(line) +":"+ std::to_string(column);
-    throw YoctoException(error);
+    throw UnexpectedTokenException(error);
 }
 
 void Lexer::unexpected_eof_error(){

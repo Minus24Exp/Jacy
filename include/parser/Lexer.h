@@ -63,7 +63,7 @@ public:
     void lex_number();
 
     // Errors
-    void unexpected_error();
+    void unexpected_token_error();
     void unexpected_eof_error();
 };
 
