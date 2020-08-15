@@ -1,2 +1,2 @@
-# Documentation specification for developers
+# Documentation specification
 
