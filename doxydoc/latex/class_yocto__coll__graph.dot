@@ -1,7 +1,0 @@
-digraph "Yocto"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{Yocto\n||+ Yocto()\l+ Yocto()\l+ operator=()\l+ operator=()\l+ launch()\l+ get_instance()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="The main class that controls all interpreter parts (lexer, parser, evaluator)"];
-}
