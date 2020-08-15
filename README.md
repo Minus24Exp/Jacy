@@ -12,4 +12,4 @@
 | - |
 | [__Документация(*В процессе*)__](docs/ru_docs/getting_started.md) |
 | - |
-| [__Dev docs__(English only)](docs/docs_docs/getting_started.md) |
+| [__Dev docs__(English only)](docs/dev_docs/getting_started.md) |
