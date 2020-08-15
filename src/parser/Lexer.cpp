@@ -254,6 +254,9 @@ TokenStream Lexer::lex(const std::string & script){
                 case '-':{
                     if(is_digit(peek_next())){
                         lex_number();
+                    }else if(peek_next() == '='){
+                        add_token(Operator::SubAssign);
+                        advance(2);
                     }else{
                         add_token(Operator::Sub);
                         advance();
@@ -261,7 +264,15 @@ TokenStream Lexer::lex(const std::string & script){
                 } break;
                 case '*':{
                     if(peek_next() == '*'){
-                        add_token(Operator::Exp);
+                        if(peek_next(2) == '='){
+                            add_token(Operator::ExpAssign);
+                            advance(3);
+                        }else{  
+                            add_token(Operator::Exp);
+                            advance(2);
+                        }
+                    }else if(peek_next() == '='){
+                        add_token(Operator::MulAssign);
                         advance(2);
                     }else{
                         add_token(Operator::Mul);
@@ -284,14 +295,22 @@ TokenStream Lexer::lex(const std::string & script){
                             }
                         }
                         advance(2);
+                    }else if(peek_next() == '='){
+                        add_token(Operator::DivAssign);
+                        advance(2);
                     }else{
                         add_token(Operator::Div);
                         advance();
                     }
                 } break;
                 case '%':{
-                    add_token(Operator::Mod);
-                    advance();
+                    if(peek_next() == '='){
+                        add_token(Operator::ModAssign);
+                        advance(2);
+                    }else{
+                        add_token(Operator::Mod);
+                        advance();
+                    }
                 } break;
                 case ';':{
                     add_token(Operator::Semi);

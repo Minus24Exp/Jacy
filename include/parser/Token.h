@@ -41,7 +41,7 @@ enum class Operator {
     Assign,
 
     // Augmented assignment
-    AddAssign,
+    AddAssign, SubAssign, MulAssign, DivAssign, ModAssign, ExpAssign,
 
     Add, Sub, Mul, Div, Mod, Exp,
 
@@ -79,7 +79,8 @@ enum class Operator {
 const std::vector <std::string> operators {
     "=",
 
-    "+=",
+    // Augmented assignment
+    "+=", "-=", "*=", "/=", "%=", "**=",
 
     "+", "-", "*", "/", "%", "**",
 
