@@ -447,7 +447,7 @@ stmt_ptr Parser::parse_import(){
             skip_op(Operator::As, false, false);
             as = parse_id();
         }else{
-            as = object;
+            as = nullptr;
         }
 
         entities.push_back({ all, object, as });

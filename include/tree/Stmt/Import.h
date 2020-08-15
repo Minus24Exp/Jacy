@@ -17,8 +17,8 @@ struct ImportEntity {
 using ImportEntityList = std::vector<ImportEntity>;
 
 struct Import : Stmt {
-    std::string path;
     ImportEntityList entities;
+    std::string path;
 
     Import(const Position & pos, const std::string & path, const ImportEntityList & entities)
         : Stmt(pos, StmtType::Import), path(path), entities(entities) {}
