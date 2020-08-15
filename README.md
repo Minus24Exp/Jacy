@@ -5,7 +5,8 @@
 # Yocto
 
 10⁻²⁴ size programming language written in pure C++.
-(__Yocto implementation with AST-Walker.__)
+
+> __Evaluation part of interpreter is now deleted, because of rewriting__
 
 | [__Documentation__](docs/en_docs/getting_started.md) |
 | - |
