@@ -1,0 +1,88 @@
+\hypertarget{struct_infix}{}\doxysection{Infix Struct Reference}
+\label{struct_infix}\index{Infix@{Infix}}
+
+
+{\ttfamily \#include $<$Infix.\+h$>$}
+
+
+
+Inheritance diagram for Infix\+:
+% FIG 0
+
+
+Collaboration diagram for Infix\+:
+% FIG 1
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_infix_a57d763b58962897b3cd194350f501e23}{Infix}} (\mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} \mbox{\hyperlink{struct_infix_a95cdc9495c498ca5bd7d7302f9246823}{left}}, const \mbox{\hyperlink{struct_token}{Token}} \&\mbox{\hyperlink{struct_infix_aebdf777cd85fa9387b1a4113b5ecf945}{op}}, \mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} \mbox{\hyperlink{struct_infix_a7941b5b68132b3a93d2c151218bc91b5}{right}})
+\item 
+virtual \mbox{\hyperlink{struct_infix_a2dfa67817ffc2845380b567847165e23}{$\sim$\+Infix}} ()=default
+\item 
+void \mbox{\hyperlink{struct_infix_acbdb809a83cd9ddb1267a36e74237790}{accept}} (\mbox{\hyperlink{class_base_visitor}{Base\+Visitor}} \&visitor) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} \mbox{\hyperlink{struct_infix_a95cdc9495c498ca5bd7d7302f9246823}{left}}
+\item 
+\mbox{\hyperlink{struct_token}{Token}} \mbox{\hyperlink{struct_infix_aebdf777cd85fa9387b1a4113b5ecf945}{op}}
+\item 
+\mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} \mbox{\hyperlink{struct_infix_a7941b5b68132b3a93d2c151218bc91b5}{right}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{struct_infix_a57d763b58962897b3cd194350f501e23}\label{struct_infix_a57d763b58962897b3cd194350f501e23}} 
+\index{Infix@{Infix}!Infix@{Infix}}
+\index{Infix@{Infix}!Infix@{Infix}}
+\doxysubsubsection{\texorpdfstring{Infix()}{Infix()}}
+{\footnotesize\ttfamily Infix\+::\+Infix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}}}]{left,  }\item[{const \mbox{\hyperlink{struct_token}{Token}} \&}]{op,  }\item[{\mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}}}]{right }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{struct_infix_a2dfa67817ffc2845380b567847165e23}\label{struct_infix_a2dfa67817ffc2845380b567847165e23}} 
+\index{Infix@{Infix}!````~Infix@{$\sim$Infix}}
+\index{````~Infix@{$\sim$Infix}!Infix@{Infix}}
+\doxysubsubsection{\texorpdfstring{$\sim$Infix()}{~Infix()}}
+{\footnotesize\ttfamily virtual Infix\+::$\sim$\+Infix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{struct_infix_acbdb809a83cd9ddb1267a36e74237790}\label{struct_infix_acbdb809a83cd9ddb1267a36e74237790}} 
+\index{Infix@{Infix}!accept@{accept}}
+\index{accept@{accept}!Infix@{Infix}}
+\doxysubsubsection{\texorpdfstring{accept()}{accept()}}
+{\footnotesize\ttfamily void Infix\+::accept (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_base_visitor}{Base\+Visitor}} \&}]{visitor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_expr_a38efa34076c170e553e91b9d59bc2d4b}{Expr}}.
+
+Here is the call graph for this function\+:
+% FIG 2
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_infix_a95cdc9495c498ca5bd7d7302f9246823}\label{struct_infix_a95cdc9495c498ca5bd7d7302f9246823}} 
+\index{Infix@{Infix}!left@{left}}
+\index{left@{left}!Infix@{Infix}}
+\doxysubsubsection{\texorpdfstring{left}{left}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} Infix\+::left}
+
+\mbox{\Hypertarget{struct_infix_aebdf777cd85fa9387b1a4113b5ecf945}\label{struct_infix_aebdf777cd85fa9387b1a4113b5ecf945}} 
+\index{Infix@{Infix}!op@{op}}
+\index{op@{op}!Infix@{Infix}}
+\doxysubsubsection{\texorpdfstring{op}{op}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_token}{Token}} Infix\+::op}
+
+\mbox{\Hypertarget{struct_infix_a7941b5b68132b3a93d2c151218bc91b5}\label{struct_infix_a7941b5b68132b3a93d2c151218bc91b5}} 
+\index{Infix@{Infix}!right@{right}}
+\index{right@{right}!Infix@{Infix}}
+\doxysubsubsection{\texorpdfstring{right}{right}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} Infix\+::right}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/tree/\+Expr/\mbox{\hyperlink{_infix_8h}{Infix.\+h}}\end{DoxyCompactItemize}

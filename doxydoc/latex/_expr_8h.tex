@@ -1,0 +1,119 @@
+\hypertarget{_expr_8h}{}\doxysection{include/tree/\+Expr/\+Expr.h File Reference}
+\label{_expr_8h}\index{include/tree/Expr/Expr.h@{include/tree/Expr/Expr.h}}
+{\ttfamily \#include \char`\"{}tree/\+Node.\+h\char`\"{}}\newline
+Include dependency graph for Expr.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_expr}{Expr}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_expr}{Expr}} $>$
+\item 
+using \mbox{\hyperlink{_expr_8h_ab63c55d9d68132a9c512bd91f1aa3748}{Expr\+List}} = std\+::vector$<$ \mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7}{Expr\+Type}} \{ \newline
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7ad7da1b76e5799f53a399b7a96ba67437}{Expr\+Type\+::\+Literal}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a490aa6e856ccf208a054389e47ce0d06}{Expr\+Type\+::\+Id}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a918c0f86e7efc8d13bb39d2ccedee454}{Expr\+Type\+::\+Infix}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a716de874a0d74f25c0aa8c444c3a7539}{Expr\+Type\+::\+Prefix}}, 
+\newline
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a185b7133db22230701a857c059360cc2}{Expr\+Type\+::\+Assign}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a5d5b78699e57104f2fa03bbdf7b9197b}{Expr\+Type\+::\+Set}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7ac55582518cba2c464f29f5bae1c68def}{Expr\+Type\+::\+Get}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7ac3755e61202abd74da5885d2e9c9160e}{Expr\+Type\+::\+Call}}, 
+\newline
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a786887572f6ef1c20f2d8177cb2f1639}{Expr\+Type\+::\+If}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a5b236a4aea5ea0cb858f86ac44e21494}{Expr\+Type\+::\+Get\+Item}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a3affb5bc8b1ec308579403e9acc08c9b}{Expr\+Type\+::\+Set\+Item}}, 
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a4ee29ca12c7d126654bd0e5275de6135}{Expr\+Type\+::\+List}}, 
+\newline
+\mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7a91516e7a50ce0a67a8eb1f9229c293d1}{Expr\+Type\+::\+Dict}}
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}\label{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}} 
+\index{Expr.h@{Expr.h}!expr\_ptr@{expr\_ptr}}
+\index{expr\_ptr@{expr\_ptr}!Expr.h@{Expr.h}}
+\doxysubsubsection{\texorpdfstring{expr\_ptr}{expr\_ptr}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}} =  std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_expr}{Expr}}$>$}
+
+\mbox{\Hypertarget{_expr_8h_ab63c55d9d68132a9c512bd91f1aa3748}\label{_expr_8h_ab63c55d9d68132a9c512bd91f1aa3748}} 
+\index{Expr.h@{Expr.h}!ExprList@{ExprList}}
+\index{ExprList@{ExprList}!Expr.h@{Expr.h}}
+\doxysubsubsection{\texorpdfstring{ExprList}{ExprList}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{_expr_8h_ab63c55d9d68132a9c512bd91f1aa3748}{Expr\+List}} =  std\+::vector$<$\mbox{\hyperlink{_expr_8h_a7123482863e0756bc81618a4cff2a0c1}{expr\+\_\+ptr}}$>$}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7}} 
+\index{Expr.h@{Expr.h}!ExprType@{ExprType}}
+\index{ExprType@{ExprType}!Expr.h@{Expr.h}}
+\doxysubsubsection{\texorpdfstring{ExprType}{ExprType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{_expr_8h_a3e262b377dc15baba6e58438868decb7}{Expr\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Literal@{Literal}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Literal@{Literal}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7ad7da1b76e5799f53a399b7a96ba67437}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7ad7da1b76e5799f53a399b7a96ba67437}} 
+Literal&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Id@{Id}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Id@{Id}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a490aa6e856ccf208a054389e47ce0d06}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a490aa6e856ccf208a054389e47ce0d06}} 
+Id&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Infix@{Infix}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Infix@{Infix}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a918c0f86e7efc8d13bb39d2ccedee454}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a918c0f86e7efc8d13bb39d2ccedee454}} 
+Infix&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Prefix@{Prefix}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Prefix@{Prefix}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a716de874a0d74f25c0aa8c444c3a7539}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a716de874a0d74f25c0aa8c444c3a7539}} 
+Prefix&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Assign@{Assign}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Assign@{Assign}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a185b7133db22230701a857c059360cc2}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a185b7133db22230701a857c059360cc2}} 
+Assign&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Set@{Set}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Set@{Set}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a5d5b78699e57104f2fa03bbdf7b9197b}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a5d5b78699e57104f2fa03bbdf7b9197b}} 
+Set&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Get@{Get}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Get@{Get}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7ac55582518cba2c464f29f5bae1c68def}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7ac55582518cba2c464f29f5bae1c68def}} 
+Get&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Call@{Call}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Call@{Call}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7ac3755e61202abd74da5885d2e9c9160e}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7ac3755e61202abd74da5885d2e9c9160e}} 
+Call&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{If@{If}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!If@{If}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a786887572f6ef1c20f2d8177cb2f1639}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a786887572f6ef1c20f2d8177cb2f1639}} 
+If&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{GetItem@{GetItem}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!GetItem@{GetItem}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a5b236a4aea5ea0cb858f86ac44e21494}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a5b236a4aea5ea0cb858f86ac44e21494}} 
+Get\+Item&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SetItem@{SetItem}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!SetItem@{SetItem}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a3affb5bc8b1ec308579403e9acc08c9b}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a3affb5bc8b1ec308579403e9acc08c9b}} 
+Set\+Item&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{List@{List}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!List@{List}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a4ee29ca12c7d126654bd0e5275de6135}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a4ee29ca12c7d126654bd0e5275de6135}} 
+List&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Dict@{Dict}!Expr.h@{Expr.h}}\index{Expr.h@{Expr.h}!Dict@{Dict}}}\mbox{\Hypertarget{_expr_8h_a3e262b377dc15baba6e58438868decb7a91516e7a50ce0a67a8eb1f9229c293d1}\label{_expr_8h_a3e262b377dc15baba6e58438868decb7a91516e7a50ce0a67a8eb1f9229c293d1}} 
+Dict&\\
+\hline
+
+\end{DoxyEnumFields}

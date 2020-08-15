@@ -1,0 +1,329 @@
+\hypertarget{class_printer}{}\doxysection{Printer Class Reference}
+\label{class_printer}\index{Printer@{Printer}}
+
+
+{\ttfamily \#include $<$Printer.\+h$>$}
+
+
+
+Inheritance diagram for Printer\+:
+% FIG 0
+
+
+Collaboration diagram for Printer\+:
+% FIG 1
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_printer_a1aba91ebff40aebda570d92f17f28b27}{Printer}} ()
+\item 
+virtual \mbox{\hyperlink{class_printer_a1ff3570e107f405173736016be4f3ceb}{$\sim$\+Printer}} ()=default
+\item 
+void \mbox{\hyperlink{class_printer_a46015e63e5fb4f2f5e2f743f5279e8ea}{print}} (const \mbox{\hyperlink{_stmt_8h_ab93f4e24a92198b7182285baff389630}{Stmt\+List}} \&tree)
+\item 
+void \mbox{\hyperlink{class_printer_a1a11b81586bef09129ede6b14009dfe7}{visit}} (\mbox{\hyperlink{struct_expr_stmt}{Expr\+Stmt}} $\ast$expr\+\_\+stmt) override
+\item 
+void \mbox{\hyperlink{class_printer_a4d13af2276cc99867af1f54f01deff70}{visit}} (\mbox{\hyperlink{struct_block}{Block}} $\ast$block) override
+\item 
+void \mbox{\hyperlink{class_printer_aaec772698ea273fe452a591056efb6a1}{visit}} (\mbox{\hyperlink{struct_var_decl}{Var\+Decl}} $\ast$var\+\_\+decl) override
+\item 
+void \mbox{\hyperlink{class_printer_a515b3428dfecb6e776f2761874f3f806}{visit}} (\mbox{\hyperlink{struct_func_decl}{Func\+Decl}} $\ast$func\+\_\+decl) override
+\item 
+void \mbox{\hyperlink{class_printer_a30967573560c182d9d7181ce594bc49e}{visit}} (\mbox{\hyperlink{struct_return_stmt}{Return\+Stmt}} $\ast$return\+\_\+stmt) override
+\item 
+void \mbox{\hyperlink{class_printer_a4c54450c878f0e50bee2ef3dec659f6e}{visit}} (\mbox{\hyperlink{struct_while_stmt}{While\+Stmt}} $\ast$w) override
+\item 
+void \mbox{\hyperlink{class_printer_a1657d91b19626782171191587556f24a}{visit}} (\mbox{\hyperlink{struct_for_stmt}{For\+Stmt}} $\ast$for\+\_\+stmt) override
+\item 
+void \mbox{\hyperlink{class_printer_af253478d21d4670930310ef747bd807b}{visit}} (\mbox{\hyperlink{struct_class_decl}{Class\+Decl}} $\ast$class\+\_\+decl) override
+\item 
+void \mbox{\hyperlink{class_printer_ab6700c9c99972ea888f191a5200f8495}{visit}} (\mbox{\hyperlink{struct_import}{Import}} $\ast$import) override
+\item 
+void \mbox{\hyperlink{class_printer_a96f663a607f35ce91eabe8b2dc8f46d1}{visit}} (\mbox{\hyperlink{struct_literal}{Literal}} $\ast$literal) override
+\item 
+void \mbox{\hyperlink{class_printer_ade6b51532f85027c6a9a8b4e1474e0e8}{visit}} (\mbox{\hyperlink{struct_identifier}{Identifier}} $\ast$id) override
+\item 
+void \mbox{\hyperlink{class_printer_aaf600efe607712cb4bcf6946c74f94a1}{visit}} (\mbox{\hyperlink{struct_infix}{Infix}} $\ast$infix) override
+\item 
+void \mbox{\hyperlink{class_printer_af895d058a7253c711fa07f2bfca8819a}{visit}} (\mbox{\hyperlink{struct_prefix}{Prefix}} $\ast$prefix) override
+\item 
+void \mbox{\hyperlink{class_printer_ac255d84f796020a938eb82354a48a611}{visit}} (\mbox{\hyperlink{struct_assign}{Assign}} $\ast$assign) override
+\item 
+void \mbox{\hyperlink{class_printer_ab5bd0aba2942baee10d40df77924b1cd}{visit}} (\mbox{\hyperlink{struct_set_expr}{Set\+Expr}} $\ast$set\+\_\+expr) override
+\item 
+void \mbox{\hyperlink{class_printer_a731e9f8dece2cf0d71a00d28674cb3d3}{visit}} (\mbox{\hyperlink{struct_get_expr}{Get\+Expr}} $\ast$get\+\_\+expr) override
+\item 
+void \mbox{\hyperlink{class_printer_a10575ebcbc409f1fa794a984ce02d4ae}{visit}} (\mbox{\hyperlink{struct_func_call}{Func\+Call}} $\ast$func\+\_\+call) override
+\item 
+void \mbox{\hyperlink{class_printer_a1cfdcb03b2355d47dd9752b2f1562e2b}{visit}} (\mbox{\hyperlink{struct_if_expr}{If\+Expr}} $\ast$if\+\_\+expr) override
+\item 
+void \mbox{\hyperlink{class_printer_afa392f0f5aac32384334267d055c582b}{visit}} (\mbox{\hyperlink{struct_list_expr}{List\+Expr}} $\ast$list) override
+\item 
+void \mbox{\hyperlink{class_printer_af2ef83d1fec4a1df8fbd2e5afce79b3c}{visit}} (\mbox{\hyperlink{struct_get_item}{Get\+Item}} $\ast$get\+\_\+item) override
+\item 
+void \mbox{\hyperlink{class_printer_ab8223efc5cbea4d25cc86f0636f475ac}{visit}} (\mbox{\hyperlink{struct_set_item}{Set\+Item}} $\ast$set\+\_\+item) override
+\item 
+void \mbox{\hyperlink{class_printer_a695023d87d3c7120249de3e80d74b37a}{visit}} (\mbox{\hyperlink{struct_dict_expr}{Dict\+Expr}} $\ast$dict) override
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_printer_a1aba91ebff40aebda570d92f17f28b27}\label{class_printer_a1aba91ebff40aebda570d92f17f28b27}} 
+\index{Printer@{Printer}!Printer@{Printer}}
+\index{Printer@{Printer}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{Printer()}{Printer()}}
+{\footnotesize\ttfamily Printer\+::\+Printer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_printer_a1ff3570e107f405173736016be4f3ceb}\label{class_printer_a1ff3570e107f405173736016be4f3ceb}} 
+\index{Printer@{Printer}!````~Printer@{$\sim$Printer}}
+\index{````~Printer@{$\sim$Printer}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{$\sim$Printer()}{~Printer()}}
+{\footnotesize\ttfamily virtual Printer\+::$\sim$\+Printer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_printer_a46015e63e5fb4f2f5e2f743f5279e8ea}\label{class_printer_a46015e63e5fb4f2f5e2f743f5279e8ea}} 
+\index{Printer@{Printer}!print@{print}}
+\index{print@{print}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily void Printer\+::print (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{_stmt_8h_ab93f4e24a92198b7182285baff389630}{Stmt\+List}} \&}]{tree }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_printer_ac255d84f796020a938eb82354a48a611}\label{class_printer_ac255d84f796020a938eb82354a48a611}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_assign}{Assign}} $\ast$}]{assign }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a2affa4b4fec4a044b6a12dc6e7aa8a32}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_a4d13af2276cc99867af1f54f01deff70}\label{class_printer_a4d13af2276cc99867af1f54f01deff70}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_block}{Block}} $\ast$}]{block }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a29a697ebcb895a40aafafc1f8ef03501}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_af253478d21d4670930310ef747bd807b}\label{class_printer_af253478d21d4670930310ef747bd807b}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [3/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_class_decl}{Class\+Decl}} $\ast$}]{class\+\_\+decl }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_aa88b79e02757ef87f90353859c0fbf29}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_a695023d87d3c7120249de3e80d74b37a}\label{class_printer_a695023d87d3c7120249de3e80d74b37a}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [4/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_dict_expr}{Dict\+Expr}} $\ast$}]{dict }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a916d8a5e006268ab17e83fe4d0588cd1}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_a1a11b81586bef09129ede6b14009dfe7}\label{class_printer_a1a11b81586bef09129ede6b14009dfe7}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [5/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_expr_stmt}{Expr\+Stmt}} $\ast$}]{expr\+\_\+stmt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a78b7bbe2de6d26e75705e586612ffadf}{Base\+Visitor}}.
+
+Here is the caller graph for this function\+:
+% FIG 2
+\mbox{\Hypertarget{class_printer_a1657d91b19626782171191587556f24a}\label{class_printer_a1657d91b19626782171191587556f24a}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [6/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_for_stmt}{For\+Stmt}} $\ast$}]{for\+\_\+stmt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a348f977085d412f59f826a3634aa2d8d}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_a10575ebcbc409f1fa794a984ce02d4ae}\label{class_printer_a10575ebcbc409f1fa794a984ce02d4ae}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [7/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_func_call}{Func\+Call}} $\ast$}]{func\+\_\+call }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a28d57a065e04758c900772174e844c3a}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_a515b3428dfecb6e776f2761874f3f806}\label{class_printer_a515b3428dfecb6e776f2761874f3f806}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [8/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_func_decl}{Func\+Decl}} $\ast$}]{func\+\_\+decl }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a40ad317c14a09260ddd434ef878636e4}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_a731e9f8dece2cf0d71a00d28674cb3d3}\label{class_printer_a731e9f8dece2cf0d71a00d28674cb3d3}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [9/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_get_expr}{Get\+Expr}} $\ast$}]{get\+\_\+expr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a1dc20fa09d2dd595507b32e0d19e4a79}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_af2ef83d1fec4a1df8fbd2e5afce79b3c}\label{class_printer_af2ef83d1fec4a1df8fbd2e5afce79b3c}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [10/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_get_item}{Get\+Item}} $\ast$}]{get\+\_\+item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_ac77a0a84b23af7a09f1b6a36c02edf32}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_ade6b51532f85027c6a9a8b4e1474e0e8}\label{class_printer_ade6b51532f85027c6a9a8b4e1474e0e8}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [11/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_identifier}{Identifier}} $\ast$}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_acf08c80f4a04712c0830210d8ee63cb3}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_a1cfdcb03b2355d47dd9752b2f1562e2b}\label{class_printer_a1cfdcb03b2355d47dd9752b2f1562e2b}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [12/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_if_expr}{If\+Expr}} $\ast$}]{if\+\_\+expr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_ac02059f9f644101d0027091fa8baad47}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_ab6700c9c99972ea888f191a5200f8495}\label{class_printer_ab6700c9c99972ea888f191a5200f8495}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [13/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_import}{Import}} $\ast$}]{import }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a7935b978a6996a7da9ae90c23c4c432e}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_aaf600efe607712cb4bcf6946c74f94a1}\label{class_printer_aaf600efe607712cb4bcf6946c74f94a1}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [14/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_infix}{Infix}} $\ast$}]{infix }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a008b942ab98665200eae8080ca327fdb}{Base\+Visitor}}.
+
+Here is the call graph for this function\+:
+% FIG 3
+\mbox{\Hypertarget{class_printer_afa392f0f5aac32384334267d055c582b}\label{class_printer_afa392f0f5aac32384334267d055c582b}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [15/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_list_expr}{List\+Expr}} $\ast$}]{list }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a9fa761afdb6ce7d72f7524df19bad934}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_a96f663a607f35ce91eabe8b2dc8f46d1}\label{class_printer_a96f663a607f35ce91eabe8b2dc8f46d1}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [16/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_literal}{Literal}} $\ast$}]{literal }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a8682f73a3c40d37fd01397ef8edd7a06}{Base\+Visitor}}.
+
+Here is the call graph for this function\+:
+% FIG 4
+\mbox{\Hypertarget{class_printer_af895d058a7253c711fa07f2bfca8819a}\label{class_printer_af895d058a7253c711fa07f2bfca8819a}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [17/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_prefix}{Prefix}} $\ast$}]{prefix }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_aaa883d1562adf1ca0dbb795caf838765}{Base\+Visitor}}.
+
+Here is the call graph for this function\+:
+% FIG 5
+\mbox{\Hypertarget{class_printer_a30967573560c182d9d7181ce594bc49e}\label{class_printer_a30967573560c182d9d7181ce594bc49e}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [18/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_return_stmt}{Return\+Stmt}} $\ast$}]{return\+\_\+stmt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_ac7c1c74e5b8432d7639a2ef6d12d0a6d}{Base\+Visitor}}.
+
+Here is the call graph for this function\+:
+% FIG 6
+\mbox{\Hypertarget{class_printer_ab5bd0aba2942baee10d40df77924b1cd}\label{class_printer_ab5bd0aba2942baee10d40df77924b1cd}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [19/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_set_expr}{Set\+Expr}} $\ast$}]{set\+\_\+expr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a4e7a0d2d6b89180ccde0a053c6fe86a2}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_ab8223efc5cbea4d25cc86f0636f475ac}\label{class_printer_ab8223efc5cbea4d25cc86f0636f475ac}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [20/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_set_item}{Set\+Item}} $\ast$}]{set\+\_\+item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a1fd1fc2d06ebef086fe2f0f1148e7a5b}{Base\+Visitor}}.
+
+\mbox{\Hypertarget{class_printer_aaec772698ea273fe452a591056efb6a1}\label{class_printer_aaec772698ea273fe452a591056efb6a1}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [21/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_var_decl}{Var\+Decl}} $\ast$}]{var\+\_\+decl }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_a506ec6ac60dcc7c021301ad6c8e52505}{Base\+Visitor}}.
+
+Here is the call graph for this function\+:
+% FIG 7
+\mbox{\Hypertarget{class_printer_a4c54450c878f0e50bee2ef3dec659f6e}\label{class_printer_a4c54450c878f0e50bee2ef3dec659f6e}} 
+\index{Printer@{Printer}!visit@{visit}}
+\index{visit@{visit}!Printer@{Printer}}
+\doxysubsubsection{\texorpdfstring{visit()}{visit()}\hspace{0.1cm}{\footnotesize\ttfamily [22/22]}}
+{\footnotesize\ttfamily void Printer\+::visit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_while_stmt}{While\+Stmt}} $\ast$}]{w }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_visitor_af0030360e4e04ae7f72b913ab031bcaf}{Base\+Visitor}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/tree/\mbox{\hyperlink{_printer_8h}{Printer.\+h}}\item 
+src/tree/\mbox{\hyperlink{_printer_8cpp}{Printer.\+cpp}}\end{DoxyCompactItemize}

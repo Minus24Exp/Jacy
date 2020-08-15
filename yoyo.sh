@@ -39,8 +39,8 @@ elif [[ $1 = "git_all" ]]; then
     echo -e "git add .\n"
     eval "git add ."
 
-    echo -e "git commit -m \"$2\"\n"
-    eval "git commit -m \"$2\""
+    echo -e "git commit -m \"${@:2}\"\n"
+    eval "git commit -m \"${@:2}\""
 
     echo -e "git push -u origin master\n"
     eval "git push -u origin master"

@@ -1,0 +1,43 @@
+digraph "Import"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{Import\n||+ Import()\l+ Import()\l+ ~Import()\l+ accept()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{Stmt\n||+ Stmt()\l+ ~Stmt()\l+ accept()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_stmt.html",tooltip=" "];
+  Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node3 [label="{Node\n||+ Node()\l+ ~Node()\l+ accept()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_node.html",tooltip=" "];
+  Node4 -> Node3 [color="grey25",fontsize="10",style="solid",label=" +pos" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{Position\n||}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_position.html",tooltip=" "];
+  Node5 -> Node4 [color="grey25",fontsize="10",style="solid",label=" +column\n+line" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{uint32_t\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node6 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +type" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{StmtType\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node7 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +path" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{std::string\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip="STL class."];
+  Node8 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node8 [label="{std::basic_string\<\l char \>\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip="STL class."];
+  Node9 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +entities" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node9 [label="{std::vector\< ImportEntity \>\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node10 -> Node9 [color="grey25",fontsize="10",style="solid",label=" +elements" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node10 [label="{ImportEntity\n||+ ImportEntity()\l+ ~ImportEntity()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_import_entity.html",tooltip=" "];
+  Node11 -> Node10 [color="grey25",fontsize="10",style="solid",label=" +all" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node11 [label="{bool\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node12 -> Node10 [color="grey25",fontsize="10",style="solid",label=" +as\n+object" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node12 [label="{std::shared_ptr\< Identifier \>\n||+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node13 -> Node12 [color="grey25",fontsize="10",style="solid",label=" +ptr" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node13 [label="{Identifier\n||+ Identifier()\l+ get_name()\l+ accept()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_identifier.html",tooltip=" "];
+  Node14 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node14 [label="{Expr\n||+ Expr()\l+ ~Expr()\l+ accept()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_expr.html",tooltip=" "];
+  Node3 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node15 -> Node14 [color="grey25",fontsize="10",style="solid",label=" +type" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node15 [label="{ExprType\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node16 -> Node13 [color="grey25",fontsize="10",style="solid",label=" +token" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node16 [label="{Token\n||+ Token()\l+ Token()\l+ Token()\l+ Token()\l+ Token()\l+ ~Token()\l+ Bool()\l+ Int()\l+ Float()\l+ String()\l+ op()\l+ kw()\l+ to_string()\l+ error()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_token.html",tooltip=" "];
+  Node17 -> Node16 [color="grey25",fontsize="10",style="solid",label=" +val" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node17 [label="{variant\< std::monostate,\l bool, yo_int, double,\l std::string, Operator,\l Keyword \>\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node4 -> Node16 [color="grey25",fontsize="10",style="solid",label=" +pos" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node18 -> Node16 [color="grey25",fontsize="10",style="solid",label=" +type" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node18 [label="{TokenType\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+}
