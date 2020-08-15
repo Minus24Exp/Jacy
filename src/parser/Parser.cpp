@@ -150,6 +150,9 @@ stmt_ptr Parser::parse_stmt(){
             case Keyword::Import:{
                 return parse_import();
             }
+            case Keyword::Type:{
+                return parse_type_decl();
+            }
         }
     }
 
@@ -460,6 +463,18 @@ stmt_ptr Parser::parse_import(){
     advance();
 
     return std::make_shared<Import>(import_pos, path, entities);
+}
+
+// TypeDecl //
+stmt_ptr Parser::parse_type_decl(){
+    Position type_decl_pos = peek().pos;
+
+    skip_kw(Keyword::Type, false, false);
+    id_ptr id = parse_id();
+    skip_op(Operator::Assign, false, false);
+    expr_ptr type_expr = parse_expr();
+
+    return std::make_shared<TypeDecl>(type_decl_pos, id, type_expr);
 }
 
 /////////////////
