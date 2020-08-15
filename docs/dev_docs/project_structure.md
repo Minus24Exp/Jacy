@@ -2,21 +2,21 @@
 
 ```
 .
-+-- bin
++-- <b>bin</b>
 |   +-- {Binaries}
-+-- docs
++-- <b>docs</b>
 |   +-- dev_docs (Development documentation)
 |   +-- en_docs (Documentation in english)
 |   +-- ru_docs (Documentation in russian)
-+-- img
++-- <b>img</b>
 |   +-- {Images for repo}
-+-- include
++-- <b>include</b>
 |   +-- {All C++ headers go here}
-+-- lib
++-- <b>lib</b>
 |   +-- {All Yocto's native libraries}
-+-- sample
++-- <b>sample</b>
 |   +-- {Sample Yocto scripts}
-+-- src
++-- <b>src</b>
 |   +-- {All C++ source files (.cpp) go here}
 +-- .gitignore
 +-- Doxyfile
