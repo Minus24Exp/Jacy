@@ -1,6 +1,6 @@
 # Project structure
 
-```
+<pre>
 .
 +-- <b>bin</b>
 |   +-- {Binaries}
@@ -22,7 +22,7 @@
 +-- Doxyfile
 +-- README.md
 +-- yoyo.sh
-```
+</pre>
 
 #### Marks:
 > Doxyfile is settings for Doxygen, it is ignored for git
