@@ -98,7 +98,7 @@ const std::vector <std::string> operators {
 
     "===", "!==",
 
-    "...", ">..", "..<", ">.<",
+    "..", ">..", "..<", ">.<",
 
     "=>",
 
@@ -135,6 +135,8 @@ enum class Keyword {
 
     For,
 
+    Type,
+
     MAX
 };
 
@@ -161,7 +163,9 @@ const std::vector <std::string> keywords {
 
     "from",
 
-    "for"
+    "for",
+
+    "type"
 };
 
 inline Keyword str_to_kw(const std::string & str){

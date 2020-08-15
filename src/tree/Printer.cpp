@@ -129,6 +129,14 @@ void Printer::visit(Import * import){
     std::cout << "import " << import->path;
 }
 
+void Printer::visit(TypeDecl * type_decl){
+    print_indent();
+    std::cout << "type ";
+    type_decl->id->accept(*this);
+    std::cout << " = ";
+    type_decl->type_expr->accept(*this);
+}
+
 /////////////////
 // Expressions //
 /////////////////

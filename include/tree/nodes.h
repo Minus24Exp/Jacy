@@ -7,6 +7,7 @@
 #include "tree/Stmt/ForStmt.h"
 #include "tree/Stmt/ClassDecl.h"
 #include "tree/Stmt/Import.h"
+#include "tree/Stmt/TypeDecl.h"
 
 // Expressions //
 #include "tree/Expr/Literal.h"
@@ -27,5 +28,5 @@
 
 /**
  * This file just includes all nodes
- * But (!important!), incluse Node.h after all of the other
+ * But (!important!), include Node.h last
  */
