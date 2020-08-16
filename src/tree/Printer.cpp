@@ -192,7 +192,9 @@ void Printer::visit(Prefix * prefix){
 
 void Printer::visit(Assign * assign){
     assign->id->accept(*this);
-    std::cout << " = ";
+    std::cout << " ";
+    std::cout << op_to_str(assign->assign_op);
+    std::cout << " ";
     assign->value->accept(*this);
 }
 

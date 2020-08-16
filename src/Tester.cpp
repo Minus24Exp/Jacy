@@ -11,46 +11,27 @@ void Tester::prepare(){
     std::cout << "[Prepairing Tests]\n\n";
 
     struct dirent * entry;
-    DIR * lexer_tests_dir = opendir("test/lexer");
-    DIR * parser_tests_dir = opendir("test/parser");
+    DIR * tests_dir = opendir("test");
 
-    if(lexer_tests_dir == NULL){
-        throw YoctoException("Unable to open \"test/lexer\" folder not found");
+    if(tests_dir == NULL){
+        throw YoctoException("Unable to open \"test\" folder");
     }
 
-    if(parser_tests_dir == NULL){
-        throw YoctoException("Unable to open \"test/parser\" folder not found");
-    }
-
-    // Collect lexer tests
-    while((entry = readdir(lexer_tests_dir)) != NULL){
+    // Collect tests
+    while((entry = readdir(tests_dir)) != NULL){
         // Skip `.`, `..` and maybe hidden files
         if(entry->d_name[0] != '.'){
-            lexer_test_list.push_back("test/lexer/"+ std::string(entry->d_name));
+            test_list.push_back("test/"+ std::string(entry->d_name));
         }
     }
 
-    // Collect parser tests
-    while((entry = readdir(parser_tests_dir)) != NULL){
-        // Skip `.`, `..` and maybe hidden files
-        if(entry->d_name[0] != '.'){
-            parser_test_list.push_back("test/parser/"+ std::string(entry->d_name));
-        }
-    }
-
-    closedir(lexer_tests_dir);
-    closedir(parser_tests_dir);
+    closedir(tests_dir);
 }
 
 void Tester::run(){
-    std::cout << "\n[Run lexer tests]" << std::endl;
-    for(const auto & lexer_test : lexer_test_list){
-        run_test(lexer_test, TestType::Lexer);
-    }
-
-    std::cout << "\n[Run parser tests]" << std::endl;
-    for(const auto & parser_test : parser_test_list){
-        run_test(parser_test, TestType::Parser);
+    std::cout << "\n[Run tests]" << std::endl;
+    for(const auto & test : test_list){
+        run_test(test);
     }
 }
 
@@ -68,7 +49,7 @@ std::string Tester::read_file(const std::string & path){
     return ss.str();
 }
 
-void Tester::run_test(const std::string & path, TestType test_type){
+void Tester::run_test(const std::string & path){
     std::string error_msg;
 
     std::string script;
@@ -79,9 +60,7 @@ void Tester::run_test(const std::string & path, TestType test_type){
 
         tokens = lexer.lex(script);
 
-        if(test_type == TestType::Parser){
-            parser.parse(tokens);
-        }
+        tree = parser.parse(tokens);
     }catch(YoctoException & e){
         error_msg = e.what();
     }
@@ -104,7 +83,7 @@ void Tester::run_test(const std::string & path, TestType test_type){
             }
         }
 
-        if(tree.size() > 0 && test_type == TestType::Parser){
+        if(tree.size() > 0){
             Printer printer;
             std::cout << "Parse Tree:" << std::endl;
             printer.print(tree);

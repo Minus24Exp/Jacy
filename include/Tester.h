@@ -45,18 +45,12 @@ private:
     Lexer & lexer;
     Parser & parser;
 
-    std::vector<std::string> lexer_test_list;
-    std::vector<std::string> parser_test_list;
+    std::vector<std::string> test_list;
     void prepare();
 
     std::string read_file(const std::string & path);
 
-    enum class TestType {
-        Lexer,
-        Parser
-    };
-
-    void run_test(const std::string & path, TestType test_type);
+    void run_test(const std::string & path);
 };
 
 #endif

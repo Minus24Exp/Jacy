@@ -38,7 +38,12 @@ bool Parser::is_kw(const Keyword & kw){
 bool Parser::is_assign_op(){
     // Fixme: Maybe reduce checkers?
     return is_op(Operator::Assign)
-        || is_op(Operator::AddAssign);
+        || is_op(Operator::AddAssign)
+        || is_op(Operator::SubAssign)
+        || is_op(Operator::MulAssign)
+        || is_op(Operator::DivAssign)
+        || is_op(Operator::ModAssign)
+        || is_op(Operator::ExpAssign);
 }
 
 //////////////
