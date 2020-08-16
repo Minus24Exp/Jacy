@@ -7,19 +7,30 @@ Yocto::Yocto()
     debug = false;
 }
 
-void Yocto::launch(int argc, const char * argv[]){
-    // Parser argv
+void Yocto::launch(int argc, const char * argv[]){    
+    // Parse argv
+    
+    // yocto_args -> false when main file appears
+    bool yocto_args = true;
+    
+    std::vector<std::string> script_argv;
     for(int i = 1; i < argc; i++){
         std::string arg(argv[i]);
 
         if(arg[0] == '-'){
-            if(arg.substr(1) == "debug"){
-                debug = true;
+            if(yocto_args){
+                // Parse yocto arguments
+                if(arg.substr(1) == "debug"){
+                    debug = true;
+                }
+            }else{
+                script_argv.push_back(std::string(argv[i]));
             }
         }else{
             // Check if argument is Yocto file (ends with ".yo")
             if(arg.size() > 3 && arg.compare(arg.size() - 3, 3, ".yo") == 0){
                 if(main_file.empty()){
+                    yocto_args = false;
                     main_file = arg;
                 }else{
                     throw YoctoException("Expected only one input file");
@@ -31,6 +42,7 @@ void Yocto::launch(int argc, const char * argv[]){
     if(main_file.empty()){
         run_repl();
     }else{
+        // @TODO: Add script argv available in script
         run_script(main_file);
     }
 }

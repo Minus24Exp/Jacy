@@ -18,6 +18,9 @@
 |   +-- {Sample Yocto scripts}
 +-- <b>src</b>
 |   +-- {All C++ source files (.cpp) go here}
++-- <b>test</b>
+|   +-- parsing
+|   |   +-- {Parsing tests}
 +-- .gitignore
 +-- Doxyfile
 +-- README.md

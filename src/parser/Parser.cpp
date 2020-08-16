@@ -647,7 +647,7 @@ expr_ptr Parser::add(){
 expr_ptr Parser::mult(){
     expr_ptr left = power();
     
-    while(is_op(Operator::Mul) || is_op(Operator::Div)){
+    while(is_op(Operator::Mul) || is_op(Operator::Div) || is_op(Operator::Mod)){
         const auto op_token = peek();
         advance();
         skip_nl(true);

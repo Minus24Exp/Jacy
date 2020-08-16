@@ -11,6 +11,7 @@
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
 #include "tree/Printer.h"
+#include "Tester.h"
 
 /**
  * Yocto

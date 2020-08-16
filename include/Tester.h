@@ -1,0 +1,61 @@
+#ifndef TEST_H
+#define TEST_H
+
+#include "parser/Lexer.h"
+#include "parser/Parser.h"
+
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <dirent.h>
+#include <sys/types.h>
+
+// If true then after one test failed next tests won't be ran
+const bool continue_after_fail = true;
+
+class Tester {
+public:
+    /**
+     * @return singleton instance of Tester class
+     */
+    static Tester & get_instance(){
+        static Tester instance;
+        return instance;
+    }
+
+/*
+ * Delete everything singleton must not have
+ */
+public:
+    Tester(const Tester&)             = delete;
+    Tester(Tester&&)                  = delete;
+    Tester & operator=(const Tester&) = delete;
+    Tester & operator=(Tester&&)      = delete;
+
+private:
+    Tester();
+    ~Tester() = default;
+
+public:
+    void run();
+
+private:
+    Lexer & lexer;
+    Parser & parser;
+
+    std::vector<std::string> lexer_test_list;
+    std::vector<std::string> parser_test_list;
+    void prepare();
+
+    std::string read_file(const std::string & path);
+
+    enum class TestType {
+        Lexer,
+        Parser
+    };
+
+    void run_test(const std::string & path, TestType test_type);
+};
+
+#endif
