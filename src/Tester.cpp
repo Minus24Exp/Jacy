@@ -76,9 +76,6 @@ bool Tester::run_test(const std::string & path){
         std::cout << "(\u001b[31m×\u001b[0m) Test `" << path << "` not passed" << std::endl;
         
         std::cout << "\tError: " << error_msg << std::endl;
-        
-        std::cout << "Code:" << std::endl;
-        std::cout << script << std::endl;
 
         if(tokens.size() > 0){
             std::cout << "Token:" << std::endl;
