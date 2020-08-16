@@ -1,8 +1,9 @@
-#ifndef TEST_H
-#define TEST_H
+#ifndef TESTER_H
+#define TESTER_H
 
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
+#include "tree/Printer.h"
 
 #include <string>
 #include <iostream>

@@ -71,10 +71,13 @@ std::string Tester::read_file(const std::string & path){
 void Tester::run_test(const std::string & path, TestType test_type){
     std::string error_msg;
 
+    std::string script;
+    TokenStream tokens;
+    StmtList tree;
     try{
-        std::string script = read_file(path);
+        script = read_file(path);
 
-        TokenStream tokens  = lexer.lex(script);
+        tokens = lexer.lex(script);
 
         if(test_type == TestType::Parser){
             parser.parse(tokens);
@@ -88,6 +91,26 @@ void Tester::run_test(const std::string & path, TestType test_type){
         std::cout << "(\u001b[32m✔\u001b[0m) Test `" << path << "` passed" << std::endl;
     }else{
         std::cout << "(\u001b[31m×\u001b[0m) Test `" << path << "` not passed" << std::endl;
+        
         std::cout << "\tError: " << error_msg << std::endl;
+        
+        std::cout << "Code:" << std::endl;
+        std::cout << script << std::endl;
+
+        if(tokens.size() > 0){
+            std::cout << "Token:" << std::endl;
+            for(auto & t : tokens){
+                std::cout << t.to_string() << std::endl;
+            }
+        }
+
+        if(tree.size() > 0 && test_type == TestType::Parser){
+            Printer printer;
+            std::cout << "Parse Tree:" << std::endl;
+            printer.print(tree);
+            std::cout << std::endl;
+        }
     }
+
+    std::cout << "——————————————————————————————————————————————————————————————————————————\n\n";
 }
