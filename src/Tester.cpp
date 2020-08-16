@@ -69,11 +69,14 @@ bool Tester::run_test(const std::string & path){
         error_msg = e.what();
     }
 
+    std::string message;
     if(error_msg.empty()){
         // If test checked
-        std::cout << "(\u001b[32m✔\u001b[0m) Test `" << path << "` passed" << std::endl;
+        message = "(\u001b[32m✔\u001b[0m) Test `" + path + "` passed";
+        std::cout << message << std::endl;
     }else{
-        std::cout << "(\u001b[31m×\u001b[0m) Test `" << path << "` not passed" << std::endl;
+        message = "(\u001b[31m×\u001b[0m) Test `" + path + "` not passed";
+        std::cout << message << std::endl;
         
         std::cout << "\tError: " << error_msg << std::endl;
 
@@ -92,7 +95,12 @@ bool Tester::run_test(const std::string & path){
         }
     }
 
-    std::cout << "——————————————————————————————————————————————————————————————————————————\n\n";
+    // Pretty printed delimiter
+    // -10 because of ANSI colors in message
+    for(int i = 0; i < message.size() - 10; i++){
+        std::cout << "—";
+    }
+    std::cout << "\n\n";
 
     return error_msg.empty();
 }

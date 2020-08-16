@@ -254,7 +254,9 @@ stmt_ptr Parser::parse_func_decl(){
     bool first = true;
     while(!eof()){
         if((paren && is_op(Operator::RParen))
-        || (!paren && (is_op(Operator::Arrow) || is_op(Operator::LBrace)))){
+        || (!paren && (is_op(Operator::Arrow)
+        || is_op(Operator::LBrace))))
+        {
             break;
         }
         if(first){
