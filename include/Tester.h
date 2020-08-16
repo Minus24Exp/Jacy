@@ -13,7 +13,7 @@
 #include <sys/types.h>
 
 // If true then after one test failed next tests won't be ran
-const bool continue_after_fail = true;
+const bool continue_after_fail = false;
 
 class Tester {
 public:
@@ -50,7 +50,7 @@ private:
 
     std::string read_file(const std::string & path);
 
-    void run_test(const std::string & path);
+    bool run_test(const std::string & path);
 };
 
 #endif

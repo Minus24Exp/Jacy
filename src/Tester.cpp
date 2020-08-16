@@ -31,7 +31,11 @@ void Tester::prepare(){
 void Tester::run(){
     std::cout << "\n[Run tests]" << std::endl;
     for(const auto & test : test_list){
-        run_test(test);
+        bool passed = run_test(test);
+        if(!passed && !continue_after_fail){
+            std::cout << "[\u001b[31mStopped after fail\u001b[0m]" << std::endl;
+            return;
+        }
     }
 }
 
@@ -49,7 +53,7 @@ std::string Tester::read_file(const std::string & path){
     return ss.str();
 }
 
-void Tester::run_test(const std::string & path){
+bool Tester::run_test(const std::string & path){
     std::string error_msg;
 
     std::string script;
@@ -92,4 +96,6 @@ void Tester::run_test(const std::string & path){
     }
 
     std::cout << "——————————————————————————————————————————————————————————————————————————\n\n";
+
+    return error_msg.empty();
 }
