@@ -1,5 +1,8 @@
 #include "Yocto.h"
 #include "Tester.h"
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
 
 const bool RUN_TESTS = true;
 
@@ -9,7 +12,11 @@ void signal_handler(int signal_num){
 }
 
 int main(int argc, const char * argv[]){
-    signal(SIGSEGV, signal_handler);
+    struct sigaction act;
+    act.sa_handler = signal_handler;
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = 0;
+    sigaction(SIGINT, &act, 0);
 
     if(RUN_TESTS){
         Tester & tester = Tester::get_instance();

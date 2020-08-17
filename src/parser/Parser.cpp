@@ -109,6 +109,10 @@ StmtList Parser::parse(const TokenStream & tokens){
         while(is_nl()){
             advance();
         }
+        if(eof()){
+            break;
+        }
+
         tree.push_back(parse_stmt());
 
         if(!eof() && !virtual_semi){
@@ -379,9 +383,8 @@ stmt_ptr Parser::parse_class_decl(){
 
     skip_op(Operator::LBrace, true, true);
 
+    // @Note: Think about nested classes
     // Parse declarations
-    // Note: Think about nested classes
-
     StmtList decls;
     while(!eof()){
         skip_nl(true);
