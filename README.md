@@ -2,7 +2,7 @@
     <img src="img/Jacy.png" width="250">    
 </p>
 
-# Jacy
+# *Jacy*
 (*Previously __Yocto__*)
 
 10⁻²⁴ size programming language written in pure C++.
