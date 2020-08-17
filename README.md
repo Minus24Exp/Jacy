@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="img/Jacy.png" width="250">    
+    <img src="img/JacyWide.png" width="300">    
 </p>
 
 # *Jacy*
