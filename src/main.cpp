@@ -5,7 +5,7 @@ const bool RUN_TESTS = true;
 
 void signal_handler(int signal_num){ 
     std::cout << "Interrupt signal: " << signal_num << std::endl; 
-    exit(signal_num);   
+    exit(signal_num); 
 }
 
 int main(int argc, const char * argv[]){

@@ -248,7 +248,7 @@ TokenStream Lexer::lex(const std::string & script){
                         advance(2);
                     }else{
                         add_token(Operator::Add);
-                        advance();   
+                        advance();
                     }
                 } break;
                 case '-':{

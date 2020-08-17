@@ -10,7 +10,7 @@ public:
 
     void compile(const StmtList & tree);
 private:
-    StmtList tree;    
+    StmtList tree; 
 };
 
 #endif
