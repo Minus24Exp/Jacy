@@ -1,0 +1,30 @@
+[1m[35m
+git add .
+
+[1m[33m
+git commit -m "Yocto - [YEAH]"
+
+[master 4ce4aed] Yocto - [YEAH]
+ 42 files changed, 105 insertions(+), 109 deletions(-)
+ rename lib/range.yo => Jacy (100%)
+ delete mode 100755 bin/yocto
+ delete mode 100644 bin/yocto.exe
+ create mode 100644 img/Jacy.png
+ rename include/{Yocto.h => Jacy.h} (76%)
+ rename yoyo.sh => jacy.sh (96%)
+ mode change 100755 => 100644
+ create mode 100644 lib/range.jc
+ rename sample/{module1.yo => module1.jc} (100%)
+ rename sample/{module2.yo => module2.jc} (100%)
+ rename sample/modules/{inner.yo => inner.jc} (100%)
+ rename sample/{script.yo => script.jc} (100%)
+ rename src/{Yocto.cpp => Jacy.cpp} (81%)
+ rename test/{class_decl.yo => class_decl.jc} (100%)
+ rename test/{func_decl.yo => func_decl.jc} (100%)
+ rename test/{if_expr.yo => if_expr.jc} (100%)
+ rename test/{infix.yo => infix.jc} (100%)
+[1m[32m
+git push -u origin master
+
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+[0m
