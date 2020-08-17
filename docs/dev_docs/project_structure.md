@@ -13,9 +13,9 @@
 +-- <b>include</b>
 |   +-- {All C++ headers go here}
 +-- <b>lib</b>
-|   +-- {All Yocto's native libraries}
+|   +-- {All Jacy's native libraries}
 +-- <b>sample</b>
-|   +-- {Sample Yocto scripts}
+|   +-- {Sample Jacy scripts}
 +-- <b>src</b>
 |   +-- {All C++ source files (.cpp) go here}
 +-- <b>test</b>

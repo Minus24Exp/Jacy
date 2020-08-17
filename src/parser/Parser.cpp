@@ -384,6 +384,7 @@ stmt_ptr Parser::parse_class_decl(){
     skip_op(Operator::LBrace, true, true);
 
     // @Note: Think about nested classes
+    
     // Parse declarations
     StmtList decls;
     while(!eof()){
@@ -914,7 +915,7 @@ expr_ptr Parser::parse_if_expr(){
 // Errors //
 ////////////
 void Parser::error(const std::string & msg){
-    throw YoctoException(msg);
+    throw JacyException(msg);
 }
 
 void Parser::unexpected_error(){

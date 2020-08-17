@@ -1,7 +1,7 @@
 #ifndef ASSIGN_H
 #define ASSIGN_H
 
-// Note: In Yocto assignment is an expression
+// Note: In Jacy assignment is an expression
 // Note: `Assign` is expression for assignment with identifier only !!!
 // It means, that it's only valid for `id = value`
 // For other assignments there's `SetExpr` and for array will be one separate too.

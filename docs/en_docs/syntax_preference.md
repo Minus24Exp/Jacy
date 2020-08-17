@@ -1,5 +1,5 @@
 # Syntax preference
-Yocto's syntax is various. Sometimes you need to choose one way to write something, sometimes you should always prefer one way.
+Jacy's syntax is various. Sometimes you need to choose one way to write something, sometimes you should always prefer one way.
 
 ### Parentheses
 Control flow expressions and function delcaration can be written with/without parentheses.

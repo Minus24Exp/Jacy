@@ -12,7 +12,7 @@ I hope it's possible...
 ### Control flow
 
 #### `if`/`elif`(`else if`)/`else`
-In Yocto `if` is an expression that sets current value to last evaluated in its block.
+In Jacy `if` is an expression that sets current value to last evaluated in its block.
 So, it's possible to use `if` in assignment or as ternary:
 ```
 // Assignment
@@ -92,7 +92,7 @@ while a {
 ```
 
 #### Functions, `func` keyword
-To define a function in Yocto you need to use `func` keyword:
+To define a function in Jacy you need to use `func` keyword:
 ```
 func a //...
 ```
@@ -136,11 +136,11 @@ func a p1 = 'a', p2 = 'b' // ...
 ```
 Anyway, here's one common rule: **After parameter with default value all parameters MUST have default value**
 In Ruby it's possible to set default value for first argument and not to set it for second one.
-But, firstly, Yocto interpreter is not so smart, and secondly, I think it's not as much convenient as bad practice and may be confused.
-So, most likely, in Yocto it will never be implemented.
+But, firstly, Jacy interpreter is not so smart, and secondly, I think it's not as much convenient as bad practice and may be confused.
+So, most likely, in Jacy it will never be implemented.
 
 #### Function calls
-In Yocto function calls require parentheses(`()`), it's not possible to do it as in Ruby, even no-argument functions require parentheses.
+In Jacy function calls require parentheses(`()`), it's not possible to do it as in Ruby, even no-argument functions require parentheses.
 
 ### Types
 
@@ -166,7 +166,7 @@ For explicit type convertion every object has or can overload special convertion
 - `to_f` to float
 
 In Ruby there's the thing that I don't like at all. The Perl problem of multiple ways.
-I really want to make Yocto "funny" to use as Ruby is, but I want to make it as strict as I can.
+I really want to make Jacy "funny" to use as Ruby is, but I want to make it as strict as I can.
 
 ### Magic methods
 
@@ -179,8 +179,8 @@ Operator overloading can be implemented with operator magic functions:
 - `__mod` - `%`
 - `__pow` - `**`
 
-## Yocto code recomendations
-Since Yocto provides different ways to do the same thing, I want to describe some rules about code writing for stringency.
+## Jacy code recomendations
+Since Jacy provides different ways to do the same thing, I want to describe some rules about code writing for stringency.
 
 ### Single-line blocks
 Examples with writing rules:

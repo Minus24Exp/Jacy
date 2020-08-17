@@ -20,7 +20,7 @@ MyType - type
 ```
 
 ## Type declaration (aliases)
-In Yocto it's possible to declare some kind of "alias" for type.
+In Jacy it's possible to declare some kind of "alias" for type.
 For example, I want to create a type that can be Int or Bool.
 Here's the syntax I need to apply:
 ```

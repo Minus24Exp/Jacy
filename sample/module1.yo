@@ -1,1 +1,0 @@
-func mod1_print p1 => print(p1)

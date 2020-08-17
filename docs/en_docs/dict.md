@@ -1,5 +1,5 @@
 # Dict (Dictionaries)
-In Yocto dictionaries are same to Python's.
+In Jacy dictionaries are same to Python's.
 
 ## Key
 Key can be any object with `__hash` function.

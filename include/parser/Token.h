@@ -8,7 +8,7 @@
 
 using yo_int = long;
 
-// Note: In Yocto floating-point numbers are doubles
+// Note: In Jacy floating-point numbers are doubles
 enum class Operator;
 enum class Keyword;
 using TokenVal = std::variant<std::monostate, bool, yo_int, double, std::string, Operator, Keyword>;

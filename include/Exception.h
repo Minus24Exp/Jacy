@@ -9,14 +9,14 @@
 const int RECURSION_DEPTH_LIMIT = 1000;
 
 /**
- * @brief The base class of all exceptions in Yocto 
+ * @brief The base class of all exceptions in Jacy 
  * @details All other exceptions count as "Uncaught"
  * 
  * @param msg String message to print when caught
  */
-class YoctoException : public std::exception {
+class JacyException : public std::exception {
 public:
-    YoctoException(const std::string & msg)
+    JacyException(const std::string & msg)
         : message(msg) {}
 
     /**
@@ -37,29 +37,29 @@ private:
 /**
  * FileNotFoundException
  */
-class FileNotFoundException : public YoctoException {
+class FileNotFoundException : public JacyException {
 public:
-    FileNotFoundException() : YoctoException("File not found") {}
-    FileNotFoundException(const std::string & details) : YoctoException("File not found: "+ details) {}
+    FileNotFoundException() : JacyException("File not found") {}
+    FileNotFoundException(const std::string & details) : JacyException("File not found: "+ details) {}
 };
 
 /**
  * IllegalArgumentException
  */
-class IllegalArgumentException : public YoctoException {
+class IllegalArgumentException : public JacyException {
 public:
-    IllegalArgumentException() : YoctoException("Illegal argument") {}
-    IllegalArgumentException(const std::string & details) : YoctoException("Illegal argument: "+ details) {}
+    IllegalArgumentException() : JacyException("Illegal argument") {}
+    IllegalArgumentException(const std::string & details) : JacyException("Illegal argument: "+ details) {}
 };
 
 /**
  * ExpectedException
  * @brief Exception for cases when something was expected but wrong thing was given
  */
-class ExpectedException : public YoctoException {
+class ExpectedException : public JacyException {
 public:
     ExpectedException(const std::string & expected, const std::string & given)
-        : YoctoException("Expected "+ expected +", "+ given +" given") {}
+        : JacyException("Expected "+ expected +", "+ given +" given") {}
 
     ExpectedException(const std::string & expected, Token given_token)
         : ExpectedException(expected, given_token.to_string()) {}
@@ -69,9 +69,9 @@ public:
 // Parsring Exceptions //
 /////////////////////////
 
-class ParserException : public YoctoException {
+class ParserException : public JacyException {
 public:
-    ParserException(const std::string & msg) : YoctoException(msg) {}
+    ParserException(const std::string & msg) : JacyException(msg) {}
 
     ParserException(const std::string & pre_msg, Token t, const std::string & post_msg)
         : ParserException(pre_msg +" "+ t.to_string() +" "+ post_msg) {}
@@ -112,10 +112,10 @@ public:
  * @param pos Position where error occured
  * @param in_file File where error occured
  */
-class RuntimeException : public YoctoException {
+class RuntimeException : public JacyException {
 public:
     RuntimeException(const std::string & msg, const Position & pos, const std::string & in_file)
-        : YoctoException("Runtime error: "+ msg +"\n"+ in_file +":"+
+        : JacyException("Runtime error: "+ msg +"\n"+ in_file +":"+
                         std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
 };
 
@@ -139,9 +139,9 @@ public:
 
 // Dev Error used in cases there something was wrong with source code
 // It's mostly like a hint for developers
-class DevError : public YoctoException {
+class DevError : public JacyException {
 public:
-    DevError(const std::string & msg) : YoctoException("[Dev Error]: "+ msg) {}
+    DevError(const std::string & msg) : JacyException("[Dev Error]: "+ msg) {}
 };
 
 #endif

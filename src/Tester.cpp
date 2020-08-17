@@ -14,7 +14,7 @@ void Tester::prepare(){
     DIR * tests_dir = opendir("test");
 
     if(tests_dir == NULL){
-        throw YoctoException("Unable to open \"test\" folder");
+        throw JacyException("Unable to open \"test\" folder");
     }
 
     // Collect tests
@@ -65,7 +65,7 @@ bool Tester::run_test(const std::string & path){
         tokens = lexer.lex(script);
 
         tree = parser.parse(tokens);
-    }catch(YoctoException & e){
+    }catch(JacyException & e){
         error_msg = e.what();
     }
 

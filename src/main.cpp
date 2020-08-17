@@ -1,8 +1,5 @@
-#include "Yocto.h"
+#include "Jacy.h"
 #include "Tester.h"
-#include <signal.h>
-#include <unistd.h>
-#include <stdio.h>
 
 const bool RUN_TESTS = true;
 
@@ -12,11 +9,7 @@ void signal_handler(int signal_num){
 }
 
 int main(int argc, const char * argv[]){
-    struct sigaction act;
-    act.sa_handler = signal_handler;
-    sigemptyset(&act.sa_mask);
-    act.sa_flags = 0;
-    sigaction(SIGINT, &act, 0);
+    signal(SIGSEGV, signal_handler);
 
     if(RUN_TESTS){
         Tester & tester = Tester::get_instance();
@@ -25,8 +18,8 @@ int main(int argc, const char * argv[]){
     }
 
     try{
-        Yocto::get_instance().launch(argc, argv);
-    }catch(YoctoException & e){
+        Jacy::get_instance().launch(argc, argv);
+    }catch(JacyException & e){
         std::cout << e.what() << std::endl;
     }catch(std::exception & e){
         std::cout << "Uncaught error: " << e.what() << std::endl;

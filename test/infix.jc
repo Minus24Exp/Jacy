@@ -1,0 +1,17 @@
+// This test is all about infix operators
+
+1 + 1
+1 - 1
+1 * 1
+1 / 1
+1 % 1
+1 ** 1
+
+val a
+a = 10
+a += 10
+a -= 10
+a *= 10
+a /= 10
+a %= 10
+a **= 10

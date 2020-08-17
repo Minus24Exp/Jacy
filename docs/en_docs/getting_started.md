@@ -1,4 +1,4 @@
-# Yocto Specification
+# Jacy Specification
 
 ## Grammar notations
 All grammar notations are/must be written in ANTLR-like(not real antlr) syntax, because it is easier to read rather than BNF.

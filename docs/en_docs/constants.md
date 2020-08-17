@@ -1,6 +1,6 @@
 # Constants and Literals
 
-Yocto's literals:
+Jacy's literals:
 - null (singleton instance of NullClass)
 - Bool (`true`/`false`)
 - Int (64-bit precision signed number, `long`)

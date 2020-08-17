@@ -1,8 +1,9 @@
 <p align="center">
-    <img src="img/Yocto.png" width="250">    
+    <img src="img/Jacy.png" width="250">    
 </p>
 
-# Yocto
+# Jacy
+(*Previously __Yocto__*)
 
 10⁻²⁴ size programming language written in pure C++.
 
