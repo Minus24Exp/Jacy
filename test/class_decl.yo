@@ -1,3 +1,5 @@
 // This test is about class declaration
 
-class A {}
+class A {
+    
+}
