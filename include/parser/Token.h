@@ -150,10 +150,10 @@ const std::vector <std::string> keywords {
     "null",
     "true", "false",
     "var", "val",
-    
+
     "func",
     "return",
-    
+
     "if", "elif", "else",
 
     "while",
@@ -269,7 +269,7 @@ struct Token {
     Operator op(){
         return std::get<Operator>(val);
     }
-    
+
     Keyword kw(){
         return std::get<Keyword>(val);
     }

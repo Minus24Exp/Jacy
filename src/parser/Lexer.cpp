@@ -169,7 +169,7 @@ TokenStream Lexer::lex(const std::string & script){
     while(!eof()){
         token_line = line;
         token_column = column;
-    
+
         if(skip(peek())){
             advance();
         }else if(is_nl(peek())){

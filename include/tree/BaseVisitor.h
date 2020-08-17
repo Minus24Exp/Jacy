@@ -36,7 +36,7 @@ class BaseVisitor {
 public:
     BaseVisitor() {}
     virtual ~BaseVisitor() = default;
-        
+
     // Statements //
     virtual void visit(ExprStmt * expr_stmt) = 0;
     virtual void visit(Block * block) = 0;
@@ -63,7 +63,7 @@ public:
     virtual void visit(GetItem * get_item) = 0;
     virtual void visit(SetItem * set_item) = 0;
     virtual void visit(DictExpr * dict) = 0;
-    
+
 };
 
 #endif

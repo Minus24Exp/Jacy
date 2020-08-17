@@ -79,7 +79,7 @@ private:
      * @param script Source code as string
      */
     void run(const std::string & script);
-    
+
     /**
      * @brief Run source code in debug mode
      * 

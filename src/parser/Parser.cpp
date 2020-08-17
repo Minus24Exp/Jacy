@@ -186,7 +186,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
 
     // Multi-line //
     skip_op(Operator::LBrace, false, true);
-    
+
     bool first = true;
     while(!eof()){
         if(is_op(Operator::RBrace)){
@@ -249,7 +249,7 @@ stmt_ptr Parser::parse_func_decl(){
     }else{
         paren = false;
     }
-    
+
     FuncParams params;
     bool first = true;
     while(!eof()){
@@ -381,7 +381,7 @@ stmt_ptr Parser::parse_class_decl(){
 
     // Parse declarations
     // Note: Think about nested classes
-    
+
     StmtList decls;
     while(!eof()){
         skip_nl(true);
@@ -653,7 +653,7 @@ expr_ptr Parser::add(){
 
 expr_ptr Parser::mult(){
     expr_ptr left = power();
-    
+
     while(is_op(Operator::Mul) || is_op(Operator::Div) || is_op(Operator::Mod)){
         const auto op_token = peek();
         advance();
@@ -686,7 +686,7 @@ expr_ptr Parser::prefix(){
         expr_ptr right = call();
         return std::make_shared<Prefix>(op_token, right);
     }
-    
+
     return call();
 }
 
@@ -759,11 +759,11 @@ expr_ptr Parser::primary(){
     if(is_kw(Keyword::If)){
         return parse_if_expr();
     }
-    
+
     // List
     if(is_op(Operator::LBracket)){
         skip_op(Operator::LBracket, false, true);
-        
+
         ExprList elements;
         bool first = true;
         while(!eof()){
@@ -864,7 +864,7 @@ expr_ptr Parser::parse_if_expr(){
     Position if_pos = peek().pos;
 
     skip_kw(Keyword::If, false, true);
-    
+
     bool paren = true;
     if(is_op(Operator::LParen)){
         skip_op(Operator::LParen, true, true);

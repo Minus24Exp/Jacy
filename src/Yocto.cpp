@@ -9,10 +9,10 @@ Yocto::Yocto()
 
 void Yocto::launch(int argc, const char * argv[]){    
     // Parse argv
-    
+
     // yocto_args -> false when main file appears
     bool yocto_args = true;
-    
+
     std::vector<std::string> script_argv;
     for(int i = 1; i < argc; i++){
         std::string arg(argv[i]);

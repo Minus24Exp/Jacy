@@ -12,7 +12,7 @@ public:
     virtual ~Printer() = default;
 
     void print(const StmtList & tree);
-    
+
     // Statements //
     void visit(ExprStmt * expr_stmt) override;
     void visit(Block * block) override;

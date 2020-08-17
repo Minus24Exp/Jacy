@@ -50,7 +50,7 @@ void Printer::visit(VarDecl * var_decl){
         std::cout << "val";
     }
     std::cout << " ";
-    
+
     visit(var_decl->id.get());
 
     if(var_decl->assign_expr){
@@ -106,14 +106,14 @@ void Printer::visit(ClassDecl * class_decl){
     print_indent();
     std::cout << "class ";
     class_decl->id->accept(*this);
-    
+
     if(class_decl->super){
         std::cout << " : ";
         class_decl->super->accept(*this);
     }
 
     std::cout << " {\n";
-    
+
     indent++;
     for(const auto & field : class_decl->fields){
         field->accept(*this);
@@ -131,13 +131,13 @@ void Printer::visit(Import * import){
     const auto N = import->entities.size();
     for(int i = 0; i < N; i++){
         const auto entity = import->entities[i];
-        
+
         if(entity.all){
             std::cout << "*";
         }else{
             entity.object->accept(*this);
         }
-        
+
         if(entity.as){
             std::cout << " as ";
             entity.as->accept(*this);

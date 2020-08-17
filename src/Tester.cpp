@@ -77,7 +77,7 @@ bool Tester::run_test(const std::string & path){
     }else{
         message = "(\u001b[31m×\u001b[0m) Test `" + path + "` not passed";
         std::cout << message << std::endl;
-        
+
         std::cout << "\tError: " << error_msg << std::endl;
 
         if(tokens.size() > 0){
