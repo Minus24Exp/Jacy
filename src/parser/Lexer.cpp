@@ -104,7 +104,7 @@ void Lexer::lex_number(){
             case 'X':{
                 advance();
                 if(!is_hex(peek())){
-                    unexpected_error();
+                    unexpected_token_error();
                 }
                 do{
                     num += peek();
@@ -117,7 +117,7 @@ void Lexer::lex_number(){
             case 'B':{
                 advance();
                 if(!is_digit(peek())){
-                    unexpected_error();
+                    unexpected_token_error();
                 }
                 do{
                     num += peek();
@@ -130,7 +130,7 @@ void Lexer::lex_number(){
         }
     }
 
-    // TODO: Fix floating hex numbers
+    // @TODO: Fix floating hex numbers
 
     while(is_digit(peek())){
         num += peek();
@@ -149,7 +149,7 @@ void Lexer::lex_number(){
         num += peek();
         advance();
         if(!is_digit(peek())){
-            unexpected_error();
+            unexpected_token_error();
         }
         do{
             num += peek();
@@ -219,7 +219,7 @@ TokenStream Lexer::lex(const std::string & script){
                 unexpected_eof_error();
             }
             if(peek() != quote){
-                unexpected_error();
+                unexpected_token_error();
             }
             add_token(TokenType::String, str);
             advance();
@@ -254,6 +254,9 @@ TokenStream Lexer::lex(const std::string & script){
                 case '-':{
                     if(is_digit(peek_next())){
                         lex_number();
+                    }else if(peek_next() == '='){
+                        add_token(Operator::SubAssign);
+                        advance(2);
                     }else{
                         add_token(Operator::Sub);
                         advance();
@@ -261,7 +264,15 @@ TokenStream Lexer::lex(const std::string & script){
                 } break;
                 case '*':{
                     if(peek_next() == '*'){
-                        add_token(Operator::Exp);
+                        if(peek_next(2) == '='){
+                            add_token(Operator::ExpAssign);
+                            advance(3);
+                        }else{  
+                            add_token(Operator::Exp);
+                            advance(2);
+                        }
+                    }else if(peek_next() == '='){
+                        add_token(Operator::MulAssign);
                         advance(2);
                     }else{
                         add_token(Operator::Mul);
@@ -284,14 +295,22 @@ TokenStream Lexer::lex(const std::string & script){
                             }
                         }
                         advance(2);
+                    }else if(peek_next() == '='){
+                        add_token(Operator::DivAssign);
+                        advance(2);
                     }else{
                         add_token(Operator::Div);
                         advance();
                     }
                 } break;
                 case '%':{
-                    add_token(Operator::Mod);
-                    advance();
+                    if(peek_next() == '='){
+                        add_token(Operator::ModAssign);
+                        advance(2);
+                    }else{
+                        add_token(Operator::Mod);
+                        advance();
+                    }
                 } break;
                 case ';':{
                     add_token(Operator::Semi);
@@ -340,7 +359,7 @@ TokenStream Lexer::lex(const std::string & script){
                             add_token(Operator::RangeRE);
                             advance(3);
                         }else{
-                            unexpected_error();
+                            unexpected_token_error();
                         }
                     }else{
                         add_token(Operator::Dot);
@@ -382,7 +401,7 @@ TokenStream Lexer::lex(const std::string & script){
                         add_token(Operator::Pipe);
                         advance(2);
                     }else{
-                        unexpected_error();
+                        unexpected_token_error();
                     }
                 } break;
                 case '<':{
@@ -406,7 +425,7 @@ TokenStream Lexer::lex(const std::string & script){
                             add_token(Operator::RangeBothE);
                             advance(3);
                         }else{
-                            unexpected_error();
+                            unexpected_token_error();
                         }
                     }else{
                         add_token(Operator::GT);
@@ -414,7 +433,7 @@ TokenStream Lexer::lex(const std::string & script){
                     }
                 } break;
                 default:{
-                    unexpected_error();
+                    unexpected_token_error();
                 }
             }
         }
@@ -425,10 +444,10 @@ TokenStream Lexer::lex(const std::string & script){
     return tokens;
 }
 
-void Lexer::unexpected_error(){
-    std::string error = "Unexpected token `"+ std::string(1, peek()) + "`";
+void Lexer::unexpected_token_error(){
+    std::string error = "token `"+ std::string(1, peek()) +"`";
     error += " at "+ std::to_string(line) +":"+ std::to_string(column);
-    throw YoctoException(error);
+    throw UnexpectedTokenException(error);
 }
 
 void Lexer::unexpected_eof_error(){

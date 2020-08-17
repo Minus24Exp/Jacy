@@ -1,12 +1,21 @@
 #include "Yocto.h"
+#include "Tester.h"
 
-void signal_handler( int signal_num ) { 
+const bool RUN_TESTS = true;
+
+void signal_handler(int signal_num){ 
     std::cout << "Interrupt signal: " << signal_num << std::endl; 
     exit(signal_num);   
 }
 
 int main(int argc, const char * argv[]){
     signal(SIGSEGV, signal_handler);
+
+    if(RUN_TESTS){
+        Tester & tester = Tester::get_instance();
+        tester.run();
+        return 0;
+    }
 
     try{
         Yocto::get_instance().launch(argc, argv);

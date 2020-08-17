@@ -62,6 +62,7 @@ private:
     stmt_ptr parse_for_stmt();
     stmt_ptr parse_class_decl();
     stmt_ptr parse_import();
+    stmt_ptr parse_type_decl();
 
     // Expressions //
     expr_ptr parse_expr();
@@ -81,9 +82,8 @@ private:
     expr_ptr prefix();
     expr_ptr call();
     expr_ptr member_access();
-    //
-
     expr_ptr primary();
+    //
 
     id_ptr parse_id();
     expr_ptr parse_func_call(expr_ptr left);

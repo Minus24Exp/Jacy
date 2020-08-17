@@ -11,38 +11,81 @@
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
 #include "tree/Printer.h"
+#include "Tester.h"
 
+/**
+ * Yocto
+ * @brief The main class that controls all interpreter parts (lexer, parser, evaluator)
+ * 
+ * @details Singleton
+ */
 class Yocto {
 public:
+    /**
+     * @return singleton instance of Yocto class
+     */
     static Yocto & get_instance(){
         static Yocto instance;
         return instance;
     }
 
-    Yocto(const Yocto&) = delete;
-    Yocto(Yocto&&) = delete;
+/*
+ * Delete everything singleton must not have
+ */
+public:
+    Yocto(const Yocto&)             = delete;
+    Yocto(Yocto&&)                  = delete;
     Yocto & operator=(const Yocto&) = delete;
-    Yocto & operator=(Yocto&&) = delete;
+    Yocto & operator=(Yocto&&)      = delete;
 
 private:
     Yocto();
     ~Yocto() = default;
 
 public:
+    /**
+     * @brief Launch Yocto
+     * 
+     * @param argc Count of command line arguments
+     * @param argv List of command line arguments
+     */
     void launch(int argc, const char * argv[]);
 
-    void run_repl();
-    void run_script(const std::string & path);
-
-    void run(const std::string & script);
-    void run_debug(const std::string & script);
-
 private:
+    // Initial file that interpreter starts from (received as command line argument)
     std::string main_file;
+
+    // Debug mode state
     bool debug;
 
     Lexer & lexer;
     Parser & parser;
+
+    /**
+     * @brief Run REPL
+     */
+    void run_repl();
+
+    /**
+     * @brief Run script file
+     * 
+     * @param path String path to file to run
+     */
+    void run_script(const std::string & path);
+
+    /**
+     * @brief Run source code
+     * 
+     * @param script Source code as string
+     */
+    void run(const std::string & script);
+    
+    /**
+     * @brief Run source code in debug mode
+     * 
+     * @param script Source code as string
+     */
+    void run_debug(const std::string & script);
 };
 
 #endif

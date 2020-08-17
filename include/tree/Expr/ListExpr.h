@@ -4,7 +4,7 @@
 #include "tree/Expr/Expr.h"
 
 /**
- * TODO: Think about alternative for ListExpr, it sounds pretty strange
+ * @TODO: Think about alternative for ListExpr, it sounds pretty strange
  */
 
 struct ListExpr : Expr {

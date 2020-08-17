@@ -15,6 +15,7 @@ struct WhileStmt;
 struct ForStmt;
 struct ClassDecl;
 struct Import;
+struct TypeDecl;
 
 struct Expr;
 struct Literal;
@@ -46,6 +47,7 @@ public:
     virtual void visit(ForStmt * for_stmt) = 0;
     virtual void visit(ClassDecl * class_decl) = 0;
     virtual void visit(Import * import) = 0;
+    virtual void visit(TypeDecl * type_decl) = 0;
 
     // Expressions //
     virtual void visit(Literal * literal) = 0;

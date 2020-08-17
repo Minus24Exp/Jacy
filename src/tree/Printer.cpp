@@ -126,7 +126,41 @@ void Printer::visit(ClassDecl * class_decl){
 }
 
 void Printer::visit(Import * import){
-    std::cout << "import " << import->path;
+    std::cout << "import ";
+
+    const auto N = import->entities.size();
+    for(int i = 0; i < N; i++){
+        const auto entity = import->entities[i];
+        
+        if(entity.all){
+            std::cout << "*";
+        }else{
+            entity.object->accept(*this);
+        }
+        
+        if(entity.as){
+            std::cout << " as ";
+            entity.as->accept(*this);
+        }
+
+        if(i < N - 1){
+            std::cout << ", ";
+        }
+    }
+
+    if(N > 0){
+        std::cout << " from ";
+    }
+
+    std::cout << "\"" << import->path << "\"";
+}
+
+void Printer::visit(TypeDecl * type_decl){
+    print_indent();
+    std::cout << "type ";
+    type_decl->id->accept(*this);
+    std::cout << " = ";
+    type_decl->type_expr->accept(*this);
 }
 
 /////////////////
@@ -158,7 +192,9 @@ void Printer::visit(Prefix * prefix){
 
 void Printer::visit(Assign * assign){
     assign->id->accept(*this);
-    std::cout << " = ";
+    std::cout << " ";
+    std::cout << op_to_str(assign->assign_op);
+    std::cout << " ";
     assign->value->accept(*this);
 }
 

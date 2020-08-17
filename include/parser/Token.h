@@ -41,7 +41,7 @@ enum class Operator {
     Assign,
 
     // Augmented assignment
-    AddAssign,
+    AddAssign, SubAssign, MulAssign, DivAssign, ModAssign, ExpAssign,
 
     Add, Sub, Mul, Div, Mod, Exp,
 
@@ -79,7 +79,8 @@ enum class Operator {
 const std::vector <std::string> operators {
     "=",
 
-    "+=",
+    // Augmented assignment
+    "+=", "-=", "*=", "/=", "%=", "**=",
 
     "+", "-", "*", "/", "%", "**",
 
@@ -98,7 +99,7 @@ const std::vector <std::string> operators {
 
     "===", "!==",
 
-    "...", ">..", "..<", ">.<",
+    "..", ">..", "..<", ">.<",
 
     "=>",
 
@@ -135,6 +136,8 @@ enum class Keyword {
 
     For,
 
+    Type,
+
     MAX
 };
 
@@ -161,7 +164,9 @@ const std::vector <std::string> keywords {
 
     "from",
 
-    "for"
+    "for",
+
+    "type"
 };
 
 inline Keyword str_to_kw(const std::string & str){
@@ -269,7 +274,7 @@ struct Token {
         return std::get<Keyword>(val);
     }
 
-    std::string to_string(){
+    std::string to_string(bool with_pos = true){
         std::string str;
 
         switch(type){
@@ -305,7 +310,7 @@ struct Token {
             } break;
         }
 
-        // TODO: Fix quote for empty values
+        // @TODO: Fix quote for empty values
         str += " `";
         switch(type){
             case TokenType::Bool:{
@@ -329,7 +334,10 @@ struct Token {
             } break;
         }
 
-        str += "` at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column);
+        if(with_pos){
+            str += "` at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column);
+        }
+
         return str;
     }
 

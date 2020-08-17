@@ -1,0 +1,34 @@
+// This test is about if expression and its different syntaxes
+
+if(true){
+    print(1)
+}elif(false){
+    print(1)
+}else{
+    print(1)
+}
+
+if(true) print(2)
+elif(false) print(2)
+else print(2)
+
+if(true)
+    print(3)
+elif false
+    print(3)
+else
+    print(3)
+
+if true {
+    print(4)
+} elif false {
+    print(4)  
+}else{
+    print(4)
+}
+
+if true => print(5)
+elif false => print(5)
+else print(5)
+
+if true => print(6) elif false => print(6) else print(6)

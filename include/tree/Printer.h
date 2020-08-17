@@ -23,6 +23,7 @@ public:
     void visit(ForStmt * for_stmt) override;
     void visit(ClassDecl * class_decl) override;
     void visit(Import * import) override;
+    void visit(TypeDecl * type_decl) override;
 
     // Expressions //
     void visit(Literal * literal) override;

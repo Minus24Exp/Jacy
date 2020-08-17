@@ -17,7 +17,8 @@ enum class StmtType {
     Return,
     Class,
     Import,
-    For
+    For,
+    Type
 };
 
 struct Stmt : Node {

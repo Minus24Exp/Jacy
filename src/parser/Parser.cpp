@@ -38,7 +38,12 @@ bool Parser::is_kw(const Keyword & kw){
 bool Parser::is_assign_op(){
     // Fixme: Maybe reduce checkers?
     return is_op(Operator::Assign)
-        || is_op(Operator::AddAssign);
+        || is_op(Operator::AddAssign)
+        || is_op(Operator::SubAssign)
+        || is_op(Operator::MulAssign)
+        || is_op(Operator::DivAssign)
+        || is_op(Operator::ModAssign)
+        || is_op(Operator::ExpAssign);
 }
 
 //////////////
@@ -150,6 +155,9 @@ stmt_ptr Parser::parse_stmt(){
             case Keyword::Import:{
                 return parse_import();
             }
+            case Keyword::Type:{
+                return parse_type_decl();
+            }
         }
     }
 
@@ -164,7 +172,7 @@ block_ptr Parser::parse_block(bool allow_one_line){
     // One-line //
     // If one-line block is allowed then try to parse single stmt
     if(!is_op(Operator::LBrace) && allow_one_line){
-        // TODO: Think about this skip_nl
+        // @TODO: Think about this skip_nl
         // Is it okay?
         skip_nl(true);
         stmts.push_back(parse_stmt());
@@ -246,7 +254,9 @@ stmt_ptr Parser::parse_func_decl(){
     bool first = true;
     while(!eof()){
         if((paren && is_op(Operator::RParen))
-        || (!paren && (is_op(Operator::Arrow) || is_op(Operator::LBrace)))){
+        || (!paren && (is_op(Operator::Arrow)
+        || is_op(Operator::LBrace))))
+        {
             break;
         }
         if(first){
@@ -401,7 +411,7 @@ stmt_ptr Parser::parse_import(){
     // No new-lines in import
     skip_kw(Keyword::Import, false, false);
 
-    // TODO: Improve `import`
+    // @TODO: Improve `import`
     // - Multiple objects import
 
     // Import nothing, just run source
@@ -444,7 +454,7 @@ stmt_ptr Parser::parse_import(){
             skip_op(Operator::As, false, false);
             as = parse_id();
         }else{
-            as = object;
+            as = nullptr;
         }
 
         entities.push_back({ all, object, as });
@@ -462,6 +472,18 @@ stmt_ptr Parser::parse_import(){
     return std::make_shared<Import>(import_pos, path, entities);
 }
 
+// TypeDecl //
+stmt_ptr Parser::parse_type_decl(){
+    Position type_decl_pos = peek().pos;
+
+    skip_kw(Keyword::Type, false, false);
+    id_ptr id = parse_id();
+    skip_op(Operator::Assign, false, false);
+    expr_ptr type_expr = parse_expr();
+
+    return std::make_shared<TypeDecl>(type_decl_pos, id, type_expr);
+}
+
 /////////////////
 // Expressions //
 /////////////////
@@ -472,7 +494,7 @@ expr_ptr Parser::parse_expr(){
 expr_ptr Parser::assignment(){
     expr_ptr expr = pipe();
 
-    // TODO: Add compound assignment operators
+    // @TODO: Add compound assignment operators
 
     if(is_assign_op()){
         Operator assign_op = peek().op();
@@ -599,7 +621,7 @@ expr_ptr Parser::named_checks(){
 expr_ptr Parser::range(){
     expr_ptr left = add();
 
-    // TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
+    // @TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
     if(is_op(Operator::Range)
     || is_op(Operator::RangeLE)
     || is_op(Operator::RangeRE)
@@ -632,7 +654,7 @@ expr_ptr Parser::add(){
 expr_ptr Parser::mult(){
     expr_ptr left = power();
     
-    while(is_op(Operator::Mul) || is_op(Operator::Div)){
+    while(is_op(Operator::Mul) || is_op(Operator::Div) || is_op(Operator::Mod)){
         const auto op_token = peek();
         advance();
         skip_nl(true);
@@ -727,7 +749,7 @@ expr_ptr Parser::primary(){
         expr_ptr expr = parse_expr();
         skip_op(Operator::RParen, true, false);
 
-        // TODO: !!! Think do I need special node for grouping? (precedence problem?) 
+        // @TODO: !!! Think do I need special node for grouping? (precedence problem?) 
         return expr;
     }
 
@@ -893,7 +915,7 @@ void Parser::error(const std::string & msg){
 }
 
 void Parser::unexpected_error(){
-    throw UnexpectedException(peek());
+    throw UnexpectedTokenException(peek());
 }
 
 void Parser::expected_error(const std::string & expected){
