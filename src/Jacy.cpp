@@ -10,15 +10,15 @@ Jacy::Jacy()
 void Jacy::launch(int argc, const char * argv[]){    
     // Parse argv
 
-    // Jacy_args -> false when main file appears
-    bool Jacy_args = true;
+    // jacy_args -> false when main file appears
+    bool jacy_args = true;
 
     std::vector<std::string> script_argv;
     for(int i = 1; i < argc; i++){
         std::string arg(argv[i]);
 
         if(arg[0] == '-'){
-            if(Jacy_args){
+            if(jacy_args){
                 // Parse Jacy arguments
                 if(arg.substr(1) == "debug"){
                     debug = true;
@@ -28,9 +28,9 @@ void Jacy::launch(int argc, const char * argv[]){
             }
         }else{
             // Check if argument is Jacy file (ends with ".yo")
-            if(arg.size() > 3 && arg.compare(arg.size() - 3, 3, ".yo") == 0){
+            if(arg.size() > 3 && arg.compare(arg.size() - 3, 3, ".jc") == 0){
                 if(main_file.empty()){
-                    Jacy_args = false;
+                    jacy_args = false;
                     main_file = arg;
                 }else{
                     throw JacyException("Expected only one input file");

@@ -1,5 +1,6 @@
 <p align="center">
-    <img src="img/JacyWide.png" width="300">    
+    <img src="img/JacyLarge.png" width="300">
+    <!-- #F46D6D -->
 </p>
 
 # *Jacy*
