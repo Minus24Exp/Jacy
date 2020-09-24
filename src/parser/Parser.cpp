@@ -300,24 +300,14 @@ stmt_ptr Parser::parse_while_stmt(){
 
     skip_kw(Keyword::While, false, false);
 
-    bool paren = true;
-    if(is_op(Operator::LParen)){
-        skip_op(Operator::LParen, false, true);
-    }else{
-        paren = false;
-    }
-
     expr_ptr cond = parse_expr();
 
     bool allow_one_line = false;
-    if(paren){
-        skip_op(Operator::RParen, false, true);
-        allow_one_line = true;
-    }else if(is_nl()){
+    if (is_nl()) {
         allow_one_line = true;
     }
 
-    if(is_op(Operator::Arrow)){
+    if (is_op(Operator::Arrow)) {
         skip_op(Operator::Arrow, true, true);
         allow_one_line = true;
     }

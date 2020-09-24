@@ -78,11 +78,10 @@ void Printer::visit(FuncDecl * func_decl){
 
 void Printer::visit(WhileStmt * w){
     print_indent();
-    std::cout << "while(";
+    std::cout << "while ";
     w->cond->accept(*this);
-    std::cout << "){\n";
+    std::cout << " ";
     w->body->accept(*this);
-    std::cout << "\n}";
 }
 
 void Printer::visit(ForStmt * for_stmt){
