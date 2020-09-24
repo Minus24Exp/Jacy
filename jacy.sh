@@ -15,8 +15,7 @@ debug_flags="-Og -ggdb"
 max_errors="1"
 ld_flags="-Iinclude"
 
-# -lstdc++fs to compile with filesystem
-cpp_flags="-std=c++17 -lstdc++fs"
+cpp_flags="-std=c++17"
 cpp_files="src/*.cpp src/**/*.cpp"
 
 target="bin/target"
