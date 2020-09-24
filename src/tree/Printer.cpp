@@ -226,16 +226,14 @@ void Printer::visit(FuncCall * func_call){
 }
 
 void Printer::visit(IfExpr * if_expr){
-    std::cout << "if(";
+    std::cout << "if ";
     if_expr->cond->accept(*this);
-    std::cout << "){\n";
+    std::cout << " ";
     if_expr->if_branch->accept(*this);
-    std::cout << "}";
 
     if(if_expr->else_branch){
-        std::cout << " else {\n";
+        std::cout << " else ";
         if_expr->else_branch->accept(*this);
-        std::cout << "\n}";
     }
 }
 

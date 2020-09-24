@@ -868,20 +868,10 @@ expr_ptr Parser::parse_if_expr(){
 
     skip_kw(Keyword::If, false, true);
 
-    bool paren = true;
-    if(is_op(Operator::LParen)){
-        skip_op(Operator::LParen, true, true);
-    }else{
-        paren = false;
-    }
-
     expr_ptr cond = parse_expr();
 
     bool allow_one_line = false;
-    if(paren){
-        skip_op(Operator::RParen, true, true);
-        allow_one_line = true;
-    }else if(is_nl()){
+    if (is_nl()) {
         // If `if` condition is not captured in parenthesis,
         // then only if there's new-line after it, body can be one-line
         allow_one_line = true;
