@@ -1,6 +1,0 @@
-while a => print(a)
-while a 
-    print(a)
-while a {
-    print(a)
-}

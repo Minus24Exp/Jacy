@@ -323,13 +323,6 @@ stmt_ptr Parser::parse_for_stmt(){
 
     skip_kw(Keyword::For, false, false);
 
-    bool paren = true;
-    if(is_op(Operator::LParen)){
-        skip_op(Operator::LParen, false, true);
-    }else{
-        paren = false;
-    }
-
     id_ptr For = parse_id();
 
     skip_op(Operator::In, false, false);
@@ -337,10 +330,7 @@ stmt_ptr Parser::parse_for_stmt(){
     expr_ptr In = parse_expr();
 
     bool allow_one_line = false;
-    if(paren){
-        skip_op(Operator::RParen, true, true);
-        allow_one_line = true;
-    }else if(is_nl()){
+    if (is_nl()) {
         allow_one_line = true;
     }
 
