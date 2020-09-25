@@ -31,6 +31,9 @@
 *.out
 *.app
 
+.vscode
+.idea
+
 bin
 
 Doxyfile

@@ -112,7 +112,7 @@ const std::vector <std::string> operators {
     "|>"
 };
 
-inline std::string op_to_str(const Operator & op){
+inline std::string op_to_str(const Operator & op) {
     return operators.at(static_cast<size_t>(op));
 }
 
@@ -142,7 +142,7 @@ enum class Keyword {
 };
 
 // Overload operator less-than to check if identifier is Keyword
-inline bool operator<(Keyword kwl, Keyword kwr){
+inline bool operator<(Keyword kwl, Keyword kwr) {
     return static_cast<size_t>(kwl) < static_cast<size_t>(kwr);
 }
 
@@ -169,13 +169,13 @@ const std::vector <std::string> keywords {
     "type"
 };
 
-inline Keyword str_to_kw(const std::string & str){
+inline Keyword str_to_kw(const std::string & str) {
     return static_cast<Keyword>(
         std::distance(keywords.begin(), std::find(keywords.begin(), keywords.end(), str))
     );
 }
 
-inline std::string kw_to_str(const Keyword & kw){
+inline std::string kw_to_str(const Keyword & kw) {
     return keywords.at(static_cast<size_t>(kw));
 }
 
@@ -190,158 +190,158 @@ struct Token {
 
     Position pos;
 
-    Token(const TokenType & _type, const std::string & v){
+    Token(const TokenType & _type, const std::string & v) {
         this->type = _type;
 
-        switch(type){
+        switch(type) {
             case TokenType::Id:
-            case TokenType::String:{
+            case TokenType::String: {
                 val = v;
             } break;
         }
     }
 
-    Token(NumType num_type, const std::string & num){
-        switch(num_type){
-            case NumType::Int:{
+    Token(NumType num_type, const std::string & num) {
+        switch(num_type) {
+            case NumType::Int: {
                 type = TokenType::Int;
                 val = std::stol(num);
             } break;
-            case NumType::Float:{
+            case NumType::Float: {
                 type = TokenType::Float;
                 val = std::stod(num);
             } break;
-            case NumType::Bin:{
+            case NumType::Bin: {
                 type = TokenType::Int;
                 val = std::stol(num, 0, 2);
             } break;
-            case NumType::Hex:{
+            case NumType::Hex: {
                 type = TokenType::Int;
                 val = std::stol(num, 0, 16);
             } break;
         }
     }
 
-    Token(const Operator & op){
+    Token(const Operator & op) {
         type = TokenType::Op;
         val = op;
     }
 
-    Token(const Keyword & kw){
-        switch(kw){
+    Token(const Keyword & kw) {
+        switch(kw) {
             case Keyword::True:
-            case Keyword::False:{
+            case Keyword::False: {
                 type = TokenType::Bool;
                 val = kw == Keyword::True;
             } break;
-            case Keyword::Null:{
+            case Keyword::Null: {
                 type = TokenType::Null;
             } break;
-            default:{
+            default: {
                 type = TokenType::Kw;
                 val = kw;
             }
         }
     }
 
-    Token(const TokenType & type){
+    Token(const TokenType & type) {
         this->type = type;
     }
 
     virtual ~Token() = default;
 
-    bool Bool(){
+    bool Bool() {
         return std::get<bool>(val);
     }
 
-    yo_int Int(){
+    yo_int Int() {
         return std::get<yo_int>(val);
     }
 
-    double Float(){
+    double Float() {
         return std::get<double>(val);
     }
 
-    std::string String(){
+    std::string String() {
         return std::get<std::string>(val);
     }
 
-    Operator op(){
+    Operator op() {
         return std::get<Operator>(val);
     }
 
-    Keyword kw(){
+    Keyword kw() {
         return std::get<Keyword>(val);
     }
 
-    std::string to_string(bool with_pos = true){
+    std::string to_string(bool with_pos = true) {
         std::string str;
 
-        switch(type){
-            case TokenType::Null:{
+        switch(type) {
+            case TokenType::Null: {
                 str += "null";
             } break;
-            case TokenType::Bool:{
+            case TokenType::Bool: {
                 str += "bool";
             } break;
-            case TokenType::Int:{
+            case TokenType::Int: {
                 str += "int";
             } break;
-            case TokenType::Float:{
+            case TokenType::Float: {
                 str += "float";
             } break;
-            case TokenType::Id:{
+            case TokenType::Id: {
                 str += "identifier";
             } break;
-            case TokenType::String:{
+            case TokenType::String: {
                 str += "string";
             } break;
-            case TokenType::Op:{
+            case TokenType::Op: {
                 str += "operator";
             } break;
-            case TokenType::Kw:{
+            case TokenType::Kw: {
                 str += "keyword";
             } break;
-            case TokenType::Nl:{
+            case TokenType::Nl: {
                 str += "[new line]";
             } break;
-            case TokenType::Eof:{
+            case TokenType::Eof: {
                 str += "[EOF]";
             } break;
         }
 
         // @TODO: Fix quote for empty values
         str += " `";
-        switch(type){
-            case TokenType::Bool:{
+        switch(type) {
+            case TokenType::Bool: {
                 str += std::to_string(Bool());
             } break;
-            case TokenType::Int:{
+            case TokenType::Int: {
                 str += std::to_string(Int());
             } break;
-            case TokenType::Float:{
+            case TokenType::Float: {
                 str += std::to_string(Float());
             } break;
             case TokenType::Id:
-            case TokenType::String:{
+            case TokenType::String: {
                 str += String();
             } break;
-            case TokenType::Op:{
+            case TokenType::Op: {
                 str += op_to_str(op());
             } break;
-            case TokenType::Kw:{
+            case TokenType::Kw: {
                 str += kw_to_str(kw());
             } break;
         }
 
-        if(with_pos){
+        if (with_pos) {
             str += "` at "+ std::to_string(pos.line) +":"+ std::to_string(pos.column);
         }
 
         return str;
     }
 
-    void error(const std::string & msg){
+    void error(const std::string & msg) {
         throw msg + " " + to_string();
     }
 };

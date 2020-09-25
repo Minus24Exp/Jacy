@@ -20,7 +20,7 @@ public:
     /**
      * @return singleton instance of Tester class
      */
-    static Tester & get_instance(){
+    static Tester & get_instance() {
         static Tester instance;
         return instance;
     }

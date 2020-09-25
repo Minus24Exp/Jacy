@@ -12,7 +12,7 @@ struct Identifier : Expr {
 
     Identifier(const Token & token) : Expr(token.pos, ExprType::Id), token(token) {}
 
-    std::string get_name(){
+    std::string get_name() {
         return token.String();
     }
 

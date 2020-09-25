@@ -7,7 +7,7 @@
 
 class Parser {
 public:
-    static Parser & get_instance(){
+    static Parser & get_instance() {
         static Parser instance;
         return instance;
     }

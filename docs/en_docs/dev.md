@@ -16,9 +16,9 @@ In Jacy `if` is an expression that sets current value to last evaluated in its b
 So, it's possible to use `if` in assignment or as ternary:
 ```
 // Assignment
-var a = if() //...
+var a = if () //...
 
-var tern = if(1) true else false
+var tern = if (1) true else false
 // or without parentheses
 var tern = if 1 => true else false
 ```
@@ -27,7 +27,7 @@ var tern = if 1 => true else false
 
 `if`/`elif`/`else` may have one-line body:
 ```
-if(a) print(a)
+if (a) print(a)
 else print('nope')
 ```
 
@@ -73,16 +73,16 @@ It also have the same rules for one-line blocks as `if` (watch `if` section).
 
 All examples are equal:
 ```
-while(a) print(a)
+while (a) print(a)
 // or
 while a
     print(a)
 // or
 while a => print(a)
 // or
-while(a) => print(a)
+while (a) => print(a)
 // or
-while(a){
+while (a) {
     print(a)
 }
 // or
@@ -127,7 +127,7 @@ func a => print('no args')
 ##### Default values
 Default values may be written as any of the ways below:
 ```
-func a(p1 = 'a', p2 = 'b'){
+func a(p1 = 'a', p2 = 'b') {
     print(p1)
     print(p2)
 }
@@ -186,15 +186,15 @@ Since Jacy provides different ways to do the same thing, I want to describe some
 Examples with writing rules:
 ```
 // 1. Classic. Use it whenever you want, even for one-line blocks.
-if(1){
+if (1) {
     print("true")
     print("true")
-}else{
+} else {
     print("false")
 }
 
 // 2. Flatness (Classic one-line).
-if(1) print("true")
+if (1) print("true")
 else print("false")
 
 // 3. No parenthesis! Use this if you don't like parentheses.
@@ -207,7 +207,7 @@ else
 if 1 {
     print("true")
     print("true")
-}else{
+} else {
     print("false")
     print("false")
 }
@@ -217,10 +217,10 @@ if 1 => print("true")
 else print("false")
 
 // 5! Don't write so. It's verbose.
-if(1) => print("true")
+if (1) => print("true")
 else print("false")
 // or
-if(1) => {
+if (1) => {
     // ...
 }
 ```

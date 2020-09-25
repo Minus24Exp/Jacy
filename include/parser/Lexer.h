@@ -9,7 +9,7 @@
 
 class Lexer {
 public:
-    static Lexer & get_instance(){
+    static Lexer & get_instance() {
         static Lexer instance;
         return instance;
     }

@@ -5,7 +5,7 @@
 Сразу взглянем на пример:
 ```
 // C-style
-if(true){
+if (true) {
     print('yeps')
 }
 
@@ -15,7 +15,7 @@ if true {
 }
 
 // В одну строку?
-if(true) print('one line!!')
+if (true) print('one line!!')
 
 if true => print('i do not like parentheses')
 ```
@@ -23,7 +23,7 @@ if true => print('i do not like parentheses')
 Это нужно для того, чтобы разделить условие и тело.
 Но если тело ставить на следующую строку, то `=>` можно опустить:
 ```
-if(true)
+if (true)
     print('aaaaa')
 
 if true
@@ -32,7 +32,7 @@ if true
 
 Важно понимать, что без фигурных скобочек (`{}`) телом будет только следующая строка:
 ```
-if(false)
+if (false)
     print('это не выведется в консоль, ведь условие = false')
 print('этот print не является частью тела `if`')
 

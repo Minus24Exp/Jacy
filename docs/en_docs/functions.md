@@ -9,7 +9,7 @@ Some basics:
 ### Declaration
 To declare a function use `func` keyword:
 ```
-func show(){
+func show() {
     print('print something')
 }
 ```

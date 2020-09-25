@@ -24,7 +24,7 @@ public:
     /**
      * @return singleton instance of Jacy class
      */
-    static Jacy & get_instance(){
+    static Jacy & get_instance() {
         static Jacy instance;
         return instance;
     }

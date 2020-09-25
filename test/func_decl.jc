@@ -1,14 +1,14 @@
 // This test is about function declaration
 
-func a(){
+func a() {
     print('a')
 }
 
-func b(p1){
+func b(p1) {
     print('b')
 }
 
-func c(p1, p2 = 2){
+func c(p1, p2 = 2) {
     print('c')
 }
 

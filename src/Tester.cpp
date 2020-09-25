@@ -7,20 +7,20 @@ Tester::Tester()
     prepare();
 }
 
-void Tester::prepare(){
+void Tester::prepare() {
     std::cout << "[Prepairing Tests]\n\n";
 
     struct dirent * entry;
     DIR * tests_dir = opendir("test");
 
-    if(tests_dir == NULL){
+    if (tests_dir == NULL) {
         throw JacyException("Unable to open \"test\" folder");
     }
 
     // Collect tests
-    while((entry = readdir(tests_dir)) != NULL){
+    while ((entry = readdir(tests_dir)) != NULL) {
         // Skip `.`, `..` and maybe hidden files
-        if(entry->d_name[0] != '.'){
+        if (entry->d_name[0] != '.') {
             test_list.push_back("test/"+ std::string(entry->d_name));
         }
     }
@@ -28,21 +28,21 @@ void Tester::prepare(){
     closedir(tests_dir);
 }
 
-void Tester::run(){
+void Tester::run() {
     std::cout << "\n[Run tests]" << std::endl;
-    for(const auto & test : test_list){
+    for (const auto & test : test_list) {
         bool passed = run_test(test);
-        if(!passed && !continue_after_fail){
+        if (!passed && !continue_after_fail) {
             std::cout << "[\u001b[31mStopped after fail\u001b[0m]" << std::endl;
             return;
         }
     }
 }
 
-std::string Tester::read_file(const std::string & path){
+std::string Tester::read_file(const std::string & path) {
     std::fstream file(path);
 
-    if(!file.is_open()){
+    if (!file.is_open()) {
         throw FileNotFoundException(path);
     }
 
@@ -53,41 +53,41 @@ std::string Tester::read_file(const std::string & path){
     return ss.str();
 }
 
-bool Tester::run_test(const std::string & path){
+bool Tester::run_test(const std::string & path) {
     std::string error_msg;
 
     std::string script;
     TokenStream tokens;
     StmtList tree;
-    try{
+    try {
         script = read_file(path);
 
         tokens = lexer.lex(script);
 
         tree = parser.parse(tokens);
-    }catch(JacyException & e){
+    } catch (JacyException & e) {
         error_msg = e.what();
     }
 
     std::string message;
-    if(error_msg.empty()){
+    if (error_msg.empty()) {
         // If test checked
         message = "(\u001b[32m✔\u001b[0m) Test `" + path + "` passed";
         std::cout << message << std::endl;
-    }else{
+    } else {
         message = "(\u001b[31m×\u001b[0m) Test `" + path + "` not passed";
         std::cout << message << std::endl;
 
         std::cout << "\tError: " << error_msg << std::endl;
 
-        if(tokens.size() > 0){
+        if (tokens.size() > 0) {
             std::cout << "Token:" << std::endl;
-            for(auto & t : tokens){
+            for (auto & t : tokens) {
                 std::cout << t.to_string() << std::endl;
             }
         }
 
-        if(tree.size() > 0){
+        if (tree.size() > 0) {
             Printer printer;
             std::cout << "Parse Tree:" << std::endl;
             printer.print(tree);
@@ -97,7 +97,7 @@ bool Tester::run_test(const std::string & path){
 
     // Pretty printed delimiter
     // -10 because of ANSI colors in message
-    for(int i = 0; i < message.size() - 10; i++){
+    for (int i = 0; i < message.size() - 10; i++) {
         std::cout << "—";
     }
     std::cout << "\n\n";

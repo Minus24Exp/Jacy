@@ -1,18 +1,18 @@
 // This test is about if expression and its different syntaxes
 
-if(true){
+if (true) {
     print(1)
-}elif(false){
+}elif (false) {
     print(1)
-}else{
+} else {
     print(1)
 }
 
-if(true) print(2)
-elif(false) print(2)
+if (true) print(2)
+elif (false) print(2)
 else print(2)
 
-if(true)
+if (true)
     print(3)
 elif false
     print(3)
@@ -23,7 +23,7 @@ if true {
     print(4)
 } elif false {
     print(4)  
-}else{
+} else {
     print(4)
 }
 

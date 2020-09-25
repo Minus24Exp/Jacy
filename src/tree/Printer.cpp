@@ -1,19 +1,19 @@
 #include "tree/Printer.h"
 
-Printer::Printer(){}
+Printer::Printer() {}
 
-void Printer::print_indent(){
+void Printer::print_indent() {
     // Note: Use print indent only before statement printing
     // not before expression
     std::string str(indent * 4, ' ');
     std::cout << str;
 }
 
-void Printer::print(const StmtList & tree){
+void Printer::print(const StmtList & tree) {
     indent = 0;
-    for(int i = 0; i < tree.size(); i++){
+    for (int i = 0; i < tree.size(); i++) {
         tree[i]->accept(*this);
-        if(i < tree.size() - 1){
+        if (i < tree.size() - 1) {
             std::cout << std::endl;
         }
     }
@@ -22,17 +22,17 @@ void Printer::print(const StmtList & tree){
 ////////////////
 // Statements //
 ////////////////
-void Printer::visit(ExprStmt * expr_stmt){
+void Printer::visit(ExprStmt * expr_stmt) {
     print_indent();
     expr_stmt->expr->accept(*this);
 }
 
-void Printer::visit(Block * block){
+void Printer::visit(Block * block) {
     std::cout << "{\n";
     indent++;
-    for(int i = 0; i < block->stmts.size(); i++){
+    for (int i = 0; i < block->stmts.size(); i++) {
         block->stmts[i]->accept(*this);
-        if(i < block->stmts.size() - 1){
+        if (i < block->stmts.size() - 1) {
             std::cout << std::endl;
         }
     }
@@ -42,31 +42,31 @@ void Printer::visit(Block * block){
     std::cout << "}";
 }
 
-void Printer::visit(VarDecl * var_decl){
+void Printer::visit(VarDecl * var_decl) {
     print_indent();
-    if(var_decl->decl == VarDeclType::Var){
+    if (var_decl->decl == VarDeclType::Var) {
         std::cout << "var";
-    }else if(var_decl->decl == VarDeclType::Val){
+    } else if (var_decl->decl == VarDeclType::Val) {
         std::cout << "val";
     }
     std::cout << " ";
 
     visit(var_decl->id.get());
 
-    if(var_decl->assign_expr){
+    if (var_decl->assign_expr) {
         std::cout << " = ";
         var_decl->assign_expr->accept(*this);
     }
 }
 
-void Printer::visit(FuncDecl * func_decl){
+void Printer::visit(FuncDecl * func_decl) {
     print_indent();
     std::cout << "func ";
     func_decl->id->accept(*this);
     std::cout << "(";
-    for(int i = 0; i < func_decl->params.size(); i++){
+    for (int i = 0; i < func_decl->params.size(); i++) {
         func_decl->params[i].id->accept(*this);
-        if(i < func_decl->params.size() - 1){
+        if (i < func_decl->params.size() - 1) {
             std::cout << ", ";
         }
     }
@@ -74,7 +74,7 @@ void Printer::visit(FuncDecl * func_decl){
     func_decl->body->accept(*this);
 }
 
-void Printer::visit(WhileStmt * w){
+void Printer::visit(WhileStmt * w) {
     print_indent();
     std::cout << "while ";
     w->cond->accept(*this);
@@ -82,7 +82,7 @@ void Printer::visit(WhileStmt * w){
     w->body->accept(*this);
 }
 
-void Printer::visit(ForStmt * for_stmt){
+void Printer::visit(ForStmt * for_stmt) {
     print_indent();
     std::cout << "for ";
     for_stmt->For->accept(*this);
@@ -92,18 +92,18 @@ void Printer::visit(ForStmt * for_stmt){
     for_stmt->body->accept(*this);
 }
 
-void Printer::visit(ReturnStmt * return_stmt){
+void Printer::visit(ReturnStmt * return_stmt) {
     print_indent();
     std::cout << "return ";
     return_stmt->accept(*this);
 }
 
-void Printer::visit(ClassDecl * class_decl){
+void Printer::visit(ClassDecl * class_decl) {
     print_indent();
     std::cout << "class ";
     class_decl->id->accept(*this);
 
-    if(class_decl->super){
+    if (class_decl->super) {
         std::cout << " : ";
         class_decl->super->accept(*this);
     }
@@ -111,7 +111,7 @@ void Printer::visit(ClassDecl * class_decl){
     std::cout << " {\n";
 
     indent++;
-    for(const auto & field : class_decl->fields){
+    for (const auto & field : class_decl->fields) {
         field->accept(*this);
         std::cout << std::endl;
     }
@@ -121,37 +121,37 @@ void Printer::visit(ClassDecl * class_decl){
     std::cout << "}";
 }
 
-void Printer::visit(Import * import){
+void Printer::visit(Import * import) {
     std::cout << "import ";
 
     const auto N = import->entities.size();
-    for(int i = 0; i < N; i++){
+    for (int i = 0; i < N; i++) {
         const auto entity = import->entities[i];
 
-        if(entity.all){
+        if (entity.all) {
             std::cout << "*";
-        }else{
+        } else {
             entity.object->accept(*this);
         }
 
-        if(entity.as){
+        if (entity.as) {
             std::cout << " as ";
             entity.as->accept(*this);
         }
 
-        if(i < N - 1){
+        if (i < N - 1) {
             std::cout << ", ";
         }
     }
 
-    if(N > 0){
+    if (N > 0) {
         std::cout << " from ";
     }
 
     std::cout << "\"" << import->path << "\"";
 }
 
-void Printer::visit(TypeDecl * type_decl){
+void Printer::visit(TypeDecl * type_decl) {
     print_indent();
     std::cout << "type ";
     type_decl->id->accept(*this);
@@ -162,8 +162,8 @@ void Printer::visit(TypeDecl * type_decl){
 /////////////////
 // Expressions //
 /////////////////
-void Printer::visit(Literal * literal){
-    switch(literal->token.type){
+void Printer::visit(Literal * literal) {
+    switch(literal->token.type) {
         case TokenType::Bool: std::cout << literal->token.Bool(); break;
         case TokenType::Int: std::cout << literal->token.Int(); break;
         case TokenType::Float: std::cout << literal->token.Float(); break;
@@ -171,22 +171,22 @@ void Printer::visit(Literal * literal){
     }
 }
 
-void Printer::visit(Identifier * id){
+void Printer::visit(Identifier * id) {
     std::cout << id->token.String();
 }
 
-void Printer::visit(Infix * infix){
+void Printer::visit(Infix * infix) {
     infix->left->accept(*this);
     std::cout << " " << op_to_str(infix->op.op()) << " ";
     infix->right->accept(*this);
 }
 
-void Printer::visit(Prefix * prefix){
+void Printer::visit(Prefix * prefix) {
     std::cout << op_to_str(prefix->op.op());
     prefix->right->accept(*this);
 }
 
-void Printer::visit(Assign * assign){
+void Printer::visit(Assign * assign) {
     assign->id->accept(*this);
     std::cout << " ";
     std::cout << op_to_str(assign->assign_op);
@@ -194,7 +194,7 @@ void Printer::visit(Assign * assign){
     assign->value->accept(*this);
 }
 
-void Printer::visit(SetExpr * set_expr){
+void Printer::visit(SetExpr * set_expr) {
     set_expr->left->accept(*this);
     std::cout << ".";
     set_expr->id->accept(*this);
@@ -202,56 +202,56 @@ void Printer::visit(SetExpr * set_expr){
     set_expr->value->accept(*this);
 }
 
-void Printer::visit(GetExpr * get_expr){
+void Printer::visit(GetExpr * get_expr) {
     get_expr->left->accept(*this);
     std::cout << ".";
     get_expr->id->accept(*this);
 }
 
-void Printer::visit(FuncCall * func_call){
+void Printer::visit(FuncCall * func_call) {
     func_call->left->accept(*this);
 
     std::cout << "(";
-    for(int i = 0; i < func_call->args.size(); i++){
+    for (int i = 0; i < func_call->args.size(); i++) {
         func_call->args[i]->accept(*this);
-        if(i < func_call->args.size() - 1){
+        if (i < func_call->args.size() - 1) {
             std::cout << ", ";
         }
     }
     std::cout << ")";
 }
 
-void Printer::visit(IfExpr * if_expr){
+void Printer::visit(IfExpr * if_expr) {
     std::cout << "if ";
     if_expr->cond->accept(*this);
     std::cout << " ";
     if_expr->if_branch->accept(*this);
 
-    if(if_expr->else_branch){
+    if (if_expr->else_branch) {
         std::cout << " else ";
         if_expr->else_branch->accept(*this);
     }
 }
 
-void Printer::visit(ListExpr * list){
+void Printer::visit(ListExpr * list) {
     std::cout << "[";
-    for(size_t i = 0; i < list->elements.size(); i++){
+    for (size_t i = 0; i < list->elements.size(); i++) {
         list->elements[i]->accept(*this);
-        if(i < list->elements.size() - 1){
+        if (i < list->elements.size() - 1) {
             std::cout << ", ";
         }
     }
     std::cout << "]";
 }
 
-void Printer::visit(GetItem * get_item){
+void Printer::visit(GetItem * get_item) {
     get_item->left->accept(*this);
     std::cout << "[";
     get_item->index->accept(*this);
     std::cout << "]";
 }
 
-void Printer::visit(SetItem * set_item){
+void Printer::visit(SetItem * set_item) {
     set_item->left->accept(*this);
     std::cout << "[";
     set_item->index->accept(*this);
@@ -260,9 +260,9 @@ void Printer::visit(SetItem * set_item){
     set_item->value->accept(*this);
 }
 
-void Printer::visit(DictExpr * dict){
+void Printer::visit(DictExpr * dict) {
     std::cout << "{\n";
-    for(const auto & it : dict->elements){
+    for (const auto & it : dict->elements) {
         it.key->accept(*this);
         std::cout << ": ";
         it.val->accept(*this);

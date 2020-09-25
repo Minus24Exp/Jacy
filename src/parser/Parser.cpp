@@ -1,41 +1,41 @@
 #include "parser/Parser.h"
 
-Token Parser::peek(){
+Token Parser::peek() {
     return tokens[index];
 }
 
-Token Parser::advance(){
+Token Parser::advance() {
     return tokens[++index];
 }
 
 /////////////
 // Chekers //
 /////////////
-bool Parser::eof(){
+bool Parser::eof() {
     return is_typeof(TokenType::Eof);
 }
 
-bool Parser::is_typeof(const TokenType & type){
+bool Parser::is_typeof(const TokenType & type) {
     return peek().type == type;
 }
 
-bool Parser::is_nl(){
+bool Parser::is_nl() {
     return is_typeof(TokenType::Nl);
 }
 
-bool Parser::is_semis(){
+bool Parser::is_semis() {
     return is_nl() || is_op(Operator::Semi);
 }
 
-bool Parser::is_op(const Operator & op){
+bool Parser::is_op(const Operator & op) {
     return is_typeof(TokenType::Op) && peek().op() == op;
 }
 
-bool Parser::is_kw(const Keyword & kw){
+bool Parser::is_kw(const Keyword & kw) {
     return is_typeof(TokenType::Kw) && peek().kw() == kw;
 }
 
-bool Parser::is_assign_op(){
+bool Parser::is_assign_op() {
     // Fixme: Maybe reduce checkers?
     return is_op(Operator::Assign)
         || is_op(Operator::AddAssign)
@@ -49,50 +49,50 @@ bool Parser::is_assign_op(){
 //////////////
 // Skippers //
 //////////////
-void Parser::skip_nl(const bool & optional){
-    if(is_nl()){
-        do{
+void Parser::skip_nl(const bool & optional) {
+    if (is_nl()) {
+        do {
             advance();
-        }while(is_nl());
-    }else if(!optional){
+        } while(is_nl());
+    } else if (!optional) {
         expected_error("[new line]");
     }
 }
 
-void Parser::skip_semis(){
-    if(is_semis()){
-        do{
+void Parser::skip_semis() {
+    if (is_semis()) {
+        do {
             advance();
-        }while(is_semis());
-    }else{
+        } while(is_semis());
+    } else {
         expected_error("`;` or [new line]");
     }
 }
 
-void Parser::skip_op(const Operator & op, const bool & skip_l_nl, const bool & skip_r_nl){
-    if(skip_l_nl){
+void Parser::skip_op(const Operator & op, const bool & skip_l_nl, const bool & skip_r_nl) {
+    if (skip_l_nl) {
         skip_nl(true);
     }
-    if(is_op(op)){
+    if (is_op(op)) {
         advance();
-    }else{
+    } else {
         expected_error("`"+ op_to_str(op) + "`");
     }
-    if(skip_r_nl){
+    if (skip_r_nl) {
         skip_nl(true);
     }
 }
 
-void Parser::skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl){
-    if(skip_l_nl){
+void Parser::skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl) {
+    if (skip_l_nl) {
         skip_nl(true);
     }
-    if(is_kw(kw)){
+    if (is_kw(kw)) {
         advance();
-    }else{
+    } else {
         expected_error("`"+ kw_to_str(kw) +"`");
     }
-    if(skip_r_nl){
+    if (skip_r_nl) {
         skip_nl(true);
     }
 }
@@ -100,22 +100,22 @@ void Parser::skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & sk
 /////////////
 // Parsers //
 /////////////
-StmtList Parser::parse(const TokenStream & tokens){
+StmtList Parser::parse(const TokenStream & tokens) {
     tree.clear();
     index = 0;
     this->tokens = tokens;
 
-    while(!eof()){
-        while(is_nl()){
+    while (!eof()) {
+        while (is_nl()) {
             advance();
         }
-        if(eof()){
+        if (eof()) {
             break;
         }
 
         tree.push_back(parse_stmt());
 
-        if(!eof() && !virtual_semi){
+        if (!eof() && !virtual_semi) {
             skip_semis();
             virtual_semi = false;
         }
@@ -127,39 +127,39 @@ StmtList Parser::parse(const TokenStream & tokens){
 ////////////////
 // Statements //
 ////////////////
-stmt_ptr Parser::parse_stmt(){
-    if(is_typeof(TokenType::Kw)){
-        switch(peek().kw()){
+stmt_ptr Parser::parse_stmt() {
+    if (is_typeof(TokenType::Kw)) {
+        switch(peek().kw()) {
             case Keyword::Var:
-            case Keyword::Val:{
+            case Keyword::Val: {
                 return parse_var_decl();
             } break;
-            case Keyword::Func:{
+            case Keyword::Func: {
                 return parse_func_decl();
             } break;
-            case Keyword::While:{
+            case Keyword::While: {
                 return parse_while_stmt();
             } break;
-            case Keyword::For:{
+            case Keyword::For: {
                 return parse_for_stmt();
             } break;
-            case Keyword::Return:{
+            case Keyword::Return: {
                 Position return_stmt_pos = peek().pos;
                 advance();
                 expr_ptr expr = nullptr;
-                if(!is_semis()){
+                if (!is_semis()) {
                     // not empty return
                     expr = parse_expr();
                 }
                 return std::make_shared<ReturnStmt>(return_stmt_pos, expr);
             }
-            case Keyword::Class:{
+            case Keyword::Class: {
                 return parse_class_decl();
             }
-            case Keyword::Import:{
+            case Keyword::Import: {
                 return parse_import();
             }
-            case Keyword::Type:{
+            case Keyword::Type: {
                 return parse_type_decl();
             }
         }
@@ -169,13 +169,13 @@ stmt_ptr Parser::parse_stmt(){
 }
 
 // Block //
-block_ptr Parser::parse_block(bool allow_one_line){
+block_ptr Parser::parse_block(bool allow_one_line) {
     Position block_pos = peek().pos;
     StmtList stmts;
 
     // One-line //
     // If one-line block is allowed then try to parse single stmt
-    if(!is_op(Operator::LBrace) && allow_one_line){
+    if (!is_op(Operator::LBrace) && allow_one_line) {
         // @TODO: Think about this skip_nl
         // Is it okay?
         skip_nl(true);
@@ -192,16 +192,16 @@ block_ptr Parser::parse_block(bool allow_one_line){
     skip_op(Operator::LBrace, false, true);
 
     bool first = true;
-    while(!eof()){
-        if(is_op(Operator::RBrace)){
+    while (!eof()) {
+        if (is_op(Operator::RBrace)) {
             break;
         }
-        if(first){
+        if (first) {
             first = false;
-        }else{
+        } else {
             skip_semis();
         }
-        if(is_op(Operator::RBrace)){
+        if (is_op(Operator::RBrace)) {
             break;
         }
         stmts.push_back(parse_stmt());
@@ -213,15 +213,15 @@ block_ptr Parser::parse_block(bool allow_one_line){
 }
 
 // VarDecl //
-stmt_ptr Parser::parse_var_decl(){
+stmt_ptr Parser::parse_var_decl() {
     Position var_decl_pos = peek().pos;
 
     VarDeclType decl = VarDeclType::Var;
-    if(is_kw(Keyword::Var)){
+    if (is_kw(Keyword::Var)) {
         decl = VarDeclType::Var;
-    }else if(is_kw(Keyword::Val)){
+    } else if (is_kw(Keyword::Val)) {
         decl = VarDeclType::Val;
-    }else{
+    } else {
         expected_error("`var` or `val` keyword");
     }
     advance();
@@ -231,7 +231,7 @@ stmt_ptr Parser::parse_var_decl(){
     expr_ptr assign_expr = nullptr;
 
     // It's obvious, but mark that augmented assignment cannot appear in variable declaration
-    if(is_op(Operator::Assign)){
+    if (is_op(Operator::Assign)) {
         skip_op(Operator::Assign, true, true);
         assign_expr = parse_expr();
     }
@@ -240,7 +240,7 @@ stmt_ptr Parser::parse_var_decl(){
 }
 
 // FuncDecl //
-stmt_ptr Parser::parse_func_decl(){
+stmt_ptr Parser::parse_func_decl() {
     Position func_decl_pos = peek().pos;
 
     skip_kw(Keyword::Func, false, true);
@@ -252,20 +252,20 @@ stmt_ptr Parser::parse_func_decl(){
         skip_op(Operator::LParen, true, true);
 
         bool first = true;
-        while(!eof()){
+        while (!eof()) {
             if (is_op(Operator::RParen)) {
                 break;
             }
-            if(first){
+            if (first) {
                 first = false;
-            }else{
+            } else {
                 skip_op(Operator::Comma, true, true);
             }
             id_ptr param_id = parse_id();
 
             // Check for default value
             expr_ptr default_val = nullptr;
-            if(is_op(Operator::Assign)){
+            if (is_op(Operator::Assign)) {
                 skip_op(Operator::Assign, true, true);
                 default_val = parse_expr();
             }
@@ -288,7 +288,7 @@ stmt_ptr Parser::parse_func_decl(){
 }
 
 // WhileStmt //
-stmt_ptr Parser::parse_while_stmt(){
+stmt_ptr Parser::parse_while_stmt() {
     Position while_pos = peek().pos;
 
     skip_kw(Keyword::While, false, false);
@@ -311,7 +311,7 @@ stmt_ptr Parser::parse_while_stmt(){
 }
 
 // ForStmt //
-stmt_ptr Parser::parse_for_stmt(){
+stmt_ptr Parser::parse_for_stmt() {
     Position for_stmt_pos = peek().pos;
 
     skip_kw(Keyword::For, false, false);
@@ -327,7 +327,7 @@ stmt_ptr Parser::parse_for_stmt(){
         allow_one_line = true;
     }
 
-    if(is_op(Operator::Arrow)){
+    if (is_op(Operator::Arrow)) {
         skip_op(Operator::Arrow, true, true);
         allow_one_line = true;
     }
@@ -338,7 +338,7 @@ stmt_ptr Parser::parse_for_stmt(){
 }
 
 // ClassDecl //
-stmt_ptr Parser::parse_class_decl(){
+stmt_ptr Parser::parse_class_decl() {
     Position class_decl_pos = peek().pos;
 
     skip_kw(Keyword::Class, false, true);
@@ -348,7 +348,7 @@ stmt_ptr Parser::parse_class_decl(){
     skip_nl(true);
 
     expr_ptr super = nullptr;
-    if(is_op(Operator::Colon)){
+    if (is_op(Operator::Colon)) {
         skip_op(Operator::Colon, true, true);
         super = parse_expr();
     }
@@ -359,18 +359,18 @@ stmt_ptr Parser::parse_class_decl(){
     
     // Parse declarations
     StmtList decls;
-    while(!eof()){
+    while (!eof()) {
         skip_nl(true);
 
-        if(is_op(Operator::RBrace)){
+        if (is_op(Operator::RBrace)) {
             break;
         }
 
-        if(is_kw(Keyword::Val) || is_kw(Keyword::Var)){
+        if (is_kw(Keyword::Val) || is_kw(Keyword::Var)) {
             decls.push_back(parse_var_decl());
-        }else if(is_kw(Keyword::Func)){
+        } else if (is_kw(Keyword::Func)) {
             decls.push_back(parse_func_decl());
-        }else{
+        } else {
             expected_error("function or variable declaration");
         }
         skip_semis();
@@ -382,7 +382,7 @@ stmt_ptr Parser::parse_class_decl(){
 }
 
 // Import //
-stmt_ptr Parser::parse_import(){
+stmt_ptr Parser::parse_import() {
     Position import_pos = peek().pos;
     // No new-lines in import
     skip_kw(Keyword::Import, false, false);
@@ -392,7 +392,7 @@ stmt_ptr Parser::parse_import(){
 
     // Import nothing, just run source
     // e.g. `import "path"`
-    if(is_typeof(TokenType::String)){
+    if (is_typeof(TokenType::String)) {
         std::string path = peek().String();
         advance();
         return std::make_shared<Import>(import_pos, path);
@@ -401,35 +401,35 @@ stmt_ptr Parser::parse_import(){
     // Complex import
     ImportEntityList entities;
     bool first = true;
-    while(!eof()){
+    while (!eof()) {
         skip_nl(true);
-        if(is_nl() || is_kw(Keyword::From)){
+        if (is_nl() || is_kw(Keyword::From)) {
             break;
         }
-        if(first){
+        if (first) {
             first = false;
-        }else{
+        } else {
             skip_op(Operator::Comma, false, false);
         }
-        if(is_nl() || is_kw(Keyword::From)){
+        if (is_nl() || is_kw(Keyword::From)) {
             break;
         }
 
         bool all = false;
         id_ptr object = nullptr;
         id_ptr as = nullptr;
-        if(is_op(Operator::Mul)){
+        if (is_op(Operator::Mul)) {
             advance();
             all = true;
-        }else{
+        } else {
             object = parse_id();
         }
 
         // All (`*`) requires `as` annotation
-        if(all || is_op(Operator::As)){
+        if (all || is_op(Operator::As)) {
             skip_op(Operator::As, false, false);
             as = parse_id();
-        }else{
+        } else {
             as = nullptr;
         }
 
@@ -438,7 +438,7 @@ stmt_ptr Parser::parse_import(){
 
     skip_kw(Keyword::From, false, false);
 
-    if(!is_typeof(TokenType::String)){
+    if (!is_typeof(TokenType::String)) {
         expected_error("path to file (String)");
     }
 
@@ -449,7 +449,7 @@ stmt_ptr Parser::parse_import(){
 }
 
 // TypeDecl //
-stmt_ptr Parser::parse_type_decl(){
+stmt_ptr Parser::parse_type_decl() {
     Position type_decl_pos = peek().pos;
 
     skip_kw(Keyword::Type, false, false);
@@ -463,16 +463,16 @@ stmt_ptr Parser::parse_type_decl(){
 /////////////////
 // Expressions //
 /////////////////
-expr_ptr Parser::parse_expr(){
+expr_ptr Parser::parse_expr() {
     return assignment();
 }
 
-expr_ptr Parser::assignment(){
+expr_ptr Parser::assignment() {
     expr_ptr expr = pipe();
 
     // @TODO: Add compound assignment operators
 
-    if(is_assign_op()){
+    if (is_assign_op()) {
         Operator assign_op = peek().op();
         advance();
 
@@ -480,17 +480,17 @@ expr_ptr Parser::assignment(){
 
         expr_ptr value = parse_expr();
 
-        if(expr->type == ExprType::Id){
+        if (expr->type == ExprType::Id) {
             id_ptr id = std::static_pointer_cast<Identifier>(expr);
             return std::make_shared<Assign>(id, value, assign_op);
         }
 
-        if(expr->type == ExprType::Get){
+        if (expr->type == ExprType::Get) {
             std::shared_ptr<GetExpr> get_expr = std::static_pointer_cast<GetExpr>(expr);
             return std::make_shared<SetExpr>(get_expr->left, get_expr->id, value);
         }
 
-        if(expr->type == ExprType::GetItem){
+        if (expr->type == ExprType::GetItem) {
             std::shared_ptr<GetItem> get_item = std::static_pointer_cast<GetItem>(expr);
             return std::make_shared<SetItem>(get_item->left, get_item->index, value);
         }
@@ -501,10 +501,10 @@ expr_ptr Parser::assignment(){
     return expr;
 }
 
-expr_ptr Parser::pipe(){
+expr_ptr Parser::pipe() {
     expr_ptr left = Or();
 
-    while(is_op(Operator::Pipe)){
+    while (is_op(Operator::Pipe)) {
         advance();
         skip_nl(true);
         expr_ptr right = Or();
@@ -514,10 +514,10 @@ expr_ptr Parser::pipe(){
     return left;
 }
 
-expr_ptr Parser::Or(){
+expr_ptr Parser::Or() {
     expr_ptr left = And();
 
-    while(is_op(Operator::Or)){
+    while (is_op(Operator::Or)) {
         const auto op_token = peek();
         advance();
         skip_nl(true);
@@ -528,10 +528,10 @@ expr_ptr Parser::Or(){
     return left;
 }
 
-expr_ptr Parser::And(){
+expr_ptr Parser::And() {
     expr_ptr left = eq();
 
-    while(is_op(Operator::And)){
+    while (is_op(Operator::And)) {
         const auto op_token = peek();
         advance();
         skip_nl(true);
@@ -542,10 +542,10 @@ expr_ptr Parser::And(){
     return left;
 }
 
-expr_ptr Parser::eq(){
+expr_ptr Parser::eq() {
     expr_ptr left = comp();
 
-    while(is_op(Operator::Eq) || is_op(Operator::NotEq)
+    while (is_op(Operator::Eq) || is_op(Operator::NotEq)
        || is_op(Operator::RefEq) || is_op(Operator::RefNotEq))
     {
         const auto op_token = peek();
@@ -558,10 +558,10 @@ expr_ptr Parser::eq(){
     return left;
 }
 
-expr_ptr Parser::comp(){
+expr_ptr Parser::comp() {
     expr_ptr left = named_checks();
 
-    while(is_op(Operator::LT)
+    while (is_op(Operator::LT)
        || is_op(Operator::GT)
        || is_op(Operator::LE)
        || is_op(Operator::GE))
@@ -576,10 +576,10 @@ expr_ptr Parser::comp(){
     return left;
 }
 
-expr_ptr Parser::named_checks(){
+expr_ptr Parser::named_checks() {
     expr_ptr left = range();
 
-    while(is_op(Operator::Is)
+    while (is_op(Operator::Is)
        || is_op(Operator::NotIs)
        || is_op(Operator::In)
        || is_op(Operator::NotIn))
@@ -594,11 +594,11 @@ expr_ptr Parser::named_checks(){
     return left;
 }
 
-expr_ptr Parser::range(){
+expr_ptr Parser::range() {
     expr_ptr left = add();
 
     // @TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
-    if(is_op(Operator::Range)
+    if (is_op(Operator::Range)
     || is_op(Operator::RangeLE)
     || is_op(Operator::RangeRE)
     || is_op(Operator::RangeBothE))
@@ -613,10 +613,10 @@ expr_ptr Parser::range(){
     return left;
 }
 
-expr_ptr Parser::add(){
+expr_ptr Parser::add() {
     expr_ptr left = mult();
 
-    while(is_op(Operator::Add) || is_op(Operator::Sub)){
+    while (is_op(Operator::Add) || is_op(Operator::Sub)) {
         const auto op_token = peek();
         advance();
         skip_nl(true);
@@ -627,10 +627,10 @@ expr_ptr Parser::add(){
     return left;
 }
 
-expr_ptr Parser::mult(){
+expr_ptr Parser::mult() {
     expr_ptr left = power();
 
-    while(is_op(Operator::Mul) || is_op(Operator::Div) || is_op(Operator::Mod)){
+    while (is_op(Operator::Mul) || is_op(Operator::Div) || is_op(Operator::Mod)) {
         const auto op_token = peek();
         advance();
         skip_nl(true);
@@ -641,10 +641,10 @@ expr_ptr Parser::mult(){
     return left;
 }
 
-expr_ptr Parser::power(){
+expr_ptr Parser::power() {
     expr_ptr left = prefix();
 
-    while(is_op(Operator::Exp)){
+    while (is_op(Operator::Exp)) {
         advance();
         skip_nl(true);
         expr_ptr right = prefix();
@@ -654,8 +654,8 @@ expr_ptr Parser::power(){
     return left;
 }
 
-expr_ptr Parser::prefix(){
-    if(is_op(Operator::Not) || is_op(Operator::Sub))
+expr_ptr Parser::prefix() {
+    if (is_op(Operator::Not) || is_op(Operator::Sub))
     {
         const auto op_token = peek();
         advance();
@@ -666,13 +666,13 @@ expr_ptr Parser::prefix(){
     return call();
 }
 
-expr_ptr Parser::call(){
+expr_ptr Parser::call() {
     expr_ptr left = member_access();
 
-    while(!eof()){
-        if(is_op(Operator::LParen)){
+    while (!eof()) {
+        if (is_op(Operator::LParen)) {
             left = parse_func_call(left);
-        }else{
+        } else {
             break;
         }
     }
@@ -680,20 +680,20 @@ expr_ptr Parser::call(){
     return left;
 }
 
-expr_ptr Parser::member_access(){
+expr_ptr Parser::member_access() {
     expr_ptr left = primary();
 
-    while(!eof()){
-        if(is_op(Operator::Dot)){
+    while (!eof()) {
+        if (is_op(Operator::Dot)) {
             advance();
             id_ptr id = parse_id();
             left = std::make_shared<GetExpr>(left, id);
-        }else if(is_op(Operator::LBracket)){
+        } else if (is_op(Operator::LBracket)) {
             skip_op(Operator::LBracket, false, true);
             expr_ptr index = parse_expr();
             skip_op(Operator::RBracket, true, false);
             left = std::make_shared<GetItem>(left, index);
-        }else{
+        } else {
             break;
         }
     }
@@ -701,9 +701,9 @@ expr_ptr Parser::member_access(){
     return left;
 }
 
-expr_ptr Parser::primary(){
+expr_ptr Parser::primary() {
     // Literal
-    if(is_typeof(TokenType::Int)
+    if (is_typeof(TokenType::Int)
     || is_typeof(TokenType::Float)
     || is_typeof(TokenType::String)
     || is_typeof(TokenType::Bool)
@@ -715,12 +715,12 @@ expr_ptr Parser::primary(){
     }
 
     // Identifier
-    if(is_typeof(TokenType::Id)){
+    if (is_typeof(TokenType::Id)) {
         return parse_id();
     }
 
     // Grouping
-    if(is_op(Operator::LParen)){
+    if (is_op(Operator::LParen)) {
         skip_op(Operator::LParen, false, true);
         expr_ptr expr = parse_expr();
         skip_op(Operator::RParen, true, false);
@@ -732,28 +732,28 @@ expr_ptr Parser::primary(){
     Position pos = peek().pos;
 
     // If expression
-    if(is_kw(Keyword::If)){
+    if (is_kw(Keyword::If)) {
         return parse_if_expr();
     }
 
     // List
-    if(is_op(Operator::LBracket)){
+    if (is_op(Operator::LBracket)) {
         skip_op(Operator::LBracket, false, true);
 
         ExprList elements;
         bool first = true;
-        while(!eof()){
+        while (!eof()) {
             skip_nl(true);
-            if(is_op(Operator::RBracket)){
+            if (is_op(Operator::RBracket)) {
                 break;
             }
-            if(first){
+            if (first) {
                 first = false;
-            }else{
+            } else {
                 skip_op(Operator::Comma, true, true);
             }
             // Note: Allow `[1,]` (comma without next element)
-            if(is_op(Operator::RBracket)){
+            if (is_op(Operator::RBracket)) {
                 break;
             }
             elements.push_back(parse_expr());
@@ -763,22 +763,22 @@ expr_ptr Parser::primary(){
     }
 
     // Dictionary
-    if(is_op(Operator::LBrace)){
+    if (is_op(Operator::LBrace)) {
         skip_op(Operator::LBrace, false, true);
 
         DictElementList elements;
         bool first = true;
-        while(!eof()){
+        while (!eof()) {
             skip_nl(true);
-            if(is_op(Operator::RBrace)){
+            if (is_op(Operator::RBrace)) {
                 break;
             }
-            if(first){
+            if (first) {
                 first = false;
-            }else{
+            } else {
                 skip_op(Operator::Comma, true, true);
             }
-            if(is_op(Operator::RBrace)){
+            if (is_op(Operator::RBrace)) {
                 break;
             }
             expr_ptr key = parse_expr();
@@ -796,8 +796,8 @@ expr_ptr Parser::primary(){
 }
 
 // Identifier //
-id_ptr Parser::parse_id(){
-    if(!is_typeof(TokenType::Id)){
+id_ptr Parser::parse_id() {
+    if (!is_typeof(TokenType::Id)) {
         expected_error("identifier");
     }
 
@@ -808,23 +808,23 @@ id_ptr Parser::parse_id(){
 
 
 // FuncCall //
-expr_ptr Parser::parse_func_call(expr_ptr left){
+expr_ptr Parser::parse_func_call(expr_ptr left) {
     skip_op(Operator::LParen, false, true);
 
     ExprList args;
 
     bool first = true;
-    while(!eof()){
+    while (!eof()) {
         skip_nl(true);
-        if(is_op(Operator::RParen)){
+        if (is_op(Operator::RParen)) {
             break;
         }
-        if(first){
+        if (first) {
             first = false;
-        }else{
+        } else {
             skip_op(Operator::Comma, true, true);
         }
-        if(is_op(Operator::RParen)){
+        if (is_op(Operator::RParen)) {
             break;
         }
         args.push_back(parse_expr());
@@ -836,7 +836,7 @@ expr_ptr Parser::parse_func_call(expr_ptr left){
 }
 
 // IfExpr //
-expr_ptr Parser::parse_if_expr(){
+expr_ptr Parser::parse_if_expr() {
     Position if_pos = peek().pos;
 
     skip_kw(Keyword::If, false, true);
@@ -850,7 +850,7 @@ expr_ptr Parser::parse_if_expr(){
         allow_one_line = true;
     }
 
-    if(is_op(Operator::Arrow)){
+    if (is_op(Operator::Arrow)) {
         skip_op(Operator::Arrow, true, true);
         allow_one_line = true;
     }
@@ -859,13 +859,13 @@ expr_ptr Parser::parse_if_expr(){
 
     // Allow to write one-line expressions
     // like: val a = if true => 'yeps' else 'nope'
-    if(!is_kw(Keyword::Else)){
+    if (!is_kw(Keyword::Else)) {
         skip_semis();
         virtual_semi = true;
     }
 
     block_ptr else_branch = nullptr;
-    if(is_kw(Keyword::Else)){
+    if (is_kw(Keyword::Else)) {
         skip_kw(Keyword::Else, false, true);
         else_branch = parse_block(true);
     }
@@ -876,14 +876,14 @@ expr_ptr Parser::parse_if_expr(){
 ////////////
 // Errors //
 ////////////
-void Parser::error(const std::string & msg){
+void Parser::error(const std::string & msg) {
     throw JacyException(msg);
 }
 
-void Parser::unexpected_error(){
+void Parser::unexpected_error() {
     throw UnexpectedTokenException(peek());
 }
 
-void Parser::expected_error(const std::string & expected){
+void Parser::expected_error(const std::string & expected) {
     throw ExpectedException(expected, peek());
 }

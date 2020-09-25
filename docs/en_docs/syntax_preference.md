@@ -6,7 +6,7 @@ Control flow expressions and function delcaration can be written with/without pa
 Example:
 ```
 // C-like
-if(true){
+if (true) {
     print('yoyo')
 }
 // No-parentheses
@@ -20,7 +20,7 @@ In the case of (not) using parentheses, you should choose one way and write all 
 No words, just look at examples and choose what you like more:
 ```
 // Standard `if`
-if(true){
+if (true) {
     print('yoyoyo')
 }
 
@@ -30,36 +30,36 @@ if true {
 }
 
 // One-line standard `if`
-if(true) print('yoyoyo')
+if (true) print('yoyoyo')
 
 // One-line no-paren `if`
 if true => print('yoyoyo')
 
 // Possible to write, but nonsensical
-if(true) => print('yoyoyo')
+if (true) => print('yoyoyo')
 ```
 So, as you can see, one-line no-paren `if` requires `=>`, because parser need to know when condition ends.
 
 As far as not only if can be written without parentheses, look at these examples:
 ```
 // While statement
-while(true){
+while (true) {
     print('yoyo, infinity')
 }
 while true {
     print('aaaaa')
 }
-while(true) print('oaoaoaoao')
+while (true) print('oaoaoaoao')
 while true => print('10')
 
 // Function declaration
-func a(){
+func a() {
     print('just a raw function')
 }
 func a {
     print('No parameters, so why do I need parentheses???')
 }
-func a(p1){
+func a(p1) {
     print('Raw function with parameter')
 }
 func a p1 {
