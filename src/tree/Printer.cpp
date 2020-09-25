@@ -63,7 +63,6 @@ void Printer::visit(FuncDecl * func_decl){
     print_indent();
     std::cout << "func ";
     func_decl->id->accept(*this);
-
     std::cout << "(";
     for(int i = 0; i < func_decl->params.size(); i++){
         func_decl->params[i].id->accept(*this);
@@ -71,8 +70,7 @@ void Printer::visit(FuncDecl * func_decl){
             std::cout << ", ";
         }
     }
-    std::cout << ")";
-
+    std::cout << ") ";
     func_decl->body->accept(*this);
 }
 
@@ -86,13 +84,12 @@ void Printer::visit(WhileStmt * w){
 
 void Printer::visit(ForStmt * for_stmt){
     print_indent();
-    std::cout << "for(";
+    std::cout << "for ";
     for_stmt->For->accept(*this);
     std::cout << " in ";
     for_stmt->In->accept(*this);
-    std::cout << "){\n";
+    std::cout << " ";
     for_stmt->body->accept(*this);
-    std::cout << "\n}";
 }
 
 void Printer::visit(ReturnStmt * return_stmt){

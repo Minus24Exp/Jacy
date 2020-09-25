@@ -247,44 +247,37 @@ stmt_ptr Parser::parse_func_decl(){
 
     id_ptr id = parse_id();
 
-    bool paren = true;
-    if(is_op(Operator::LParen)){
-        skip_op(Operator::LParen, true, true);
-    }else{
-        paren = false;
-    }
-
     FuncParams params;
-    bool first = true;
-    while(!eof()){
-        if((paren && is_op(Operator::RParen))
-        || (!paren && (is_op(Operator::Arrow) || is_op(Operator::LBrace))))
-        {
-            break;
-        }
-        if(first){
-            first = false;
-        }else{
-            skip_op(Operator::Comma, true, true);
-        }
-        id_ptr param_id = parse_id();
+    if (is_op(Operator::LParen)) {
+        skip_op(Operator::LParen, true, true);
 
-        // Check for default value
-        expr_ptr default_val = nullptr;
-        if(is_op(Operator::Assign)){
-            skip_op(Operator::Assign, true, true);
-            default_val = parse_expr();
+        bool first = true;
+        while(!eof()){
+            if (is_op(Operator::RParen)) {
+                break;
+            }
+            if(first){
+                first = false;
+            }else{
+                skip_op(Operator::Comma, true, true);
+            }
+            id_ptr param_id = parse_id();
+
+            // Check for default value
+            expr_ptr default_val = nullptr;
+            if(is_op(Operator::Assign)){
+                skip_op(Operator::Assign, true, true);
+                default_val = parse_expr();
+            }
+
+            params.push_back({ param_id, default_val });
         }
-
-        params.push_back({ param_id, default_val });
-    }
-
-    bool allow_one_line = false;
-    if(paren){
+        
         skip_op(Operator::RParen, true, true);
     }
 
-    if(is_op(Operator::Arrow)){
+    bool allow_one_line = false;
+    if (is_op(Operator::Arrow)) {
         skip_op(Operator::Arrow, true, true);
         allow_one_line = true;
     }

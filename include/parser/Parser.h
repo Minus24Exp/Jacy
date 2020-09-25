@@ -30,7 +30,8 @@ private:
 
     StmtList tree;
 
-    // Virtual semi used when statement does not require semi after it, but parser need to know if semi was skipped
+    // Virtual semi used when statement does not require semi after it,
+    // but parser need to know if semi was skipped
     bool virtual_semi = false;
 
     Token peek();
