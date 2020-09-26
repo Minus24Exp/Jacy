@@ -7,8 +7,6 @@
 #include "tree/nodes.h"
 #include "compiler/opcode.h"
 
-using Chunk = std::vector<uint8_t>;
-
 class CodeGenerator : public BaseVisitor {
 public:
     CodeGenerator();

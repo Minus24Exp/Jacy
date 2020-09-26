@@ -2,6 +2,14 @@
 
 CodeGenerator::CodeGenerator() {}
 
+std::vector<uint8_t> CodeGenerator::gen(const StmtList & tree) {
+    for (const auto & stmt : tree) {
+        stmt->accept(*this);
+    }
+
+    return chunk;
+}
+
 void CodeGenerator::write(uint8_t byte) {
     chunk.push_back(byte);
 }
@@ -14,14 +22,6 @@ void CodeGenerator::write(const uint8_t * byte_array, int size) {
     for (int i = 0; i < size; i++) {
         write(byte_array[i]);
     }
-}
-
-std::vector<uint8_t> CodeGenerator::gen(const StmtList & tree) {
-    for (const auto & stmt : tree) {
-        stmt->accept(*this);
-    }
-
-    return chunk;
 }
 
 ////////////////
@@ -71,7 +71,6 @@ void CodeGenerator::visit(TypeDecl * expr_stmt) {
 // Expressions //
 /////////////////
 void CodeGenerator::visit(Literal * literal) {
-    // TODO: Global switch left-indent
     switch (literal->token.type) {
         case TokenType::Null: {
             write(OpCode::CONST_NULL);

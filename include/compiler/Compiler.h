@@ -8,7 +8,7 @@ public:
     Compiler();
     virtual ~Compiler() = default;
 
-    void compile(const StmtList & tree);
+    Chunk compile(const StmtList & tree);
 private:
     CodeGenerator codegen;
 };

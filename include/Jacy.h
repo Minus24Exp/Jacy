@@ -12,6 +12,8 @@
 #include "parser/Parser.h"
 #include "tree/Printer.h"
 #include "Tester.h"
+#include "compiler/Compiler.h"
+#include "compiler/Disasm.h"
 
 /**
  * Jacy
@@ -60,6 +62,8 @@ private:
 
     Lexer & lexer;
     Parser & parser;
+    Compiler compiler;
+    Disasm disasm;
 
     /**
      * @brief Run REPL

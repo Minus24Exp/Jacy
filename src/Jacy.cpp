@@ -95,6 +95,7 @@ void Jacy::run_script(const std::string & path) {
 void Jacy::run(const std::string & script) {
     TokenStream tokens = lexer.lex(script);
     StmtList tree = parser.parse(tokens);
+    compiler.compile(tree);
 }
 
 void Jacy::run_debug(const std::string & script) {
@@ -123,6 +124,13 @@ void Jacy::run_debug(const std::string & script) {
     std::cout << "\nParse Tree:" << std::endl;
     printer.print(tree);
     std::cout << std::endl;
+        
+    auto compiler_start = bench();
+    Chunk chunk = compiler.compile(tree);
+    auto compiler_end = bench();
+
+    // Print bytecode
+    disasm.printChunk(chunk);
 
     std::cout << "\n\nBenchmarks:" << std::endl;
 
@@ -131,4 +139,7 @@ void Jacy::run_debug(const std::string & script) {
 
     auto parser_duration = std::chrono::duration<double>(parser_end - parser_start).count();
     std::cout << "Parsing: " << parser_duration << "s" << std::endl;
+
+    auto compiler_duration = std::chrono::duration<double>(compiler_end - compiler_start).count();
+    std::cout << "Compilation: " << compiler_duration << "s" << std::endl;
 }
