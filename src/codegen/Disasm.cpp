@@ -51,6 +51,9 @@ void Disasm::printChunk(Chunk chunk) {
                 std::cout << bytesToString(peek_it(), size);
                 advance(size);
             } break;
+            default: {
+                throw DevError("[Disasm] Unknown opcode " + std::to_string(peek()));
+            }
         }
         std::cout << std::endl;
     }

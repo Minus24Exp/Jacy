@@ -1,8 +1,9 @@
 #ifndef DISASM_H
 #define DISASM_H
 
-#include "codegen/opcode.h"
 #include <iostream>
+#include "codegen/opcode.h"
+#include "Exception.h"
 
 class Disasm {
 public:
