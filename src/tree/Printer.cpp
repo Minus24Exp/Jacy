@@ -263,7 +263,13 @@ void Printer::visit(SetItem * set_item) {
 void Printer::visit(DictExpr * dict) {
     std::cout << "{\n";
     for (const auto & it : dict->elements) {
-        it.key->accept(*this);
+        if (it.id_key) {
+            std::cout << it.id_key->get_name();
+        } else {
+            std::cout << "[";
+            it.expr_key->accept(*this);
+            std::cout << "]";
+        }
         std::cout << ": ";
         it.val->accept(*this);
         std::cout << ",\n";

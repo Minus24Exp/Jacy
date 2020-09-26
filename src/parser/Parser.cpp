@@ -46,6 +46,14 @@ bool Parser::is_assign_op() {
         || is_op(Operator::ExpAssign);
 }
 
+bool Parser::is_literal() {
+    return is_typeof(TokenType::Int)
+        || is_typeof(TokenType::Float)
+        || is_typeof(TokenType::String)
+        || is_typeof(TokenType::Bool)
+        || is_typeof(TokenType::Null);
+}
+
 //////////////
 // Skippers //
 //////////////
@@ -703,15 +711,8 @@ expr_ptr Parser::member_access() {
 
 expr_ptr Parser::primary() {
     // Literal
-    if (is_typeof(TokenType::Int)
-    || is_typeof(TokenType::Float)
-    || is_typeof(TokenType::String)
-    || is_typeof(TokenType::Bool)
-    || is_typeof(TokenType::Null))
-    {
-        Token current = peek();
-        advance();
-        return std::make_shared<Literal>(current);
+    if (is_literal()) {
+        return parse_literal();
     }
 
     // Identifier
@@ -781,10 +782,24 @@ expr_ptr Parser::primary() {
             if (is_op(Operator::RBrace)) {
                 break;
             }
-            expr_ptr key = parse_expr();
+
+            id_ptr id_key = nullptr;
+            expr_ptr expr_key = nullptr;
+
+            if (is_op(Operator::LBracket)) {
+                skip_op(Operator::LBracket, true, true);
+                expr_key = parse_expr();
+                skip_op(Operator::RBracket, true, true);
+            } else if (is_literal()) {
+                expr_key = parse_literal();
+            } else {
+                id_key = parse_id();
+            }
+
             skip_op(Operator::Colon, true, true);
             expr_ptr val = parse_expr();
-            elements.push_back({key, val});
+
+            elements.push_back({id_key, expr_key, val});
         }
         skip_op(Operator::RBrace, true, false);
         return std::make_shared<DictExpr>(pos, elements);
@@ -871,6 +886,12 @@ expr_ptr Parser::parse_if_expr() {
     }
 
     return std::make_shared<IfExpr>(if_pos, cond, then_branch, else_branch);
+}
+
+expr_ptr Parser::parse_literal() {
+    Token current = peek();
+    advance();
+    return std::make_shared<Literal>(current);
 }
 
 ////////////

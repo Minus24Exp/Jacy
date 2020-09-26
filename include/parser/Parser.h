@@ -45,6 +45,7 @@ private:
     bool is_op(const Operator & op);
     bool is_kw(const Keyword & kw);
     bool is_assign_op();
+    bool is_literal();
 
     // Skippers //
     void skip_nl(const bool & optional = false);
@@ -89,6 +90,7 @@ private:
     id_ptr parse_id();
     expr_ptr parse_func_call(expr_ptr left);
     expr_ptr parse_if_expr();
+    expr_ptr parse_literal();
 
     // Errors
     void error(const std::string & msg);

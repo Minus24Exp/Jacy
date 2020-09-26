@@ -2,9 +2,11 @@
 #define DICTEXPR_H
 
 #include "tree/Expr/Expr.h"
+#include "tree/Expr/Identifier.h"
 
 struct DictElement {
-    expr_ptr key;
+    id_ptr id_key;
+    expr_ptr expr_key;
     expr_ptr val;
 };
 

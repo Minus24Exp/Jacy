@@ -1,19 +1,23 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "F:/PROGRAMMS/MinGW/mingw64/include"
             ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "windowsSdkVersion": "10.0.18362.0",
-            "compilerPath": "F:/PROGRAMMS/VisualStudio/VC/Tools/MSVC/14.25.28610/bin/Hostx64/x64/cl.exe",
+            "defines": ["_HAS_CXX17"],
+            "compilerPath": "F:/PROGRAMMS/MinGW/mingw64/bin/g++.exe",
             "cStandard": "c11",
-            "intelliSenseMode": "msvc-x64"
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "F:/PROGRAMMS/MinGW/mingw64/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4
