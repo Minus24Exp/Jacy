@@ -163,7 +163,7 @@ void Printer::visit(TypeDecl * type_decl) {
 // Expressions //
 /////////////////
 void Printer::visit(Literal * literal) {
-    switch(literal->token.type) {
+    switch (literal->token.type) {
         case TokenType::Bool: std::cout << literal->token.Bool(); break;
         case TokenType::Int: std::cout << literal->token.Int(); break;
         case TokenType::Float: std::cout << literal->token.Float(); break;

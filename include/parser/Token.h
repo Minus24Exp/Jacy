@@ -193,7 +193,7 @@ struct Token {
     Token(const TokenType & _type, const std::string & v) {
         this->type = _type;
 
-        switch(type) {
+        switch (type) {
             case TokenType::Id:
             case TokenType::String: {
                 val = v;
@@ -202,7 +202,7 @@ struct Token {
     }
 
     Token(NumType num_type, const std::string & num) {
-        switch(num_type) {
+        switch (num_type) {
             case NumType::Int: {
                 type = TokenType::Int;
                 val = std::stol(num);
@@ -228,7 +228,7 @@ struct Token {
     }
 
     Token(const Keyword & kw) {
-        switch(kw) {
+        switch (kw) {
             case Keyword::True:
             case Keyword::False: {
                 type = TokenType::Bool;
@@ -277,7 +277,7 @@ struct Token {
     std::string to_string(bool with_pos = true) {
         std::string str;
 
-        switch(type) {
+        switch (type) {
             case TokenType::Null: {
                 str += "null";
             } break;
@@ -312,7 +312,7 @@ struct Token {
 
         // @TODO: Fix quote for empty values
         str += " `";
-        switch(type) {
+        switch (type) {
             case TokenType::Bool: {
                 str += std::to_string(Bool());
             } break;

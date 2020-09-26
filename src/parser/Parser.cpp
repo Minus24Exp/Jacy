@@ -137,7 +137,7 @@ StmtList Parser::parse(const TokenStream & tokens) {
 ////////////////
 stmt_ptr Parser::parse_stmt() {
     if (is_typeof(TokenType::Kw)) {
-        switch(peek().kw()) {
+        switch (peek().kw()) {
             case Keyword::Var:
             case Keyword::Val: {
                 return parse_var_decl();

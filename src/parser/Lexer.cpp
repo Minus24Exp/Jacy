@@ -99,7 +99,7 @@ void Lexer::lex_number() {
 
     if (peek() == '0') {
         advance();
-        switch(peek()) {
+        switch (peek()) {
             case 'x':
             case 'X': {
                 advance();
@@ -224,7 +224,7 @@ TokenStream Lexer::lex(const std::string & script) {
             add_token(TokenType::String, str);
             advance();
         } else {
-            switch(peek()) {
+            switch (peek()) {
                 case '=': {
                     if (peek_next() == '>') {
                         add_token(Operator::Arrow);
