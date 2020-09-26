@@ -1,4 +1,4 @@
-#include "compiler/Disasm.h"
+#include "codegen/Disasm.h"
 
 Disasm::Disasm() {}
 
@@ -15,6 +15,11 @@ Chunk::iterator Disasm::peek_it() {
     return chunk.begin() + index;
 }
 
+void Disasm::consumeOpcode() {
+    std::cout << opcodeNames[peek()] << " ";
+    advance();
+}
+
 void Disasm::printChunk(Chunk chunk) {
     index = 0;
     this->chunk = chunk;
@@ -22,21 +27,31 @@ void Disasm::printChunk(Chunk chunk) {
     while (index < chunk.size()) {
         switch (static_cast<OpCode>(peek())) {
             case OpCode::CONST_NULL: {
-                std::cout << "CONST_NULL" << std::endl;
-                advance();
+                consumeOpcode();
             } break;
             case OpCode::CONST_BOOL: {
-                std::cout << "CONST_BOOL ";
-                advance();
+                consumeOpcode();
                 std::cout << peek() ? "(true)" : "(false)";
                 advance();
             } break;
             case OpCode::CONST_INT: {
-                std::cout << "CONST_INT ";
-                advance();
+                consumeOpcode();
                 std::cout << bytesToLong(peek_it());
                 advance(8);
             } break;
+            case OpCode::CONST_FLOAT: {
+                consumeOpcode();
+                std::cout << bytesToDouble(peek_it());
+                advance(8);
+            } break;
+            case OpCode::CONST_STRING: {
+                consumeOpcode();
+                std::size_t size = bytesToLong(peek_it());
+                advance(8);
+                std::cout << bytesToString(peek_it(), size);
+                advance(size);
+            } break;
         }
+        std::cout << std::endl;
     }
 }

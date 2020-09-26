@@ -129,6 +129,8 @@ void Jacy::run_debug(const std::string & script) {
     Chunk chunk = compiler.compile(tree);
     auto compiler_end = bench();
 
+    std::cout << "[compiled]: " << chunk.size() << std::endl;
+
     // Print bytecode
     disasm.printChunk(chunk);
 

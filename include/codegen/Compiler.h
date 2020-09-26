@@ -1,7 +1,7 @@
 #ifndef COMPILER_H
 #define COMPILER_H
 
-#include "compiler/CodeGenerator.h"
+#include "codegen/CodeGen.h"
 
 class Compiler {
 public:
@@ -10,7 +10,7 @@ public:
 
     Chunk compile(const StmtList & tree);
 private:
-    CodeGenerator codegen;
+    CodeGen codegen;
 };
 
 #endif

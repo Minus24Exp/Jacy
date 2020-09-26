@@ -1,7 +1,7 @@
 #ifndef DISASM_H
 #define DISASM_H
 
-#include "compiler/opcode.h"
+#include "codegen/opcode.h"
 #include <iostream>
 
 class Disasm {
@@ -18,6 +18,8 @@ private:
     uint8_t peek();
     uint8_t advance(int distance = 1);
     Chunk::iterator peek_it();
+
+    void consumeOpcode();
 };
 
 #endif

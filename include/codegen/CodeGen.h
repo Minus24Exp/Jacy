@@ -1,16 +1,16 @@
-#ifndef CODEGENERATOR_H
-#define CODEGENERATOR_H
+#ifndef CodeGen_H
+#define CodeGen_H
 
 #include <vector>
 #include <cstdint>
 #include "tree/BaseVisitor.h"
 #include "tree/nodes.h"
-#include "compiler/opcode.h"
+#include "codegen/opcode.h"
 
-class CodeGenerator : public BaseVisitor {
+class CodeGen : public BaseVisitor {
 public:
-    CodeGenerator();
-    virtual ~CodeGenerator() = default;
+    CodeGen();
+    virtual ~CodeGen() = default;
 
     Chunk gen(const StmtList & tree);
 private:

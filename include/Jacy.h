@@ -12,8 +12,8 @@
 #include "parser/Parser.h"
 #include "tree/Printer.h"
 #include "Tester.h"
-#include "compiler/Compiler.h"
-#include "compiler/Disasm.h"
+#include "codegen/Compiler.h"
+#include "codegen/Disasm.h"
 
 /**
  * Jacy
