@@ -132,7 +132,7 @@ void Jacy::run_debug(const std::string & script) {
     std::cout << "[compiled]: " << chunk.size() << std::endl;
 
     // Print bytecode
-    disasm.printChunk(chunk);
+    disasm.eval(chunk);
 
     std::cout << "\n\nBenchmarks:" << std::endl;
 

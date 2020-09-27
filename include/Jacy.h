@@ -13,7 +13,7 @@
 #include "tree/Printer.h"
 #include "Tester.h"
 #include "codegen/Compiler.h"
-#include "codegen/Disasm.h"
+#include "vm/Disasm.h"
 
 /**
  * Jacy

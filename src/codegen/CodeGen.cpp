@@ -93,7 +93,7 @@ void CodeGen::visit(Literal * literal) {
             write(OpCode::CONST_STRING);
             std::size_t size = literal->token.String().size();
             write(reinterpret_cast<uint8_t*>(&size), sizeof(size));
-            char * bytes = new char [size + 1];
+            char * bytes = new char[size + 1];
             std::strcpy(bytes, literal->token.String().c_str());
             write((uint8_t*)bytes, size);
         } break;
