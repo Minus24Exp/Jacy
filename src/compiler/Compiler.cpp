@@ -1,6 +1,6 @@
 #include "compiler/Compiler.h"
 
-Compiler::Compiler() {}
+Compiler::Compiler() : scope_depth(0) {}
 
 std::vector<uint8_t> Compiler::compile(const StmtList & tree) {
     for (const auto & stmt : tree) {
@@ -10,17 +10,27 @@ std::vector<uint8_t> Compiler::compile(const StmtList & tree) {
     return chunk;
 }
 
-void Compiler::write(uint8_t byte) {
+std::size_t Compiler::resolve_local(std::string name) {
+    for (std::size_t i = locals.size() - 1; i >= 0; i--) {
+        if (locals[i].name == name) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+void Compiler::emit(uint8_t byte) {
     chunk.push_back(byte);
 }
 
-void Compiler::write(OpCode opcode) {
-    write(static_cast<uint8_t>(opcode));
+void Compiler::emit(OpCode opcode) {
+    emit(static_cast<uint8_t>(opcode));
 }
 
-void Compiler::write(const uint8_t * byte_array, int size) {
+void Compiler::emit(const uint8_t * byte_array, int size) {
     for (std::size_t i = 0; i < size; i++) {
-        write(byte_array[i]);
+        emit(byte_array[i]);
     }
 }
 
@@ -73,35 +83,36 @@ void Compiler::visit(TypeDecl * expr_stmt) {
 void Compiler::visit(Literal * literal) {
     switch (literal->token.type) {
         case TokenType::Null: {
-            write(OpCode::CONST_NULL);
+            emit(OpCode::CONST_NULL);
         } break;
         case TokenType::Bool: {
-            write(OpCode::CONST_BOOL);
-            write(1);
+            emit(OpCode::CONST_BOOL);
+            emit(1);
         } break;
         case TokenType::Int: {
-            write(OpCode::CONST_INT);
+            emit(OpCode::CONST_INT);
             yo_int val = literal->token.Int();
-            write(reinterpret_cast<uint8_t*>(&val), 8);
+            emit(reinterpret_cast<uint8_t*>(&val), 8);
         } break;
         case TokenType::Float: {
-            write(OpCode::CONST_FLOAT);
+            emit(OpCode::CONST_FLOAT);
             double val = literal->token.Float();
-            write(reinterpret_cast<uint8_t*>(&val), 8);
+            emit(reinterpret_cast<uint8_t*>(&val), 8);
         } break;
         case TokenType::String: {
-            write(OpCode::CONST_STRING);
+            emit(OpCode::CONST_STRING);
             std::size_t size = literal->token.String().size();
-            write(reinterpret_cast<uint8_t*>(&size), sizeof(size));
+            emit(reinterpret_cast<uint8_t*>(&size), sizeof(size));
             char * bytes = new char[size + 1];
             std::strcpy(bytes, literal->token.String().c_str());
-            write((uint8_t*)bytes, size);
+            emit((uint8_t*)bytes, size);
         } break;
     }
 }
 
 void Compiler::visit(Identifier * id) {
-    
+    emit(OpCode::LOAD);
+    emit(resolve_local(id->get_name()));
 }
 
 void Compiler::visit(Infix * expr_stmt) {

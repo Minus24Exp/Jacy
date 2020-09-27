@@ -5,6 +5,8 @@
 #include <cstdint>
 #include "parser/Token.h"
 
+using Chunk = std::vector<uint8_t>;
+
 enum class OpCode : uint8_t {
     NOP,
     CONST_NULL,
@@ -12,6 +14,7 @@ enum class OpCode : uint8_t {
     CONST_INT,
     CONST_FLOAT,
     CONST_STRING,
+    LOAD,
 };
 
 const std::vector <std::string> opcodeNames {
@@ -23,22 +26,9 @@ const std::vector <std::string> opcodeNames {
     "CONST_STRING",
 };
 
-using Chunk = std::vector<uint8_t>;
-
-static inline yo_int bytesToLong(Chunk::iterator it) {
-    yo_int value;
-    std::copy(it, it + 8, reinterpret_cast<uint8_t*>(&value));
-    return value;
-}
-
-static inline double bytesToDouble(Chunk::iterator it) {
-    double value;
-    std::copy(it, it + 8, reinterpret_cast<uint8_t*>(&value));
-    return value;
-}
-
-// static inline std::string bytesToString(Chunk::iterator it, std::size_t size) {
-//     return std::string(it, it + size);
-// }
+struct Local {
+    int depth;
+    Token name;
+};
 
 #endif

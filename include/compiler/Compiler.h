@@ -1,10 +1,10 @@
 #ifndef COMPILER_H
 #define COMPILER_H
 
+#include <cstring>
 #include "tree/nodes.h"
 #include "tree/BaseVisitor.h"
 #include "compiler/opcode.h"
-#include <cstring>
 
 class Compiler : public BaseVisitor {
 public:
@@ -14,10 +14,15 @@ public:
     Chunk compile(const StmtList & tree);
 
 private:
+    int scope_depth;
+    std::vector<Local> locals;
+    std::size_t resolve_local(std::string name);
+
     Chunk chunk;
-    void write(uint8_t byte);
-    void write(OpCode opcode);
-    void write(const uint8_t * byte_array, int size);
+
+    void emit(uint8_t byte);
+    void emit(OpCode opcode);
+    void emit(const uint8_t * byte_array, int size);
 
     // Statements //
     void visit(ExprStmt * expr_stmt) override;
