@@ -12,7 +12,7 @@
 #include "parser/Parser.h"
 #include "tree/Printer.h"
 #include "Tester.h"
-#include "codegen/Compiler.h"
+#include "compiler/Compiler.h"
 #include "vm/Disasm.h"
 
 /**

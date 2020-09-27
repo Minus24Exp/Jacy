@@ -1,25 +1,24 @@
-#ifndef CodeGen_H
-#define CodeGen_H
+#ifndef COMPILER_H
+#define COMPILER_H
 
-#include <vector>
-#include <cstdint>
-#include <cstring>
-#include "tree/BaseVisitor.h"
 #include "tree/nodes.h"
-#include "codegen/opcode.h"
+#include "tree/BaseVisitor.h"
+#include "compiler/opcode.h"
+#include <cstring>
 
-class CodeGen : public BaseVisitor {
+class Compiler : public BaseVisitor {
 public:
-    CodeGen();
-    virtual ~CodeGen() = default;
+    Compiler();
+    virtual ~Compiler() = default;
 
-    Chunk gen(const StmtList & tree);
+    Chunk compile(const StmtList & tree);
+
 private:
     Chunk chunk;
     void write(uint8_t byte);
     void write(OpCode opcode);
     void write(const uint8_t * byte_array, int size);
-    
+
     // Statements //
     void visit(ExprStmt * expr_stmt) override;
     void visit(Block * block) override;

@@ -1,7 +1,7 @@
 #ifndef BASEVM_H
 #define BASEVM_H
 
-#include "codegen/opcode.h"
+#include "compiler/opcode.h"
 #include "Exception.h"
 
 class BaseVM {
