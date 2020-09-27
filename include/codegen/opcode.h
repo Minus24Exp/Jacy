@@ -37,9 +37,8 @@ static inline double bytesToDouble(Chunk::iterator it) {
     return value;
 }
 
-static inline std::string bytesToString(Chunk::iterator it, std::size_t size) {
-    return std::string(it, it + size
-    );
-}
+// static inline std::string bytesToString(Chunk::iterator it, std::size_t size) {
+//     return std::string(it, it + size);
+// }
 
 #endif

@@ -2,6 +2,7 @@
 #define DISASM_H
 
 #include <iostream>
+#include <iomanip>
 #include "codegen/opcode.h"
 #include "Exception.h"
 

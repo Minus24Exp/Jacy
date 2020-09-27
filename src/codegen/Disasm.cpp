@@ -48,8 +48,10 @@ void Disasm::printChunk(Chunk chunk) {
                 consumeOpcode();
                 std::size_t size = bytesToLong(peek_it());
                 advance(8);
-                std::cout << bytesToString(peek_it(), size);
-                advance(size);
+                for (int i = 0; i < size; i++) {
+                    std::cout << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(*peek_it()) << " ";
+                    advance();
+                }
             } break;
             default: {
                 throw DevError("[Disasm] Unknown opcode " + std::to_string(peek()));

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <cstring>
 #include "tree/BaseVisitor.h"
 #include "tree/nodes.h"
 #include "codegen/opcode.h"

@@ -19,7 +19,7 @@ void CodeGen::write(OpCode opcode) {
 }
 
 void CodeGen::write(const uint8_t * byte_array, int size) {
-    for (int i = 0; i < size; i++) {
+    for (std::size_t i = 0; i < size; i++) {
         write(byte_array[i]);
     }
 }
@@ -92,9 +92,10 @@ void CodeGen::visit(Literal * literal) {
         case TokenType::String: {
             write(OpCode::CONST_STRING);
             std::size_t size = literal->token.String().size();
-            const char * bytes = literal->token.String().c_str();
-            write(reinterpret_cast<uint8_t*>(&size), 8);
-            write(reinterpret_cast<const uint8_t*>(bytes), size);
+            write(reinterpret_cast<uint8_t*>(&size), sizeof(size));
+            char * bytes = new char [size + 1];
+            std::strcpy(bytes, literal->token.String().c_str());
+            write((uint8_t*)bytes, size);
         } break;
     }
 }

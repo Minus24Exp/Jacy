@@ -15,7 +15,7 @@ debug_flags="-Og -ggdb"
 max_errors="1"
 ld_flags="-Iinclude"
 
-cpp_flags="-std=c++17"
+cpp_flags="-std=c++17 -m64"
 cpp_files="src/*.cpp src/**/*.cpp"
 
 target="bin/target"
