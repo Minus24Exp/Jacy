@@ -30,7 +30,7 @@ elif [[ $1 = "run" || $1 = "r" ]]; then
 elif [[ $1 = "d" || $1 = "debug" ]]; then
     echo -e "\n${bold_ansi}${green_ansi}[Debug:'${target}']${reset_ansi}\n"
     eval "gdb ${target}"
-elif [[ $1 = "git_all" ]]; then
+elif [[ $1 = "gitall" ]]; then
     if [[ $2 == "" ]]; then
         echo -e "${red_ansi}Please, specify commit message${reset_ansi}"
         exit
@@ -57,5 +57,5 @@ echo "Usage:
     'compile' or 'c' => compile source
     'run' or 'r' => run source
     'debug' or 'd' => debug target
-    'git_all' => git add ., git commit -m *argument*, git push -u origin master"
+    'gitall' => git add ., git commit -m *argument*, git push -u origin master"
 fi
