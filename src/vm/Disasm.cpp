@@ -24,6 +24,14 @@ void Disasm::const_float(double value) {
     std::cout << std::setprecision(64) << value;
 }
 
-void Disasm::const_string(std::string value) {
+void Disasm::const_string(const std::string & value) {
     std::cout << value;
+}
+
+void Disasm::load(uint64_t offset) {
+    std::cout << offset;
+}
+
+void Disasm::store(uint64_t offset) {
+    std::cout << offset;
 }

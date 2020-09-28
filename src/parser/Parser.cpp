@@ -224,11 +224,11 @@ block_ptr Parser::parse_block(bool allow_one_line) {
 stmt_ptr Parser::parse_var_decl() {
     Position var_decl_pos = peek().pos;
 
-    VarDeclType decl = VarDeclType::Var;
+    VarDeclKind decl = VarDeclKind::Var;
     if (is_kw(Keyword::Var)) {
-        decl = VarDeclType::Var;
+        decl = VarDeclKind::Var;
     } else if (is_kw(Keyword::Val)) {
-        decl = VarDeclType::Val;
+        decl = VarDeclKind::Val;
     } else {
         expected_error("`var` or `val` keyword");
     }

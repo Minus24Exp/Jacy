@@ -12,7 +12,7 @@ std::vector<uint8_t> Compiler::compile(const StmtList & tree) {
 
 std::size_t Compiler::resolve_local(std::string name) {
     for (std::size_t i = locals.size() - 1; i >= 0; i--) {
-        if (locals[i].name == name) {
+        if (locals[i].name.String() == name) {
             return i;
         }
     }
@@ -34,6 +34,18 @@ void Compiler::emit(const uint8_t * byte_array, int size) {
     }
 }
 
+void Compiler::emit(uint16_t s) {
+    emit(reinterpret_cast<uint8_t*>(&s), 2);
+}
+
+void Compiler::emit(uint32_t i) {
+    emit(reinterpret_cast<uint8_t*>(&i), 4);
+}
+
+void Compiler::emit(uint64_t l) {
+    emit(reinterpret_cast<uint8_t*>(&l), 8);
+}
+
 ////////////////
 // Statements //
 ////////////////
@@ -45,8 +57,14 @@ void Compiler::visit(Block * expr_stmt) {
 
 }
 
-void Compiler::visit(VarDecl * expr_stmt) {
+void Compiler::visit(VarDecl * var_decl) {
+    locals.push_back({scope_depth, var_decl->id->token, var_decl->kind});
 
+    if (var_decl->assign_expr) {
+        var_decl->assign_expr->accept(*this);
+        emit(OpCode::STORE);
+        emit(locals.size() - 1);
+    }
 }
 
 void Compiler::visit(FuncDecl * expr_stmt) {
@@ -87,7 +105,7 @@ void Compiler::visit(Literal * literal) {
         } break;
         case TokenType::Bool: {
             emit(OpCode::CONST_BOOL);
-            emit(1);
+            emit(static_cast<uint8_t>(literal->token.Bool()));
         } break;
         case TokenType::Int: {
             emit(OpCode::CONST_INT);
@@ -112,7 +130,11 @@ void Compiler::visit(Literal * literal) {
 
 void Compiler::visit(Identifier * id) {
     emit(OpCode::LOAD);
-    emit(resolve_local(id->get_name()));
+    std::size_t resolved = resolve_local(id->get_name());
+    if (resolved == -1) {
+        throw new JacyException(id->get_name() + " is not defined");
+    }
+    emit(resolved);
 }
 
 void Compiler::visit(Infix * expr_stmt) {
@@ -124,7 +146,7 @@ void Compiler::visit(Prefix * expr_stmt) {
 }
 
 void Compiler::visit(Assign * expr_stmt) {
-
+    
 }
 
 void Compiler::visit(SetExpr * expr_stmt) {

@@ -44,9 +44,9 @@ void Printer::visit(Block * block) {
 
 void Printer::visit(VarDecl * var_decl) {
     print_indent();
-    if (var_decl->decl == VarDeclType::Var) {
+    if (var_decl->kind == VarDeclKind::Var) {
         std::cout << "var";
-    } else if (var_decl->decl == VarDeclType::Val) {
+    } else if (var_decl->kind == VarDeclKind::Val) {
         std::cout << "val";
     }
     std::cout << " ";

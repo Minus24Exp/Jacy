@@ -3,6 +3,8 @@
 
 #include "compiler/opcode.h"
 #include "Exception.h"
+#include "Value.h"
+#include <stack>
 
 class BaseVM {
 public:
@@ -13,7 +15,7 @@ public:
 
 protected:
     Chunk chunk;
-    size_t index;
+    std::size_t index;
     uint8_t peek();
     uint8_t advance(int distance = 1);
     Chunk::iterator peek_it();
@@ -32,7 +34,9 @@ protected:
     virtual void const_bool(bool value) = 0;
     virtual void const_int(yo_int value) = 0;
     virtual void const_float(double value) = 0;
-    virtual void const_string(std::string value) = 0;
+    virtual void const_string(const std::string & value) = 0;
+    virtual void load(uint64_t offset) = 0;
+    virtual void store(uint64_t offset) = 0;
 };
 
 #endif

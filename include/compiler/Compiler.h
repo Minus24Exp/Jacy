@@ -5,6 +5,7 @@
 #include "tree/nodes.h"
 #include "tree/BaseVisitor.h"
 #include "compiler/opcode.h"
+#include "Exception.h"
 
 class Compiler : public BaseVisitor {
 public:
@@ -23,6 +24,9 @@ private:
     void emit(uint8_t byte);
     void emit(OpCode opcode);
     void emit(const uint8_t * byte_array, int size);
+    void emit(uint16_t s);
+    void emit(uint32_t i);
+    void emit(uint64_t l);
 
     // Statements //
     void visit(ExprStmt * expr_stmt) override;
@@ -50,6 +54,8 @@ private:
     void visit(GetItem * get_item) override;
     void visit(SetItem * set_item) override;
     void visit(DictExpr * dict) override;
+
+    void error(const std::string & msg);
 };
 
 #endif

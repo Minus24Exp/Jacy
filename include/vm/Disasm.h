@@ -18,7 +18,9 @@ private:
     void const_bool(bool value) override;
     void const_int(yo_int value) override;
     void const_float(double value) override;
-    void const_string(std::string value) override;
+    void const_string(const std::string & value) override;
+    void load(uint64_t offset) override;
+    void store(uint64_t offset) override;
 };
 
 #endif
