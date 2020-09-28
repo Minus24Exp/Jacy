@@ -129,6 +129,10 @@ void Jacy::run_debug(const std::string & script) {
     Chunk chunk = compiler.compile(tree);
     auto compiler_end = bench();
 
+    auto vm_start = bench();
+    vm.eval(chunk);
+    auto vm_end = bench();
+
     std::cout << "[compiled]: " << chunk.size() << std::endl;
 
     // Print bytecode
@@ -144,4 +148,7 @@ void Jacy::run_debug(const std::string & script) {
 
     auto compiler_duration = std::chrono::duration<double>(compiler_end - compiler_start).count();
     std::cout << "Compilation: " << compiler_duration << "s" << std::endl;
+
+    auto vm_duration = std::chrono::duration<double>(vm_end - vm_start).count();
+    std::cout << "Evaluation: " << compiler_duration << "s" << std::endl;
 }

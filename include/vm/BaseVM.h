@@ -3,7 +3,6 @@
 
 #include "compiler/opcode.h"
 #include "Exception.h"
-#include "Value.h"
 #include <stack>
 
 class BaseVM {

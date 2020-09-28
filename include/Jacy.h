@@ -14,6 +14,7 @@
 #include "Tester.h"
 #include "compiler/Compiler.h"
 #include "vm/Disasm.h"
+#include "vm/VM.h"
 
 /**
  * Jacy
@@ -64,6 +65,7 @@ private:
     Parser & parser;
     Compiler compiler;
     Disasm disasm;
+    VM vm;
 
     /**
      * @brief Run REPL
