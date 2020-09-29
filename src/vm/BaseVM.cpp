@@ -56,31 +56,17 @@ void BaseVM::eval(const Chunk & chunk) {
 
         switch (opcode) {
             case OpCode::NOP: {}
-            case OpCode::CONST_NULL: {
-                const_null();
-            } break;
-            case OpCode::CONST_BOOL: {
-                const_bool(static_cast<bool>(read_byte()));
-            } break;
-            case OpCode::CONST_INT: {
-                const_int(static_cast<yo_int>(read_long()));
-            } break;
-            case OpCode::CONST_FLOAT: {
-                const_float(static_cast<double>(read_long()));
-            } break;
-            case OpCode::CONST_STRING: {
-                std::size_t size;
-                size = sizeof(size) == 8 ? read_long() : read_int();
-                const_string(std::string(peek_it(), peek_it() + size));
-                advance(size);
+            case OpCode::CONST: {
+                uint8_t offset = read_byte();
+                load_const(offset);
             } break;
             case OpCode::LOAD: {
                 std::size_t offset = read_long();
-                load(offset);
+                load_var(offset);
             } break;
             case OpCode::STORE: {
                 std::size_t offset = read_long();
-                store(offset);
+                store_var(offset);
             } break;
             default: {
                 throw DevError("[Disasm] Unknown opcode " + std::to_string(peek()));

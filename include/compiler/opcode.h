@@ -10,24 +10,17 @@ using Chunk = std::vector<uint8_t>;
 
 enum class OpCode : uint8_t {
     NOP,
-    CONST_NULL,
-    CONST_BOOL,
-    CONST_INT,
-    CONST_FLOAT,
-    CONST_STRING,
-    LOAD,
-    STORE,
+    LOAD_CONST,
+    LOAD_VAR,
+    STORE_VAR,
 };
 
 const std::vector <std::string> opcodeNames {
-    "NOP",              // --
-    "CONST_NULL",       // --
-    "CONST_BOOL",       // 1 op byte
-    "CONST_INT",        // 8 op bytes
-    "CONST_FLOAT",      // 8 op bytes
-    "CONST_STRING",     // [size] op bytes
-    "LOAD",             // 8 op bytes (stack offset)
-    "STORE",            // 8 op bytes (stack offset)
+//  OPCODE                  // Operands
+    "NOP",                  // --
+    "LOAD_CONST",           // 1 op byte
+    "LOAD_VAR",             // 8 op bytes (stack offset)
+    "STORE_VAR",            // 8 op bytes (stack offset)
 };
 
 struct Local {

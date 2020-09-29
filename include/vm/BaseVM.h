@@ -28,14 +28,10 @@ protected:
     // OpCodes //
     virtual void consumeOpCode(OpCode opcode);
     virtual void afterInstr();
-    
-    virtual void const_null() = 0;
-    virtual void const_bool(bool value) = 0;
-    virtual void const_int(yo_int value) = 0;
-    virtual void const_float(double value) = 0;
-    virtual void const_string(const std::string & value) = 0;
-    virtual void load(uint64_t offset) = 0;
-    virtual void store(uint64_t offset) = 0;
+
+    virtual void load_const(uint8_t offset) = 0;
+    virtual void load_var(uint64_t offset) = 0;
+    virtual void store_var(uint64_t offset) = 0;
 };
 
 #endif
