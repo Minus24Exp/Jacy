@@ -10,7 +10,7 @@ void Disasm::afterInstr() {
     std::cout << std::endl;
 }
 
-void Disasm::load_const(uint8_t offset) {
+void Disasm::load_const(uint64_t offset) {
     std::cout << offset;
 }
 
@@ -20,4 +20,9 @@ void Disasm::load_var(uint64_t offset) {
 
 void Disasm::store_var(uint64_t offset) {
     std::cout << offset;
+}
+
+
+void Disasm::print() {
+    std::cout << "(" << chunk.constants.back() << ")";
 }

@@ -17,7 +17,7 @@ protected:
     std::size_t index;
     uint8_t peek();
     uint8_t advance(int distance = 1);
-    Chunk::iterator peek_it();
+    OpCodeIt peek_it();
 
     // Readers //
     uint8_t read_byte();
@@ -29,9 +29,11 @@ protected:
     virtual void consumeOpCode(OpCode opcode);
     virtual void afterInstr();
 
-    virtual void load_const(uint8_t offset) = 0;
+    virtual void load_const(uint64_t offset) = 0;
     virtual void load_var(uint64_t offset) = 0;
     virtual void store_var(uint64_t offset) = 0;
+
+    virtual void print() = 0;
 };
 
 #endif

@@ -13,15 +13,16 @@ public:
 
 private:
     std::stack<Value> stack;
-    std::vector<Value> consts;
     std::vector<Value> slots;
 
     void push(Value val);
     Value top();
 
-    void load_const(uint8_t offset) override;
+    void load_const(uint64_t offset) override;
     void load_var(uint64_t offset) override;
     void store_var(uint64_t offset) override;
+
+    void print() override {}
 };
 
 #endif

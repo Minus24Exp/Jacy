@@ -3,16 +3,16 @@
 BaseVM::BaseVM() {}
 
 uint8_t BaseVM::peek() {
-    return chunk[index];
+    return chunk.code[index];
 }
 
 uint8_t BaseVM::advance(int distance) {
     index += distance;
-    return chunk[index];
+    return chunk.code[index];
 }
 
-Chunk::iterator BaseVM::peek_it() {
-    return chunk.begin() + index;
+OpCodeIt BaseVM::peek_it() {
+    return chunk.code.begin() + index;
 }
 
 uint8_t BaseVM::read_byte() {
@@ -49,24 +49,27 @@ void BaseVM::eval(const Chunk & chunk) {
     index = 0;
     this->chunk = chunk;
 
-    while (index < chunk.size()) {
+    while (index < chunk.code.size()) {
         OpCode opcode = static_cast<OpCode>(peek());
         advance();
         consumeOpCode(opcode);
 
         switch (opcode) {
             case OpCode::NOP: {}
-            case OpCode::CONST: {
-                uint8_t offset = read_byte();
+            case OpCode::LOAD_CONST: {
+                uint8_t offset = read_long();
                 load_const(offset);
             } break;
-            case OpCode::LOAD: {
+            case OpCode::LOAD_VAR: {
                 std::size_t offset = read_long();
                 load_var(offset);
             } break;
-            case OpCode::STORE: {
+            case OpCode::STORE_VAR: {
                 std::size_t offset = read_long();
                 store_var(offset);
+            } break;
+            case OpCode::PRINT: {
+                print();
             } break;
             default: {
                 throw DevError("[Disasm] Unknown opcode " + std::to_string(peek()));

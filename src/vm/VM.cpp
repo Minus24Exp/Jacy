@@ -10,8 +10,8 @@ Value VM::top() {
     return stack.top();
 }
 
-void VM::load_const(uint8_t offset) {
-    push(consts[offset]);
+void VM::load_const(uint64_t offset) {
+    push(chunk.constants[offset]);
 }
 
 void VM::load_var(uint64_t offset) {

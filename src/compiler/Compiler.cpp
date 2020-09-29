@@ -2,7 +2,7 @@
 
 Compiler::Compiler() : scope_depth(0) {}
 
-std::vector<uint8_t> Compiler::compile(const StmtList & tree) {
+Chunk Compiler::compile(const StmtList & tree) {
     for (const auto & stmt : tree) {
         stmt->accept(*this);
     }
@@ -20,8 +20,17 @@ std::size_t Compiler::resolve_local(std::string name) {
     return -1;
 }
 
+void Compiler::addConstant(Value value) {
+    chunk.constants.push_back(value);
+    emit(OpCode::LOAD_CONST);
+    emit(static_cast<uint64_t>(chunk.constants.size() - 1));
+
+    // TODO: Add debug mode
+    emit(OpCode::PRINT);
+}
+
 void Compiler::emit(uint8_t byte) {
-    chunk.push_back(byte);
+    chunk.code.push_back(byte);
 }
 
 void Compiler::emit(OpCode opcode) {
@@ -62,7 +71,7 @@ void Compiler::visit(VarDecl * var_decl) {
 
     if (var_decl->assign_expr) {
         var_decl->assign_expr->accept(*this);
-        emit(OpCode::STORE);
+        emit(OpCode::STORE_VAR);
         emit(locals.size() - 1);
     }
 }
@@ -101,35 +110,31 @@ void Compiler::visit(TypeDecl * expr_stmt) {
 void Compiler::visit(Literal * literal) {
     switch (literal->token.type) {
         case TokenType::Null: {
-            emit(OpCode::CONST_NULL);
+            addConstant(NullConst);
         } break;
         case TokenType::Bool: {
-            emit(OpCode::CONST_BOOL);
-            emit(static_cast<uint8_t>(literal->token.Bool()));
+            addConstant(literal->token.Bool() ? TrueConst : FalseConst);
         } break;
         case TokenType::Int: {
-            emit(OpCode::CONST_INT);
-            yo_int val = literal->token.Int();
-            emit(reinterpret_cast<uint8_t*>(&val), 8);
+            addConstant(intValue(literal->token.Int()));
         } break;
         case TokenType::Float: {
-            emit(OpCode::CONST_FLOAT);
-            double val = literal->token.Float();
-            emit(reinterpret_cast<uint8_t*>(&val), 8);
+            addConstant(floatValue(literal->token.Float()));
         } break;
         case TokenType::String: {
-            emit(OpCode::CONST_STRING);
-            std::size_t size = literal->token.String().size();
-            emit(reinterpret_cast<uint8_t*>(&size), sizeof(size));
-            char * bytes = new char[size + 1];
-            std::strcpy(bytes, literal->token.String().c_str());
-            emit((uint8_t*)bytes, size);
+            // addConstant(stringValue())
+            // emit(OpCode::CONST_STRING);
+            // std::size_t size = literal->token.String().size();
+            // emit(reinterpret_cast<uint8_t*>(&size), sizeof(size));
+            // char * bytes = new char[size + 1];
+            // std::strcpy(bytes, literal->token.String().c_str());
+            // emit((uint8_t*)bytes, size);
         } break;
     }
 }
 
 void Compiler::visit(Identifier * id) {
-    emit(OpCode::LOAD);
+    emit(OpCode::LOAD_VAR);
     std::size_t resolved = resolve_local(id->get_name());
     if (resolved == -1) {
         throw new JacyException(id->get_name() + " is not defined");

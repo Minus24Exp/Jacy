@@ -5,6 +5,7 @@
 #include "tree/nodes.h"
 #include "tree/BaseVisitor.h"
 #include "compiler/opcode.h"
+#include "vm/Value.h"
 #include "Exception.h"
 
 class Compiler : public BaseVisitor {
@@ -18,6 +19,7 @@ private:
     int scope_depth;
     std::vector<Local> locals;
     std::size_t resolve_local(std::string name);
+    void addConstant(Value value);
 
     Chunk chunk;
 
