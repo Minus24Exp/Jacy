@@ -116,19 +116,19 @@ void Compiler::visit(Literal * literal) {
             addConstant(literal->token.Bool() ? TrueConst : FalseConst);
         } break;
         case TokenType::Int: {
-            addConstant(intValue(literal->token.Int()));
+            addConstant(Value{Type::Int, literal->token.Int()});
         } break;
         case TokenType::Float: {
-            addConstant(floatValue(literal->token.Float()));
+            addConstant(Value{Type::Float, literal->token.Float()});
         } break;
         case TokenType::String: {
-            // addConstant(stringValue())
-            // emit(OpCode::CONST_STRING);
-            // std::size_t size = literal->token.String().size();
-            // emit(reinterpret_cast<uint8_t*>(&size), sizeof(size));
-            // char * bytes = new char[size + 1];
-            // std::strcpy(bytes, literal->token.String().c_str());
-            // emit((uint8_t*)bytes, size);
+            addConstant(Value{Type::String, literal->token.String()});
+            emit(OpCode::LOAD_CONST);
+            std::size_t size = literal->token.String().size();
+            emit(reinterpret_cast<uint8_t*>(&size), sizeof(size));
+            char * bytes = new char[size + 1];
+            std::strcpy(bytes, literal->token.String().c_str());
+            emit((uint8_t*)bytes, size);
         } break;
     }
 }

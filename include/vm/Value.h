@@ -3,24 +3,26 @@
 
 #include <variant>
 #include <cstring>
+#include <cstdint>
+#include <math.h>
 
-const uint64_t SIGN_BIT = 0x8000000000000000;
-const uint64_t QNAN = 0x7ffc000000000000;
+// TODO: Optimize using QNAN mask, it will also allow writing bytecode to file
 
-using Value = uint64_t;
+enum class Type {
+    Null,
+    Bool,
+    Int,
+    Float,
+    String,
+};
 
-// Constants
-const Value NullConst = QNAN | 1;
-const Value FalseConst = QNAN | 2;
-const Value TrueConst = QNAN | 3;
+struct Value {
+    Type tag;
+    std::variant<uint8_t, long, double, std::string> val;
+};
 
-// Value conversion
-Value intValue(long i);
-Value floatValue(double d);
-
-// Checkers
-bool isInt();
+const Value NullConst = Value{Type::Null, static_cast<uint8_t>(0)};
+const Value FalseConst = Value{Type::Bool, static_cast<uint8_t>(0)};
+const Value TrueConst = Value{Type::Bool, static_cast<uint8_t>(1)};
 
 #endif
-
-94088928169176

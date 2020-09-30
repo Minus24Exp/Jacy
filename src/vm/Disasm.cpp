@@ -24,5 +24,23 @@ void Disasm::store_var(uint64_t offset) {
 
 
 void Disasm::print() {
-    std::cout << "(" << chunk.constants.back() << ")";
+    Value constant = chunk.constants.back();
+
+    switch (constant.tag) {
+        case Type::Null: {
+            std::cout << "null";
+        } break;
+        case Type::Bool: {
+            std::cout << (std::get<uint8_t>(constant.val)) ? "true" : "false";
+        } break;
+        case Type::Int: {
+            std::cout << std::get<long>(constant.val);
+        } break;
+        case Type::Float: {
+            std::cout << std::get<double>(constant.val);
+        } break;
+        default: {
+            std::cout << "Unsupported type";
+        }
+    }
 }
