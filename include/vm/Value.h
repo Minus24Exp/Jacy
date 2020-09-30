@@ -15,16 +15,12 @@ const Value FalseConst = QNAN | 2;
 const Value TrueConst = QNAN | 3;
 
 // Value conversion
-static inline Value intValue(long i) {
-    Value value;
-    memcpy(&value, &i, sizeof(long));
-    return value;
-}
+Value intValue(long i);
+Value floatValue(double d);
 
-static inline Value floatValue(double d) {
-    Value value;
-    memcpy(&value, &d, sizeof(double));
-    return value;
-}
+// Checkers
+bool isInt();
 
 #endif
+
+94088928169176

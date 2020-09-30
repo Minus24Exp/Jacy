@@ -18,7 +18,7 @@ ld_flags="-Iinclude"
 cpp_flags="-std=c++17 -m64"
 cpp_files="src/*.cpp src/**/*.cpp"
 
-target="bin/target"
+target="./bin/target"
 
 if [[ $1 = "compile" || $1 = "c" ]]; then
     echo -e "\n${underline_ansi}${magenta_ansi}[Compile source]${reset_ansi}\n"
