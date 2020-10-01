@@ -19,7 +19,7 @@ private:
     int scope_depth;
     std::vector<Local> locals;
     std::size_t resolve_local(std::string name);
-    void addConstant(Value value);
+    // void addConstant(Value value);
 
     Chunk chunk;
 

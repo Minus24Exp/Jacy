@@ -4,6 +4,7 @@
 #include <variant>
 #include <cstring>
 #include <cstdint>
+#include <string>
 #include <math.h>
 
 // TODO: Optimize using QNAN mask, it will also allow writing bytecode to file
@@ -18,7 +19,7 @@ enum class Type {
 
 struct Value {
     Type tag;
-    std::variant<uint8_t, long, double, std::string> val;
+    std::variant<uint8_t, long, double, const char*> val;
 };
 
 const Value NullConst = Value{Type::Null, static_cast<uint8_t>(0)};

@@ -133,7 +133,7 @@ void Jacy::run_debug(const std::string & script) {
     vm.eval(chunk);
     auto vm_end = bench();
 
-    std::cout << "[compiled]: " << chunk.code.size() << std::endl;
+    std::cout << "[compiled]: " << chunk.size() << std::endl;
 
     // Print bytecode
     disasm.eval(chunk);

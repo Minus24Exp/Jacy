@@ -20,17 +20,16 @@ std::size_t Compiler::resolve_local(std::string name) {
     return -1;
 }
 
-void Compiler::addConstant(Value value) {
-    chunk.constants.push_back(value);
-    emit(OpCode::LOAD_CONST);
-    emit(static_cast<uint64_t>(chunk.constants.size() - 1));
+// void Compiler::addConstant(Value value) {
+//     chunk.constants.push_back(value);
+//     emit(static_cast<uint64_t>(chunk.constants.size() - 1));
 
-    // TODO: Add debug mode
-    emit(OpCode::PRINT);
-}
+//     // TODO: Add debug mode
+//     emit(OpCode::PRINT);
+// }
 
 void Compiler::emit(uint8_t byte) {
-    chunk.code.push_back(byte);
+    chunk.push_back(byte);
 }
 
 void Compiler::emit(OpCode opcode) {
@@ -110,25 +109,25 @@ void Compiler::visit(TypeDecl * expr_stmt) {
 void Compiler::visit(Literal * literal) {
     switch (literal->token.type) {
         case TokenType::Null: {
-            addConstant(NullConst);
+            emit(OpCode::LOAD_NULL);
         } break;
         case TokenType::Bool: {
-            addConstant(literal->token.Bool() ? TrueConst : FalseConst);
+            emit(OpCode::LOAD_BOOL);
+            emit(static_cast<uint8_t>(literal->token.Bool()));
         } break;
         case TokenType::Int: {
-            addConstant(Value{Type::Int, literal->token.Int()});
+            emit(OpCode::LOAD_INT);
+            emit(static_cast<uint64_t>(literal->token.Int()));
         } break;
         case TokenType::Float: {
-            addConstant(Value{Type::Float, literal->token.Float()});
+            emit(OpCode::LOAD_FLOAT);
+            emit(static_cast<uint64_t>(literal->token.Float()));
         } break;
         case TokenType::String: {
-            addConstant(Value{Type::String, literal->token.String()});
-            emit(OpCode::LOAD_CONST);
-            std::size_t size = literal->token.String().size();
-            emit(reinterpret_cast<uint8_t*>(&size), sizeof(size));
-            char * bytes = new char[size + 1];
-            std::strcpy(bytes, literal->token.String().c_str());
-            emit((uint8_t*)bytes, size);
+            emit(OpCode::LOAD_STRING);
+            const std::string & s = literal->token.String();
+            emit(static_cast<uint64_t>(s.size()));
+            emit(reinterpret_cast<const uint8_t*>(s.c_str()), s.size());
         } break;
     }
 }

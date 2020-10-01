@@ -7,30 +7,34 @@
 #include "parser/Token.h"
 #include "tree/Stmt/VarDecl.h"
 
-using OpCodeIt = std::vector<uint64_t>::iterator;
-
-struct Chunk {
-    std::vector<uint64_t> code;
-    std::vector<Value> constants;
-};
+using Chunk = std::vector<uint8_t>;
+using OpCodeIt = Chunk::iterator;
 
 enum class OpCode : uint8_t {
     NOP,
-    LOAD_CONST,
+
+    LOAD_NULL,
+    LOAD_BOOL,
+    LOAD_INT,
+    LOAD_FLOAT,
+    LOAD_STRING,
+
     LOAD_VAR,
     STORE_VAR,
-
-    PRINT, // Debug only -- remove in prod
 };
 
 const std::vector <std::string> opcodeNames {
 //  OPCODE                  // Operands
     "NOP",                  // --
-    "LOAD_CONST",           // 1 op byte
+
+    "LOAD_NULL",            // --
+    "LOAD_BOOL",            // A (1 byte) -> R(A)
+    "LOAD_INT",             // A (8 bytes) -> R(A)
+    "LOAD_FLOAT",           // A (8 bytes) -> R(A)
+    "LOAD_STRING",          // S (8 bytes size), Bytes[S] -> R(string from Bytes)
+
     "LOAD_VAR",             // 8 op bytes (stack offset)
     "STORE_VAR",            // 8 op bytes (stack offset)
-
-    "PRINT",
 };
 
 struct Local {

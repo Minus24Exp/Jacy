@@ -10,8 +10,23 @@ Value VM::top() {
     return stack.top();
 }
 
-void VM::load_const(uint64_t offset) {
-    push(chunk.constants[offset]);
+void VM::load_null() {
+    push(NullConst);
+}
+
+void VM::load_bool(bool value) {
+    push(value ? TrueConst : FalseConst);
+}
+
+void VM::load_int(int64_t value) {
+}
+
+void VM::load_float(double value) {
+    // push(NullConst);
+}
+
+void VM::load_string(const char * value) {
+    // push(NullConst);
 }
 
 void VM::load_var(uint64_t offset) {

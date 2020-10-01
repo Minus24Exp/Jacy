@@ -20,20 +20,22 @@ protected:
     OpCodeIt peek_it();
 
     // Readers //
-    uint8_t read_byte();
-    uint16_t read_short();
-    uint32_t read_int();
-    uint64_t read_long();
+    uint8_t read();
+    uint16_t read2();
+    uint32_t read4();
+    uint64_t read8();
 
     // OpCodes //
     virtual void consumeOpCode(OpCode opcode);
     virtual void afterInstr();
 
-    virtual void load_const(uint64_t offset) = 0;
+    virtual void load_null() = 0;
+    virtual void load_bool(bool value) = 0;
+    virtual void load_int(int64_t value) = 0;
+    virtual void load_float(double value) = 0;
+    virtual void load_string(const char * value) = 0;
     virtual void load_var(uint64_t offset) = 0;
     virtual void store_var(uint64_t offset) = 0;
-
-    virtual void print() = 0;
 };
 
 #endif
