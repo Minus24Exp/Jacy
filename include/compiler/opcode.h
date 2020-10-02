@@ -21,6 +21,10 @@ enum class OpCode : uint8_t {
 
     LOAD_VAR,
     STORE_VAR,
+
+    POP,
+
+    CALL,
 };
 
 const std::vector <std::string> opcodeNames {
@@ -28,18 +32,23 @@ const std::vector <std::string> opcodeNames {
     "NOP",                  // --
 
     "LOAD_NULL",            // --
-    "LOAD_BOOL",            // A (1 byte) -> R(A)
-    "LOAD_INT",             // A (8 bytes) -> R(A)
-    "LOAD_FLOAT",           // A (8 bytes) -> R(A)
-    "LOAD_STRING",          // S (8 bytes size), Bytes[S] -> R(string from Bytes)
+    "LOAD_BOOL",            // A (1) -> StackTop = A
+    "LOAD_INT",             // A (8) -> StackTop = A
+    "LOAD_FLOAT",           // A (8) -> StackTop = A
+    "LOAD_STRING",          // S (8), Bytes[S - size] -> StackTop = String from Bytes
 
-    "LOAD_VAR",             // 8 op bytes (stack offset)
-    "STORE_VAR",            // 8 op bytes (stack offset)
+    "LOAD_VAR",             // A (8) -> StackTop = Variable[size - A]
+    "STORE_VAR",            // A (8) -> Variable[A] = StackTop
+
+    "POP",                  // 
+
+                            // CALL op handle 1-byte (max 256) for args count, it will be increased in the future
+    "CALL",                 // A (8 bytes offset), C (1) -> StackTop = Variable[size - A](Stack[top...C])
 };
 
 struct Local {
     int depth;
-    Token name;
+    std::string name;
     VarDeclKind kind;
 };
 

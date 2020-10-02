@@ -35,3 +35,9 @@ void Disasm::load_var(uint64_t offset) {
 void Disasm::store_var(uint64_t offset) {
     std::cout << offset;
 }
+
+void Disasm::pop() {}
+
+void Disasm::call(uint8_t args_count) {
+    std::cout << static_cast<int>(args_count) << " (args count)";
+}

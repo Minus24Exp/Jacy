@@ -1,6 +1,9 @@
 #include "compiler/Compiler.h"
 
-Compiler::Compiler() : scope_depth(0) {}
+Compiler::Compiler() : scope_depth(0) {
+    // Debug print function
+    locals.emplace(locals.begin() + print_offset, Local{0, "print", VarDeclKind::Val});
+}
 
 Chunk Compiler::compile(const StmtList & tree) {
     for (const auto & stmt : tree) {
@@ -12,7 +15,7 @@ Chunk Compiler::compile(const StmtList & tree) {
 
 std::size_t Compiler::resolve_local(std::string name) {
     for (std::size_t i = locals.size() - 1; i >= 0; i--) {
-        if (locals[i].name.String() == name) {
+        if (locals[i].name == name) {
             return i;
         }
     }
@@ -59,6 +62,7 @@ void Compiler::emit(uint64_t l) {
 ////////////////
 void Compiler::visit(ExprStmt * expr_stmt) {
     expr_stmt->expr->accept(*this);
+    emit(OpCode::POP);
 }
 
 void Compiler::visit(Block * expr_stmt) {
@@ -66,7 +70,7 @@ void Compiler::visit(Block * expr_stmt) {
 }
 
 void Compiler::visit(VarDecl * var_decl) {
-    locals.push_back({scope_depth, var_decl->id->token, var_decl->kind});
+    locals.push_back({scope_depth, var_decl->id->get_name(), var_decl->kind});
 
     if (var_decl->assign_expr) {
         var_decl->assign_expr->accept(*this);
@@ -162,7 +166,15 @@ void Compiler::visit(GetExpr * expr_stmt) {
 }
 
 void Compiler::visit(FuncCall * expr_stmt) {
+    expr_stmt->left->accept(*this);
+    uint8_t args_count = expr_stmt->args.size();
 
+    for (const auto & arg : expr_stmt->args) {
+        arg->accept(*this);
+    }
+
+    emit(OpCode::CALL);
+    emit(args_count);
 }
 
 void Compiler::visit(IfExpr * expr_stmt) {

@@ -36,6 +36,8 @@ protected:
     virtual void load_string(const char * value) = 0;
     virtual void load_var(uint64_t offset) = 0;
     virtual void store_var(uint64_t offset) = 0;
+    virtual void pop() = 0;
+    virtual void call(uint8_t args_count) = 0;
 };
 
 #endif

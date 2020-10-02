@@ -95,7 +95,8 @@ void Jacy::run_script(const std::string & path) {
 void Jacy::run(const std::string & script) {
     TokenStream tokens = lexer.lex(script);
     StmtList tree = parser.parse(tokens);
-    compiler.compile(tree);
+    Chunk chunk = compiler.compile(tree);
+    vm.eval(chunk);
 }
 
 void Jacy::run_debug(const std::string & script) {
@@ -129,14 +130,14 @@ void Jacy::run_debug(const std::string & script) {
     Chunk chunk = compiler.compile(tree);
     auto compiler_end = bench();
 
-    auto vm_start = bench();
-    vm.eval(chunk);
-    auto vm_end = bench();
-
     std::cout << "[compiled]: " << chunk.size() << std::endl;
 
     // Print bytecode
     disasm.eval(chunk);
+
+    auto vm_start = bench();
+    vm.eval(chunk);
+    auto vm_end = bench();
 
     std::cout << "\n\nBenchmarks:" << std::endl;
 

@@ -6,6 +6,7 @@
 #include "tree/BaseVisitor.h"
 #include "compiler/opcode.h"
 #include "vm/Value.h"
+#include "object/objects.h"
 #include "Exception.h"
 
 class Compiler : public BaseVisitor {

@@ -50,8 +50,7 @@ void BaseVM::eval(const Chunk & chunk) {
     this->chunk = chunk;
 
     while (index < chunk.size()) {
-        OpCode opcode = static_cast<OpCode>(peek());
-        advance();
+        OpCode opcode = static_cast<OpCode>(read());
         consumeOpCode(opcode);
 
         switch (opcode) {
@@ -83,6 +82,13 @@ void BaseVM::eval(const Chunk & chunk) {
             case OpCode::STORE_VAR: {
                 std::size_t offset = read8();
                 store_var(offset);
+            } break;
+            case OpCode::POP: {
+                pop();
+            } break;
+            case OpCode::CALL: {
+                uint8_t args_count = read();
+                call(args_count);
             } break;
             default: {
                 throw DevError("[Disasm] Unknown opcode " + std::to_string(peek()));

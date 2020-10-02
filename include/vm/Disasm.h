@@ -19,9 +19,10 @@ private:
     void load_int(int64_t value) override;
     void load_float(double value) override;
     void load_string(const char * value) override;
-
     void load_var(uint64_t offset) override;
     void store_var(uint64_t offset) override;
+    void pop() override;
+    void call(uint8_t args_count) override;
 };
 
 #endif
