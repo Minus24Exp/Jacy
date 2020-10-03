@@ -2,6 +2,9 @@
 #define FUNC_H
 
 #include "object/Object.h"
+#include "tree/Stmt/FuncDecl.h"
+
+using ParamsCountType = uint8_t;
 
 class Func : public Object {
 public:
@@ -20,7 +23,7 @@ public:
                 case Type::Bool: {
                     repr += arg.byte() ? "true" : "false";
                 } break;
-                case Type::Int: {
+                case Type::Int: { 
                     repr += std::to_string(arg._long());
                 } break;
                 case Type::Float: {
@@ -40,6 +43,15 @@ public:
         std::cout << repr << std::endl;
         return NullConst;
     }
+
+    ParamsCountType arity() {
+        return params.size();
+    }
+
+private:
+    FuncParams params;
+    std::string name;
+    Chunk chunk;
 };
 
 #endif

@@ -80,7 +80,9 @@ void Compiler::visit(VarDecl * var_decl) {
 }
 
 void Compiler::visit(FuncDecl * expr_stmt) {
-
+    
+    emit(OpCode::MAKE_FUNC);
+    emit(locals.size() - 1);
 }
 
 void Compiler::visit(ReturnStmt * expr_stmt) {

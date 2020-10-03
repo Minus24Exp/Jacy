@@ -25,6 +25,8 @@ enum class OpCode : uint8_t {
     POP,
 
     CALL,
+
+    MAKE_FUNC,
 };
 
 const std::vector <std::string> opcodeNames {
@@ -44,6 +46,8 @@ const std::vector <std::string> opcodeNames {
 
                             // CALL op handle 1-byte (max 256) for args count, it will be increased in the future
     "CALL",                 // A (8 bytes offset), C (1) -> StackTop = Variable[size - A](Stack[top...C])
+
+    "MAKE_FUNC",            // 
 };
 
 struct Local {
