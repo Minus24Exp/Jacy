@@ -32,12 +32,8 @@ enum class OpCode : uint8_t {
 const std::vector <std::string> opcodeNames {
 //  OPCODE                  // Operands
     "NOP",                  // --
-
-    "LOAD_NULL",            // --
-    "LOAD_BOOL",            // A (1) -> StackTop = A
-    "LOAD_INT",             // A (8) -> StackTop = A
-    "LOAD_FLOAT",           // A (8) -> StackTop = A
-    "LOAD_STRING",          // S (8), Bytes[S - size] -> StackTop = String from Bytes
+    
+    "LOAD_CONST",           // A (8) -> StackTop = Constants[A]
 
     "LOAD_VAR",             // A (8) -> StackTop = Variable[size - A]
     "STORE_VAR",            // A (8) -> Variable[A] = StackTop

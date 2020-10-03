@@ -64,5 +64,6 @@
         "map": "cpp",
         "stack": "cpp",
         "xtree": "cpp"
-    }
+    },
+    "cquery.cacheDirectory": "${workspaceFolder}/.vscode/cquery_cached_index/"
 }

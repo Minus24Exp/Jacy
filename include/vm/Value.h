@@ -13,47 +13,45 @@
 class Object;
 using obj_ptr = std::shared_ptr<Object>;
 
-enum class Type {
-    Null,
-    Bool,
-    Int,
-    Float,
-    String,
+using Value = uint64_t;
 
-    // Complex types
-    ObjFunc,
-};
+const Value SIGN_BIT = 0x8000000000000000;
+const Value QNAN = 0x7ffc000000000000;
 
-struct Value {
-    Type type;
-    std::variant<std::monostate, uint8_t, int64_t, double, std::string, obj_ptr> as;
+const Value NullConst = QNAN | 1;
+const Value FalseConst = QNAN | 2;
+const Value TrueConst = QNAN | 3;
 
-    uint8_t byte() {
-        return std::get<uint8_t>(as);
-    }
+static inline bool is_null(Value value) {
+    return value == NullConst;
+}
 
-    int64_t _long() {
-        return std::get<int64_t>(as);
-    }
+static inline bool is_bool(Value value) {
+    // value | 1, because FalseConst | 1 gives TrueConst
+    return (value | 1) == TrueConst;
+}
 
-    double _double() {
-        return std::get<double>(as);
-    }
+static inline bool is_number(Value value) {
+    return (value & QNAN) != QNAN;
+}
 
-    std::string string() {
-        return std::get<std::string>(as);
-    }
+static inline bool is_obj(Value value) {
+    return ((value) & (QNAN | SIGN_BIT)) == (QNAN | SIGN_BIT);
+}
 
-    obj_ptr obj() {
-        return std::get<obj_ptr>(as);
-    }
-};
+static inline bool as_bool(Value value) {
+    return value == TrueConst;
+}
 
-const Value NullConst = Value{Type::Null};
-const Value FalseConst = Value{Type::Bool, static_cast<uint8_t>(0)};
-const Value TrueConst = Value{Type::Bool, static_cast<uint8_t>(1)};
+static inline 
 
-// For debug
-const uint64_t print_offset = 0;
+static inline obj_ptr as_obj(Value value) {
+    return std::make_shared<Object>((uintptr_t)(value & !(SIGN_BIT | QNAN)));
+}
+
+static inline Value obj_val(const obj_ptr & obj) {
+    return static_cast<Value>(SIGN_BIT | QNAN | (uint64_t)(uintptr_t)(obj.get()));
+}
+
 
 #endif
