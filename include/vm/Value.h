@@ -26,26 +26,26 @@ enum class Type {
 
 struct Value {
     Type type;
-    std::variant<std::monostate, uint8_t, int64_t, double, std::string, obj_ptr> val;
+    std::variant<std::monostate, uint8_t, int64_t, double, std::string, obj_ptr> as;
 
     uint8_t byte() {
-        return std::get<uint8_t>(val);
+        return std::get<uint8_t>(as);
     }
 
     int64_t _long() {
-        return std::get<int64_t>(val);
+        return std::get<int64_t>(as);
     }
 
     double _double() {
-        return std::get<double>(val);
+        return std::get<double>(as);
     }
 
     std::string string() {
-        return std::get<std::string>(val);
+        return std::get<std::string>(as);
     }
 
     obj_ptr obj() {
-        return std::get<obj_ptr>(val);
+        return std::get<obj_ptr>(as);
     }
 };
 

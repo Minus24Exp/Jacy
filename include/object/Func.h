@@ -4,6 +4,9 @@
 #include "object/Object.h"
 #include "tree/Stmt/FuncDecl.h"
 
+class Func;
+using func_ptr = std::shared_ptr<Func>;
+
 using ParamsCountType = uint8_t;
 
 class Func : public Object {

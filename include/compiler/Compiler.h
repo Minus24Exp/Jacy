@@ -6,8 +6,9 @@
 #include "tree/BaseVisitor.h"
 #include "compiler/opcode.h"
 #include "vm/Value.h"
-#include "object/objects.h"
 #include "Exception.h"
+#include "object/objects.h"
+#include "compiler/Scope.h"
 
 class Compiler : public BaseVisitor {
 public:
@@ -18,8 +19,11 @@ public:
 
 private:
     int scope_depth;
-    std::vector<Local> locals;
-    std::size_t resolve_local(std::string name);
+    func_ptr func;
+    scope_ptr current_scope;
+    uint64_t resolve_local(const scope_ptr & scope, std::string name);
+    uint64_t resolve_upvalue(const scope_ptr & scope, std::string name);
+    uint64_t add_upvalue(const scope_ptr & scope, uint64_t index, bool is_local);
     // void addConstant(Value value);
 
     Chunk chunk;

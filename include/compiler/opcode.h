@@ -41,19 +41,26 @@ const std::vector <std::string> opcodeNames {
 
     "LOAD_VAR",             // A (8) -> StackTop = Variable[size - A]
     "STORE_VAR",            // A (8) -> Variable[A] = StackTop
+    "LOAD_UPVALUE",         // A (8) -> Frame.closure
 
     "POP",                  // 
 
                             // CALL op handle 1-byte (max 256) for args count, it will be increased in the future
-    "CALL",                 // A (8 bytes offset), C (1) -> StackTop = Variable[size - A](Stack[top...C])
-
+    "CALL",                 // A (8), C (1) -> StackTop = Variable[size - A](Stack[top...C])
     "MAKE_FUNC",            // 
+    "CLOSURE",              // A (8) -> StackTop = new closure for function 
 };
 
 struct Local {
     int depth;
     std::string name;
     VarDeclKind kind;
+    bool is_captured;
+};
+
+struct Upvalue {
+    uint64_t index;
+    bool is_local;
 };
 
 #endif

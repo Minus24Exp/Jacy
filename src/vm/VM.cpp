@@ -1,7 +1,7 @@
 #include "vm/VM.h"
 
 VM::VM() {
-    slots.emplace(slots.begin() + print_offset, Value{Type::ObjFunc, std::make_shared<Func>()});
+    // slots.emplace(slots.begin() + print_offset, Value{Type::ObjFunc, std::make_shared<Func>()});
 }
 
 void VM::push(const Value & val) {
