@@ -43,7 +43,7 @@ static inline bool as_bool(Value value) {
     return value == TrueConst;
 }
 
-static inline 
+static inline double as_num()
 
 static inline obj_ptr as_obj(Value value) {
     return std::make_shared<Object>((uintptr_t)(value & !(SIGN_BIT | QNAN)));
