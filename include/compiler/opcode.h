@@ -7,17 +7,14 @@
 #include "parser/Token.h"
 #include "tree/Stmt/VarDecl.h"
 
-using Chunk = std::vector<uint8_t>;
-using OpCodeIt = Chunk::iterator;
+struct Chunk {
+    std::vector<uint8_t> code;
+    std::vector<Value> constants;
+};
+using OpCodeIt = std::vector<uint8_t>::iterator;
 
 enum class OpCode : uint8_t {
     NOP,
-
-    LOAD_NULL,
-    LOAD_BOOL,
-    LOAD_INT,
-    LOAD_FLOAT,
-    LOAD_STRING,
 
     LOAD_VAR,
     STORE_VAR,
@@ -45,6 +42,7 @@ const std::vector <std::string> opcodeNames {
     "LOAD_UPVALUE",         // A (8) -> Frame.closure
 
     "POP",                  // "" -> pop stack
+    "CLOSE_UPVALUE",        // "" -> 
 
                             // CALL op handle 1-byte (max 256) for args count, it will be increased in the future
     "CALL",                 // A (8), C (1) -> StackTop = Variable[size - A](Stack[top...C])

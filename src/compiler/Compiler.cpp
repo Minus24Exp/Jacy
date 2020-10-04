@@ -13,6 +13,11 @@ Chunk Compiler::compile(const StmtList & tree) {
     return chunk;
 }
 
+void Compiler::emitConst(const Value & value) {
+    emit(OpCode::LOAD_CONST);
+    
+}
+
 uint64_t Compiler::resolve_local(const scope_ptr & scope, std::string name) {
     for (std::size_t i = scope->locals.size() - 1; i >= 0; i--) {
         if (scope->locals[i].name == name) {
@@ -54,6 +59,23 @@ uint64_t Compiler::add_upvalue(const scope_ptr & scope, uint64_t index, bool is_
     return scope->upvalues.size() - 1;
 }
 
+void Compiler::enter_scope() {
+    this->current_scope = std::make_shared<Scope>(this->current_scope);
+    scope_depth++;
+}
+
+void Compiler::exit_scope() {
+    scope_depth--;
+
+    while (current_scope->locals.size() > 0 && current_scope->locals.back().depth > scope_depth) {
+        if (current_scope->locals.back().is_captured) {
+            // emit(OpCode::)
+        }
+    }
+
+    this->current_scope = this->current_scope->enclosing;
+}
+
 // void Compiler::addConstant(Value value) {
 //     chunk.constants.push_back(value);
 //     emit(static_cast<uint64_t>(chunk.constants.size() - 1));
@@ -63,7 +85,7 @@ uint64_t Compiler::add_upvalue(const scope_ptr & scope, uint64_t index, bool is_
 // }
 
 void Compiler::emit(uint8_t byte) {
-    chunk.push_back(byte);
+    chunk.code.push_back(byte);
 }
 
 void Compiler::emit(OpCode opcode) {

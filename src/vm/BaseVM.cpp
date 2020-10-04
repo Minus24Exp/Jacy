@@ -3,16 +3,16 @@
 BaseVM::BaseVM() {}
 
 uint8_t BaseVM::peek() {
-    return chunk[index];
+    return chunk.code[index];
 }
 
 uint8_t BaseVM::advance(int distance) {
     index += distance;
-    return chunk[index];
+    return chunk.code[index];
 }
 
 OpCodeIt BaseVM::peek_it() {
-    return chunk.begin() + index;
+    return chunk.code.begin() + index;
 }
 
 uint8_t BaseVM::read() {
@@ -49,7 +49,7 @@ void BaseVM::eval(const Chunk & chunk) {
     index = 0;
     this->chunk = chunk;
 
-    while (index < chunk.size()) {
+    while (index < chunk.code.size()) {
         OpCode opcode = static_cast<OpCode>(read());
         consumeOpCode(opcode);
 

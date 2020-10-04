@@ -10,7 +10,10 @@ using scope_ptr = std::shared_ptr<Scope>;
 struct Scope {
     scope_ptr enclosing;
     std::vector<Local> locals;
-    std::vector<UpValue> upvalues;
+    std::vector<Upvalue> upvalues;
+
+    Scope(const scope_ptr & enclosing) : enclosing(enclosing) {}
+    virtual ~Scope() = default;
 };
 
 #endif
