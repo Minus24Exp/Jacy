@@ -47,6 +47,10 @@ struct Value {
     }
 };
 
+const Value NullConst = Value{Type::Null};
+const Value FalseConst = Value{Type::Bool, static_cast<uint8_t>(0)};
+const Value TrueConst = Value{Type::Bool, static_cast<uint8_t>(1)};
+
 // QNAN Version
 // I need to decide how to use NaN-Boxing with separated integer and double types
 
