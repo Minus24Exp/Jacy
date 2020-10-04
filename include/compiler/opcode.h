@@ -21,25 +21,30 @@ enum class OpCode : uint8_t {
 
     LOAD_VAR,
     STORE_VAR,
+    LOAD_UPVALUE,
 
     POP,
 
     CALL,
-
     MAKE_FUNC,
+    CLOSURE,
 };
 
 const std::vector <std::string> opcodeNames {
 //  OPCODE                  // Operands
     "NOP",                  // --
-    
-    "LOAD_CONST",           // A (8) -> StackTop = Constants[A]
+
+    "LOAD_NULL",            // "" -> StackTop = null
+    "LOAD_BOOL",            // A (1) -> StackTop = A
+    "LOAD_INT",             // A (8) -> StackTop = A
+    "LOAD_FLOAT",           // A (8) -> StackTop = A
+    "LOAD_STRING",          // S (8), W[S] -> StackTop = W
 
     "LOAD_VAR",             // A (8) -> StackTop = Variable[size - A]
     "STORE_VAR",            // A (8) -> Variable[A] = StackTop
     "LOAD_UPVALUE",         // A (8) -> Frame.closure
 
-    "POP",                  // 
+    "POP",                  // "" -> pop stack
 
                             // CALL op handle 1-byte (max 256) for args count, it will be increased in the future
     "CALL",                 // A (8), C (1) -> StackTop = Variable[size - A](Stack[top...C])
