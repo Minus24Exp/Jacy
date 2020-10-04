@@ -60,7 +60,7 @@ void VM::call(uint8_t args_count) {
     }
 
     Value func = pop_stack();
-    if (func.type != Type::ObjFunc) {
+    if (func.type != Type::Func) {
         throw JacyException("Unable to use as a function");
     }
 

@@ -16,6 +16,8 @@ using OpCodeIt = std::vector<uint8_t>::iterator;
 enum class OpCode : uint8_t {
     NOP,
 
+    LOAD_CONST,
+
     LOAD_VAR,
     STORE_VAR,
     LOAD_UPVALUE,

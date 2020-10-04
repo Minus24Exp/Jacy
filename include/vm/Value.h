@@ -7,6 +7,7 @@
 #include <string>
 #include <math.h>
 #include <memory>
+#include <map>
 
 // TODO: Optimize using QNAN mask, it will also allow writing bytecode to file
 
@@ -20,41 +21,16 @@ enum class Type {
     Float,
     String,
 
-    ObjFunc,
+    Func,
 };
 
 struct Value {
     Type type;
-    std::variant<std::monostate, uint8_t, int64_t, double, std::string, obj_ptr> as;
-
-    uint8_t byte() {
-        return std::get<uint8_t>(as);
-    }
-
-    int64_t _long() {
-        return std::get<int64_t>(as);
-    }
-
-    double _double() {
-        return std::get<double>(as);
-    }
-
-    std::string string() {
-        return std::get<std::string>(as);
-    }
-
-    obj_ptr obj() {
-        return std::get<obj_ptr>(as);
-    }
+    obj_ptr obj;
 };
-
-const Value NullConst = Value{Type::Null};
-const Value FalseConst = Value{Type::Bool, static_cast<uint8_t>(0)};
-const Value TrueConst = Value{Type::Bool, static_cast<uint8_t>(1)};
 
 struct  ObjUpvalue {
     obj_ptr obj;
-    Value 
 };
 
 // QNAN Version

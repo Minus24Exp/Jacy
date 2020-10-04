@@ -9,6 +9,7 @@ using scope_ptr = std::shared_ptr<Scope>;
 
 struct Scope {
     scope_ptr enclosing;
+    Chunk chunk;
     std::vector<Local> locals;
     std::vector<Upvalue> upvalues;
 

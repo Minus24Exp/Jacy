@@ -5,17 +5,33 @@ Compiler::Compiler() : scope_depth(0) {
     // locals.emplace(locals.begin() + print_offset, Local{0, "print", VarDeclKind::Val});
 }
 
-Chunk Compiler::compile(const StmtList & tree) {
+scope_ptr Compiler::compile(const StmtList & tree) {
+    enter_scope();
+    
     for (const auto & stmt : tree) {
         stmt->accept(*this);
     }
 
-    return chunk;
+    scope_ptr global = current_scope;
+    exit_scope();
+    return global;
 }
 
-void Compiler::emitConst(const Value & value) {
+uint64_t Compiler::add_const(const Value & value) {
+    current_scope->chunk.constants.push_back(value);
+}
+
+uint64_t Compiler::make_const(const Value & value) {
+    uint64_t index = add_const(value);
+    if (index > UINT64_MAX) {
+        throw JacyException("Maximum constant pool size exceeded");
+    }
+    return index;
+}
+
+void Compiler::emit_const(const Value & value) {
     emit(OpCode::LOAD_CONST);
-    
+    emit(make_const(value));
 }
 
 uint64_t Compiler::resolve_local(const scope_ptr & scope, std::string name) {
@@ -76,16 +92,8 @@ void Compiler::exit_scope() {
     this->current_scope = this->current_scope->enclosing;
 }
 
-// void Compiler::addConstant(Value value) {
-//     chunk.constants.push_back(value);
-//     emit(static_cast<uint64_t>(chunk.constants.size() - 1));
-
-//     // TODO: Add debug mode
-//     emit(OpCode::PRINT);
-// }
-
 void Compiler::emit(uint8_t byte) {
-    chunk.code.push_back(byte);
+    current_scope->chunk.code.push_back(byte);
 }
 
 void Compiler::emit(OpCode opcode) {
@@ -166,25 +174,19 @@ void Compiler::visit(TypeDecl * expr_stmt) {
 void Compiler::visit(Literal * literal) {
     switch (literal->token.type) {
         case TokenType::Null: {
-            emit(OpCode::LOAD_NULL);
+            emit_const(NullConst);
         } break;
         case TokenType::Bool: {
-            emit(OpCode::LOAD_BOOL);
-            emit(static_cast<uint8_t>(literal->token.Bool()));
+            emit_const(literal->token.Bool() ? TrueConst : FalseConst);
         } break;
         case TokenType::Int: {
-            emit(OpCode::LOAD_INT);
-            emit(static_cast<uint64_t>(literal->token.Int()));
+            emit_const(make_int(static_cast<int64_t>(literal->token.Int())));
         } break;
         case TokenType::Float: {
-            emit(OpCode::LOAD_FLOAT);
-            emit(static_cast<uint64_t>(literal->token.Float()));
+            emit_const(make_float(static_cast<int64_t>(literal->token.Float())));
         } break;
         case TokenType::String: {
-            emit(OpCode::LOAD_STRING);
-            const std::string & s = literal->token.String();
-            emit(static_cast<uint64_t>(s.size()));
-            emit(reinterpret_cast<const uint8_t*>(s.c_str()), s.size());
+            emit_const(Value{Type::String, literal->token.String()});
         } break;
     }
 }

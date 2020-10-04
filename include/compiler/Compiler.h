@@ -2,6 +2,7 @@
 #define COMPILER_H
 
 #include <cstring>
+#include <cstdint>
 #include "tree/nodes.h"
 #include "tree/BaseVisitor.h"
 #include "compiler/opcode.h"
@@ -15,22 +16,23 @@ public:
     Compiler();
     virtual ~Compiler() = default;
 
-    Chunk compile(const StmtList & tree);
+    scope_ptr compile(const StmtList & tree);
 
 private:
     int scope_depth;
     func_ptr func;
     scope_ptr current_scope;
-    void emitConst(const Value & value);
+
+    uint64_t add_const(const Value & value);
+    uint64_t make_const(const Value & value);
+    void emit_const(const Value & value);
+
     uint64_t resolve_local(const scope_ptr & scope, std::string name);
     uint64_t resolve_upvalue(const scope_ptr & scope, std::string name);
     uint64_t add_upvalue(const scope_ptr & scope, uint64_t index, bool is_local);
 
     void enter_scope();
     void exit_scope();
-    // void addConstant(Value value);
-
-    Chunk chunk;
 
     void emit(uint8_t byte);
     void emit(OpCode opcode);
