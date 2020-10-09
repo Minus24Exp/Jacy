@@ -14,18 +14,29 @@
 class Compiler : public BaseVisitor {
 public:
     Compiler();
-    virtual ~Compiler() = default;
+    ~Compiler() override = default;
 
     scope_ptr compile(const StmtList & tree);
 
 private:
+    // Scope info
     int scope_depth;
-    func_ptr func;
     scope_ptr current_scope;
+    // module_ptr module;
+    func_ptr func;
+    class_ptr _class;
 
+    // Chunk operators
     uint64_t add_const(const Value & value);
     uint64_t make_const(const Value & value);
     void emit_const(const Value & value);
+    uint64_t id_const(Identifier * id);
+    void declare_var(Identifier * id, VarDeclKind kind);
+    void add_local(Identifier * id, VarDeclKind kind);
+    void mark_inited();
+    void emit_id(Identifier * id);
+    void define_var(uint64_t global);
+    uint64_t compile_var(Identifier * id, VarDeclKind kind);
 
     uint64_t resolve_local(const scope_ptr & scope, std::string name);
     uint64_t resolve_upvalue(const scope_ptr & scope, std::string name);

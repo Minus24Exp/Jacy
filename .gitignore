@@ -35,5 +35,5 @@
 # .idea
 
 bin/**
-
+cmake-build-debug
 Doxyfile

@@ -18,38 +18,46 @@ enum class OpCode : uint8_t {
 
     LOAD_CONST,
 
-    LOAD_VAR,
-    STORE_VAR,
-    LOAD_UPVALUE,
+    GET_GLOBAL,
+    SET_GLOBAL,
+    DEFINE_GLOBAL,
+
+    GET_LOCAL,
+    SET_LOCAL,
+    GET_UPVALUE,
 
     POP,
 
     CALL,
     MAKE_FUNC,
     CLOSURE,
+
+    CLASS,
 };
 
 const std::vector <std::string> opcodeNames {
 //  OPCODE                  // Operands
     "NOP",                  // --
 
-    "LOAD_NULL",            // "" -> StackTop = null
-    "LOAD_BOOL",            // A (1) -> StackTop = A
-    "LOAD_INT",             // A (8) -> StackTop = A
-    "LOAD_FLOAT",           // A (8) -> StackTop = A
-    "LOAD_STRING",          // S (8), W[S] -> StackTop = W
+    "LOAD_CONST",
 
-    "LOAD_VAR",             // A (8) -> StackTop = Variable[size - A]
-    "STORE_VAR",            // A (8) -> Variable[A] = StackTop
+    "GET_GLOBAL",
+    "SET_GLOBAL",
+    "DEFINE_GLOBAL",
+
+    "GET_LOCAL",            // A (8) -> StackTop = slots[size - A]
+    "SET_LOCAL",            // A (8) -> slots[A] = StackTop
     "LOAD_UPVALUE",         // A (8) -> Frame.closure
 
     "POP",                  // "" -> pop stack
     "CLOSE_UPVALUE",        // "" -> 
 
                             // CALL op handle 1-byte (max 256) for args count, it will be increased in the future
-    "CALL",                 // A (8), C (1) -> StackTop = Variable[size - A](Stack[top...C])
+    "CALL",                 // A (8), C (1) -> StackTop = slots[size - A](Stack[top...C])
     "MAKE_FUNC",            // 
-    "CLOSURE",              // A (8) -> StackTop = new closure for function 
+    "CLOSURE",              // A (8) -> StackTop = new closure for function
+
+    "CLASS",
 };
 
 struct Local {

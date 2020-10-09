@@ -2,16 +2,23 @@
 #define BOOL_H
 
 #include "object/Object.h"
+#include "object/Class.h"
+
+class Bool;
+using bool_ptr = std::shared_ptr<Bool>;
+
+extern class_ptr cBool;
 
 class Bool : public Object {
 public:
-    Bool(bool value) : value(value) {}
+    Bool(bool value) : Object(cBool), value(value) {}
     virtual ~Bool() = default;
+
 private:
     bool value;
 };
 
-const Value FalseConst = Value{Type::Bool, std::make_shared<Bool>(false)};
-const Value TrueConst = Value{Type::Bool, std::make_shared<Bool>(true)};
+const bool_ptr FalseConst = std::make_shared<Bool>(false);
+const bool_ptr TrueConst = std::make_shared<Bool>(true);
 
 #endif

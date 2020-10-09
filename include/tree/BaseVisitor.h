@@ -34,7 +34,7 @@ struct DictExpr;
 
 class BaseVisitor {
 public:
-    BaseVisitor() {}
+    BaseVisitor() = default;
     virtual ~BaseVisitor() = default;
 
     // Statements //

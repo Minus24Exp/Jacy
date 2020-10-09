@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated />
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
   </component>
-  <component name="CMakeSettings">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="Jacy" targetName="Jacy" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
-      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_OPTIONS="CMAKE_LANG_COMPILER=g++" />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Parser.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Bool.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Bool.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Float.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Float.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Func.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Func.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Int.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Int.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Null.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Null.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Object.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Object.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/String.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/String.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/objects.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/objects.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/parser/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Lexer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/parser/Token.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Token.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/BaseVisitor.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/BaseVisitor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/ClassDecl.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/ClassDecl.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/VM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/VM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/parser/Lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Lexer.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +60,14 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CMakeLists.txt" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -31,14 +79,29 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.C/C++" />
   </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="cowsay" />
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Jacy" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Jacy" TARGET_NAME="Jacy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Jacy" RUN_TARGET_NAME="Jacy">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -52,28 +115,56 @@
       <workItem from="1600562124747" duration="60000" />
       <workItem from="1600953822880" duration="885000" />
       <workItem from="1600954908215" duration="1125000" />
+      <workItem from="1602089997627" duration="11860000" />
+      <workItem from="1602253550276" duration="3089000" />
+      <workItem from="1602262021070" duration="1000" />
+      <workItem from="1602262113101" duration="620000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1600955030927">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1600955030927" />
+    <state x="1039" y="315" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602093618850">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="1039" y="315" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602093618850" />
     <state x="1060" y="280" key="FileChooserDialogImpl" timestamp="1600955361401">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1600955361401" />
-    <state x="781" y="170" key="SettingsEditor" timestamp="1600955943822">
+    <state x="781" y="170" key="SettingsEditor" timestamp="1602259380571">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="781" y="170" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1600955943822" />
+    <state x="781" y="170" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602259380571" />
     <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1600955775833">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1600955775833" />
+    <state width="600" height="440" key="javadoc.popup" timestamp="1602093882720">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state width="600" height="440" key="javadoc.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602093882720" />
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1602098959154">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602098959154" />
   </component>
 </project>

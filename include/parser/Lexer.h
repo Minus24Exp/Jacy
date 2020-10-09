@@ -20,7 +20,7 @@ public:
     Lexer & operator=(Lexer&&) = delete;
 
 private:
-    Lexer() = default;
+    Lexer();
     ~Lexer() = default;
 
 public:
@@ -38,20 +38,19 @@ public:
     void add_token(NumType num_type, const std::string & num);
 
     uint32_t index;
-
-    char peek();
-    char peek_next(int distance = 1);
-    char advance(int inc = 1);
-
     uint32_t line;
     uint32_t column;
     // Token column points to start of token
     uint32_t token_column;
     uint32_t token_line;
 
+    char peek();
+    char peek_next(int distance = 1);
+    char advance(int inc = 1);
+
     bool eof();
 
-    // Determinators
+    // Checkers
     bool skip(const char & c);
     bool is_nl(const char & c);
     bool is_digit(const char & c);

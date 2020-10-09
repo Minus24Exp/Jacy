@@ -21,7 +21,9 @@ enum class Type {
     Float,
     String,
 
+    Object, // User-Defined object
     Func,
+    Class,
 };
 
 struct Value {

@@ -2,6 +2,7 @@
 #define SCOPE_H
 
 #include <memory>
+#include <utility>
 #include "compiler/opcode.h"
 
 class Scope;
@@ -13,7 +14,7 @@ struct Scope {
     std::vector<Local> locals;
     std::vector<Upvalue> upvalues;
 
-    Scope(const scope_ptr & enclosing) : enclosing(enclosing) {}
+    explicit Scope(scope_ptr enclosing) : enclosing(std::move(enclosing)) {}
     virtual ~Scope() = default;
 };
 

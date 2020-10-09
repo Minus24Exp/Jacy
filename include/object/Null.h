@@ -3,14 +3,16 @@
 
 #include "object/Object.h"
 
+extern class_ptr cNull;
+
 class Null : public Object {
 public:
-    Null() {}
+    Null() : Object(cNull) {}
     virtual ~Null() = default;
 
 private:
 };
 
-const Value NullConst = Value{Type::Null, std::make_shared<Null>()};
+const std::shared_ptr<Null> NullConst = std::make_shared<Null>();
 
 #endif

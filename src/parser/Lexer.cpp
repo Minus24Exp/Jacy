@@ -1,5 +1,13 @@
 #include "parser/Lexer.h"
 
+Lexer::Lexer() {
+    index = 0;
+    line = 0;
+    column = 0;
+    token_column = 0;
+    token_line = 0;
+}
+
 char Lexer::peek() {
     return script[index];
 }

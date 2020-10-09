@@ -1,10 +1,10 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include <variant>
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <variant>
 
 using yo_int = long;
 

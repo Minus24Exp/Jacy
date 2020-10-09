@@ -15,6 +15,7 @@ public:
 private:
     std::stack<Value> stack;
     std::vector<Value> slots;
+    std::map<std::string, Value> globals;
 
     void push(const Value & val);
     Value top();
