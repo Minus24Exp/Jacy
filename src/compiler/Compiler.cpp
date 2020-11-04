@@ -97,7 +97,7 @@ void Compiler::visit(Literal * literal) {
 }
 
 void Compiler::visit(Identifier * id) {
-
+    emit_id(id);
 }
 
 void Compiler::visit(Infix * expr_stmt) {
@@ -108,8 +108,18 @@ void Compiler::visit(Prefix * expr_stmt) {
 
 }
 
-void Compiler::visit(Assign * expr_stmt) {
-
+void Compiler::visit(Assign * assign) {
+    assign->value->accept(*this);
+    size_t operand = resolve_local(assign->id.get());
+    OpCode opcode;
+    if (operand == -1) {
+        operand = make_string(assign->id->get_name());
+        opcode = OpCode::StoreGlobal;
+    } else {
+        opcode = OpCode::StoreLocal;
+    }
+    emit(opcode);
+    emit(operand);
 }
 
 void Compiler::visit(SetExpr * expr_stmt) {
@@ -143,14 +153,9 @@ void Compiler::visit(DictExpr * expr_stmt) {
 
 }
 
-void Compiler::enter_scope() {
-    scope_depth++;
-}
-
-void Compiler::exit_scope() {
-    scope_depth--;
-}
-
+//////////////
+// Bytecode //
+//////////////
 void Compiler::emit(uint8_t byte) {
     chunk.code.push_back(byte);
 }
@@ -177,6 +182,9 @@ void Compiler::emit(uint64_t l) {
     emit(reinterpret_cast<uint8_t*>(&l), 8);
 }
 
+///////////////
+// Constants //
+///////////////
 void Compiler::emit_int(long long int_val) {
     emit(OpCode::IntConst);
     const auto & found = int_constants.find(int_val);
@@ -186,6 +194,7 @@ void Compiler::emit_int(long long int_val) {
     }
     chunk.constants.push_back(IntConstant{int_val});
     int_constants[int_val] = chunk.constants.size() - 1;
+    emit(chunk.constants.size() - 1);
 }
 
 void Compiler::emit_float(double float_val) {
@@ -197,15 +206,66 @@ void Compiler::emit_float(double float_val) {
     }
     chunk.constants.push_back(FloatConstant{float_val});
     float_constants[float_val] = chunk.constants.size() - 1;
+    emit(chunk.constants.size() - 1);
 }
 
 void Compiler::emit_string(const std::string & string_val) {
     emit(OpCode::StringConst);
+    emit(make_string(string_val));
+}
+
+size_t Compiler::make_string(const std::string & string_val) {
     const auto & found = string_constants.find(string_val);
     if (found != string_constants.end()) {
-        emit(found->second);
-        return;
+        return found->second;
     }
     chunk.constants.push_back(StringConstant{string_val});
     string_constants[string_val] = chunk.constants.size() - 1;
+    return chunk.constants.size() - 1;
+}
+
+///////////
+// Scope //
+///////////
+void Compiler::enter_scope() {
+    scope_depth++;
+    scope = std::make_shared<Scope>(scope);
+}
+
+void Compiler::exit_scope() {
+    scope_depth--;
+    if (!scope->parent) {
+        throw DevError("Attempt to exit global scope");
+    }
+    scope = scope->parent;
+}
+
+///////////////
+// Variables //
+///////////////
+size_t Compiler::resolve_local(Identifier * id) {
+    for (size_t i = scope->locals.size() - 1; i >= 0; i--) {
+        const auto & local = scope->locals[i];
+        if (local.name == id->get_name()) {
+            if (local.depth == -1) {
+                error(id->get_name() + " is not defined");
+            }
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+void Compiler::emit_id(Identifier * id) {
+    size_t operand = resolve_local(id);
+    OpCode opcode;
+    if (operand == -1) {
+        operand = make_string(id->get_name());
+        opcode = OpCode::LoadGlobal;
+    } else {
+        opcode = OpCode::LoadLocal;
+    }
+    emit(opcode);
+    emit(operand);
 }

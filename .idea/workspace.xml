@@ -29,53 +29,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Constants ... )))">
+      <change afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Jacy.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Jacy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Tester.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Bool.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Class.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Float.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Func.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Int.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Null.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Object.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/String.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/objects.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/parser/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Lexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/parser/Parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Parser.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/parser/Token.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Token.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Expr/Assign.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/Assign.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Expr/Expr.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/Expr.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Expr/FuncCall.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/FuncCall.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Expr/Identifier.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/Identifier.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Expr/Literal.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/Literal.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Expr/SetExpr.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/SetExpr.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Node.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Node.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Printer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Printer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/FuncDecl.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/FuncDecl.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/ReturnStmt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/ReturnStmt.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/Stmt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/Stmt.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/nodes.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/nodes.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/Disasm.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/VM.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tester.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/Lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Lexer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tree/Printer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/tree/Printer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/VM.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/Value.cpp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,8 +115,16 @@
       <workItem from="1602262113101" duration="1060000" />
       <workItem from="1604252084719" duration="15000" />
       <workItem from="1604279483060" duration="10320000" />
-      <workItem from="1604502965002" duration="9135000" />
+      <workItem from="1604502965002" duration="14914000" />
     </task>
+    <task id="LOCAL-00001" summary="Constants ... )))">
+      <created>1604515216293</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1604515216293</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,6 +141,10 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Constants ... )))" />
+    <option name="LAST_COMMIT_MESSAGE" value="Constants ... )))" />
   </component>
   <component name="WindowStateProjectService">
     <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1600955030927">
@@ -209,9 +181,9 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state width="600" height="440" key="javadoc.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602093882720" />
-    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1602098959154">
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1604524224204">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602098959154" />
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604524224204" />
   </component>
 </project>

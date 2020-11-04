@@ -42,6 +42,11 @@ enum class OpCode : uint8_t {
     IntConst,
     FloatConst,
     StringConst,
+
+    LoadGlobal,
+    StoreGlobal,
+    LoadLocal,
+    StoreLocal,
 };
 
 enum class ConstantType : uint8_t {
@@ -54,7 +59,7 @@ struct Constant {
     ConstantType type;
     explicit Constant(ConstantType type) : type(type) {}
 
-    uint8_t type_code() {
+    uint8_t type_code() const {
         return static_cast<uint8_t>(type);
     }
     virtual ByteList codegen() = 0;

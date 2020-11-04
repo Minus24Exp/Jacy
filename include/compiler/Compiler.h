@@ -5,6 +5,7 @@
 #include "tree/nodes.h"
 #include "compiler/opcode.h"
 #include "Exception.h"
+#include "compiler/Scope.h"
 
 #include <cstring>
 #include <cstdint>
@@ -45,10 +46,6 @@ public:
     void visit(DictExpr * dict) override;
 
 private:
-    uint64_t scope_depth;
-    void enter_scope();
-    void exit_scope();
-
     // Bytecode
     Chunk chunk;
     void emit(uint8_t byte);
@@ -67,6 +64,17 @@ private:
     void emit_int(long long int_val);
     void emit_float(double float_val);
     void emit_string(const std::string & string_val);
+    size_t make_string(const std::string & string_val);
+
+    // Scope
+    uint64_t scope_depth;
+    scope_ptr scope;
+    void enter_scope();
+    void exit_scope();
+
+    // Variables
+    size_t resolve_local(Identifier * id);
+    void emit_id(Identifier * id);
 
 private:
     void error(const std::string & msg) {}
