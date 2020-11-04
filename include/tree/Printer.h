@@ -9,7 +9,7 @@
 class Printer : public BaseVisitor {
 public:
     Printer();
-    virtual ~Printer() = default;
+    ~Printer() override = default;
 
     void print(const StmtList & tree);
 
@@ -41,9 +41,9 @@ public:
     void visit(DictExpr * dict) override;
 
 private:
-    void print_indent();
+    void print_indent() const;
 
-    size_t indent;
+    size_t indent{};
 };
 
 #endif

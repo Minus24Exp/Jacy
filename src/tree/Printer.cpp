@@ -1,8 +1,8 @@
 #include "tree/Printer.h"
 
-Printer::Printer() {}
+Printer::Printer() = default;
 
-void Printer::print_indent() {
+void Printer::print_indent() const {
     // Note: Use print indent only before statement printing
     // not before expression
     std::string str(indent * 4, ' ');
@@ -163,33 +163,28 @@ void Printer::visit(TypeDecl * type_decl) {
 // Expressions //
 /////////////////
 void Printer::visit(Literal * literal) {
-    switch (literal->token.type) {
-        case TokenType::Bool: std::cout << literal->token.Bool(); break;
-        case TokenType::Int: std::cout << literal->token.Int(); break;
-        case TokenType::Float: std::cout << literal->token.Float(); break;
-        case TokenType::String: std::cout << "\"" << literal->token.String() << "\""; break;
-    }
+    std::cout << literal->token.val;
 }
 
 void Printer::visit(Identifier * id) {
-    std::cout << id->token.String();
+    std::cout << id->token.val;
 }
 
 void Printer::visit(Infix * infix) {
     infix->left->accept(*this);
-    std::cout << " " << op_to_str(infix->op.op()) << " ";
+    std::cout << " " << op_to_str(infix->op.type) << " ";
     infix->right->accept(*this);
 }
 
 void Printer::visit(Prefix * prefix) {
-    std::cout << op_to_str(prefix->op.op());
+    std::cout << op_to_str(prefix->op.type);
     prefix->right->accept(*this);
 }
 
 void Printer::visit(Assign * assign) {
     assign->id->accept(*this);
     std::cout << " ";
-    std::cout << op_to_str(assign->assign_op);
+    std::cout << op_to_str(assign->assign_op.type);
     std::cout << " ";
     assign->value->accept(*this);
 }

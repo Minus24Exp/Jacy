@@ -11,10 +11,7 @@
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
 #include "tree/Printer.h"
-#include "Tester.h"
 #include "compiler/Compiler.h"
-#include "vm/Disasm.h"
-#include "vm/VM.h"
 
 /**
  * Jacy
@@ -61,11 +58,9 @@ private:
     // Debug mode state
     bool debug;
 
-    Lexer & lexer;
-    Parser & parser;
+    Lexer lexer;
+    Parser parser;
     Compiler compiler;
-    Disasm disasm;
-    VM vm;
 
     /**
      * @brief Run REPL

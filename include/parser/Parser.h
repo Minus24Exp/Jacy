@@ -7,19 +7,8 @@
 
 class Parser {
 public:
-    static Parser & get_instance() {
-        static Parser instance;
-        return instance;
-    }
-
-    Parser(const Parser&) = delete;
-    Parser(Parser&&) = delete;
-    Parser & operator=(const Parser&) = delete;
-    Parser & operator=(Parser&&) = delete;
-
-private:
-    Parser() = default;
-    ~Parser() = default;
+    Parser();
+    virtual ~Parser() = default;
 
 public:
     StmtList parse(const TokenStream & tokens);
@@ -39,19 +28,16 @@ private:
 
     // Chekers //
     bool eof();
-    bool is_typeof(const TokenType & type);
+    bool is(const TokenType & type);
     bool is_nl();
     bool is_semis();
-    bool is_op(const Operator & op);
-    bool is_kw(const Keyword & kw);
     bool is_assign_op();
     bool is_literal();
 
     // Skippers //
     void skip_nl(const bool & optional = false);
     void skip_semis();
-    void skip_op(const Operator & op, const bool & skip_l_nl, const bool & skip_r_nl);
-    void skip_kw(const Keyword & kw, const bool & skip_l_nl, const bool & skip_r_nl);
+    void skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl);
 
     // Parsers //
 
@@ -81,6 +67,7 @@ private:
     expr_ptr add();
     expr_ptr mult();
     expr_ptr power();
+    expr_ptr type_cast();
     expr_ptr prefix();
     expr_ptr call();
     expr_ptr member_access();
@@ -88,7 +75,7 @@ private:
     //
 
     id_ptr parse_id();
-    expr_ptr parse_func_call(expr_ptr left);
+    expr_ptr parse_func_call(const expr_ptr & left);
     expr_ptr parse_if_expr();
     expr_ptr parse_literal();
 

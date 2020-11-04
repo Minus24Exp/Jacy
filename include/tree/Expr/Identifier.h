@@ -10,10 +10,11 @@ using id_ptr = std::shared_ptr<Identifier>;
 struct Identifier : Expr {
     Token token;
 
-    Identifier(const Token & token) : Expr(token.pos, ExprType::Id), token(token) {}
+    explicit Identifier(const Token & token) : Expr(token.pos, ExprType::Id), token(token) {}
+    ~Identifier() override = default;
 
-    std::string get_name() {
-        return token.String();
+    std::string get_name() const {
+        return token.val;
     }
 
     void accept(BaseVisitor & visitor) override {

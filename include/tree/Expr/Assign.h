@@ -11,9 +11,9 @@ struct Assign : Expr {
     expr_ptr value;
 
     // Used by augmented assignment, like `+=` (here `augment` is operator `+`)
-    Operator assign_op;
+    Token assign_op;
 
-    Assign(id_ptr id, expr_ptr value, Operator assign_op)
+    Assign(id_ptr id, expr_ptr value, Token assign_op)
         : Expr(id->pos, ExprType::Assign), id(id), value(value), assign_op(assign_op) {}
     virtual ~Assign() = default;
 

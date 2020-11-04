@@ -6,7 +6,7 @@
 #include "tree/BaseVisitor.h"
 
 struct Node {
-    Node(const Position & pos) : pos(pos) {}
+    explicit Node(const Position & pos) : pos(pos) {}
     virtual ~Node() = default;
 
     virtual void accept(BaseVisitor & visitor) = 0;

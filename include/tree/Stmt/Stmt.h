@@ -23,9 +23,9 @@ enum class StmtType {
 
 struct Stmt : Node {
     Stmt(const Position & pos, StmtType type) : Node(pos), type(type) {}
-    virtual ~Stmt() = default;
+    ~Stmt() override = default;
 
-    virtual void accept(BaseVisitor & visitor) = 0;
+    void accept(BaseVisitor & visitor) override = 0;
 
     StmtType type;
 };
@@ -33,10 +33,10 @@ struct Stmt : Node {
 struct ExprStmt : Stmt {
     expr_ptr expr;
 
-    ExprStmt(expr_ptr expr) : Stmt(expr->pos, StmtType::Expr), expr(expr) {}
-    virtual ~ExprStmt() = default;
+    explicit ExprStmt(expr_ptr expr) : Stmt(expr->pos, StmtType::Expr), expr(expr) {}
+    ~ExprStmt() override = default;
 
-    virtual void accept(BaseVisitor & visitor) override {
+    void accept(BaseVisitor & visitor) override {
         visitor.visit(this);
     }
 };

@@ -30,28 +30,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Jacy.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Jacy.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Tester.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Bool.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Bool.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Float.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Float.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Func.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Func.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Int.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Int.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Null.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Null.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/Object.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/Object.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/String.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/String.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/objects.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/objects.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Bool.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Class.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Float.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Func.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Int.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Null.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/Object.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/String.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/objects.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/include/parser/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Lexer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/parser/Parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Parser.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/parser/Token.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Token.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/BaseVisitor.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/BaseVisitor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/ClassDecl.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/ClassDecl.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/VM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/VM.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Expr/Assign.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/Assign.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Expr/Expr.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/Expr.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Expr/FuncCall.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/FuncCall.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Expr/Identifier.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/Identifier.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Expr/Literal.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/Literal.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Expr/SetExpr.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Expr/SetExpr.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Node.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Node.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Printer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Printer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/FuncDecl.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/FuncDecl.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/ReturnStmt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/ReturnStmt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/Stmt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/Stmt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/nodes.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/nodes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/Disasm.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/VM.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tester.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/parser/Lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Lexer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/parser/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Parser.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tree/Printer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/tree/Printer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/VM.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/Value.cpp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +111,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.C/C++" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
@@ -98,6 +122,16 @@
     <configuration name="Jacy" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Jacy" TARGET_NAME="Jacy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Jacy" RUN_TARGET_NAME="Jacy">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
@@ -118,7 +152,10 @@
       <workItem from="1602089997627" duration="11860000" />
       <workItem from="1602253550276" duration="3089000" />
       <workItem from="1602262021070" duration="1000" />
-      <workItem from="1602262113101" duration="620000" />
+      <workItem from="1602262113101" duration="1060000" />
+      <workItem from="1604252084719" duration="15000" />
+      <workItem from="1604279483060" duration="10320000" />
+      <workItem from="1604502965002" duration="9135000" />
     </task>
     <servers />
   </component>
@@ -146,14 +183,24 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1039" y="315" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602093618850" />
-    <state x="1060" y="280" key="FileChooserDialogImpl" timestamp="1600955361401">
+    <state x="1013" y="276" width="528" height="500" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1604505985043">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1600955361401" />
-    <state x="781" y="170" key="SettingsEditor" timestamp="1602259380571">
+    <state x="1013" y="276" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604505985043" />
+    <state x="1013" y="277" width="528" height="500" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1052/2560.27.1280.1024@0.0.2560.1052" timestamp="1604280741677" />
+    <state x="1060" y="280" key="FileChooserDialogImpl" timestamp="1604252098543">
       <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604252098543" />
+    <state x="781" y="170" key="SettingsEditor" timestamp="1604290775117">
+      <screen x="0" y="0" width="2560" height="1052" />
     </state>
     <state x="781" y="170" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602259380571" />
+    <state x="781" y="170" key="SettingsEditor/0.0.2560.1052/2560.27.1280.1024@0.0.2560.1052" timestamp="1604290775117" />
+    <state x="1097" y="435" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604510001663">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="1097" y="435" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604510001663" />
     <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1600955775833">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>

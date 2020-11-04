@@ -6,7 +6,7 @@
 struct ReturnStmt : Stmt {
     expr_ptr expr;
     ReturnStmt(const Position & pos, expr_ptr expr) : Stmt(pos, StmtType::Return), expr(expr) {}
-    virtual ~ReturnStmt() = default;
+    ~ReturnStmt() override = default;
 
     void accept(BaseVisitor & visitor) override {
         visitor.visit(this);

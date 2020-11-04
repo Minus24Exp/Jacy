@@ -76,28 +76,11 @@ void Lexer::add_token(Token t) {
     tokens.push_back(t);
 }
 
-void Lexer::add_token(const TokenType & type, const std::string & val) {
+void Lexer::add_token(const TokenType & type, const std::string & val = "") {
     add_token(Token(type, val));
 }
 
-void Lexer::add_token(const Operator & op) {
-    add_token(Token(op));
-}
-
-void Lexer::add_token(const Keyword & kw) {
-    add_token(Token(kw));
-}
-
-void Lexer::add_token(const TokenType & type) {
-    add_token(Token(type));
-}
-
-void Lexer::add_token(NumType num_type, const std::string & num) {
-    add_token(Token(num_type, num));
-}
-
 void Lexer::lex_number() {
-    NumType num_type = NumType::Int;
     std::string num;
 
     if (peek() == '-') {
@@ -118,9 +101,9 @@ void Lexer::lex_number() {
                     num += peek();
                 } while(is_hex(advance()));
 
-                add_token(NumType::Hex, num);
+                add_token(TokenType::Int, num);
                 return;
-            } break;
+            }
             case 'b':
             case 'B': {
                 advance();
@@ -131,14 +114,14 @@ void Lexer::lex_number() {
                     num += peek();
                 } while(is_digit(advance()));
 
-                add_token(NumType::Bin, num);
+                add_token(TokenType::Int, num);
                 return;
-            } break;
+            }
             default: num = "0";
         }
     }
 
-    // @TODO: Fix floating hex numbers
+    // TODO: Fix floating hex numbers
 
     while (is_digit(peek())) {
         num += peek();
@@ -149,11 +132,10 @@ void Lexer::lex_number() {
         // As far as numbers are object we must check if there's number after dot
         // and to advance through it
         if (!is_digit(peek_next())) {
-            add_token(NumType::Int, num);
+            add_token(TokenType::Int, num);
             return;
         }
 
-        num_type = NumType::Float;
         num += peek();
         advance();
         if (!is_digit(peek())) {
@@ -162,13 +144,14 @@ void Lexer::lex_number() {
         do {
             num += peek();
         } while(is_digit(advance()));
+        add_token(TokenType::Float, num);
+    } else {
+        add_token(TokenType::Int, num);
     }
-
-    add_token(num_type, num);
 }
 
-TokenStream Lexer::lex(const std::string & script) {
-    this->script = script;
+TokenStream Lexer::lex(const std::string & s) {
+    this->script = s;
     tokens.clear();
     index = 0;
     line = 1;
@@ -190,32 +173,24 @@ TokenStream Lexer::lex(const std::string & script) {
             while (is_id(advance())) {
                 id += peek();
             }
+            
+            if (id == "elif") {
+                add_token(TokenType::Else);
+                add_token(TokenType::If);
+                continue;
+            }
 
-            Keyword kw = str_to_kw(id);
-
-            if (kw < Keyword::MAX) {
-                // Note: !!! `elif` -> `else if` preprocessor
-                if (kw == Keyword::Elif) {
-                    add_token(Keyword::Else);
-                    add_token(Keyword::If);
-                } else {
-                    add_token(kw);
-                }
-            } else if (id == "is") {
-                // `is` operator
-                add_token(Operator::Is);
-            } else if (id == "in") {
-                // `in` operator
-                add_token(Operator::In);
-            } else if (id == "as") {
-                add_token(Operator::As);
-            } else {
+            TokenType kw = str_to_kw(id);
+            
+            if (kw == TokenType::None) {
                 add_token(TokenType::Id, id);
+            } else {
+                add_token(kw);
             }
         } else if (is_quote(peek())) {
             const char quote = peek();
             advance();
-            std::string str = "";
+            std::string str;
             while (!eof()) {
                 if (peek() == quote) {
                     break;
@@ -235,27 +210,27 @@ TokenStream Lexer::lex(const std::string & script) {
             switch (peek()) {
                 case '=': {
                     if (peek_next() == '>') {
-                        add_token(Operator::Arrow);
+                        add_token(TokenType::Arrow);
                         advance(2);
                     } else if (peek_next() == '=') {
                         if (peek_next(2) == '=') {
-                            add_token(Operator::RefEq);
+                            add_token(TokenType::RefEq);
                             advance(3);
                         } else {
-                            add_token(Operator::Eq);
+                            add_token(TokenType::Eq);
                             advance(2);
                         }
                     } else {
-                        add_token(Operator::Assign);
+                        add_token(TokenType::Assign);
                         advance();
                     }
                 } break;
                 case '+': {
                     if (peek_next() == '=') {
-                        add_token(Operator::AddAssign);
+                        add_token(TokenType::AddAssign);
                         advance(2);
                     } else {
-                        add_token(Operator::Add);
+                        add_token(TokenType::Add);
                         advance();
                     }
                 } break;
@@ -263,27 +238,27 @@ TokenStream Lexer::lex(const std::string & script) {
                     if (is_digit(peek_next())) {
                         lex_number();
                     } else if (peek_next() == '=') {
-                        add_token(Operator::SubAssign);
+                        add_token(TokenType::SubAssign);
                         advance(2);
                     } else {
-                        add_token(Operator::Sub);
+                        add_token(TokenType::Sub);
                         advance();
                     }
                 } break;
                 case '*': {
                     if (peek_next() == '*') {
                         if (peek_next(2) == '=') {
-                            add_token(Operator::ExpAssign);
+                            add_token(TokenType::ExpAssign);
                             advance(3);
                         } else {  
-                            add_token(Operator::Exp);
+                            add_token(TokenType::Exp);
                             advance(2);
                         }
                     } else if (peek_next() == '=') {
-                        add_token(Operator::MulAssign);
+                        add_token(TokenType::MulAssign);
                         advance(2);
                     } else {
-                        add_token(Operator::Mul);
+                        add_token(TokenType::Mul);
                         advance();
                     }
                 } break;
@@ -304,56 +279,56 @@ TokenStream Lexer::lex(const std::string & script) {
                         }
                         advance(2);
                     } else if (peek_next() == '=') {
-                        add_token(Operator::DivAssign);
+                        add_token(TokenType::DivAssign);
                         advance(2);
                     } else {
-                        add_token(Operator::Div);
+                        add_token(TokenType::Div);
                         advance();
                     }
                 } break;
                 case '%': {
                     if (peek_next() == '=') {
-                        add_token(Operator::ModAssign);
+                        add_token(TokenType::ModAssign);
                         advance(2);
                     } else {
-                        add_token(Operator::Mod);
+                        add_token(TokenType::Mod);
                         advance();
                     }
                 } break;
                 case ';': {
-                    add_token(Operator::Semi);
+                    add_token(TokenType::Semi);
                     advance();
                 } break;
                 case '(': {
-                    add_token(Operator::LParen);
+                    add_token(TokenType::LParen);
                     advance();
                 } break;
                 case ')': {
-                    add_token(Operator::RParen);
+                    add_token(TokenType::RParen);
                     advance();
                 } break;
                 case '{': {
-                    add_token(Operator::LBrace);
+                    add_token(TokenType::LBrace);
                     advance();
                 } break;
                 case '}': {
-                    add_token(Operator::RBrace);
+                    add_token(TokenType::RBrace);
                     advance();
                 } break;
                 case '[': {
-                    add_token(Operator::LBracket);
+                    add_token(TokenType::LBracket);
                     advance();
                 } break;
                 case ']': {
-                    add_token(Operator::RBracket);
+                    add_token(TokenType::RBracket);
                     advance();
                 } break;
                 case ',': {
-                    add_token(Operator::Comma);
+                    add_token(TokenType::Comma);
                     advance();
                 } break;
                 case ':': {
-                    add_token(Operator::Colon);
+                    add_token(TokenType::Colon);
                     advance();
                 } break;
                 case '.': {
@@ -361,52 +336,52 @@ TokenStream Lexer::lex(const std::string & script) {
                         lex_number();
                     } else if (peek_next() == '.') {
                         if (peek_next(2) == '.') {
-                            add_token(Operator::Range);
+                            add_token(TokenType::Range);
                             advance(3);
                         } else if (peek_next(2) == '<') {
-                            add_token(Operator::RangeRE);
+                            add_token(TokenType::RangeRE);
                             advance(3);
                         } else {
                             unexpected_token_error();
                         }
                     } else {
-                        add_token(Operator::Dot);
+                        add_token(TokenType::Dot);
                         advance();
                     }
                 } break;
                 case '&': {
                     if (peek_next() == '&') {
-                        add_token(Operator::And);
+                        add_token(TokenType::And);
                         advance(2);
                     }
                 } break;
                 case '!': {
                     if (peek_next() == '=') {
                         if (peek_next(2) == '=') {
-                            add_token(Operator::RefNotEq);
+                            add_token(TokenType::RefNotEq);
                             advance(3);
                         } else {
-                            add_token(Operator::NotEq);
+                            add_token(TokenType::NotEq);
                             advance(2);
                         }
                     } else if (peek_next() == 'i' && peek_next(2) == 's') {
                         // `!is` operator
-                        add_token(Operator::NotIs);
+                        add_token(TokenType::NotIs);
                         advance(3);
                     } else if (peek_next() == 'i' && peek_next(2) == 'n') {
-                        add_token(Operator::NotIn);
+                        add_token(TokenType::NotIn);
                         advance(3);
                     } else {
-                        add_token(Operator::Not);
+                        add_token(TokenType::Not);
                         advance();
                     }
                 } break;
                 case '|': {
                     if (peek_next() == '|') {
-                        add_token(Operator::Or);
+                        add_token(TokenType::Or);
                         advance(2);
                     } else if (peek_next() == '>') {
-                        add_token(Operator::Pipe);
+                        add_token(TokenType::Pipe);
                         advance(2);
                     } else {
                         unexpected_token_error();
@@ -414,29 +389,29 @@ TokenStream Lexer::lex(const std::string & script) {
                 } break;
                 case '<': {
                     if (peek_next() == '=') {
-                        add_token(Operator::LE);
+                        add_token(TokenType::LE);
                         advance(2);
                     } else {
-                        add_token(Operator::LT);
+                        add_token(TokenType::LT);
                         advance();
                     }
                 } break;
                 case '>': {
                     if (peek_next() == '=') {
-                        add_token(Operator::GE);
+                        add_token(TokenType::GE);
                         advance(2);
                     } else if (peek_next() == '.') {
                         if (peek_next(2) == '.') {
-                            add_token(Operator::RangeLE);
+                            add_token(TokenType::RangeLE);
                             advance(3);
                         } else if (peek_next(2) == '<') {
-                            add_token(Operator::RangeBothE);
+                            add_token(TokenType::RangeBothE);
                             advance(3);
                         } else {
                             unexpected_token_error();
                         }
                     } else {
-                        add_token(Operator::GT);
+                        add_token(TokenType::GT);
                         advance();
                     }
                 } break;
