@@ -1,19 +1,26 @@
 #ifndef SCOPE_H
 #define SCOPE_H
 
-#include <memory>
+#include "compiler/types.h"
+#include "tree/Stmt/VarDecl.h"
 #include <vector>
+#include <map>
 
 struct Scope;
 using scope_ptr = std::shared_ptr<Scope>;
 
 struct Local {
+    Local(VarDeclKind kind, type_ptr type, std::string name) : kind(kind), type(type), name(std::move(name)) {}
+
+    VarDeclKind kind;
+    type_ptr type;
     std::string name;
-    size_t depth;
+    int32_t depth{-1};
+    bool is_captured{false};
 };
 
 struct Scope {
-    Scope(scope_ptr parent = nullptr) : parent(parent) {}
+    explicit Scope(scope_ptr parent = nullptr) : parent(parent) {}
 
     scope_ptr parent;
 

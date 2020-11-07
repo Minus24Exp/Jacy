@@ -6,6 +6,7 @@
 #include "compiler/opcode.h"
 #include "Exception.h"
 #include "compiler/Scope.h"
+#include "compiler/types.h"
 
 #include <cstring>
 #include <cstdint>
@@ -67,14 +68,25 @@ private:
     size_t make_string(const std::string & string_val);
 
     // Scope
-    uint64_t scope_depth;
+    int32_t scope_depth;
     scope_ptr scope;
     void enter_scope();
     void exit_scope();
 
     // Variables
-    size_t resolve_local(Identifier * id);
+    int64_t resolve_local(const scope_ptr & _scope, Identifier * id);
+    int64_t resolve_upvalue(const scope_ptr & _scope, Identifier * id);
     void emit_id(Identifier * id);
+    uint32_t var(Identifier * id);
+    void declare_var(VarDeclKind kind, type_ptr type, Identifier * id);
+    void add_local(VarDeclKind kind, type_ptr type, const std::string & name);
+
+    // Jumps
+    size_t emit_jump(OpCode jump_instr);
+    void patch_jump(size_t offset);
+
+    // Types
+    type_ptr get_type(Identifier * id);
 
 private:
     void error(const std::string & msg) {}

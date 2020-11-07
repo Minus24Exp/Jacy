@@ -30,11 +30,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Constants ... )))">
-      <change afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/dev_notes/compiler.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/compiler/types.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/vm/Disasm.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tree/Stmt/VarDecl.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tree/Stmt/VarDecl.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -71,7 +79,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
@@ -116,6 +124,9 @@
       <workItem from="1604252084719" duration="15000" />
       <workItem from="1604279483060" duration="10320000" />
       <workItem from="1604502965002" duration="14914000" />
+      <workItem from="1604542027124" duration="6372000" />
+      <workItem from="1604642965053" duration="3443000" />
+      <workItem from="1604693135081" duration="18479000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -164,10 +175,10 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604252098543" />
-    <state x="781" y="170" key="SettingsEditor" timestamp="1604290775117">
-      <screen x="0" y="0" width="2560" height="1052" />
+    <state x="781" y="170" key="SettingsEditor" timestamp="1604770943322">
+      <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="781" y="170" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602259380571" />
+    <state x="781" y="170" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604770943322" />
     <state x="781" y="170" key="SettingsEditor/0.0.2560.1052/2560.27.1280.1024@0.0.2560.1052" timestamp="1604290775117" />
     <state x="1097" y="435" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604510001663">
       <screen x="0" y="0" width="2560" height="1050" />
@@ -181,9 +192,13 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state width="600" height="440" key="javadoc.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602093882720" />
-    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1604524224204">
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1604644788529">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604524224204" />
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604644788529" />
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1604751919723">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604751919723" />
   </component>
 </project>

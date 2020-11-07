@@ -7,6 +7,7 @@
 #include "parser/Token.h"
 #include "tree/Stmt/VarDecl.h"
 
+const int jump_space = 8;
 using ByteList = std::vector<uint8_t>;
 
 /**
@@ -26,15 +27,18 @@ using ByteList = std::vector<uint8_t>;
  *
  * OPCODEs table
  * Opcode -- | -- Description -- | -- operands
- * NOP - "Nothing" opcode
- * NullConst - Null constant
- * FalseConst - False constant
- * TrueConst - True constant
- * StringConst - String constant | size (8), ...chars[size]
+ * NOP | "Nothing" opcode
+ * NullConst | Null constant
+ * FalseConst | False constant
+ * TrueConst | True constant
+ * StringConst | String constant | size (8), ...chars[size]
+ *
+ * DefineGlobal - | Define global variable |
  */
 
 enum class OpCode : uint8_t {
     NOP,
+    Pop,
 
     NullConst,
     FalseConst,
@@ -43,10 +47,19 @@ enum class OpCode : uint8_t {
     FloatConst,
     StringConst,
 
+    DefineGlobal,
     LoadGlobal,
     StoreGlobal,
     LoadLocal,
     StoreLocal,
+
+    Jump,
+    JumpFalse,
+
+    Call,
+
+    GetProperty,
+    SetProperty,
 };
 
 enum class ConstantType : uint8_t {
@@ -73,7 +86,7 @@ struct IntConstant : Constant {
     ByteList codegen() override {
         ByteList bytes = {type_code()};
         for (int i = 0; i < sizeof(value); i++) {
-            bytes.push_back((value >> (8u * i)) & 0XFF);
+            bytes.push_back((value >> (i * 8u)) & 0XFFu);
         }
         return bytes;
     }
