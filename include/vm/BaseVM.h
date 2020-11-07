@@ -3,7 +3,8 @@
 
 #include "vm/Value.h"
 #include "compiler/opcode.h"
-#include <stack>
+#include "Exception.h"
+#include <vector>
 #include <map>
 
 class BaseVM {
@@ -13,33 +14,35 @@ public:
 
     virtual void eval(const Chunk & chunk) = 0;
 
-//    virtual void nop() = 0;
-    virtual void _pop() = 0;
-    virtual void null_const() = 0;
-    virtual void false_const() = 0;
-    virtual void true_const() = 0;
-    virtual void int_const() = 0;
-    virtual void float_const() = 0;
-    virtual void string_const() = 0;
-    virtual void define_global() = 0;
-    virtual void load_global() = 0;
-    virtual void store_global() = 0;
-    virtual void load_local() = 0;
-    virtual void store_local() = 0;
-    virtual void jump() = 0;
-    virtual void jump_false() = 0;
-    virtual void call() = 0;
-    virtual void get_property() = 0;
-    virtual void set_property() = 0;
-
-private:
+protected:
+    // Bytecode
     Chunk chunk;
-    std::map<std::string, Value> globals;
+    size_t index{0};
+    uint8_t peek() const;
+    opcode_it peek_it();
+    void advance(int distance = 1);
+    uint8_t read();
+    uint16_t read2();
+    uint32_t read4();
+    uint64_t read8();
 
     // Stack
-    std::stack<Value> stack;
+    std::vector<Value> stack;
     void push(const Value & value);
     Value pop();
+    Value top(uint64_t offset = 1);
+
+    // Storages
+    std::map<std::string, Value> globals;
+
+    // Constants
+    constant_ptr read_const();
+    std::shared_ptr<IntConstant> read_int_const();
+    std::shared_ptr<FloatConstant> read_float_const();
+    std::shared_ptr<StringConstant> read_string_const();
+
+    // Errors
+    static void error(const std::string & msg);
 };
 
 #endif // BASEVM_H

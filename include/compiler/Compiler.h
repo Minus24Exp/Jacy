@@ -57,39 +57,38 @@ private:
     void emit(uint64_t l);
 
     // Constants
-    // Note: Maybe prefer custom size_t, for always 8-byte size
-    std::map<long long, size_t> int_constants;
-    std::map<double, size_t> float_constants;
-    std::map<std::string, size_t> string_constants;
+    std::map<long long, uint64_t> int_constants;
+    std::map<double, uint64_t> float_constants;
+    std::map<std::string, uint64_t> string_constants;
 
     void emit_int(long long int_val);
     void emit_float(double float_val);
     void emit_string(const std::string & string_val);
-    size_t make_string(const std::string & string_val);
+    uint64_t make_string(const std::string & string_val);
 
     // Scope
-    int32_t scope_depth;
+    uint64_t scope_depth;
     scope_ptr scope;
     void enter_scope();
     void exit_scope();
 
     // Variables
-    int64_t resolve_local(const scope_ptr & _scope, Identifier * id);
-    int64_t resolve_upvalue(const scope_ptr & _scope, Identifier * id);
+    uint64_t resolve_local(const scope_ptr & _scope, Identifier * id);
+    uint64_t resolve_upvalue(const scope_ptr & _scope, Identifier * id);
     void emit_id(Identifier * id);
-    uint32_t var(Identifier * id);
     void declare_var(VarDeclKind kind, type_ptr type, Identifier * id);
     void add_local(VarDeclKind kind, type_ptr type, const std::string & name);
 
     // Jumps
-    size_t emit_jump(OpCode jump_instr);
-    void patch_jump(size_t offset);
+    uint64_t emit_jump(OpCode jump_instr);
+    void patch_jump(uint64_t offset);
 
     // Types
     type_ptr get_type(Identifier * id);
 
 private:
-    void error(const std::string & msg) {}
+    static void error(const std::string & msg);
+    static void undefined_entity();
 };
 
 #endif // COMPILER_H

@@ -9,6 +9,10 @@
 
 const int jump_space = 8;
 using ByteList = std::vector<uint8_t>;
+using opcode_it = ByteList::iterator;
+
+struct Constant;
+using constant_ptr = std::shared_ptr<Constant>;
 
 /**
  * Bytecode spec
@@ -123,8 +127,8 @@ struct StringConstant : Constant {
 };
 
 struct Chunk {
-    std::vector<Constant> constants;
-    std::vector<uint8_t> code;
+    ByteList code;
+    std::vector<constant_ptr> constants;
 //    std::vector<Attribute> attributes;
 };
 

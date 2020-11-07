@@ -101,6 +101,14 @@ public:
     UnexpectedEofException() : ParserException("Unexpected end of file") {}
 };
 
+/////////////////////////////
+// Compile-time Exceptions //
+/////////////////////////////
+class CTException : public JacyException {
+public:
+    explicit CTException(const std::string & msg) : JacyException(msg) {}
+};
+
 ////////////////////////
 // Runtime Exceptions //
 ////////////////////////
@@ -131,6 +139,28 @@ public:
     RecursionDepthExceeded(const Position & pos, const std::string & in_file)
         : RuntimeException("Maximum recursion depth exceeded ("+
                            std::to_string(RECURSION_DEPTH_LIMIT) +")", pos, in_file) {}
+};
+
+/////////////////////////
+// Internal Exceptions //
+/////////////////////////
+
+/**
+ * InternalException
+ * @brief Used to be caught inside. If exception was shown in console it means that something is wrong inside.
+ */
+class InternalException : public JacyException {
+public:
+    explicit InternalException(const std::string & msg) : JacyException("[Internal_Exception]" + msg) {}
+};
+
+/**
+ * IUndefinedEntity
+ * @brief Internal exception that may be thrown to say that something is undefined.
+ */
+class IUndefinedEntity : public InternalException {
+public:
+    IUndefinedEntity() : InternalException("IUndefinedEntity") {}
 };
 
 //////////////////////

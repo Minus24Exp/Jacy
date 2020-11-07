@@ -133,7 +133,7 @@ void Compiler::visit(Prefix * expr_stmt) {
 
 void Compiler::visit(Assign * assign) {
     assign->value->accept(*this);
-    size_t operand = resolve_local(scope, assign->id.get());
+    uint64_t operand = resolve_local(scope, assign->id.get());
     OpCode opcode;
     if (operand == -1) {
         operand = make_string(assign->id->get_name());
@@ -148,7 +148,7 @@ void Compiler::visit(Assign * assign) {
 void Compiler::visit(SetExpr * set_expr) {
     set_expr->left->accept(*this);
 
-    size_t name = make_string(set_expr->id->get_name());
+    uint64_t name = make_string(set_expr->id->get_name());
     set_expr->value->accept(*this);
     emit(OpCode::SetProperty);
     emit(name);
@@ -156,18 +156,18 @@ void Compiler::visit(SetExpr * set_expr) {
 
 void Compiler::visit(GetExpr * get_expr) {
     get_expr->left->accept(*this);
-    size_t name = make_string(get_expr->id->get_name());
+    uint64_t name = make_string(get_expr->id->get_name());
     emit(OpCode::GetProperty);
     emit(name);
 }
 
 void Compiler::visit(FuncCall * func_call) {
-    size_t arg_count = 0;
+    func_call->left->accept(*this);
+    uint64_t arg_count = 0;
     for (const auto & arg : func_call->args) {
         arg->accept(*this);
         arg_count++;
     }
-    func_call->left->accept(*this);
     emit(OpCode::Call);
     emit(arg_count);
 }
@@ -175,11 +175,11 @@ void Compiler::visit(FuncCall * func_call) {
 void Compiler::visit(IfExpr * if_expr) {
     if_expr->cond->accept(*this);
 
-    size_t then_jump = emit_jump(OpCode::JumpFalse);
+    uint64_t then_jump = emit_jump(OpCode::JumpFalse);
     emit(OpCode::Pop);
     if_expr->if_branch->accept(*this);
 
-    size_t else_jump = emit_jump(OpCode::Jump);
+    uint64_t else_jump = emit_jump(OpCode::Jump);
     patch_jump(then_jump);
     emit(OpCode::Pop);
 
@@ -218,7 +218,7 @@ void Compiler::emit(OpCode opcode) {
 }
 
 void Compiler::emit(const uint8_t * byte_array, int size) {
-    for (std::size_t i = 0; i < size; i++) {
+    for (uint64_t i = 0; i < size; i++) {
         emit(byte_array[i]);
     }
 }
@@ -245,7 +245,7 @@ void Compiler::emit_int(long long int_val) {
         emit(found->second);
         return;
     }
-    chunk.constants.push_back(IntConstant{int_val});
+    chunk.constants.push_back(std::make_shared<IntConstant>(int_val));
     int_constants[int_val] = chunk.constants.size() - 1;
     emit(chunk.constants.size() - 1);
 }
@@ -257,7 +257,7 @@ void Compiler::emit_float(double float_val) {
         emit(found->second);
         return;
     }
-    chunk.constants.push_back(FloatConstant{float_val});
+    chunk.constants.push_back(std::make_shared<FloatConstant>(float_val));
     float_constants[float_val] = chunk.constants.size() - 1;
     emit(chunk.constants.size() - 1);
 }
@@ -267,12 +267,12 @@ void Compiler::emit_string(const std::string & string_val) {
     emit(make_string(string_val));
 }
 
-size_t Compiler::make_string(const std::string & string_val) {
+uint64_t Compiler::make_string(const std::string & string_val) {
     const auto & found = string_constants.find(string_val);
     if (found != string_constants.end()) {
         return found->second;
     }
-    chunk.constants.push_back(StringConstant{string_val});
+    chunk.constants.push_back(std::make_shared<StringConstant>(string_val));
     string_constants[string_val] = chunk.constants.size() - 1;
     return chunk.constants.size() - 1;
 }
@@ -296,8 +296,8 @@ void Compiler::exit_scope() {
 ///////////////
 // Variables //
 ///////////////
-int64_t Compiler::resolve_local(const scope_ptr & _scope, Identifier * id) {
-    for (size_t i = _scope->locals.size() - 1; i >= 0; i--) {
+uint64_t Compiler::resolve_local(const scope_ptr & _scope, Identifier * id) {
+    for (uint64_t i = _scope->locals.size() - 1; i >= 0; i--) {
         const auto & local = _scope->locals[i];
         if (local.name == id->get_name()) {
             if (local.depth == -1) {
@@ -307,30 +307,30 @@ int64_t Compiler::resolve_local(const scope_ptr & _scope, Identifier * id) {
         }
     }
 
-    return -1;
+    undefined_entity();
 }
 
-int64_t Compiler::resolve_upvalue(const scope_ptr & _scope, Identifier * id) {
+uint64_t Compiler::resolve_upvalue(const scope_ptr & _scope, Identifier * id) {
     if (!_scope->parent) {
-        return -1;
+        undefined_entity();
     }
 
-    int64_t local = resolve_local(_scope, id);
+    uint64_t local = resolve_local(_scope, id);
     if (local != -1) {
         _scope->parent->locals[local].is_captured = true;
-//        return add_upvalue(_scope, static_cast<uint32_t>(local), true);
+//        return add_upvalue(_scope, static_cast<uint64_t>(local), true);
     }
 
-    int64_t upvalue = resolve_upvalue(_scope->parent, id);
+    uint64_t upvalue = resolve_upvalue(_scope->parent, id);
     if (upvalue != -1) {
-//        return add_upvalue(_scope, static_cast<uint32_t>(upvalue), false);
+//        return add_upvalue(_scope, static_cast<uint64_t>(upvalue), false);
     }
 
-    return -1;
+    undefined_entity();
 }
 
 void Compiler::emit_id(Identifier * id) {
-    size_t operand = resolve_local(scope, id);
+    uint64_t operand = resolve_local(scope, id);
     OpCode opcode;
     if (operand == -1) {
         operand = make_string(id->get_name());
@@ -342,22 +342,12 @@ void Compiler::emit_id(Identifier * id) {
     emit(operand);
 }
 
-uint32_t Compiler::var(Identifier * id) {
-//    declare_var(id);
-//
-//    if (scope_depth > 0) {
-//        return 0;
-//    }
-//
-//    return make_string(id->get_name());
-}
-
 void Compiler::declare_var(VarDeclKind kind, type_ptr type, Identifier * id) {
     if (scope_depth == 0) {
         return;
     }
 
-    for (size_t i = scope->locals.size() - 1; i >= 0; i--) {
+    for (uint64_t i = scope->locals.size() - 1; i >= 0; i--) {
         const auto & local = scope->locals[i];
         if (local.depth != -1 && local.depth < scope_depth) {
             break;
@@ -382,7 +372,7 @@ void Compiler::add_local(VarDeclKind kind, type_ptr type, const std::string & na
 ///////////
 // Jumps //
 ///////////
-size_t Compiler::emit_jump(OpCode jump_instr) {
+uint64_t Compiler::emit_jump(OpCode jump_instr) {
     emit(jump_instr);
     for (int i = 0; i < jump_space; i++) {
         emit(0xFFu);
@@ -390,8 +380,8 @@ size_t Compiler::emit_jump(OpCode jump_instr) {
     return chunk.code.size() - jump_space;
 }
 
-void Compiler::patch_jump(size_t offset) {
-    size_t jump = chunk.code.size() - offset - jump_space;
+void Compiler::patch_jump(uint64_t offset) {
+    uint64_t jump = chunk.code.size() - offset - jump_space;
 
     // Check jump offset if it's bigger than jump_size type size
 
@@ -416,4 +406,15 @@ type_ptr Compiler::get_type(Identifier * id) {
     }
 
     return nullptr;
+}
+
+////////////
+// Errors //
+////////////
+void Compiler::error(const std::string & msg) {
+    throw CTException(msg);
+}
+
+void Compiler::undefined_entity() {
+    throw IUndefinedEntity();
 }
