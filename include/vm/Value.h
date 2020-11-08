@@ -5,6 +5,9 @@
 #include <string>
 #include <functional>
 #include <utility>
+#include <sstream>
+#include <iomanip>
+#include <limits>
 
 struct Value;
 using value_ptr = std::shared_ptr<Value>;
@@ -50,7 +53,9 @@ struct Float : Value {
     explicit Float(const std::shared_ptr<FloatConstant> & float_constant) : value(float_constant->value) {}
 
     std::string to_string() override {
-        return std::to_string(value);
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(std::numeric_limits<double>::max_digits10) << value;
+        return ss.str();
     }
 };
 

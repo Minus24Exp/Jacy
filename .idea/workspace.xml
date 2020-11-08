@@ -33,26 +33,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Update">
-      <change afterPath="$PROJECT_DIR$/include/vm/VM.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/vm/Verifier.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/vm/globals.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/vm/VM.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/vm/Virifier.cpp" afterDir="false" />
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="I cummed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Exception.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Exception.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Jacy.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Jacy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/Disasm.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Disasm.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/script.jc" beforeDir="false" afterPath="$PROJECT_DIR$/sample/script.jc" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,7 +135,7 @@
       <workItem from="1604642965053" duration="3443000" />
       <workItem from="1604693135081" duration="27988000" />
       <workItem from="1604793666507" duration="5016000" />
-      <workItem from="1604843203010" duration="20741000" />
+      <workItem from="1604843203010" duration="21869000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -167,7 +151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604778842208</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="I cummed">
+      <created>1604869439027</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1604869439027</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,7 +179,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Constants ... )))" />
     <MESSAGE value="Update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update" />
+    <MESSAGE value="I cummed" />
+    <option name="LAST_COMMIT_MESSAGE" value="I cummed" />
   </component>
   <component name="WindowStateProjectService">
     <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604869360100">
@@ -208,38 +200,38 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604252098543" />
-    <state width="2517" height="330" key="GridCell.Tab.0.bottom" timestamp="1604869300975">
+    <state width="2517" height="245" key="GridCell.Tab.0.bottom" timestamp="1604870445480">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="330" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300975" />
-    <state width="2517" height="330" key="GridCell.Tab.0.center" timestamp="1604869300975">
+    <state width="2517" height="245" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604870445480" />
+    <state width="2517" height="245" key="GridCell.Tab.0.center" timestamp="1604870445480">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="330" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300975" />
-    <state width="2517" height="330" key="GridCell.Tab.0.left" timestamp="1604869300974">
+    <state width="2517" height="245" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604870445480" />
+    <state width="2517" height="245" key="GridCell.Tab.0.left" timestamp="1604870445480">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="330" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300974" />
-    <state width="2517" height="330" key="GridCell.Tab.0.right" timestamp="1604869300975">
+    <state width="2517" height="245" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604870445480" />
+    <state width="2517" height="245" key="GridCell.Tab.0.right" timestamp="1604870445480">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="330" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300975" />
-    <state width="2517" height="330" key="GridCell.Tab.1.bottom" timestamp="1604869300851">
+    <state width="2517" height="245" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604870445480" />
+    <state width="2517" height="162" key="GridCell.Tab.1.bottom" timestamp="1604869954778">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="330" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300851" />
-    <state width="2517" height="330" key="GridCell.Tab.1.center" timestamp="1604869300851">
+    <state width="2517" height="162" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869954778" />
+    <state width="2517" height="162" key="GridCell.Tab.1.center" timestamp="1604869954778">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="330" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300851" />
-    <state width="2517" height="330" key="GridCell.Tab.1.left" timestamp="1604869300851">
+    <state width="2517" height="162" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869954778" />
+    <state width="2517" height="162" key="GridCell.Tab.1.left" timestamp="1604869954778">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="330" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300851" />
-    <state width="2517" height="330" key="GridCell.Tab.1.right" timestamp="1604869300851">
+    <state width="2517" height="162" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869954778" />
+    <state width="2517" height="162" key="GridCell.Tab.1.right" timestamp="1604869954778">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="330" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300851" />
+    <state width="2517" height="162" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869954778" />
     <state x="781" y="170" key="SettingsEditor" timestamp="1604854358961">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
