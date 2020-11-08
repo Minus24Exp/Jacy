@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -26,19 +29,28 @@
   <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_OPTIONS="CMAKE_LANG_COMPILER=g++" />
+      <configuration PROFILE_NAME="Debug-Coverage" CONFIG_NAME="Debug" GENERATION_OPTIONS="CMAKE_LANG_COMPILER=g++ -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_C_FLAGS=--coverage" />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Update">
+      <change afterPath="$PROJECT_DIR$/include/vm/VM.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/vm/Verifier.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/vm/globals.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/vm/VM.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/vm/Virifier.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/Exception.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Exception.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Jacy.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Jacy.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/vm/Disasm.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Disasm.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
     </list>
@@ -50,7 +62,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug-Coverage" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -60,6 +72,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="OCResolveContextSettings">
+    <option name="configuration" value="0-Debug-Jacy" />
   </component>
   <component name="ProjectId" id="1hkjhLP2ObQn1h4NuHayA63Wlso" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -74,17 +89,24 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
+    <property name="com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable" value="ALL" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="build.tools" />
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="cowsay" />
     </option>
   </component>
-  <component name="RunManager">
-    <configuration name="Jacy" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Jacy" TARGET_NAME="Jacy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Jacy" RUN_TARGET_NAME="Jacy">
+  <component name="RunManager" selected="CMake Application.Pure">
+    <configuration name="Jacy" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-debug F:\Projects\Jacy\Jacy\sample\script.jc" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Jacy" TARGET_NAME="Jacy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Jacy" RUN_TARGET_NAME="Jacy">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Pure" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="F:\Projects\Jacy\Jacy\sample\script.jc" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Jacy" TARGET_NAME="Jacy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Jacy" RUN_TARGET_NAME="Jacy">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -99,6 +121,10 @@
         <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="CMake Application.Jacy" />
+      <item itemvalue="CMake Application.Pure" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -124,6 +150,8 @@
       <workItem from="1604542027124" duration="6372000" />
       <workItem from="1604642965053" duration="3443000" />
       <workItem from="1604693135081" duration="27988000" />
+      <workItem from="1604793666507" duration="5016000" />
+      <workItem from="1604843203010" duration="20741000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -163,10 +191,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1600955030927">
+    <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604869360100">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1600955030927" />
+    <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869360100" />
     <state x="1039" y="315" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602093618850">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
@@ -180,10 +208,42 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604252098543" />
-    <state x="781" y="170" key="SettingsEditor" timestamp="1604784036756">
+    <state width="2517" height="330" key="GridCell.Tab.0.bottom" timestamp="1604869300975">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="781" y="170" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604784036756" />
+    <state width="2517" height="330" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300975" />
+    <state width="2517" height="330" key="GridCell.Tab.0.center" timestamp="1604869300975">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state width="2517" height="330" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300975" />
+    <state width="2517" height="330" key="GridCell.Tab.0.left" timestamp="1604869300974">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state width="2517" height="330" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300974" />
+    <state width="2517" height="330" key="GridCell.Tab.0.right" timestamp="1604869300975">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state width="2517" height="330" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300975" />
+    <state width="2517" height="330" key="GridCell.Tab.1.bottom" timestamp="1604869300851">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state width="2517" height="330" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300851" />
+    <state width="2517" height="330" key="GridCell.Tab.1.center" timestamp="1604869300851">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state width="2517" height="330" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300851" />
+    <state width="2517" height="330" key="GridCell.Tab.1.left" timestamp="1604869300851">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state width="2517" height="330" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300851" />
+    <state width="2517" height="330" key="GridCell.Tab.1.right" timestamp="1604869300851">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state width="2517" height="330" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869300851" />
+    <state x="781" y="170" key="SettingsEditor" timestamp="1604854358961">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="781" y="170" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604854358961" />
     <state x="781" y="170" key="SettingsEditor/0.0.2560.1052/2560.27.1280.1024@0.0.2560.1052" timestamp="1604290775117" />
     <state x="872" y="254" key="Vcs.Push.Dialog.v2" timestamp="1604778846245">
       <screen x="0" y="0" width="2560" height="1050" />
@@ -193,21 +253,28 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1097" y="435" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604778828363" />
-    <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1600955775833">
+    <state x="831" y="172" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1604802956775">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1600955775833" />
+    <state x="831" y="172" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604802956775" />
+    <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1604800309603">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604800309603" />
     <state width="600" height="440" key="javadoc.popup" timestamp="1602093882720">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state width="600" height="440" key="javadoc.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602093882720" />
-    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1604783696256">
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1604869205129">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604783696256" />
-    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1604787352553">
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604869205129" />
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1604868788948">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604787352553" />
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604868788948" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="F:\Projects\Jacy\Jacy\cmake-build-debug-coverage" NAME="Jacy Coverage Results" MODIFIED="1604854275530" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="gcov/llvm" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

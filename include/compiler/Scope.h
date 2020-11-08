@@ -15,8 +15,8 @@ struct Local {
     VarDeclKind kind;
     type_ptr type;
     std::string name;
-    uint64_t depth;
-    bool is_inited{false};
+    uint64_t depth{0};
+    bool is_defined{false};
     bool is_captured{false};
 };
 

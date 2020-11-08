@@ -30,14 +30,34 @@ using constant_ptr = std::shared_ptr<Constant>;
  * attributes (names, line info, debug info)
  *
  * OPCODEs table
- * Opcode -- | -- Description -- | -- operands
- * NOP | "Nothing" opcode
- * NullConst | Null constant
- * FalseConst | False constant
- * TrueConst | True constant
- * StringConst | String constant | size (8), ...chars[size]
+ * - CP - Constant Pool
+ * - ST - Stack Top (ST = Stack[Stack.size - 1]. Can receive offset - ST[O] is Stack[Stack.size - O - 1])
+ * - S - String constant offset
+ * - L - Long (8-byte)
  *
- * DefineGlobal - | Define global variable |
+ * -- Opcode --     | -- operands --
+ * NOP              | [Nothing]
+ * NullConst        | ST = NullConst
+ * FalseConst       | ST = FalseConst
+ * TrueConst        | ST = TrueConst
+ * IntConst         | L -> ST = CP[L]
+ * FloatConst       | L -> ST = CP[L]
+ * StringConst      | L -> ST = CP[L]
+ *
+ * DefineGlobal     | S -> CP[S]
+ * LoadGlobal       | S -> ST = globals[CP[S]]
+ * StoreGlobal      | S -> globals[CP[S]] = ST
+ * LoadLocal        | L -> ST = Frame.slots[L]
+ * StoreLocal       | L -> Frame.slots[L] = ST
+ *
+ * Jump             | L -> IP += L
+ * JumpFalse        | L -> ST is falsy ? IP += L
+ *
+ * Invoke           | L -> ST = Stack[L - 1].call(Stack[L..0])
+ * InvokeNF         | L -> ST = NativeFunction(Stack[L - 1]).call(Stack[L..0])
+ *
+ * GetProperty      | S -> ST = ST.getProperty(CP[S])
+ * SetProperty      | S -> ST[1].setProperty(CP[A], ST)
  */
 
 enum class OpCode : uint8_t {
@@ -60,7 +80,8 @@ enum class OpCode : uint8_t {
     Jump,
     JumpFalse,
 
-    Call,
+    Invoke,
+    InvokeNF,
 
     GetProperty,
     SetProperty,
@@ -80,6 +101,9 @@ struct Constant {
         return static_cast<uint8_t>(type);
     }
     virtual ByteList codegen() = 0;
+
+    // Debug
+    virtual std::string to_string() = 0;
 };
 
 struct IntConstant : Constant {
@@ -93,6 +117,10 @@ struct IntConstant : Constant {
             bytes.push_back((value >> (i * 8u)) & 0XFFu);
         }
         return bytes;
+    }
+
+    std::string to_string() override {
+        return std::to_string(value);
     }
 };
 
@@ -109,6 +137,10 @@ struct FloatConstant : Constant {
         }
         return bytes;
     }
+
+    std::string to_string() override {
+        return std::to_string(value);
+    }
 };
 
 struct StringConstant : Constant {
@@ -123,6 +155,10 @@ struct StringConstant : Constant {
             bytes.push_back(static_cast<uint8_t>(c));
         }
         return bytes;
+    }
+
+    std::string to_string() override {
+        return value;
     }
 };
 

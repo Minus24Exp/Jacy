@@ -4,15 +4,15 @@
 // Bytecode //
 //////////////
 uint8_t BaseVM::peek() const {
-    return chunk.code[index];
+    return chunk.code[ip];
 }
 
 opcode_it BaseVM::peek_it() {
-    return chunk.code.begin() + index;
+    return chunk.code.begin() + ip;
 }
 
 void BaseVM::advance(int distance) {
-    index += distance;
+    ip += distance;
 }
 
 uint8_t BaseVM::read() {
@@ -45,18 +45,18 @@ uint64_t BaseVM::read8() {
 ///////////
 // Stack //
 ///////////
-void BaseVM::push(const Value & value) {
+void BaseVM::push(const value_ptr & value) {
     stack.push_back(value);
 }
 
-Value BaseVM::pop() {
-    Value back = stack.back();
+value_ptr BaseVM::pop() {
+    value_ptr back = stack.back();
     stack.pop_back();
     return back;
 }
 
-Value BaseVM::top(uint64_t offset) {
-    return *(stack.end() - offset - 1);
+value_ptr BaseVM::top(uint64_t offset) {
+    return stack.at(stack.size() - offset - 1);
 }
 
 ///////////////
@@ -73,6 +73,7 @@ constant_ptr BaseVM::read_const() {
 
 std::shared_ptr<IntConstant> BaseVM::read_int_const() {
     constant_ptr constant = read_const();
+    // TODO: Remove type checking
     if (constant->type != ConstantType::Int) {
         throw DevError("Invalid constant type, (int) expected");
     }
@@ -81,6 +82,7 @@ std::shared_ptr<IntConstant> BaseVM::read_int_const() {
 
 std::shared_ptr<FloatConstant> BaseVM::read_float_const() {
     constant_ptr constant = read_const();
+    // TODO: Remove type checking
     if (constant->type != ConstantType::Float) {
         throw DevError("Invalid constant type, (float) expected");
     }
@@ -89,6 +91,7 @@ std::shared_ptr<FloatConstant> BaseVM::read_float_const() {
 
 std::shared_ptr<StringConstant> BaseVM::read_string_const() {
     constant_ptr constant = read_const();
+    // TODO: Remove type checking
     if (constant->type != ConstantType::String) {
         throw DevError("Invalid constant type, (string) expected");
     }

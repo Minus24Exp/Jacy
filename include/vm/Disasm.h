@@ -21,17 +21,27 @@ const std::map<OpCode, std::string> opcode_names = {
     {OpCode::StoreLocal, "StoreLocal"},
     {OpCode::Jump, "Jump"},
     {OpCode::JumpFalse, "JumpFalse"},
-    {OpCode::Call, "Call"},
+    {OpCode::Invoke, "Invoke"},
+    {OpCode::InvokeNF, "InvokeNF"},
     {OpCode::GetProperty, "GetProperty"},
     {OpCode::SetProperty, "SetProperty"},
+};
+
+struct DisasmOptions {
+    // Note: Default options
+    bool pure_dump{true};
 };
 
 class Disasm : public BaseVM {
 public:
     Disasm();
+    explicit Disasm(const DisasmOptions & options);
     ~Disasm() override = default;
 
     void eval(const Chunk & chunk) override;
+
+private:
+    DisasmOptions options{};
 };
 
 #endif // DISASM_H

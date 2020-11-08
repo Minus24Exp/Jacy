@@ -9,7 +9,6 @@ Chunk Compiler::compile(const StmtList & tree) {
         stmt->accept(*this);
     }
 
-    exit_scope();
     return chunk;
 }
 
@@ -133,13 +132,14 @@ void Compiler::visit(Prefix * expr_stmt) {
 
 void Compiler::visit(Assign * assign) {
     assign->value->accept(*this);
-    uint64_t operand = resolve_local(scope, assign->id.get());
+    uint64_t operand;
     OpCode opcode;
-    if (operand == -1) {
+    try {
+        operand = resolve_local(scope, assign->id.get());
+        opcode = OpCode::StoreLocal;
+    } catch (IUndefinedEntity & e) {
         operand = make_string(assign->id->get_name());
         opcode = OpCode::StoreGlobal;
-    } else {
-        opcode = OpCode::StoreLocal;
     }
     emit(opcode);
     emit(operand);
@@ -168,7 +168,8 @@ void Compiler::visit(FuncCall * func_call) {
         arg->accept(*this);
         arg_count++;
     }
-    emit(OpCode::Call);
+    // TODO: Non-native functions
+    emit(OpCode::InvokeNF);
     emit(arg_count);
 }
 
@@ -247,7 +248,7 @@ void Compiler::emit_int(long long int_val) {
     }
     chunk.constants.push_back(std::make_shared<IntConstant>(int_val));
     int_constants[int_val] = chunk.constants.size() - 1;
-    emit(chunk.constants.size() - 1);
+    emit(static_cast<uint64_t>(chunk.constants.size() - 1));
 }
 
 void Compiler::emit_float(double float_val) {
@@ -259,12 +260,12 @@ void Compiler::emit_float(double float_val) {
     }
     chunk.constants.push_back(std::make_shared<FloatConstant>(float_val));
     float_constants[float_val] = chunk.constants.size() - 1;
-    emit(chunk.constants.size() - 1);
+    emit(static_cast<uint64_t>(chunk.constants.size() - 1));
 }
 
 void Compiler::emit_string(const std::string & string_val) {
     emit(OpCode::StringConst);
-    emit(make_string(string_val));
+    emit(static_cast<uint64_t>(make_string(string_val)));
 }
 
 uint64_t Compiler::make_string(const std::string & string_val) {
@@ -297,10 +298,15 @@ void Compiler::exit_scope() {
 // Variables //
 ///////////////
 uint64_t Compiler::resolve_local(const scope_ptr & _scope, Identifier * id) {
+    if (_scope->locals.size() == 0) {
+        // local size is unsigned, so I cannot subtract it
+        undefined_entity();
+    }
+
     for (uint64_t i = _scope->locals.size() - 1; i >= 0; i--) {
         const auto & local = _scope->locals[i];
         if (local.name == id->get_name()) {
-            if (local.depth == -1) {
+            if (!local.is_defined) {
                 error(id->get_name() + " is not defined");
             }
             return i;
@@ -330,13 +336,14 @@ uint64_t Compiler::resolve_upvalue(const scope_ptr & _scope, Identifier * id) {
 }
 
 void Compiler::emit_id(Identifier * id) {
-    uint64_t operand = resolve_local(scope, id);
     OpCode opcode;
-    if (operand == -1) {
+    uint64_t operand;
+    try {
+        operand = resolve_local(scope, id);
+        opcode = OpCode::LoadLocal;
+    } catch (IUndefinedEntity & e) {
         operand = make_string(id->get_name());
         opcode = OpCode::LoadGlobal;
-    } else {
-        opcode = OpCode::LoadLocal;
     }
     emit(opcode);
     emit(operand);

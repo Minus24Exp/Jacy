@@ -1,42 +1,15 @@
-#include "vm/Disasm.h"
+#include "vm/VM.h"
 
-Disasm::Disasm() = default;
-
-Disasm::Disasm(const DisasmOptions & options) : Disasm() {
-    this->options = options;
+VM::VM() {
+    call_frames.push_back({});
+    frame = call_frames.begin();
 }
 
-void Disasm::eval(const Chunk & chunk) {
+void VM::eval(const Chunk & chunk) {
     this->chunk = chunk;
 
-    std::cout << "=== Chunk ===" << std::endl;
-
-    if (options.pure_dump) {
-        std::cout << "-- Pure code --" << std::endl;
-        int div = 0;
-        for (const auto & byte : chunk.code) {
-            std::cout << std::hex << static_cast<int>(byte) << " ";
-            div++;
-            if (div == 4) {
-                div = 0;
-                std::cout << std::endl;
-            }
-        }
-        if (div != 0) {
-            std::cout << std::endl;
-        }
-    }
-
-    std::cout << "-- Constant Pool --" << std::endl;
-    for (const auto & constant : chunk.constants) {
-        // Note: Now only type((
-        std::cout << static_cast<int>(constant->type) << " - " << constant->to_string() << std::endl;
-    }
-
-    std::cout << "-- Code --" << std::endl;
     while (ip < chunk.code.size()) {
         const auto & opcode = static_cast<OpCode>(read());
-        std::cout << opcode_names.at(opcode) << " ";
         switch (opcode) {
             case OpCode::NOP: break;
             case OpCode::Pop: {
@@ -54,84 +27,89 @@ void Disasm::eval(const Chunk & chunk) {
             case OpCode::IntConst: {
                 const auto & int_const = read_int_const();
                 push(std::make_shared<Int>(int_const));
-                std::cout << top()->to_string();
             } break;
             case OpCode::FloatConst: {
                 const auto & float_const = read_float_const();
                 push(std::make_shared<Float>(float_const));
-                std::cout << float_const->value;
             } break;
             case OpCode::StringConst: {
                 const auto & string_const = read_string_const();
                 push(std::make_shared<String>(string_const));
-                std::cout << string_const->value;
             } break;
             case OpCode::DefineGlobal: {
                 const auto & global_name = read_string_const();
-                std::cout << global_name->value;
                 globals[global_name->value] = pop();
-                pop();
             } break;
             case OpCode::LoadGlobal: {
                 const auto & global_name = read_string_const();
-                std::cout << global_name->value;
                 const auto & found = globals.find(global_name->value);
                 if (found == globals.end()) {
-                    std::cout << " (UNDEFINED)";
-                } else {
-                    push(found->second);
-                    std::cout << " (" << found->second->to_string() << ")";
+                    error(global_name->value + " is not defined");
                 }
+                push(found->second);
             } break;
             case OpCode::StoreGlobal: {
                 const auto & global_name = read_string_const();
-                std::cout << global_name->value;
                 const auto & found = globals.find(global_name->value);
                 if (found == globals.end()) {
-                    std::cout << " (UNDEFINED)";
-                } else {
-                    std::cout << " " << top()->to_string();
+                    error(global_name->value + " is not defined");
                 }
+                globals.at(global_name->value) = top();
             } break;
             case OpCode::LoadLocal: {
                 const auto & slot = read8();
-                std::cout << slot;
-                // TODO: Use real values
-                push(Null);
+                try {
+                    push(frame->slots.at(slot));
+                } catch (std::out_of_range & e) {
+                    // TODO: Update when locals names will be done
+                    error("Unable to resolve local");
+                }
             } break;
             case OpCode::StoreLocal: {
                 const auto & slot = read8();
-                std::cout << slot;
-                std::cout << " ";
-                std::cout << top()->to_string();
+                frame->slots.at(slot) = top();
             } break;
             case OpCode::Jump: {
                 const auto & offset = read8();
-                std::cout << offset;
+                ip += offset;
             } break;
             case OpCode::JumpFalse: {
                 const auto & offset = read8();
-                std::cout << offset;
-                std::cout << top()->to_string() << " - maybe false:)";
+                // TODO: Update when falsey will be done
+                throw DevError("JumpFalse is not still implemented due to no falsiness check");
             } break;
-            case OpCode::Invoke:
             case OpCode::InvokeNF: {
                 uint64_t arg_count = read8();
-                value_ptr func = top(arg_count);
-                std::cout << func->to_string() << "(";
+                std::shared_ptr<NativeFunc> func = std::static_pointer_cast<NativeFunc>(top(arg_count));
+                std::vector<value_ptr> args;
+                args.reserve(arg_count);
                 for (uint64_t i = 0; i < arg_count; i++) {
-                    std::cout << top(arg_count - i - 1)->to_string();
+                    args.push_back(top(arg_count - i - 1));
                 }
-                std::cout << ")";
+                value_ptr value = func->body(args);
+                // TODO: !!! Create `void`, DO NOT USE NULL
+                value = value ? value : Null;
+                push(value);
+            } break;
+            case OpCode::Invoke: {
+                 // TODO: Invoke non-native functions
             } break;
             case OpCode::GetProperty: {
-                std::cout << top()->to_string() << "." << read_string_const()->value;
+                // TODO: GetProperty
             } break;
             case OpCode::SetProperty: {
-                std::cout << top(1)->to_string() << "." << read_string_const()->value << " = " << top()->to_string();
+                // TODO: SetProperty
             } break;
             default: break;
         }
-        std::cout << std::endl;
     }
+}
+
+////////////
+// Errors //
+////////////
+void VM::error(const std::string & msg) {
+    // TODO: Current file
+    // TODO: Position tracking
+    throw RuntimeError(msg, {0, 0}, "<main>");
 }

@@ -114,15 +114,15 @@ public:
 ////////////////////////
 
 /**
- * RuntimeException
+ * RuntimeError
  * 
  * @param msg String error message
  * @param pos Position where error occured
  * @param in_file File where error occured
  */
-class RuntimeException : public JacyException {
+class RuntimeError : public JacyException {
 public:
-    RuntimeException(const std::string & msg, const Position & pos, const std::string & in_file)
+    RuntimeError(const std::string & msg, const Position & pos, const std::string & in_file)
         : JacyException("Runtime error: "+ msg +"\n"+ in_file +":"+
                         std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
 };
@@ -134,11 +134,16 @@ public:
  * @param pos Position where error occured
  * @param in_file File where error occured
  */
-class RecursionDepthExceeded : public RuntimeException {
+class RecursionDepthExceeded : public RuntimeError {
 public:
     RecursionDepthExceeded(const Position & pos, const std::string & in_file)
-        : RuntimeException("Maximum recursion depth exceeded ("+
+        : RuntimeError("Maximum recursion depth exceeded ("+
                            std::to_string(RECURSION_DEPTH_LIMIT) +")", pos, in_file) {}
+};
+
+// Verifier Errors //
+class UndefinedBehavior : public RuntimeError {
+
 };
 
 /////////////////////////
@@ -151,7 +156,7 @@ public:
  */
 class InternalException : public JacyException {
 public:
-    explicit InternalException(const std::string & msg) : JacyException("[Internal_Exception]" + msg) {}
+    explicit InternalException(const std::string & msg) : JacyException("[Internal_Exception] " + msg) {}
 };
 
 /**
