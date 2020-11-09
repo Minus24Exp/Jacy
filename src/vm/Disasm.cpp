@@ -28,9 +28,9 @@ void Disasm::eval(const Chunk & chunk) {
     }
 
     std::cout << "-- Constant Pool --" << std::endl;
+    uint64_t cp_offset = 0;
     for (const auto & constant : chunk.constants) {
-        // Note: Now only type((
-        std::cout << static_cast<int>(constant->type) << " - " << constant->to_string() << std::endl;
+        std::cout << cp_offset++ << " - " << static_cast<int>(constant->type) << " - " << constant->to_string() << std::endl;
     }
 
     std::cout << "-- Code --" << std::endl;
@@ -69,14 +69,13 @@ void Disasm::eval(const Chunk & chunk) {
             case OpCode::DefineGlobal: {
                 const auto & global_name = read_string_const();
                 std::cout << global_name->value;
-                globals[global_name->value] = pop();
-                pop();
+                globals[global_name->value] = nullptr;
             } break;
             case OpCode::LoadGlobal: {
                 const auto & global_name = read_string_const();
                 std::cout << global_name->value;
                 const auto & found = globals.find(global_name->value);
-                if (found == globals.end()) {
+                if (found == globals.end() || !found->second) {
                     std::cout << " (UNDEFINED)";
                 } else {
                     push(found->second);
@@ -130,7 +129,9 @@ void Disasm::eval(const Chunk & chunk) {
             case OpCode::SetProperty: {
                 std::cout << top(1)->to_string() << "." << read_string_const()->value << " = " << top()->to_string();
             } break;
-            default: break;
+            default: {
+                std::cout << "(no description)";
+            }
         }
         std::cout << std::endl;
     }

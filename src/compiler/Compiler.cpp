@@ -4,6 +4,7 @@ Compiler::Compiler() : scope_depth(0) {}
 
 Chunk Compiler::compile(const StmtList & tree) {
     enter_scope();
+    scope_depth = 0;
 
     for (const auto & stmt : tree) {
         stmt->accept(*this);
@@ -31,25 +32,28 @@ void Compiler::visit(VarDecl * var_decl) {
 
     if (scope_depth == 0) {
         // Define global
-        uint32_t global = make_string(var_decl->id->get_name());
+        uint64_t global = make_string(var_decl->id->get_name());
         emit(OpCode::DefineGlobal);
-        emit(static_cast<uint32_t>(global));
+        emit(static_cast<uint64_t>(global));
         if (var_decl->assign_expr) {
             var_decl->assign_expr->accept(*this);
             emit(OpCode::StoreGlobal);
+            emit(static_cast<uint64_t>(global));
         }
     } else {
         declare_var(kind, type, var_decl->id.get());
         if (var_decl->assign_expr) {
             var_decl->assign_expr->accept(*this);
             emit(OpCode::StoreLocal);
-            emit(scope->locals.size() - 1);
+            emit(static_cast<uint64_t>(scope->locals.size() - 1));
+            scope->locals.back().is_defined = true;
             scope->locals.back().depth = scope_depth;
         }
     }
 }
 
 void Compiler::visit(FuncDecl * func_decl) {
+
 }
 
 void Compiler::visit(ReturnStmt * expr_stmt) {
@@ -132,8 +136,8 @@ void Compiler::visit(Prefix * expr_stmt) {
 
 void Compiler::visit(Assign * assign) {
     assign->value->accept(*this);
-    uint64_t operand;
     OpCode opcode;
+    uint64_t operand;
     try {
         operand = resolve_local(scope, assign->id.get());
         opcode = OpCode::StoreLocal;
@@ -162,13 +166,19 @@ void Compiler::visit(GetExpr * get_expr) {
 }
 
 void Compiler::visit(FuncCall * func_call) {
+//    OpCode opcode;
+//    if (func_call->left->type == ExprType::Get) {
+//        opcode = OpCode::InvokeMethod;
+//    } else {
+//        opcode = OpCode::InvokeNF;
+//    }
     func_call->left->accept(*this);
     uint64_t arg_count = 0;
     for (const auto & arg : func_call->args) {
         arg->accept(*this);
         arg_count++;
     }
-    // TODO: Non-native functions
+    // TODO: Other invokers
     emit(OpCode::InvokeNF);
     emit(arg_count);
 }
@@ -265,7 +275,7 @@ void Compiler::emit_float(double float_val) {
 
 void Compiler::emit_string(const std::string & string_val) {
     emit(OpCode::StringConst);
-    emit(static_cast<uint64_t>(make_string(string_val)));
+    emit(make_string(string_val));
 }
 
 uint64_t Compiler::make_string(const std::string & string_val) {
@@ -303,7 +313,8 @@ uint64_t Compiler::resolve_local(const scope_ptr & _scope, Identifier * id) {
         undefined_entity();
     }
 
-    for (uint64_t i = _scope->locals.size() - 1; i >= 0; i--) {
+    // Note: I need to use (uint64_t)(0 - 1), 'cause unsigned 0 - 1 is not -1
+    for (uint64_t i = _scope->locals.size() - 1; i != (uint64_t)(0 - 1); i--) {
         const auto & local = _scope->locals[i];
         if (local.name == id->get_name()) {
             if (!local.is_defined) {
@@ -354,9 +365,8 @@ void Compiler::declare_var(VarDeclKind kind, type_ptr type, Identifier * id) {
         return;
     }
 
-    for (uint64_t i = scope->locals.size() - 1; i >= 0; i--) {
-        const auto & local = scope->locals[i];
-        if (local.depth != -1 && local.depth < scope_depth) {
+    for (const auto & local : scope->locals) {
+        if (local.is_defined && local.depth < scope_depth) {
             break;
         }
         if (id->get_name() == local.name) {

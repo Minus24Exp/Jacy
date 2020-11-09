@@ -97,8 +97,7 @@ void Jacy::run(const std::string & script) {
 }
 
 void Jacy::run_debug(const std::string & script) {
-    // @TODO: Create base exceptions for Lexer, Parser, Interpreter
-    // and catch them separatly
+    // @TODO: Create base exceptions for Lexer, Parser, Interpreter and catch them separatly
 
     const auto bench = std::chrono::high_resolution_clock::now;
 

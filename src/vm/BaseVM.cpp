@@ -66,7 +66,9 @@ constant_ptr BaseVM::read_const() {
     // Note: read_const automatically reads constant offset and advances
     const auto & offset = read8();
     if (offset >= chunk.constants.size()) {
-        // TODO: Throw error
+        // TODO: Remove cout
+        std::cout << std::endl << "offset: " << offset << ". size: " << chunk.constants.size() << std::endl;
+        throw DevError("Constant offset is out of constant pool bounds");
     }
     return chunk.constants.at(offset);
 }

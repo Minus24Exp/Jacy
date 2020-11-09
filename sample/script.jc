@@ -1,1 +1,2 @@
-print()
+val a = 'asdasdasdsads'
+print(a)

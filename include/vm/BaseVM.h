@@ -35,7 +35,7 @@ protected:
     std::vector<value_ptr> stack;
     void push(const value_ptr & value);
     value_ptr pop();
-    value_ptr top(uint64_t offset = 1);
+    value_ptr top(uint64_t offset = 0);
 
     std::map<std::string, value_ptr> globals{jcGlobals};
 

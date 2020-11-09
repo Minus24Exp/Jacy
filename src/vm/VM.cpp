@@ -38,12 +38,12 @@ void VM::eval(const Chunk & chunk) {
             } break;
             case OpCode::DefineGlobal: {
                 const auto & global_name = read_string_const();
-                globals[global_name->value] = pop();
+                globals[global_name->value] = nullptr;
             } break;
             case OpCode::LoadGlobal: {
                 const auto & global_name = read_string_const();
                 const auto & found = globals.find(global_name->value);
-                if (found == globals.end()) {
+                if (found == globals.end() || !found->second) {
                     error(global_name->value + " is not defined");
                 }
                 push(found->second);
@@ -90,9 +90,6 @@ void VM::eval(const Chunk & chunk) {
                 // TODO: !!! Create `void`, DO NOT USE NULL
                 value = value ? value : Null;
                 push(value);
-            } break;
-            case OpCode::Invoke: {
-                 // TODO: Invoke non-native functions
             } break;
             case OpCode::GetProperty: {
                 // TODO: GetProperty

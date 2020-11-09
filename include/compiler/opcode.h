@@ -54,7 +54,7 @@ using constant_ptr = std::shared_ptr<Constant>;
  * JumpFalse        | L -> ST is falsy ? IP += L
  *
  * Invoke           | L -> ST = Stack[L - 1].call(Stack[L..0])
- * InvokeNF         | L -> ST = NativeFunction(Stack[L - 1]).call(Stack[L..0])
+ * InvokeMethod     | TODO: Add description
  *
  * GetProperty      | S -> ST = ST.getProperty(CP[S])
  * SetProperty      | S -> ST[1].setProperty(CP[A], ST)
@@ -82,6 +82,7 @@ enum class OpCode : uint8_t {
 
     Invoke,
     InvokeNF,
+    InvokeMethod,
 
     GetProperty,
     SetProperty,

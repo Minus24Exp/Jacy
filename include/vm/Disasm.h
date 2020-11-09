@@ -23,6 +23,7 @@ const std::map<OpCode, std::string> opcode_names = {
     {OpCode::JumpFalse, "JumpFalse"},
     {OpCode::Invoke, "Invoke"},
     {OpCode::InvokeNF, "InvokeNF"},
+    {OpCode::InvokeMethod, "InvokeMethod"},
     {OpCode::GetProperty, "GetProperty"},
     {OpCode::SetProperty, "SetProperty"},
 };
