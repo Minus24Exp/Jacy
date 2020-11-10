@@ -35,14 +35,21 @@ void Compiler::visit(VarDecl * var_decl) {
         uint64_t global = make_string(var_decl->id->get_name());
         emit(OpCode::DefineGlobal);
         emit(static_cast<uint64_t>(global));
+
+        // Save global for compile-time checks
+        globals.emplace(var_decl->id->get_name(), nullptr);
+
         if (var_decl->assign_expr) {
             var_decl->assign_expr->accept(*this);
             emit(OpCode::StoreGlobal);
             emit(static_cast<uint64_t>(global));
+
+            globals.emplace(var_decl->id->get_name(), std::make_shared<Variable>(kind, type));
         }
     } else {
         declare_var(kind, type, var_decl->id.get());
         if (var_decl->assign_expr) {
+            // TODO: Extract type of expression
             var_decl->assign_expr->accept(*this);
             emit(OpCode::StoreLocal);
             emit(static_cast<uint64_t>(scope->locals.size() - 1));
@@ -86,35 +93,33 @@ void Compiler::visit(Literal * literal) {
     switch (literal->token.type) {
         case TokenType::Null: {
             emit(OpCode::NullConst);
+            last_type = null_t;
         } break;
         case TokenType::True: {
             emit(OpCode::TrueConst);
+            last_type = bool_t;
         } break;
         case TokenType::False: {
             emit(OpCode::FalseConst);
+            last_type = bool_t;
         } break;
         case TokenType::Int: {
             // TODO: Add conversion exception handling
             long long int_val = std::stoll(literal->token.val);
             emit_int(int_val);
-//            for (int i = 0; i < sizeof(long long); i++) {
-//                emit((uint8_t)((int_val >> (i * 8)) & 0xFF));
-//            }
+            last_type = int_t;
         } break;
         case TokenType::Float: {
             // TODO: Add conversion exception handling
             double float_val = std::stod(literal->token.val);
             emit_float(float_val);
-//            emit(reinterpret_cast<uint8_t*>(&double_val), sizeof(double));
+            last_type = float_t;
         } break;
         case TokenType::String: {
+            // TODO: Add encodings support
             const auto & string_val = literal->token.val;
             emit_string(string_val);
-//            emit(static_cast<uint64_t>(str.size()));
-//            // TODO: Add encoding support
-//            for (const auto & c : str) {
-//                emit(static_cast<uint8_t>(c));
-//            }
+            last_type = string_t;
         } break;
         default: {
             throw DevError("Unexpected type of literal token");
@@ -135,6 +140,7 @@ void Compiler::visit(Prefix * expr_stmt) {
 }
 
 void Compiler::visit(Assign * assign) {
+    // TODO: ! Disallow globals (and internal modules) reassignement
     assign->value->accept(*this);
     OpCode opcode;
     uint64_t operand;
@@ -166,21 +172,51 @@ void Compiler::visit(GetExpr * get_expr) {
 }
 
 void Compiler::visit(FuncCall * func_call) {
-//    OpCode opcode;
-//    if (func_call->left->type == ExprType::Get) {
-//        opcode = OpCode::InvokeMethod;
-//    } else {
-//        opcode = OpCode::InvokeNF;
-//    }
+    last_type = nullptr;
     func_call->left->accept(*this);
+
+    OpCode opcode;
+    type_ptr expr_type = last_type;
+    switch (expr_type->tag) {
+        case TypeTag::Func: {
+            if (func_call->type == ExprType::Get) {
+                opcode = OpCode::InvokeMethod;
+            } else {
+                opcode = OpCode::Invoke;
+            }
+        } break;
+        case TypeTag::NativeFunc: {
+            opcode = OpCode::InvokeNF;
+        } break;
+        case TypeTag::Class: {
+//            opcode = OpCode::Construct;
+        } break;
+        default: {
+            error("Is not a function");
+        }
+    }
+
+    std::shared_ptr<FuncType> func_type = std::static_pointer_cast<FuncType>(expr_type);
+    std::vector<type_ptr> arg_types;
+
     uint64_t arg_count = 0;
     for (const auto & arg : func_call->args) {
+        last_type = nullptr;
         arg->accept(*this);
         arg_count++;
+
+        arg_types.push_back(last_type);
     }
-    // TODO: Other invokers
-    emit(OpCode::InvokeNF);
+
+    if (!func_type->compare(func_type->return_type, arg_types)) {
+        error("Function invocation does not match any declaration");
+    }
+
+    emit(opcode);
     emit(arg_count);
+
+    // Return type
+    last_type = func_type->return_type;
 }
 
 void Compiler::visit(IfExpr * if_expr) {
@@ -221,7 +257,7 @@ void Compiler::visit(DictExpr * expr_stmt) {
 // Bytecode //
 //////////////
 void Compiler::emit(uint8_t byte) {
-    chunk.code.push_back(byte);
+    chunk.func->code.push_back(byte);
 }
 
 void Compiler::emit(OpCode opcode) {
@@ -352,9 +388,11 @@ void Compiler::emit_id(Identifier * id) {
     try {
         operand = resolve_local(scope, id);
         opcode = OpCode::LoadLocal;
+        last_type = scope->locals.at(operand).type;
     } catch (IUndefinedEntity & e) {
         operand = make_string(id->get_name());
         opcode = OpCode::LoadGlobal;
+        last_type = globals.at(id->get_name())->type;
     }
     emit(opcode);
     emit(operand);
@@ -394,23 +432,23 @@ uint64_t Compiler::emit_jump(OpCode jump_instr) {
     for (int i = 0; i < jump_space; i++) {
         emit(0xFFu);
     }
-    return chunk.code.size() - jump_space;
+    return chunk.func->code.size() - jump_space;
 }
 
 void Compiler::patch_jump(uint64_t offset) {
-    uint64_t jump = chunk.code.size() - offset - jump_space;
+    uint64_t jump = chunk.func->code.size() - offset - jump_space;
 
     // Check jump offset if it's bigger than jump_size type size
 
     for (int i = jump_space; i >= 0; i--) {
-        chunk.code[offset + jump_space - i] = (jump >> (i * 8u)) & 0xFFu;
+        chunk.func->code[offset + jump_space - i] = (jump >> (i * 8u)) & 0xFFu;
     }
 }
 
 ///////////
 // Types //
 ///////////
-type_ptr Compiler::get_type(Identifier * id) {
+type_ptr Compiler::resolve_type(Identifier * id) {
     scope_ptr _scope = scope;
 
     while (_scope) {
@@ -420,6 +458,11 @@ type_ptr Compiler::get_type(Identifier * id) {
             }
         }
         _scope = _scope->parent;
+    }
+
+    const auto & global = globals.find(id->get_name());
+    if (global != globals.end()) {
+        return global->second->type;
     }
 
     return nullptr;

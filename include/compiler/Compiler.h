@@ -7,6 +7,7 @@
 #include "Exception.h"
 #include "compiler/Scope.h"
 #include "compiler/types.h"
+#include "vm/globals.h"
 
 #include <cstring>
 #include <cstdint>
@@ -83,10 +84,13 @@ private:
     uint64_t emit_jump(OpCode jump_instr);
     void patch_jump(uint64_t offset);
 
-    // Types
-    type_ptr get_type(Identifier * id);
+    // Type checking
+    // TODO: Maybe add reset_type and set_type funcs for explicity
+    type_ptr last_type{nullptr};
+    std::map<std::string, var_ptr> globals;
+    type_ptr resolve_type(Identifier * id);
 
-private:
+    // Errors //
     static void error(const std::string & msg);
     static void undefined_entity();
 };

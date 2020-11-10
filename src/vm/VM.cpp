@@ -78,14 +78,15 @@ void VM::eval(const Chunk & chunk) {
                 // TODO: Update when falsey will be done
                 throw DevError("JumpFalse is not still implemented due to no falsiness check");
             } break;
+            case OpCode::Invoke: {
+                uint64_t arg_count = read8();
+                std::shared_ptr<Func> read_func_const();
+
+            } break;
             case OpCode::InvokeNF: {
                 uint64_t arg_count = read8();
                 std::shared_ptr<NativeFunc> func = std::static_pointer_cast<NativeFunc>(top(arg_count));
-                std::vector<value_ptr> args;
-                args.reserve(arg_count);
-                for (uint64_t i = 0; i < arg_count; i++) {
-                    args.push_back(top(arg_count - i - 1));
-                }
+                std::vector<value_ptr> args = read_args(arg_count);
                 value_ptr value = func->body(args);
                 // TODO: !!! Create `void`, DO NOT USE NULL
                 value = value ? value : Null;

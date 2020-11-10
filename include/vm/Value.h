@@ -69,8 +69,12 @@ struct String : Value {
     }
 };
 
-struct NativeFunc;
 using FuncArgs = std::vector<value_ptr>;
+struct Func : Value {
+
+};
+
+struct NativeFunc;
 using nf_ptr = std::shared_ptr<NativeFunc>;
 using NFBody = std::function<value_ptr(FuncArgs)>;
 struct NativeFunc : Value {

@@ -4,11 +4,11 @@
 // Bytecode //
 //////////////
 uint8_t BaseVM::peek() const {
-    return chunk.code[ip];
+    return chunk.func->code[ip];
 }
 
 opcode_it BaseVM::peek_it() {
-    return chunk.code.begin() + ip;
+    return chunk.func->code.begin() + ip;
 }
 
 void BaseVM::advance(int distance) {
@@ -98,6 +98,23 @@ std::shared_ptr<StringConstant> BaseVM::read_string_const() {
         throw DevError("Invalid constant type, (string) expected");
     }
     return std::static_pointer_cast<StringConstant>(constant);
+}
+
+std::shared_ptr<FuncConstant> BaseVM::read_func_const() {
+    constant_ptr constant = read_const();
+    if (constant->type != ConstantType::Func) {
+        throw DevError("Invalid constant type, (func) expected");
+    }
+    return std::static_pointer_cast<FuncConstant>(constant);
+}
+
+std::vector<value_ptr> BaseVM::read_args(uint64_t arg_count) {
+    std::vector<value_ptr> args;
+    args.reserve(arg_count);
+    for (uint64_t i = 0; i < arg_count; i++) {
+        args.push_back(top(arg_count - i - 1));
+    }
+    return args;
 }
 
 ////////////

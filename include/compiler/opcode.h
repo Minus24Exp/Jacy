@@ -92,6 +92,7 @@ enum class ConstantType : uint8_t {
     Int,
     Float,
     String,
+    Func,
 };
 
 struct Constant {
@@ -163,8 +164,29 @@ struct StringConstant : Constant {
     }
 };
 
-struct Chunk {
+enum class FuncConstType {
+    Script,
+    Func,
+};
+struct FuncConstant : Constant {
+    FuncConstant(FuncConstType func_type, std::string name)
+        : Constant(ConstantType::Func), func_type(func_type), name(std::move(name)) {}
+
+    std::string to_string() override {
+        if (func_type == FuncConstType::Script) {
+            return "<script>";
+        }
+        return "<func:" + name + ">";
+    }
+
+    std::string name;
+    FuncConstType func_type;
     ByteList code;
+    std::shared_ptr<FuncConstant> enclosing;
+};
+
+struct Chunk {
+    std::shared_ptr<FuncConstant> func;
     std::vector<constant_ptr> constants;
 //    std::vector<Attribute> attributes;
 };
