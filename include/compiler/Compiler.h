@@ -8,14 +8,11 @@
 #include "compiler/Scope.h"
 #include "compiler/types.h"
 #include "vm/globals.h"
+#include "common/Logger.h"
 
 #include <cstring>
 #include <cstdint>
 #include <map>
-
-struct CompilerOptions {
-    bool print_compiling_opcode{true};
-};
 
 class Compiler : public BaseVisitor {
 public:
@@ -101,6 +98,7 @@ private:
     // DEBUG //
 private:
     CompilerOptions options;
+    Logger log;
 };
 
 #endif // COMPILER_H

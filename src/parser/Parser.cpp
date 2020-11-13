@@ -1,6 +1,6 @@
 #include "parser/Parser.h"
 
-Parser::Parser() {}
+Parser::Parser() : log("Parser", options) {}
 
 Token Parser::peek() {
     return tokens[index];
@@ -974,10 +974,10 @@ void Parser::expected_error(const std::string & expected) {
 ///////////
 // Debug //
 ///////////
-void Parser::print_parsing_entity(const std::string & entity) const {
-    if (!options.print_parsing_entity) {
+void Parser::print_parsing_entity(const std::string & entity) {
+    if (!options.log_parsing_entity) {
         return;
     }
-    std::cout << "PARSE [" << entity << "]" << std::endl;
+    log.debug("Parse " + entity);
 }
 

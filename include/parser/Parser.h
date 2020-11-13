@@ -4,10 +4,7 @@
 #include "Exception.h"
 #include "parser/Token.h"
 #include "tree/nodes.h"
-
-struct ParserOptions {
-    bool print_parsing_entity{true};
-};
+#include "common/Logger.h"
 
 class Parser {
 public:
@@ -91,8 +88,9 @@ private:
     // DEBUG
 private:
     ParserOptions options;
+    Logger log;
 
-    void print_parsing_entity(const std::string & entitiy) const;
+    void print_parsing_entity(const std::string & entitiy);
 };
 
 #endif
