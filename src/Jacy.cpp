@@ -1,8 +1,6 @@
 #include "Jacy.h"
 
-Jacy::Jacy() {
-    debug = false;
-}
+Jacy::Jacy() : log("", options.log) {}
 
 void Jacy::launch(int argc, const char * argv[]) {    
     // Parse argv
@@ -18,7 +16,7 @@ void Jacy::launch(int argc, const char * argv[]) {
             if (jacy_args) {
                 // Parse Jacy arguments
                 if (arg.substr(1) == "debug") {
-                    debug = true;
+                    options.debug = true;
                 }
             } else {
                 script_argv.emplace_back(argv[i]);
@@ -57,14 +55,14 @@ void Jacy::run_repl() {
         // Intercept exceptions for REPL
         // REPL just prints them and doesn't stop
         try {
-            if (debug) {
+            if (options.debug) {
                 run_debug(line);
             } else {
                 run(line);
             }
 
         } catch (JacyException & e) {
-            std::cout << e.what() << std::endl;
+            log.error(e.what());
         }
     }
 }
@@ -80,10 +78,14 @@ void Jacy::run_script(const std::string & path) {
     ss << file.rdbuf();
     std::string script = ss.str();
 
-    if (debug) {
-        run_debug(script);
-    } else {
-        run(script);
+    try {
+        if (options.debug) {
+            run_debug(script);
+        } else {
+            run(script);
+        }
+    } catch (JacyException & e) {
+        log.error(e.what());
     }
 
     file.close();

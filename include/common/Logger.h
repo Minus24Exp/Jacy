@@ -11,7 +11,7 @@
  */
 class Logger {
 public:
-    Logger(const std::string & _class, const Options & options);
+    Logger(const std::string & _class, const LoggerOptions & options);
 
     void verbose(const std::string & msg);
     void debug(const std::string & msg);
@@ -20,7 +20,7 @@ public:
     void error(const std::string & msg);
 
 private:
-    Options options;
+    LoggerOptions options;
     std::string _class;
 
     // TODO: Move to options

@@ -1,6 +1,6 @@
 #include "parser/Parser.h"
 
-Parser::Parser() : log("Parser", options) {}
+Parser::Parser() : log("Parser", options.log) {}
 
 Token Parser::peek() {
     return tokens[index];

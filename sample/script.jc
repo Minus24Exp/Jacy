@@ -1,5 +1,4 @@
 val a = 'asdasdasdsads'
 
 if a {
-    print(a)
 }

@@ -14,6 +14,7 @@
 #include "compiler/Compiler.h"
 #include "vm/Disasm.h"
 #include "vm/VM.h"
+#include "common/Logger.h"
 
 /**
  * Jacy
@@ -58,7 +59,8 @@ private:
     std::string main_file;
 
     // Debug mode state
-    bool debug;
+    JacyOptions options;
+    Logger log;
 
     Lexer lexer;
     Parser parser;

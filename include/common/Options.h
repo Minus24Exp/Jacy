@@ -23,27 +23,38 @@ enum class LogLevel : uint8_t {
     Error,
 };
 
-struct Options {
-    // Logger options //
+
+struct LoggerOptions {
     bool log_class{true};
     bool log_level{true};
     bool static_last_class{true};
     bool colorize{true};
 };
 
-// Lexer //
-struct LexerOptions : Options {
+// Jacy main options //
+struct JacyOptions {
+    bool debug{false};
 
+    LoggerOptions log = {
+        .log_class = false, // Jacy main class does not provide class name
+    };
 };
 
+// Lexer //
+struct LexerOptions {};
+
 // Parser //
-struct ParserOptions : Options {
+struct ParserOptions {
     bool log_parsing_entity{true};
+
+    LoggerOptions log = {};
 };
 
 // Compiler //
-struct CompilerOptions : Options {
+struct CompilerOptions {
     bool print_compiling_opcode{true};
+
+    LoggerOptions log = {};
 };
 
 #endif // OPTIONS_H

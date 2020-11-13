@@ -1,6 +1,6 @@
 #include "compiler/Compiler.h"
 
-Compiler::Compiler() : scope_depth(0), log("Compiler", options) {}
+Compiler::Compiler() : scope_depth(0), log("Compiler", options.log) {}
 
 Chunk Compiler::compile(const StmtList & tree) {
     enter_scope();
