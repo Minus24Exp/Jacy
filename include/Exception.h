@@ -62,7 +62,7 @@ public:
         : JacyException("Expected "+ expected +", "+ given +" given") {}
 
     ExpectedException(const std::string & expected, Token given_token)
-        : ExpectedException(expected, given_token.to_string()) {}
+        : ExpectedException(expected, given_token.to_string(true)) {}
 };
 
 /////////////////////////

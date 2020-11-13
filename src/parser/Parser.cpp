@@ -159,6 +159,8 @@ stmt_ptr Parser::parse_stmt() {
 
 // Block //
 block_ptr Parser::parse_block(bool allow_one_line) {
+    print_parsing_entity("block");
+
     Position block_pos = peek().pos;
     StmtList stmts;
 
@@ -182,6 +184,7 @@ block_ptr Parser::parse_block(bool allow_one_line) {
 
     bool first = true;
     while (!eof()) {
+        skip_nl(true);
         if (is(TokenType::RBrace)) {
             break;
         }
@@ -198,11 +201,15 @@ block_ptr Parser::parse_block(bool allow_one_line) {
 
     skip(TokenType::RBrace, true, false);
 
+    virtual_semi = true;
+
     return std::make_shared<Block>(block_pos, stmts);
 }
 
 // VarDecl //
 stmt_ptr Parser::parse_var_decl() {
+    print_parsing_entity("var_decl");
+
     Position var_decl_pos = peek().pos;
 
     VarDeclKind decl = VarDeclKind::Var;
@@ -230,6 +237,8 @@ stmt_ptr Parser::parse_var_decl() {
 
 // FuncDecl //
 stmt_ptr Parser::parse_func_decl() {
+    print_parsing_entity("func_decl");
+
     Position func_decl_pos = peek().pos;
 
     skip(TokenType::Func, false, true);
@@ -287,6 +296,8 @@ stmt_ptr Parser::parse_func_decl() {
 
 // WhileStmt //
 stmt_ptr Parser::parse_while_stmt() {
+    print_parsing_entity("while_stmt");
+
     Position while_pos = peek().pos;
 
     skip(TokenType::While, false, false);
@@ -310,6 +321,8 @@ stmt_ptr Parser::parse_while_stmt() {
 
 // ForStmt //
 stmt_ptr Parser::parse_for_stmt() {
+    print_parsing_entity("for_stmt");
+
     Position for_stmt_pos = peek().pos;
 
     skip(TokenType::For, false, false);
@@ -337,6 +350,8 @@ stmt_ptr Parser::parse_for_stmt() {
 
 // ClassDecl //
 stmt_ptr Parser::parse_class_decl() {
+    print_parsing_entity("class_decl");
+
     Position class_decl_pos = peek().pos;
 
     skip(TokenType::Class, false, true);
@@ -381,6 +396,8 @@ stmt_ptr Parser::parse_class_decl() {
 
 // Import //
 stmt_ptr Parser::parse_import() {
+    print_parsing_entity("import");
+
     Position import_pos = peek().pos;
     // No new-lines in import
     skip(TokenType::Import, false, false);
@@ -448,6 +465,8 @@ stmt_ptr Parser::parse_import() {
 
 // TypeDecl //
 stmt_ptr Parser::parse_type_decl() {
+    print_parsing_entity("type_decl");
+
     Position type_decl_pos = peek().pos;
 
     skip(TokenType::Type, false, false);
@@ -471,6 +490,8 @@ expr_ptr Parser::assignment() {
     // @TODO: Add compound assignment operators
 
     if (is_assign_op()) {
+        print_parsing_entity("assignment");
+
         Token assign_op = peek();
         advance();
 
@@ -503,6 +524,8 @@ expr_ptr Parser::pipe() {
     expr_ptr left = Or();
 
     while (is(TokenType::Pipe)) {
+        print_parsing_entity("pipe");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -517,6 +540,8 @@ expr_ptr Parser::Or() {
     expr_ptr left = And();
 
     while (is(TokenType::Or)) {
+        print_parsing_entity("or");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -531,6 +556,8 @@ expr_ptr Parser::And() {
     expr_ptr left = eq();
 
     while (is(TokenType::And)) {
+        print_parsing_entity("and");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -547,6 +574,8 @@ expr_ptr Parser::eq() {
     while (is(TokenType::Eq) || is(TokenType::NotEq)
        || is(TokenType::RefEq) || is(TokenType::RefNotEq))
     {
+        print_parsing_entity("eq");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -565,6 +594,8 @@ expr_ptr Parser::comp() {
        || is(TokenType::LE)
        || is(TokenType::GE))
     {
+        print_parsing_entity("comp");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -583,6 +614,8 @@ expr_ptr Parser::named_checks() {
        || is(TokenType::In)
        || is(TokenType::NotIn))
     {
+        print_parsing_entity("named_checks");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -602,6 +635,8 @@ expr_ptr Parser::range() {
     || is(TokenType::RangeRE)
     || is(TokenType::RangeBothE))
     {
+        print_parsing_entity("range");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -616,6 +651,8 @@ expr_ptr Parser::add() {
     expr_ptr left = mult();
 
     while (is(TokenType::Add) || is(TokenType::Sub)) {
+        print_parsing_entity("add");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -630,6 +667,8 @@ expr_ptr Parser::mult() {
     expr_ptr left = power();
 
     while (is(TokenType::Mul) || is(TokenType::Div) || is(TokenType::Mod)) {
+        print_parsing_entity("mult");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -644,6 +683,8 @@ expr_ptr Parser::power() {
     expr_ptr left = type_cast();
 
     while (is(TokenType::Exp)) {
+        print_parsing_entity("power");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -658,6 +699,8 @@ expr_ptr Parser::type_cast() {
     expr_ptr left = prefix();
 
     if (is(TokenType::As) || is(TokenType::AsQM)) {
+        print_parsing_entity("type_cast");
+
         const auto & op_token = peek();
         advance();
         skip_nl(true);
@@ -670,6 +713,8 @@ expr_ptr Parser::type_cast() {
 
 expr_ptr Parser::prefix() {
     if (is(TokenType::Not) || is(TokenType::Sub)) {
+        print_parsing_entity("prefix");
+
         const auto & op_token = peek();
         advance();
         expr_ptr right = call();
@@ -698,10 +743,14 @@ expr_ptr Parser::member_access() {
 
     while (!eof()) {
         if (is(TokenType::Dot)) {
+            print_parsing_entity("get_expr");
+
             advance();
             id_ptr id = parse_id();
             left = std::make_shared<GetExpr>(left, id);
         } else if (is(TokenType::LBracket)) {
+            print_parsing_entity("sub-expression");
+
             skip(TokenType::LBracket, false, true);
             expr_ptr ind = parse_expr();
             skip(TokenType::RBracket, true, false);
@@ -817,6 +866,8 @@ expr_ptr Parser::primary() {
 
 // Identifier //
 id_ptr Parser::parse_id() {
+    print_parsing_entity("id");
+
     if (!is(TokenType::Id)) {
         expected_error("identifier");
     }
@@ -829,6 +880,8 @@ id_ptr Parser::parse_id() {
 
 // FuncCall //
 expr_ptr Parser::parse_func_call(const expr_ptr & left) {
+    print_parsing_entity("func_call");
+
     skip(TokenType::LParen, false, true);
 
     ExprList args;
@@ -857,6 +910,8 @@ expr_ptr Parser::parse_func_call(const expr_ptr & left) {
 
 // IfExpr //
 expr_ptr Parser::parse_if_expr() {
+    print_parsing_entity("if_expr");
+
     Position if_pos = peek().pos;
 
     skip(TokenType::If, false, true);
@@ -879,7 +934,7 @@ expr_ptr Parser::parse_if_expr() {
 
     // Allow to write one-line expressions
     // like: val a = if true => 'yeps' else 'nope'
-    if (!is(TokenType::Else)) {
+    if (!is(TokenType::Else) && !virtual_semi) {
         skip_semis();
         virtual_semi = true;
     }
@@ -894,6 +949,8 @@ expr_ptr Parser::parse_if_expr() {
 }
 
 expr_ptr Parser::parse_literal() {
+    print_parsing_entity("literal");
+
     Token current = peek();
     advance();
     return std::make_shared<Literal>(current);
@@ -913,3 +970,14 @@ void Parser::unexpected_error() {
 void Parser::expected_error(const std::string & expected) {
     throw ExpectedException(expected, peek());
 }
+
+///////////
+// Debug //
+///////////
+void Parser::print_parsing_entity(const std::string & entity) const {
+    if (!options.print_parsing_entity) {
+        return;
+    }
+    std::cout << "PARSE [" << entity << "]" << std::endl;
+}
+

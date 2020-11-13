@@ -49,7 +49,6 @@ protected:
     std::shared_ptr<IntConstant> read_int_const();
     std::shared_ptr<FloatConstant> read_float_const();
     std::shared_ptr<StringConstant> read_string_const();
-    std::shared_ptr<FuncConstant> read_func_const();
 
     // Errors
     static void error(const std::string & msg);

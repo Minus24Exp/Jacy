@@ -21,7 +21,7 @@ struct Variable {
 };
 
 struct Local : Variable {
-    Local(VarDeclKind kind, type_ptr type, std::string name) : Variable(kind, type), name(name) {}
+    Local(VarDeclKind kind, type_ptr type, std::string name) : Variable(kind, type), name(std::move(name)) {}
 
     std::string name;
     uint64_t depth{0};

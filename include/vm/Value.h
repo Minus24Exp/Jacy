@@ -13,10 +13,15 @@ struct Value;
 using value_ptr = std::shared_ptr<Value>;
 
 struct Value {
+    virtual bool to_b() = 0;
     virtual std::string to_string() = 0;
 };
 
 struct NullValue : Value {
+    bool to_b() override {
+        return false;
+    }
+
     std::string to_string() override {
         return "null";
     }
@@ -24,6 +29,10 @@ struct NullValue : Value {
 const auto Null = std::make_shared<NullValue>();
 
 struct FalseValue : Value {
+    bool to_b() override {
+        return false;
+    }
+
     std::string to_string() override {
         return "false";
     }
@@ -31,6 +40,10 @@ struct FalseValue : Value {
 const auto False = std::make_shared<FalseValue>();
 
 struct TrueValue : Value {
+    bool to_b() override {
+        return true;
+    }
+
     std::string to_string() override {
         return "true";
     }
@@ -38,9 +51,13 @@ struct TrueValue : Value {
 const auto True = std::make_shared<TrueValue>();
 
 struct Int : Value {
+    explicit Int(const std::shared_ptr<IntConstant> & int_constant) : value(int_constant->value) {}
+
     long long value;
 
-    explicit Int(const std::shared_ptr<IntConstant> & int_constant) : value(int_constant->value) {}
+    bool to_b() override {
+        return value != 0L;
+    }
 
     std::string to_string() override {
         return std::to_string(value);
@@ -48,9 +65,13 @@ struct Int : Value {
 };
 
 struct Float : Value {
+    explicit Float(const std::shared_ptr<FloatConstant> & float_constant) : value(float_constant->value) {}
+
     double value;
 
-    explicit Float(const std::shared_ptr<FloatConstant> & float_constant) : value(float_constant->value) {}
+    bool to_b() override {
+        return value != 0.0F;
+    }
 
     std::string to_string() override {
         std::stringstream ss;
@@ -60,21 +81,21 @@ struct Float : Value {
 };
 
 struct String : Value {
+    explicit String(const std::shared_ptr<StringConstant> & string_constant) : value(string_constant->value) {}
+
     std::string value;
 
-    explicit String(const std::shared_ptr<StringConstant> & string_constant) : value(string_constant->value) {}
+    bool to_b() override {
+        return value.size() != 0;
+    }
 
     std::string to_string() override {
         return value;
     }
 };
 
-using FuncArgs = std::vector<value_ptr>;
-struct Func : Value {
-
-};
-
 struct NativeFunc;
+using FuncArgs = std::vector<value_ptr>;
 using nf_ptr = std::shared_ptr<NativeFunc>;
 using NFBody = std::function<value_ptr(FuncArgs)>;
 struct NativeFunc : Value {
@@ -82,6 +103,10 @@ struct NativeFunc : Value {
     NFBody body;
 
     explicit NativeFunc(std::string name, NFBody body) : name(std::move(name)), body(std::move(body)) {}
+
+    bool to_b() override {
+        return true;
+    }
 
     std::string to_string() override {
         return "native_func_" + name;

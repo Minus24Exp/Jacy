@@ -5,6 +5,10 @@
 #include "parser/Token.h"
 #include "tree/nodes.h"
 
+struct ParserOptions {
+    bool print_parsing_entity{true};
+};
+
 class Parser {
 public:
     Parser();
@@ -80,9 +84,15 @@ private:
     expr_ptr parse_literal();
 
     // Errors
-    void error(const std::string & msg);
+    static void error(const std::string & msg);
     void unexpected_error();
     void expected_error(const std::string & expected);
+
+    // DEBUG
+private:
+    ParserOptions options;
+
+    void print_parsing_entity(const std::string & entitiy) const;
 };
 
 #endif

@@ -20,8 +20,10 @@ void Compiler::visit(ExprStmt * expr_stmt) {
     expr_stmt->expr->accept(*this);
 }
 
-void Compiler::visit(Block * expr_stmt) {
-
+void Compiler::visit(Block * block) {
+    for (const auto & stmt : block->stmts) {
+        stmt->accept(*this);
+    }
 }
 
 void Compiler::visit(VarDecl * var_decl) {
@@ -257,7 +259,7 @@ void Compiler::visit(DictExpr * expr_stmt) {
 // Bytecode //
 //////////////
 void Compiler::emit(uint8_t byte) {
-    chunk.func->code.push_back(byte);
+    chunk.code.push_back(byte);
 }
 
 void Compiler::emit(OpCode opcode) {
@@ -385,6 +387,7 @@ uint64_t Compiler::resolve_upvalue(const scope_ptr & _scope, Identifier * id) {
 void Compiler::emit_id(Identifier * id) {
     OpCode opcode;
     uint64_t operand;
+
     try {
         operand = resolve_local(scope, id);
         opcode = OpCode::LoadLocal;
@@ -392,8 +395,18 @@ void Compiler::emit_id(Identifier * id) {
     } catch (IUndefinedEntity & e) {
         operand = make_string(id->get_name());
         opcode = OpCode::LoadGlobal;
-        last_type = globals.at(id->get_name())->type;
+
+        try {
+            const auto & global = globals.at(id->get_name());
+            if (!global) {
+                throw std::out_of_range(id->get_name());
+            }
+            last_type = global->type;
+        } catch (std::out_of_range & e) {
+            error(id->get_name() + " is not defined");
+        }
     }
+
     emit(opcode);
     emit(operand);
 }
@@ -432,16 +445,16 @@ uint64_t Compiler::emit_jump(OpCode jump_instr) {
     for (int i = 0; i < jump_space; i++) {
         emit(0xFFu);
     }
-    return chunk.func->code.size() - jump_space;
+    return chunk.code.size() - jump_space;
 }
 
 void Compiler::patch_jump(uint64_t offset) {
-    uint64_t jump = chunk.func->code.size() - offset - jump_space;
+    uint64_t jump = chunk.code.size() - offset - jump_space;
 
     // Check jump offset if it's bigger than jump_size type size
 
     for (int i = jump_space; i >= 0; i--) {
-        chunk.func->code[offset + jump_space - i] = (jump >> (i * 8u)) & 0xFFu;
+        chunk.code[offset + jump_space - i] = (jump >> (i * 8u)) & 0xFFu;
     }
 }
 

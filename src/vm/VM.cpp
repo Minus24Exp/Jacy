@@ -75,13 +75,12 @@ void VM::eval(const Chunk & chunk) {
             } break;
             case OpCode::JumpFalse: {
                 const auto & offset = read8();
-                // TODO: Update when falsey will be done
-                throw DevError("JumpFalse is not still implemented due to no falsiness check");
+                if (!top()->to_b()) {
+                    ip += offset;
+                }
             } break;
             case OpCode::Invoke: {
-                uint64_t arg_count = read8();
-                std::shared_ptr<Func> read_func_const();
-
+                throw DevError("Invoke is not still implemented");
             } break;
             case OpCode::InvokeNF: {
                 uint64_t arg_count = read8();

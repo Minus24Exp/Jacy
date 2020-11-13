@@ -13,6 +13,10 @@
 #include <cstdint>
 #include <map>
 
+struct CompilerOptions {
+    bool print_compiling_opcode{true};
+};
+
 class Compiler : public BaseVisitor {
 public:
     Compiler();
@@ -93,6 +97,10 @@ private:
     // Errors //
     static void error(const std::string & msg);
     static void undefined_entity();
+
+    // DEBUG //
+private:
+    CompilerOptions options;
 };
 
 #endif // COMPILER_H

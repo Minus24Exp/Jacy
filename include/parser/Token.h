@@ -157,7 +157,7 @@ struct Token {
             }
         }
         if (with_pos) {
-            str += std::to_string(pos.line) +":"+ std::to_string(pos.column);
+            str += " " + std::to_string(pos.line) +":"+ std::to_string(pos.column);
         }
         return str;
     }

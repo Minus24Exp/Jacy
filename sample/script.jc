@@ -1,2 +1,5 @@
 val a = 'asdasdasdsads'
-print(a)
+
+if a {
+    print(a)
+}
