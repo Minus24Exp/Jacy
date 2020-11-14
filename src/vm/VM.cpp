@@ -42,19 +42,19 @@ void VM::eval(const Chunk & chunk) {
             } break;
             case OpCode::LoadGlobal: {
                 const auto & global_name = read_string_const();
-                const auto & found = globals.find(global_name->value);
-                if (found == globals.end() || !found->second) {
+                try {
+                    push(globals.at(global_name->value));
+                } catch (std::out_of_range & e) {
                     error(global_name->value + " is not defined");
                 }
-                push(found->second);
             } break;
             case OpCode::StoreGlobal: {
                 const auto & global_name = read_string_const();
-                const auto & found = globals.find(global_name->value);
-                if (found == globals.end()) {
+                try {
+                    globals.at(global_name->value) = top();
+                } catch (std::out_of_range & e) {
                     error(global_name->value + " is not defined");
                 }
-                globals.at(global_name->value) = top();
             } break;
             case OpCode::LoadLocal: {
                 const auto & slot = read8();
@@ -67,7 +67,11 @@ void VM::eval(const Chunk & chunk) {
             } break;
             case OpCode::StoreLocal: {
                 const auto & slot = read8();
-                frame->slots.at(slot) = top();
+                try {
+                    frame->slots.at(slot) = top();
+                } catch (std::out_of_range & e) {
+                    error("Unable to resolve local");
+                }
             } break;
             case OpCode::Jump: {
                 const auto & offset = read8();

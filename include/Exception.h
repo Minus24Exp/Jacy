@@ -40,7 +40,7 @@ private:
 class FileNotFoundException : public JacyException {
 public:
     FileNotFoundException() : JacyException("File not found") {}
-    FileNotFoundException(const std::string & details) : JacyException("File not found: "+ details) {}
+    explicit FileNotFoundException(const std::string & details) : JacyException("File not found: "+ details) {}
 };
 
 /**
@@ -49,7 +49,7 @@ public:
 class IllegalArgumentException : public JacyException {
 public:
     IllegalArgumentException() : JacyException("Illegal argument") {}
-    IllegalArgumentException(const std::string & details) : JacyException("Illegal argument: "+ details) {}
+    explicit IllegalArgumentException(const std::string & details) : JacyException("Illegal argument: "+ details) {}
 };
 
 /**
@@ -68,10 +68,9 @@ public:
 /////////////////////////
 // Parsring Exceptions //
 /////////////////////////
-
 class ParserException : public JacyException {
 public:
-    ParserException(const std::string & msg) : JacyException(msg) {}
+    explicit ParserException(const std::string & msg) : JacyException(msg) {}
 
     ParserException(const std::string & pre_msg, Token t, const std::string & post_msg)
         : ParserException(pre_msg +" "+ t.to_string() +" "+ post_msg) {}
@@ -88,8 +87,8 @@ public:
  */
 class UnexpectedTokenException : public ParserException {
 public:
-    UnexpectedTokenException(Token t) : ParserException("Unexpected", t) {}
-    UnexpectedTokenException(const std::string & token_str) : ParserException("Unexpected "+ token_str) {}
+    explicit UnexpectedTokenException(Token t) : ParserException("Unexpected", t) {}
+    explicit UnexpectedTokenException(const std::string & token_str) : ParserException("Unexpected "+ token_str) {}
 };
 
 /**

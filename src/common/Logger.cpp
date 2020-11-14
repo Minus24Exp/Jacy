@@ -1,9 +1,11 @@
 #include "common/Logger.h"
 
-Logger::Logger(const std::string & _class, const LoggerOptions & options) : _class(_class), options(options) {}
+#include <utility>
+
+Logger::Logger(std::string _class, const LoggerOptions & options) : _class(std::move(_class)), options(options) {}
 
 void Logger::log(LogLevel level, const std::string & msg) {
-    if (static_cast<uint8_t>(level) < static_cast<uint8_t>(log_level)) {
+    if (static_cast<uint8_t>(level) < static_cast<uint8_t>(options.level)) {
         return;
     }
 

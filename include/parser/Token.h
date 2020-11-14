@@ -149,10 +149,12 @@ struct Token {
             case TokenType::Eof: str += "[EOF]"; break;
 
             default: {
-                if (index > op_start && index < kw_start) {
+                if (index >= op_start && index < kw_start) {
                     str += op_to_str(type);
-                } else if (index > kw_start) {
+                } else if (index >= kw_start) {
                     str += kw_to_str(type);
+                } else {
+                    str += "[unknown token " + std::to_string(index) + "]";
                 }
             }
         }
@@ -163,7 +165,7 @@ struct Token {
     }
 
     void error(const std::string & msg) {
-        throw msg + " " + to_string();
+        throw msg + " " + to_string(true);
     }
 };
 

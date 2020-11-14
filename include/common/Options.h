@@ -23,12 +23,12 @@ enum class LogLevel : uint8_t {
     Error,
 };
 
-
 struct LoggerOptions {
     bool log_class{true};
     bool log_level{true};
     bool static_last_class{true};
     bool colorize{true};
+    LogLevel level{LogLevel::Warn};
 };
 
 // Jacy main options //
@@ -37,6 +37,7 @@ struct JacyOptions {
 
     LoggerOptions log = {
         .log_class = false, // Jacy main class does not provide class name
+        .level = LogLevel::Verbose, // Note: Verbose for debug
     };
 };
 
@@ -47,13 +48,23 @@ struct LexerOptions {};
 struct ParserOptions {
     bool log_parsing_entity{true};
 
-    LoggerOptions log = {};
+    LoggerOptions log = {
+        .level = LogLevel::Verbose, // Note: Verbose for debug
+    };
 };
 
 // Compiler //
 struct CompilerOptions {
     bool print_compiling_opcode{true};
 
+    LoggerOptions log = {
+        .level = LogLevel::Verbose, // Note: Verbose for debug
+    };
+};
+
+// VM //
+struct VMOptions {
+    // Note: ! Do not use logger inside vm logic, only for warnings and errors !
     LoggerOptions log = {};
 };
 

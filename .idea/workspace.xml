@@ -33,17 +33,22 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Logger, new options">
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Logger updates">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Jacy.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Jacy.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Exception.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Exception.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/common/Logger.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/common/Logger.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/common/Options.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/common/Options.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sample/script.jc" beforeDir="false" afterPath="$PROJECT_DIR$/sample/script.jc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/parser/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Lexer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/parser/Parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Parser.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/parser/Token.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Token.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/common/Logger.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/Logger.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/parser/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Parser.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/VM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/VM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +97,7 @@
       <command value="cowsay" />
     </option>
   </component>
-  <component name="RunManager" selected="CMake Application.Develop">
+  <component name="RunManager" selected="CMake Application.Develop-Debug">
     <configuration name="Develop-Debug" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-debug F:\Projects\Jacy\Jacy\sample\script.jc" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Jacy" TARGET_NAME="Jacy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Jacy" RUN_TARGET_NAME="Jacy">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -141,7 +146,8 @@
       <workItem from="1605030777704" duration="4022000" />
       <workItem from="1605126335873" duration="2968000" />
       <workItem from="1605204700187" duration="9093000" />
-      <workItem from="1605271510996" duration="8465000" />
+      <workItem from="1605271510996" duration="13699000" />
+      <workItem from="1605359612166" duration="4236000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -199,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605284111802</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Logger updates">
+      <created>1605291399408</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1605291399408</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -226,7 +239,8 @@
     <MESSAGE value="Try function as base" />
     <MESSAGE value="Save" />
     <MESSAGE value="Logger, new options" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logger, new options" />
+    <MESSAGE value="Logger updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logger updates" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1167" y="361" width="540" height="510" key="#Notifications" timestamp="1605032383293">
@@ -250,38 +264,38 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604885104034" />
-    <state width="2517" height="217" key="GridCell.Tab.0.bottom" timestamp="1605291333302">
+    <state width="2517" height="286" key="GridCell.Tab.0.bottom" timestamp="1605386887384">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="217" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605291333302" />
-    <state width="2517" height="217" key="GridCell.Tab.0.center" timestamp="1605291333301">
+    <state width="2517" height="286" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
+    <state width="2517" height="286" key="GridCell.Tab.0.center" timestamp="1605386887384">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="217" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605291333301" />
-    <state width="2517" height="217" key="GridCell.Tab.0.left" timestamp="1605291333301">
+    <state width="2517" height="286" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
+    <state width="2517" height="286" key="GridCell.Tab.0.left" timestamp="1605386887384">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="217" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605291333301" />
-    <state width="2517" height="217" key="GridCell.Tab.0.right" timestamp="1605291333301">
+    <state width="2517" height="286" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
+    <state width="2517" height="286" key="GridCell.Tab.0.right" timestamp="1605386887384">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="217" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605291333301" />
-    <state width="2517" height="217" key="GridCell.Tab.1.bottom" timestamp="1605291333303">
+    <state width="2517" height="286" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
+    <state width="2517" height="286" key="GridCell.Tab.1.bottom" timestamp="1605386887384">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="217" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605291333303" />
-    <state width="2517" height="217" key="GridCell.Tab.1.center" timestamp="1605291333303">
+    <state width="2517" height="286" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
+    <state width="2517" height="286" key="GridCell.Tab.1.center" timestamp="1605386887384">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="217" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605291333303" />
-    <state width="2517" height="217" key="GridCell.Tab.1.left" timestamp="1605291333302">
+    <state width="2517" height="286" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
+    <state width="2517" height="286" key="GridCell.Tab.1.left" timestamp="1605386887384">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="217" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605291333302" />
-    <state width="2517" height="217" key="GridCell.Tab.1.right" timestamp="1605291333303">
+    <state width="2517" height="286" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
+    <state width="2517" height="286" key="GridCell.Tab.1.right" timestamp="1605386887384">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="217" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605291333303" />
+    <state width="2517" height="286" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
     <state x="781" y="170" width="1383" height="832" key="SettingsEditor" timestamp="1604892114665">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>

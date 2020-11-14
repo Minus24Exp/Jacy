@@ -960,7 +960,9 @@ expr_ptr Parser::parse_literal() {
 // Errors //
 ////////////
 void Parser::error(const std::string & msg) {
-    throw JacyException(msg);
+    auto message = msg;
+    message += " at " + std::to_string(peek().pos.column) + ":" + std::to_string(peek().pos.line);
+    throw ParserException(message);
 }
 
 void Parser::unexpected_error() {

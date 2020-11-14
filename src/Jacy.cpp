@@ -110,7 +110,7 @@ void Jacy::run_debug(const std::string & script) {
 
     std::cout << "Tokens:" << std::endl;
     for (auto & t : tokens) {
-        std::cout << t.to_string() << std::endl;
+        std::cout << t.to_string(true) << std::endl;
     }
 
     // Parse tokens

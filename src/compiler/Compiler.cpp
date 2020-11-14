@@ -32,21 +32,28 @@ void Compiler::visit(VarDecl * var_decl) {
     // TODO: Add real types (now any)
     type_ptr type = any_t;
 
+    const auto & var_name = var_decl->id->get_name();
+
     if (scope_depth == 0) {
         // Define global
-        uint64_t global = make_string(var_decl->id->get_name());
+        uint64_t global = make_string(var_name);
         emit(OpCode::DefineGlobal);
         emit(static_cast<uint64_t>(global));
 
-        // Save global for compile-time checks
-        globals.emplace(var_decl->id->get_name(), nullptr);
+        // TODO: ! val check
+        globals[var_name] = nullptr;
+
+        log.verbose("DefineGlobal: " + var_name);
 
         if (var_decl->assign_expr) {
             var_decl->assign_expr->accept(*this);
             emit(OpCode::StoreGlobal);
             emit(static_cast<uint64_t>(global));
 
-            globals.emplace(var_decl->id->get_name(), std::make_shared<Variable>(kind, type));
+            globals[var_name] = std::make_shared<Variable>(kind, type);
+
+            log.verbose(globals.at(var_name) == nullptr ? "null" : "ok");
+            log.verbose("StoreGlobal: " + var_name);
         }
     } else {
         declare_var(kind, type, var_decl->id.get());
@@ -194,7 +201,7 @@ void Compiler::visit(FuncCall * func_call) {
 //            opcode = OpCode::Construct;
         } break;
         default: {
-            error("Is not a function");
+            error("Is not a function", func_call->left->pos);
         }
     }
 
@@ -211,7 +218,8 @@ void Compiler::visit(FuncCall * func_call) {
     }
 
     if (!func_type->compare(func_type->return_type, arg_types)) {
-        error("Function invocation does not match any declaration");
+        // TODO: Position of first parentheses
+        error("Function invocation does not match any declaration", func_call->left->pos);
     }
 
     emit(opcode);
@@ -356,7 +364,8 @@ uint64_t Compiler::resolve_local(const scope_ptr & _scope, Identifier * id) {
         const auto & local = _scope->locals[i];
         if (local.name == id->get_name()) {
             if (!local.is_defined) {
-                error(id->get_name() + " is not defined");
+                log.debug("In 'resolve_local()':");
+                error(id->get_name() + " is not defined", id->pos);
             }
             return i;
         }
@@ -399,11 +408,13 @@ void Compiler::emit_id(Identifier * id) {
         try {
             const auto & global = globals.at(id->get_name());
             if (!global) {
+                log.debug(id->get_name() + " global is null");
                 throw std::out_of_range(id->get_name());
             }
             last_type = global->type;
         } catch (std::out_of_range & e) {
-            error(id->get_name() + " is not defined");
+            log.debug("In 'emit_id()' [LoadGlobal]");
+            error(id->get_name() + " is not defined", id->pos);
         }
     }
 
@@ -421,7 +432,7 @@ void Compiler::declare_var(VarDeclKind kind, type_ptr type, Identifier * id) {
             break;
         }
         if (id->get_name() == local.name) {
-            error(id->get_name() + " has been already declared in this scope");
+            error(id->get_name() + " has been already declared in this scope", id->pos);
         }
     }
 
@@ -430,8 +441,7 @@ void Compiler::declare_var(VarDeclKind kind, type_ptr type, Identifier * id) {
 
 void Compiler::add_local(VarDeclKind kind, type_ptr type, const std::string & name) {
     if (scope->locals.size() == UINT32_MAX) {
-        error("Unable to handle too many locals");
-        return;
+        throw DevError("Unable to handle too many locals");
     }
 
     scope->locals.emplace_back(kind, type, name);
@@ -440,7 +450,7 @@ void Compiler::add_local(VarDeclKind kind, type_ptr type, const std::string & na
 ///////////
 // Jumps //
 ///////////
-uint64_t Compiler::emit_jump(OpCode jump_instr) {
+int64_t Compiler::emit_jump(OpCode jump_instr) {
     emit(jump_instr);
     for (int i = 0; i < jump_space; i++) {
         emit(0xFFu);
@@ -448,9 +458,12 @@ uint64_t Compiler::emit_jump(OpCode jump_instr) {
     return chunk.code.size() - jump_space;
 }
 
-void Compiler::patch_jump(uint64_t offset) {
-    uint64_t jump = chunk.code.size() - offset - jump_space;
+void Compiler::patch_jump(int64_t offset) {
+    int64_t jump = chunk.code.size() - offset - jump_space;
 
+    if (jump > INT64_MAX) {
+        throw DevError("Unable to handle too large jump: " + std::to_string(jump));
+    }
     // Check jump offset if it's bigger than jump_size type size
 
     for (int i = jump_space; i >= 0; i--) {
@@ -484,8 +497,10 @@ type_ptr Compiler::resolve_type(Identifier * id) {
 ////////////
 // Errors //
 ////////////
-void Compiler::error(const std::string & msg) {
-    throw CTException(msg);
+void Compiler::error(const std::string & msg, const Position & pos) {
+    std::string message = msg;
+    message += " at " + std::to_string(pos.line) + ":" + std::to_string(pos.column);
+    throw CTException(message);
 }
 
 void Compiler::undefined_entity() {

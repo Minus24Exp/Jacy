@@ -31,9 +31,9 @@
 *.out
 *.app
 
- .vscode
- .idea
+.vscode
+.idea
 
 bin/**
-cmake-build-debug
+**/cmake-build-*
 Doxyfile

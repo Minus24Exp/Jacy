@@ -35,8 +35,13 @@ void Disasm::eval(const Chunk & chunk) {
 
     std::cout << "-- Code --" << std::endl;
     while (ip < chunk.code.size()) {
-        const auto & opcode = static_cast<OpCode>(read());
-        std::cout << opcode_names.at(opcode) << " ";
+        const auto & opcode_byte = read();
+        const auto & opcode = static_cast<OpCode>(opcode_byte);
+        try {
+            std::cout << opcode_names.at(opcode) << " ";
+        } catch (std::out_of_range & e) {
+            throw DevError("Unknown opcode: " + std::to_string(opcode_byte));
+        }
         switch (opcode) {
             case OpCode::NOP: break;
             case OpCode::Pop: {
@@ -110,8 +115,7 @@ void Disasm::eval(const Chunk & chunk) {
             } break;
             case OpCode::JumpFalse: {
                 const auto & offset = read8();
-                std::cout << offset;
-                std::cout << top()->to_string() << " - maybe false:)";
+                std::cout << offset << " (" << top()->to_string() << " - maybe false, kek)";
             } break;
             case OpCode::Invoke:
             case OpCode::InvokeNF: {

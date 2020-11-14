@@ -82,8 +82,8 @@ private:
     void add_local(VarDeclKind kind, type_ptr type, const std::string & name);
 
     // Jumps
-    uint64_t emit_jump(OpCode jump_instr);
-    void patch_jump(uint64_t offset);
+    int64_t emit_jump(OpCode jump_instr);
+    void patch_jump(int64_t offset);
 
     // Type checking
     // TODO: Maybe add reset_type and set_type funcs for explicity
@@ -92,7 +92,7 @@ private:
     type_ptr resolve_type(Identifier * id);
 
     // Errors //
-    static void error(const std::string & msg);
+    static void error(const std::string & msg, const Position & pos);
     static void undefined_entity();
 
     // DEBUG //

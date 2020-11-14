@@ -81,7 +81,7 @@ private:
     expr_ptr parse_literal();
 
     // Errors
-    static void error(const std::string & msg);
+    void error(const std::string & msg);
     void unexpected_error();
     void expected_error(const std::string & expected);
 

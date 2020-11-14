@@ -11,7 +11,7 @@
  */
 class Logger {
 public:
-    Logger(const std::string & _class, const LoggerOptions & options);
+    Logger(std::string _class, const LoggerOptions & options);
 
     void verbose(const std::string & msg);
     void debug(const std::string & msg);
@@ -22,9 +22,6 @@ public:
 private:
     LoggerOptions options;
     std::string _class;
-
-    // TODO: Move to options
-    const LogLevel log_level{LogLevel::Verbose};
 
     const std::map<LogLevel, std::string> level_names = {
         {LogLevel::Verbose, "verbose"},
