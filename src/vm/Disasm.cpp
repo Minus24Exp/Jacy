@@ -15,7 +15,7 @@ void Disasm::eval(const Chunk & chunk) {
         std::cout << "-- Pure code --" << std::endl;
         int div = 0;
         for (const auto & byte : chunk.code) {
-            std::cout << std::hex << static_cast<int>(byte) << " ";
+            std::cout << std::hex << static_cast<int>(byte) << " " << std::dec;
             div++;
             if (div == 4) {
                 div = 0;
@@ -79,22 +79,21 @@ void Disasm::eval(const Chunk & chunk) {
             case OpCode::LoadGlobal: {
                 const auto & global_name = read_string_const();
                 std::cout << global_name->value;
-                const auto & found = globals.find(global_name->value);
-                if (found == globals.end() || !found->second) {
+                try {
+                    push(globals.at(global_name->value));
+                    std::cout << " (" << globals.at(global_name->value)->to_string() + ")";
+                } catch (std::out_of_range & e) {
                     std::cout << " (UNDEFINED)";
-                } else {
-                    push(found->second);
-                    std::cout << " (" << found->second->to_string() << ")";
                 }
             } break;
             case OpCode::StoreGlobal: {
                 const auto & global_name = read_string_const();
                 std::cout << global_name->value;
-                const auto & found = globals.find(global_name->value);
-                if (found == globals.end()) {
-                    std::cout << " (UNDEFINED)";
-                } else {
-                    std::cout << " " << top()->to_string();
+                try {
+                    globals.at(global_name->value) = top();
+                    std::cout << " = " << top()->to_string();
+                } catch (std::out_of_range & e) {
+                    std::cout << " = (UNDEFINED)";
                 }
             } break;
             case OpCode::LoadLocal: {
@@ -115,7 +114,7 @@ void Disasm::eval(const Chunk & chunk) {
             } break;
             case OpCode::JumpFalse: {
                 const auto & offset = read8();
-                std::cout << offset << " (" << top()->to_string() << " - maybe false, kek)";
+                std::cout << offset << " (" << top()->to_string() << " - " << (top()->to_b() ? "true" : "false") << ")";
             } break;
             case OpCode::Invoke:
             case OpCode::InvokeNF: {

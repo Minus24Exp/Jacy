@@ -11,13 +11,32 @@
  */
 class Logger {
 public:
-    Logger(std::string _class, const LoggerOptions & options);
+    Logger(std::string _class, const LoggerOptions & options) : _class(std::move(_class)), options(options) {}
 
-    void verbose(const std::string & msg);
-    void debug(const std::string & msg);
-    void info(const std::string & msg);
-    void warn(const std::string & msg);
-    void error(const std::string & msg);
+    template<typename ...Args>
+    void verbose(Args && ...args) {
+        log(LogLevel::Verbose, args...);
+    }
+
+    template<typename ...Args>
+    void debug(Args && ...args) {
+        log(LogLevel::Debug, args...);
+    }
+
+    template<typename ...Args>
+    void info(Args && ...args) {
+        log(LogLevel::Info, args...);
+    }
+
+    template<typename ...Args>
+    void warn(Args && ...args) {
+        log(LogLevel::Warn, args...);
+    }
+
+    template<typename ...Args>
+    void error(Args && ...args) {
+        log(LogLevel::Error, args...);
+    }
 
 private:
     LoggerOptions options;
@@ -50,7 +69,40 @@ private:
 
     const std::string ansi_reset = "\033[1;0m";
 
-    void log(LogLevel level, const std::string & msg);
+    template<typename Arg, typename ...Args>
+    void log(LogLevel level, Arg && first, Args && ...other) {
+        if (static_cast<uint8_t>(level) < static_cast<uint8_t>(options.level)) {
+            return;
+        }
+
+        if (options.log_class) {
+            if (options.static_last_class) {
+                static std::string last_class;
+                if (last_class != _class) {
+                    std::cout << "\t[" << _class << "]" << std::endl;
+                    last_class = _class;
+                }
+            } else {
+                std::cout << _class << " ";
+            }
+        }
+
+        if (options.log_level) {
+            if (options.colorize) {
+                std::cout << colors.at(level_colors.at(level));
+            }
+            std::cout << level_names.at(level) << ": ";
+            if (options.colorize) {
+                std::cout << ansi_reset;
+            }
+        }
+
+        std::cout << std::forward<Arg>(first);
+
+        ((std::cout << ' ' << std::forward<Args>(other)), ...);
+
+        std::cout << std::endl;
+    }
 };
 
 #endif // LOGGER_H

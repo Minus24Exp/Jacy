@@ -43,17 +43,12 @@ void Compiler::visit(VarDecl * var_decl) {
         // TODO: ! val check
         globals[var_name] = nullptr;
 
-        log.verbose("DefineGlobal: " + var_name);
-
         if (var_decl->assign_expr) {
             var_decl->assign_expr->accept(*this);
             emit(OpCode::StoreGlobal);
             emit(static_cast<uint64_t>(global));
 
             globals[var_name] = std::make_shared<Variable>(kind, type);
-
-            log.verbose(globals.at(var_name) == nullptr ? "null" : "ok");
-            log.verbose("StoreGlobal: " + var_name);
         }
     } else {
         declare_var(kind, type, var_decl->id.get());
@@ -232,11 +227,11 @@ void Compiler::visit(FuncCall * func_call) {
 void Compiler::visit(IfExpr * if_expr) {
     if_expr->cond->accept(*this);
 
-    uint64_t then_jump = emit_jump(OpCode::JumpFalse);
+    int then_jump = emit_jump(OpCode::JumpFalse);
     emit(OpCode::Pop);
     if_expr->if_branch->accept(*this);
 
-    uint64_t else_jump = emit_jump(OpCode::Jump);
+    int else_jump = emit_jump(OpCode::Jump);
     patch_jump(then_jump);
     emit(OpCode::Pop);
 
@@ -453,7 +448,7 @@ void Compiler::add_local(VarDeclKind kind, type_ptr type, const std::string & na
 int64_t Compiler::emit_jump(OpCode jump_instr) {
     emit(jump_instr);
     for (int i = 0; i < jump_space; i++) {
-        emit(0xFFu);
+        emit(U255);
     }
     return chunk.code.size() - jump_space;
 }
@@ -461,13 +456,12 @@ int64_t Compiler::emit_jump(OpCode jump_instr) {
 void Compiler::patch_jump(int64_t offset) {
     int64_t jump = chunk.code.size() - offset - jump_space;
 
-    if (jump > INT64_MAX) {
+    if (jump > UINT64_MAX) {
         throw DevError("Unable to handle too large jump: " + std::to_string(jump));
     }
-    // Check jump offset if it's bigger than jump_size type size
 
-    for (int i = jump_space; i >= 0; i--) {
-        chunk.code[offset + jump_space - i] = (jump >> (i * 8u)) & 0xFFu;
+    for (int i = jump_space - 1; i >= 0; i--) {
+        chunk.code[offset + jump_space - i - 1] = (jump >> (i * U8)) & U255;
     }
 }
 

@@ -7,12 +7,15 @@
 #include "parser/Token.h"
 #include "tree/Stmt/VarDecl.h"
 
-const int jump_space = 8;
 using ByteList = std::vector<uint8_t>;
 using opcode_it = ByteList::iterator;
 
 struct Constant;
 using constant_ptr = std::shared_ptr<Constant>;
+
+const int jump_space = 8;
+const uint8_t U255 = 0xFFu;
+const uint8_t U8 = 8u;
 
 /**
  * Bytecode spec
@@ -116,7 +119,7 @@ struct IntConstant : Constant {
     ByteList codegen() override {
         ByteList bytes = {type_code()};
         for (int i = 0; i < sizeof(value); i++) {
-            bytes.push_back((value >> (i * 8u)) & 0XFFu);
+            bytes.push_back((value >> (i * U8)) & U255);
         }
         return bytes;
     }

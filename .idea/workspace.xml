@@ -33,22 +33,15 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Logger updates">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Exception.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Exception.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/common/Logger.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/common/Logger.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/common/Options.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/common/Options.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/parser/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Lexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/parser/Parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Parser.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/parser/Token.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Token.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/Logger.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/Logger.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample/script.jc" beforeDir="false" afterPath="$PROJECT_DIR$/sample/script.jc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/Logger.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Parser.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/VM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/VM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +140,8 @@
       <workItem from="1605126335873" duration="2968000" />
       <workItem from="1605204700187" duration="9093000" />
       <workItem from="1605271510996" duration="13699000" />
-      <workItem from="1605359612166" duration="4236000" />
+      <workItem from="1605359612166" duration="9196000" />
+      <workItem from="1605453890877" duration="5428000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -212,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605291399408</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Update">
+      <created>1605386954226</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1605386954227</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,7 +233,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Constants ... )))" />
-    <MESSAGE value="Update" />
     <MESSAGE value="I cummed" />
     <MESSAGE value="Double pretty string" />
     <MESSAGE value="I love myself" />
@@ -240,7 +240,8 @@
     <MESSAGE value="Save" />
     <MESSAGE value="Logger, new options" />
     <MESSAGE value="Logger updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logger updates" />
+    <MESSAGE value="Update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1167" y="361" width="540" height="510" key="#Notifications" timestamp="1605032383293">
@@ -264,38 +265,38 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604885104034" />
-    <state width="2517" height="286" key="GridCell.Tab.0.bottom" timestamp="1605386887384">
+    <state width="491" height="902" key="GridCell.Tab.0.bottom" timestamp="1605461493342">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="286" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
-    <state width="2517" height="286" key="GridCell.Tab.0.center" timestamp="1605386887384">
+    <state width="491" height="902" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605461493342" />
+    <state width="491" height="902" key="GridCell.Tab.0.center" timestamp="1605461493342">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="286" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
-    <state width="2517" height="286" key="GridCell.Tab.0.left" timestamp="1605386887384">
+    <state width="491" height="902" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605461493342" />
+    <state width="491" height="902" key="GridCell.Tab.0.left" timestamp="1605461493342">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="286" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
-    <state width="2517" height="286" key="GridCell.Tab.0.right" timestamp="1605386887384">
+    <state width="491" height="902" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605461493342" />
+    <state width="491" height="902" key="GridCell.Tab.0.right" timestamp="1605461493342">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="286" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
-    <state width="2517" height="286" key="GridCell.Tab.1.bottom" timestamp="1605386887384">
+    <state width="491" height="902" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605461493342" />
+    <state width="491" height="902" key="GridCell.Tab.1.bottom" timestamp="1605461493231">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="286" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
-    <state width="2517" height="286" key="GridCell.Tab.1.center" timestamp="1605386887384">
+    <state width="491" height="902" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605461493231" />
+    <state width="491" height="902" key="GridCell.Tab.1.center" timestamp="1605461493231">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="286" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
-    <state width="2517" height="286" key="GridCell.Tab.1.left" timestamp="1605386887384">
+    <state width="491" height="902" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605461493231" />
+    <state width="491" height="902" key="GridCell.Tab.1.left" timestamp="1605461493231">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="286" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
-    <state width="2517" height="286" key="GridCell.Tab.1.right" timestamp="1605386887384">
+    <state width="491" height="902" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605461493231" />
+    <state width="491" height="902" key="GridCell.Tab.1.right" timestamp="1605461493231">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="2517" height="286" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605386887384" />
+    <state width="491" height="902" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605461493231" />
     <state x="781" y="170" width="1383" height="832" key="SettingsEditor" timestamp="1604892114665">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
@@ -313,10 +314,10 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="831" y="172" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604802956775" />
-    <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1604800309603">
+    <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1605454111897">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604800309603" />
+    <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605454111897" />
     <state width="600" height="440" key="javadoc.popup" timestamp="1602093882720">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
@@ -325,9 +326,9 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605276808165" />
-    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1605276864262">
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1605455377986">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605276864262" />
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605455377986" />
   </component>
 </project>
