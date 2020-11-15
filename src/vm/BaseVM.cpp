@@ -6,6 +6,82 @@ BaseVM::BaseVM() {
     }
 }
 
+void BaseVM::eval(const Chunk & chunk) {
+    this->chunk = chunk;
+
+    while (ip < chunk.code.size()) {
+        const auto & byte = read();
+        const auto & opcode = static_cast<OpCode>(byte);
+        before_opcode(opcode);
+        switch (opcode) {
+            case OpCode::NOP: {
+                _nop();
+            } break;
+            case OpCode::Pop: {
+                _pop();
+            } break;
+            case OpCode::NullConst: {
+                _null_const();
+            } break;
+            case OpCode::FalseConst: {
+                _false_Const();
+            } break;
+            case OpCode::TrueConst: {
+                _true_const();
+            } break;
+            case OpCode::IntConst: {
+                _int_const();
+            } break;
+            case OpCode::FloatConst: {
+                _float_const();
+            } break;
+            case OpCode::StringConst: {
+                _string_const();
+            } break;
+            case OpCode::DefineGlobal: {
+                _define_global();
+            } break;
+            case OpCode::LoadGlobal: {
+                _load_global();
+            } break;
+            case OpCode::StoreGlobal: {
+                _store_global();
+            } break;
+            case OpCode::LoadLocal: {
+                _load_local();
+            } break;
+            case OpCode::StoreLocal: {
+                _store_local();
+            } break;
+            case OpCode::Jump: {
+                _jump();
+            } break;
+            case OpCode::JumpFalse: {
+                _jump_false();
+            } break;
+            case OpCode::Invoke: {
+                _invoke();
+            } break;
+            case OpCode::InvokeNF: {
+                _invoke_nf();
+            } break;
+            case OpCode::InvokeMethod: {
+                _invoke_method();
+            } break;
+            case OpCode::GetProperty: {
+                _get_property();
+            } break;
+            case OpCode::SetProperty: {
+                _set_property();
+            } break;
+            default: {
+                unknown_opcode(byte);
+            }
+        }
+        after_opcode();
+    }
+}
+
 //////////////
 // Bytecode //
 //////////////

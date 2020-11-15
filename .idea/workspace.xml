@@ -33,15 +33,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Update)">
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Logger level update">
+      <change afterPath="$PROJECT_DIR$/include/common/Config.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/common/Logger.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/common/Logger.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/parser/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Lexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/parser/Parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Parser.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/Disasm.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Disasm.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/VM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/VM.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +79,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/bin/target.exe" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.toDoOptions" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
     <property name="settings.editor.splitter.proportion" value="0.1923921" />
   </component>
   <component name="RecentsManager">
@@ -146,7 +143,7 @@
       <workItem from="1605204700187" duration="9093000" />
       <workItem from="1605271510996" duration="13699000" />
       <workItem from="1605359612166" duration="9196000" />
-      <workItem from="1605453890877" duration="15521000" />
+      <workItem from="1605453890877" duration="17553000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -232,7 +229,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605474599032</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Logger level update">
+      <created>1605475533223</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1605475533223</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,7 +266,8 @@
     <MESSAGE value="Update" />
     <MESSAGE value="Logger varargs, yeah" />
     <MESSAGE value="Update)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update)" />
+    <MESSAGE value="Logger level update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logger level update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1167" y="361" width="540" height="510" key="#Notifications" timestamp="1605032383293">
@@ -286,42 +291,42 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604885104034" />
-    <state width="491" height="902" key="GridCell.Tab.0.bottom" timestamp="1605472206667">
+    <state width="491" height="902" key="GridCell.Tab.0.bottom" timestamp="1605475502887">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="491" height="902" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605472206667" />
-    <state width="491" height="902" key="GridCell.Tab.0.center" timestamp="1605472206667">
+    <state width="491" height="902" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502887" />
+    <state width="491" height="902" key="GridCell.Tab.0.center" timestamp="1605475502887">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="491" height="902" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605472206667" />
-    <state width="491" height="902" key="GridCell.Tab.0.left" timestamp="1605472206667">
+    <state width="491" height="902" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502887" />
+    <state width="491" height="902" key="GridCell.Tab.0.left" timestamp="1605475502887">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="491" height="902" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605472206667" />
-    <state width="491" height="902" key="GridCell.Tab.0.right" timestamp="1605472206667">
+    <state width="491" height="902" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502887" />
+    <state width="491" height="902" key="GridCell.Tab.0.right" timestamp="1605475502887">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="491" height="902" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605472206667" />
-    <state width="491" height="902" key="GridCell.Tab.1.bottom" timestamp="1605472206667">
+    <state width="491" height="902" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502887" />
+    <state width="491" height="902" key="GridCell.Tab.1.bottom" timestamp="1605475502888">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="491" height="902" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605472206667" />
-    <state width="491" height="902" key="GridCell.Tab.1.center" timestamp="1605472206667">
+    <state width="491" height="902" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502888" />
+    <state width="491" height="902" key="GridCell.Tab.1.center" timestamp="1605475502888">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="491" height="902" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605472206667" />
-    <state width="491" height="902" key="GridCell.Tab.1.left" timestamp="1605472206667">
+    <state width="491" height="902" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502888" />
+    <state width="491" height="902" key="GridCell.Tab.1.left" timestamp="1605475502888">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="491" height="902" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605472206667" />
-    <state width="491" height="902" key="GridCell.Tab.1.right" timestamp="1605472206667">
+    <state width="491" height="902" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502888" />
+    <state width="491" height="902" key="GridCell.Tab.1.right" timestamp="1605475502888">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="491" height="902" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605472206667" />
-    <state x="781" y="170" width="1383" height="832" key="SettingsEditor" timestamp="1605462785823">
+    <state width="491" height="902" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502888" />
+    <state x="781" y="170" width="1383" height="832" key="SettingsEditor" timestamp="1605477038377">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="781" y="170" width="1383" height="832" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605462785823" />
+    <state x="781" y="170" width="1383" height="832" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605477038377" />
     <state x="781" y="170" key="SettingsEditor/0.0.2560.1052/2560.27.1280.1024@0.0.2560.1052" timestamp="1604290775117" />
     <state x="872" y="254" key="Vcs.Push.Dialog.v2" timestamp="1604778846245">
       <screen x="0" y="0" width="2560" height="1050" />
@@ -343,10 +348,10 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state width="600" height="440" key="javadoc.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602093882720" />
-    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1605276808165">
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup" timestamp="1605477402461">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605276808165" />
+    <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605477402461" />
     <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1605471813636">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>

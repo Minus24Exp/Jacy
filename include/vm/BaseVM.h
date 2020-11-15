@@ -17,10 +17,36 @@ public:
     BaseVM();
     virtual ~BaseVM() = default;
 
-    virtual void eval(const Chunk & chunk) = 0;
+    virtual void eval(const Chunk & chunk);
 
 protected:
-    // Bytecode
+    // Opcodes //
+    virtual void before_eval() = 0;
+    virtual void before_opcode(OpCode opcode) = 0;
+    virtual void after_opcode() = 0;
+    virtual void unknown_opcode(uint8_t byte) = 0;
+    virtual void _nop() = 0;
+    virtual void _pop() = 0;
+    virtual void _null_const() = 0;
+    virtual void _false_Const() = 0;
+    virtual void _true_const() = 0;
+    virtual void _int_const() = 0;
+    virtual void _float_const() = 0;
+    virtual void _string_const() = 0;
+    virtual void _define_global() = 0;
+    virtual void _load_global() = 0;
+    virtual void _store_global() = 0;
+    virtual void _load_local() = 0;
+    virtual void _store_local() = 0;
+    virtual void _jump() = 0;
+    virtual void _jump_false() = 0;
+    virtual void _invoke() = 0;
+    virtual void _invoke_nf() = 0;
+    virtual void _invoke_method() = 0;
+    virtual void _get_property() = 0;
+    virtual void _set_property() = 0;
+
+    // Bytecode //
     Chunk chunk;
     size_t ip{0};
     uint8_t peek() const;
@@ -31,7 +57,7 @@ protected:
     uint32_t read4();
     uint64_t read8();
 
-    // Stack
+    // Stack //
     std::vector<value_ptr> stack;
     void push(const value_ptr & value);
     value_ptr pop();
@@ -39,18 +65,18 @@ protected:
 
     std::map<std::string, value_ptr> globals;
 
-    // Callframes
+    // Callframes //
     std::vector<CallFrame> call_frames;
     std::vector<CallFrame>::iterator frame;
     std::vector<value_ptr> read_args(uint64_t arg_count);
 
-    // Constants
+    // Constants //
     constant_ptr read_const();
     std::shared_ptr<IntConstant> read_int_const();
     std::shared_ptr<FloatConstant> read_float_const();
     std::shared_ptr<StringConstant> read_string_const();
 
-    // Errors
+    // Errors //
     static void error(const std::string & msg);
 };
 
