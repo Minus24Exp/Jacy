@@ -40,8 +40,6 @@ public:
     // Debug //
 public:
     DisasmOptions options{};
-
-private:
     Logger log;
 };
 

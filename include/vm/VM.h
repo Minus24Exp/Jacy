@@ -18,8 +18,6 @@ private:
     // DEBUG //
 public:
     VMOptions options;
-
-private:
     Logger log;
 };
 

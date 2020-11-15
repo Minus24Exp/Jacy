@@ -88,9 +88,9 @@ private:
     // DEBUG //
 public:
     ParserOptions options;
-private:
     Logger log;
 
+private:
     void print_parsing_entity(const std::string & entitiy);
 };
 

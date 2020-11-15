@@ -98,8 +98,6 @@ private:
     // DEBUG //
 public:
     CompilerOptions options;
-
-private:
     Logger log;
 };
 

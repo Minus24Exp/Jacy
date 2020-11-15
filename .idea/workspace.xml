@@ -33,25 +33,15 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Logger varargs, yeah">
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Update)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/common/Options.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/common/Options.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/common/Logger.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/common/Logger.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/types.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/parser/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Lexer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/parser/Parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/parser/Parser.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/vm/Disasm.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Disasm.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/vm/VM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/VM.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/globals.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globals.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/Lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Lexer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser/Parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser/Parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tree/Printer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/tree/Printer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/VM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/VM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +146,7 @@
       <workItem from="1605204700187" duration="9093000" />
       <workItem from="1605271510996" duration="13699000" />
       <workItem from="1605359612166" duration="9196000" />
-      <workItem from="1605453890877" duration="14706000" />
+      <workItem from="1605453890877" duration="15521000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -235,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605461544072</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Update)">
+      <created>1605474599032</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1605474599032</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -264,7 +261,8 @@
     <MESSAGE value="Logger updates" />
     <MESSAGE value="Update" />
     <MESSAGE value="Logger varargs, yeah" />
-    <option name="LAST_COMMIT_MESSAGE" value="Logger varargs, yeah" />
+    <MESSAGE value="Update)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update)" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1167" y="361" width="540" height="510" key="#Notifications" timestamp="1605032383293">

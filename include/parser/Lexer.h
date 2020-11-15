@@ -55,8 +55,6 @@ private:
     // DEBUG //
 public:
     LexerOptions options{};
-
-private:
     Logger log;
 };
 

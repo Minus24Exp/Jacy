@@ -13,6 +13,8 @@ class Logger {
 public:
     Logger(std::string _class, const LoggerOptions & options) : _class(std::move(_class)), options(options) {}
 
+    LoggerOptions options;
+
     template<typename ...Args>
     void verbose(Args && ...args) {
         log(LogLevel::Verbose, args...);
@@ -39,7 +41,6 @@ public:
     }
 
 private:
-    LoggerOptions options;
     std::string _class;
 
     const std::map<LogLevel, std::string> level_names = {

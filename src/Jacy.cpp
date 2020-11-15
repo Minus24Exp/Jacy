@@ -36,11 +36,12 @@ void Jacy::launch(int argc, const char * argv[]) {
 
     // TODO: Add OptionController or something...
     if (!options.debug) {
-        options.log.level = LogLevel::Warn;
-        lexer.options.log.level = LogLevel::Warn;
-        compiler.options.log.level = LogLevel::Warn;
-        vm.options.log.level = LogLevel::Warn;
-        disasm.options.log.level = LogLevel::Warn;
+        log.options.level = LogLevel::Warn;
+        lexer.log.options.level = LogLevel::Warn;
+        parser.log.options.level = LogLevel::Warn;
+        compiler.log.options.level = LogLevel::Warn;
+        vm.log.options.level = LogLevel::Warn;
+        disasm.log.options.level = LogLevel::Warn;
     }
 
     // TODO: Add command line arguments module
