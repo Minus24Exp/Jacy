@@ -1,6 +1,10 @@
 #include "compiler/Compiler.h"
 
-Compiler::Compiler() : scope_depth(0), log("Compiler", options.log) {}
+Compiler::Compiler() : scope_depth(0), log("Compiler", options.log) {
+    for (const auto & global : jcGlobals) {
+        globals[global.first] = std::make_shared<Variable>(VarDeclKind::Val, global.second.type);
+    }
+}
 
 Chunk Compiler::compile(const StmtList & tree) {
     enter_scope();
@@ -21,9 +25,11 @@ void Compiler::visit(ExprStmt * expr_stmt) {
 }
 
 void Compiler::visit(Block * block) {
+    enter_scope();
     for (const auto & stmt : block->stmts) {
         stmt->accept(*this);
     }
+    exit_scope();
 }
 
 void Compiler::visit(VarDecl * var_decl) {
@@ -403,7 +409,7 @@ void Compiler::emit_id(Identifier * id) {
         try {
             const auto & global = globals.at(id->get_name());
             if (!global) {
-                log.debug(id->get_name() + " global is null");
+                log.debug(id->get_name(), " global is null");
                 throw std::out_of_range(id->get_name());
             }
             last_type = global->type;

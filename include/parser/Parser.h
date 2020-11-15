@@ -80,14 +80,15 @@ private:
     expr_ptr parse_if_expr();
     expr_ptr parse_literal();
 
-    // Errors
+    // Errors //
     void error(const std::string & msg);
     void unexpected_error();
     void expected_error(const std::string & expected);
 
-    // DEBUG
-private:
+    // DEBUG //
+public:
     ParserOptions options;
+private:
     Logger log;
 
     void print_parsing_entity(const std::string & entitiy);

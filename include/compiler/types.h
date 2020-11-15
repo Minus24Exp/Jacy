@@ -14,6 +14,7 @@ enum class TypeTag {
     None,
     Any,
     Null,
+    Void,
     Primitive,
     Func,
     NativeFunc,
@@ -44,6 +45,15 @@ struct NullType : Type {
     }
 };
 const type_ptr null_t = std::make_shared<NullType>();
+
+struct VoidType : Type {
+    VoidType() : Type(TypeTag::Void) {}
+
+    bool compare(const type_ptr & other) override {
+        return other->tag == TypeTag::Void;
+    }
+};
+const type_ptr void_t = std::make_shared<VoidType>();
 
 struct NullableType : Type {
     explicit NullableType(const type_ptr & type) : Type(type->tag), type(type) {}
@@ -76,8 +86,12 @@ const type_ptr int_t = std::make_shared<PrimitiveType>(Primitive::Int);
 const type_ptr float_t = std::make_shared<PrimitiveType>(Primitive::Float);
 const type_ptr string_t = std::make_shared<PrimitiveType>(Primitive::String);
 
+struct FuncType;
+using func_t_ptr = std::shared_ptr<FuncType>;
+using t_list = std::vector<type_ptr>;
+
 struct FuncType : Type {
-    FuncType(TypeTag callable_type, const type_ptr & return_type, std::vector<type_ptr> arg_types)
+    FuncType(TypeTag callable_type, const type_ptr & return_type, std::vector<type_ptr> && arg_types)
         : Type(callable_type), return_type(return_type), arg_types(std::move(arg_types)) {}
 
     type_ptr return_type;

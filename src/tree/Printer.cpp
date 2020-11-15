@@ -3,8 +3,7 @@
 Printer::Printer() = default;
 
 void Printer::print_indent() const {
-    // Note: Use print indent only before statement printing
-    // not before expression
+    // Note: Use print indent only before statement printing not before expression
     std::string str(indent * 4, ' ');
     std::cout << str;
 }

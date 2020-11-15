@@ -1,6 +1,6 @@
 #include "parser/Lexer.h"
 
-Lexer::Lexer() {
+Lexer::Lexer() : log("Lexer", options.log) {
     index = 0;
     line = 0;
     column = 0;

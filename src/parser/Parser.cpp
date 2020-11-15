@@ -1,6 +1,6 @@
 #include "parser/Parser.h"
 
-Parser::Parser() : log("Parser", options.log) {}
+Parser::Parser() : log("Parser", options.log), index(0) {}
 
 Token Parser::peek() {
     return tokens[index];
@@ -980,6 +980,6 @@ void Parser::print_parsing_entity(const std::string & entity) {
     if (!options.log_parsing_entity) {
         return;
     }
-    log.debug("Parse " + entity);
+    log.debug("Parse ", entity);
 }
 

@@ -7,7 +7,7 @@
 #include "Exception.h"
 #include "compiler/Scope.h"
 #include "compiler/types.h"
-#include "vm/globals.h"
+#include "../../lib/globals.h"
 #include "common/Logger.h"
 
 #include <cstring>
@@ -49,7 +49,7 @@ public:
     void visit(DictExpr * dict) override;
 
 private:
-    // Bytecode
+    // Bytecode //
     Chunk chunk;
     void emit(uint8_t byte);
     void emit(OpCode opcode);
@@ -58,7 +58,7 @@ private:
     void emit(uint32_t i);
     void emit(uint64_t l);
 
-    // Constants
+    // Constants //
     std::map<long long, uint64_t> int_constants;
     std::map<double, uint64_t> float_constants;
     std::map<std::string, uint64_t> string_constants;
@@ -68,25 +68,25 @@ private:
     void emit_string(const std::string & string_val);
     uint64_t make_string(const std::string & string_val);
 
-    // Scope
+    // Scope //
     uint64_t scope_depth;
     scope_ptr scope;
     void enter_scope();
     void exit_scope();
 
-    // Variables
+    // Variables //
     uint64_t resolve_local(const scope_ptr & _scope, Identifier * id);
     uint64_t resolve_upvalue(const scope_ptr & _scope, Identifier * id);
     void emit_id(Identifier * id);
     void declare_var(VarDeclKind kind, type_ptr type, Identifier * id);
     void add_local(VarDeclKind kind, type_ptr type, const std::string & name);
 
-    // Jumps
+    // Jumps //
     int64_t emit_jump(OpCode jump_instr);
     void patch_jump(int64_t offset);
 
-    // Type checking
-    // TODO: Maybe add reset_type and set_type funcs for explicity
+    // Type checking //
+    // TODO: ? Maybe add reset_type and set_type funcs for explicity
     type_ptr last_type{nullptr};
     std::map<std::string, var_ptr> globals;
     type_ptr resolve_type(Identifier * id);
@@ -96,8 +96,10 @@ private:
     static void undefined_entity();
 
     // DEBUG //
-private:
+public:
     CompilerOptions options;
+
+private:
     Logger log;
 };
 

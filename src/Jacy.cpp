@@ -34,10 +34,19 @@ void Jacy::launch(int argc, const char * argv[]) {
         }
     }
 
+    // TODO: Add OptionController or something...
+    if (!options.debug) {
+        options.log.level = LogLevel::Warn;
+        lexer.options.log.level = LogLevel::Warn;
+        compiler.options.log.level = LogLevel::Warn;
+        vm.options.log.level = LogLevel::Warn;
+        disasm.options.log.level = LogLevel::Warn;
+    }
+
+    // TODO: Add command line arguments module
     if (main_file.empty()) {
         run_repl();
     } else {
-        // @TODO: Add script argv available in script
         run_script(main_file);
     }
 }
@@ -50,7 +59,7 @@ void Jacy::run_repl() {
         line.clear();
         std::getline(std::cin, line);
 
-        // @TODO: !!! Fix problem with special keys like arrow (ConEmu)
+        // TODO: !!! Fix problem with special keys like arrow (ConEmu)
 
         // Intercept exceptions for REPL
         // REPL just prints them and doesn't stop

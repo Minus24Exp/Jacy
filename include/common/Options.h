@@ -42,7 +42,9 @@ struct JacyOptions {
 };
 
 // Lexer //
-struct LexerOptions {};
+struct LexerOptions {
+    LoggerOptions log = {};
+};
 
 // Parser //
 struct ParserOptions {
@@ -60,6 +62,13 @@ struct CompilerOptions {
     LoggerOptions log = {
         .level = LogLevel::Verbose, // Note: Verbose for debug
     };
+};
+
+// Disasm //
+struct DisasmOptions {
+    bool pure_dump{true};
+
+    LoggerOptions log = {};
 };
 
 // VM //

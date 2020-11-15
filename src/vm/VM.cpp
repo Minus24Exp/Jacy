@@ -1,6 +1,6 @@
 #include "vm/VM.h"
 
-VM::VM() {
+VM::VM() : log("VM", options.log) {
     call_frames.push_back({});
     frame = call_frames.begin();
 }

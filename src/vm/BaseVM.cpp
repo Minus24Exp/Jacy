@@ -1,5 +1,11 @@
 #include "vm/BaseVM.h"
 
+BaseVM::BaseVM() {
+    for (const auto & global : jcGlobals) {
+        globals[global.first] = global.second.value;
+    }
+}
+
 //////////////
 // Bytecode //
 //////////////

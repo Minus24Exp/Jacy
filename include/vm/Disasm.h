@@ -2,6 +2,7 @@
 #define DISASM_H
 
 #include "vm/BaseVM.h"
+#include "common/Logger.h"
 #include <map>
 #include <cstring>
 
@@ -28,11 +29,6 @@ const std::map<OpCode, std::string> opcode_names = {
     {OpCode::SetProperty, "SetProperty"},
 };
 
-struct DisasmOptions {
-    // Note: Default options
-    bool pure_dump{true};
-};
-
 class Disasm : public BaseVM {
 public:
     Disasm();
@@ -41,8 +37,12 @@ public:
 
     void eval(const Chunk & chunk) override;
 
-private:
+    // Debug //
+public:
     DisasmOptions options{};
+
+private:
+    Logger log;
 };
 
 #endif // DISASM_H

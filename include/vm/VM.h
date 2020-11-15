@@ -2,6 +2,7 @@
 #define VM_H
 
 #include "vm/BaseVM.h"
+#include "common/Logger.h"
 
 class VM : public BaseVM {
 public:
@@ -13,6 +14,13 @@ public:
 private:
     // Errors //
     static void error(const std::string & msg);
+
+    // DEBUG //
+public:
+    VMOptions options;
+
+private:
+    Logger log;
 };
 
 #endif // VM_H

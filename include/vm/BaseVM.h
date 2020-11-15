@@ -4,7 +4,7 @@
 #include "vm/Value.h"
 #include "compiler/opcode.h"
 #include "Exception.h"
-#include "vm/globals.h"
+#include "../../lib/globals.h"
 #include <vector>
 #include <map>
 
@@ -14,7 +14,7 @@ struct CallFrame {
 
 class BaseVM {
 public:
-    BaseVM() = default;
+    BaseVM();
     virtual ~BaseVM() = default;
 
     virtual void eval(const Chunk & chunk) = 0;
@@ -37,7 +37,7 @@ protected:
     value_ptr pop();
     value_ptr top(uint64_t offset = 0);
 
-    std::map<std::string, value_ptr> globals{jcGlobals};
+    std::map<std::string, value_ptr> globals;
 
     // Callframes
     std::vector<CallFrame> call_frames;

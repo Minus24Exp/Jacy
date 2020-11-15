@@ -1,6 +1,6 @@
 #include "vm/Disasm.h"
 
-Disasm::Disasm() = default;
+Disasm::Disasm() : log("Disasm", options.log) {}
 
 Disasm::Disasm(const DisasmOptions & options) : Disasm() {
     this->options = options;

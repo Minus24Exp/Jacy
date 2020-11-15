@@ -3,6 +3,7 @@
 
 #include "Exception.h"
 #include "parser/Token.h"
+#include "common/Logger.h"
 
 #include <vector>
 #include <iostream>
@@ -50,6 +51,13 @@ private:
     // Errors //
     void unexpected_token_error();
     static void unexpected_eof_error();
+
+    // DEBUG //
+public:
+    LexerOptions options{};
+
+private:
+    Logger log;
 };
 
 #endif
