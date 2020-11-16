@@ -86,7 +86,6 @@ void BaseVM::unknown_opcode(uint8_t byte) {
     throw DevError("Unknown opcode with byte: " + std::to_string(byte));
 }
 
-
 //////////////
 // Bytecode //
 //////////////

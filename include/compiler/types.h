@@ -19,6 +19,7 @@ enum class TypeTag {
     Func,
     NativeFunc,
     Class,
+    Union,
 };
 
 struct Type {
@@ -91,11 +92,11 @@ using func_t_ptr = std::shared_ptr<FuncType>;
 using t_list = std::vector<type_ptr>;
 
 struct FuncType : Type {
-    FuncType(TypeTag callable_type, const type_ptr & return_type, std::vector<type_ptr> && arg_types)
-        : Type(callable_type), return_type(return_type), arg_types(std::move(arg_types)) {}
+    FuncType(TypeTag callable_type, const type_ptr & return_type, const t_list & arg_types)
+        : Type(callable_type), return_type(return_type), arg_types(arg_types) {}
 
     type_ptr return_type;
-    std::vector<type_ptr> arg_types;
+    t_list arg_types;
 
     bool compare(const type_ptr & other) override {
         if (other->tag != TypeTag::Func &&
@@ -118,6 +119,34 @@ struct FuncType : Type {
             }
         }
         return _return_type == return_type;
+    }
+};
+
+struct UnionType : Type {
+    explicit UnionType(t_list && types) : Type(TypeTag::Union), types(std::move(types)) {}
+
+    t_list types;
+
+    bool compare(const type_ptr & other) override {
+        if (other->tag == TypeTag::Union) {
+            const auto & other_union = std::static_pointer_cast<UnionType>(other);
+            // TODO: Type inheritance check
+            for (int i = 0; i < types.size(); i++) {
+                for (int j = i; j < other_union->types.size(); j++) {
+                    if (types[i]->compare(other_union->types[j])) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            for (const auto & type : types) {
+                if (type->compare(other)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 };
 
