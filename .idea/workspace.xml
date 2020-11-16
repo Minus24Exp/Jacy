@@ -34,11 +34,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Logger level update">
-      <change afterPath="$PROJECT_DIR$/include/common/Config.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/Disasm.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Disasm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/VM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/VM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/Verifier.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Verifier.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/VM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/VM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,6 +147,7 @@
       <workItem from="1605271510996" duration="13699000" />
       <workItem from="1605359612166" duration="9196000" />
       <workItem from="1605453890877" duration="17553000" />
+      <workItem from="1605486281871" duration="2148000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>

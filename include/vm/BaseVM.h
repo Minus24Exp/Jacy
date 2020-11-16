@@ -21,14 +21,14 @@ public:
 
 protected:
     // Opcodes //
-    virtual void before_eval() = 0;
-    virtual void before_opcode(OpCode opcode) = 0;
-    virtual void after_opcode() = 0;
-    virtual void unknown_opcode(uint8_t byte) = 0;
+    virtual void before_eval() {}
+    virtual void before_opcode(OpCode opcode) {}
+    virtual void after_opcode() {}
+    virtual void unknown_opcode(uint8_t byte);
     virtual void _nop() = 0;
     virtual void _pop() = 0;
     virtual void _null_const() = 0;
-    virtual void _false_Const() = 0;
+    virtual void _false_const() = 0;
     virtual void _true_const() = 0;
     virtual void _int_const() = 0;
     virtual void _float_const() = 0;

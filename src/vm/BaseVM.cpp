@@ -24,7 +24,7 @@ void BaseVM::eval(const Chunk & chunk) {
                 _null_const();
             } break;
             case OpCode::FalseConst: {
-                _false_Const();
+                _false_const();
             } break;
             case OpCode::TrueConst: {
                 _true_const();
@@ -81,6 +81,11 @@ void BaseVM::eval(const Chunk & chunk) {
         after_opcode();
     }
 }
+
+void BaseVM::unknown_opcode(uint8_t byte) {
+    throw DevError("Unknown opcode with byte: " + std::to_string(byte));
+}
+
 
 //////////////
 // Bytecode //

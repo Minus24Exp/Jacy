@@ -12,8 +12,6 @@ class Verifier : public BaseVM {
 public:
     Verifier();
     ~Verifier() override = default;
-
-    void eval(const Chunk & chunk) override;
 };
 
 #endif // VERIFIER_H
