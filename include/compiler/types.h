@@ -14,9 +14,13 @@ struct Class;
 using class_ptr = std::shared_ptr<Class>;
 using type_ptr = std::shared_ptr<Type>;
 
-extern class_ptr cAny;
 extern class_ptr cNull;
-extern class_ptr
+extern class_ptr cBool;
+extern class_ptr cInt;
+extern class_ptr cFloat;
+extern class_ptr cString;
+extern class_ptr cFunc;
+extern class_ptr cUnion;
 
 enum class TypeTag {
     None,
@@ -58,7 +62,7 @@ struct NullType : Type {
 const type_ptr null_t = std::make_shared<NullType>();
 
 struct VoidType : Type {
-    VoidType() : Type(TypeTag::Void) {}
+    VoidType() : Type(TypeTag::Void, nullptr) {}
 
     bool compare(const type_ptr & other) override {
         return other->tag == TypeTag::Void;
@@ -67,7 +71,7 @@ struct VoidType : Type {
 const type_ptr void_t = std::make_shared<VoidType>();
 
 struct NullableType : Type {
-    explicit NullableType(const type_ptr & type) : Type(type->tag), type(type) {}
+    explicit NullableType(const type_ptr & type) : Type(type->tag, type->_class), type(type) {}
 
     type_ptr type;
 
@@ -83,8 +87,15 @@ enum class Primitive {
     String,
 };
 
+std::map<Primitive, class_ptr> primitive_t_class = {
+    {Primitive::Bool, cBool},
+    {Primitive::Int, cInt},
+    {Primitive::Float, cFloat},
+    {Primitive::String, cString},
+};
+
 struct PrimitiveType : Type {
-    explicit PrimitiveType(Primitive type) : Type(TypeTag::Primitive), type(type) {}
+    explicit PrimitiveType(Primitive type) : Type(TypeTag::Primitive, primitive_t_class[type]), type(type) {}
 
     Primitive type;
 
@@ -103,7 +114,7 @@ using t_list = std::vector<type_ptr>;
 
 struct FuncType : Type {
     FuncType(TypeTag callable_type, const type_ptr & return_type, const t_list & arg_types)
-        : Type(callable_type), return_type(return_type), arg_types(arg_types) {}
+        : Type(callable_type, cFunc), return_type(return_type), arg_types(arg_types) {}
 
     type_ptr return_type;
     t_list arg_types;
@@ -133,7 +144,7 @@ struct FuncType : Type {
 };
 
 struct UnionType : Type {
-    explicit UnionType(t_list && types) : Type(TypeTag::Union), types(std::move(types)) {}
+    explicit UnionType(t_list && types) : Type(TypeTag::Union, cUnion), types(std::move(types)) {}
 
     t_list types;
 

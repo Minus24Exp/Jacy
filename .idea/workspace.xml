@@ -33,18 +33,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Union type">
-      <change afterPath="$PROJECT_DIR$/include/common/Logger.inl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/object/classes.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/object/objects.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="WIP Classes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/types.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/classes.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/classes.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +142,7 @@
       <workItem from="1605271510996" duration="13699000" />
       <workItem from="1605359612166" duration="9196000" />
       <workItem from="1605453890877" duration="17553000" />
-      <workItem from="1605486281871" duration="13471000" />
+      <workItem from="1605486281871" duration="14769000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -257,7 +249,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605499372615</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="WIP Classes">
+      <created>1605585738129</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1605585738129</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -291,7 +290,8 @@
     <MESSAGE value="BaseVM derived classes opcode functions" />
     <MESSAGE value="Union types" />
     <MESSAGE value="Union type" />
-    <option name="LAST_COMMIT_MESSAGE" value="Union type" />
+    <MESSAGE value="WIP Classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP Classes" />
   </component>
   <component name="WindowStateProjectService">
     <state x="906" y="203" key="#Inspections" timestamp="1605584389892">

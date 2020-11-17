@@ -10,15 +10,23 @@
 
 struct Field {
     VarDeclKind kind;
-    value_ptr value;
+    type_ptr type;
     std::string name;
 };
 
 struct Class {
     // TODO: ! Rewrite for any function !
-    nf_ptr constructor;
-    std::map<std::string, nf_ptr> methods;
-    std::map<std::string, value_ptr> fields;
+    func_t_ptr constructor;
+    std::map<std::string, func_t_ptr> methods;
+    std::map<std::string, Field> fields;
 };
+
+struct cNull {};
+struct cBool {};
+struct cInt {};
+struct cFloat {};
+struct cString {};
+struct cFunc {};
+struct cUnion {};
 
 #endif // CLASSES_H
