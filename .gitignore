@@ -31,8 +31,8 @@
 *.out
 *.app
 
-.vscode
-.idea
+#.vscode
+#.idea
 
 bin/**
 **/cmake-build-*

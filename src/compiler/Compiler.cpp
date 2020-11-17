@@ -41,20 +41,25 @@ void Compiler::visit(VarDecl * var_decl) {
     const auto & var_name = var_decl->id->get_name();
 
     if (scope_depth == 0) {
+        const auto & existent = globals.find(var_name);
+        if (existent != globals.end()) {
+            error("Unable to redefine global " + var_name, var_decl->pos);
+        }
+
         // Define global
         uint64_t global = make_string(var_name);
         emit(OpCode::DefineGlobal);
         emit(static_cast<uint64_t>(global));
 
-        // TODO: ! val check
-        globals[var_name] = nullptr;
+        // TODO: ! No val variables without assgin_expr and explicit type !
+        globals[var_name] = std::make_shared<Variable>(kind, type);
 
         if (var_decl->assign_expr) {
             var_decl->assign_expr->accept(*this);
             emit(OpCode::StoreGlobal);
             emit(static_cast<uint64_t>(global));
 
-            globals[var_name] = std::make_shared<Variable>(kind, type);
+            globals[var_name]->is_defined = true;
         }
     } else {
         declare_var(kind, type, var_decl->id.get());
@@ -150,7 +155,7 @@ void Compiler::visit(Prefix * expr_stmt) {
 }
 
 void Compiler::visit(Assign * assign) {
-    // TODO: ! Disallow globals (and internal modules) reassignement
+    // TODO: ! Disallow globals (and internal modules) reassignment
     assign->value->accept(*this);
     OpCode opcode;
     uint64_t operand;
@@ -169,12 +174,17 @@ void Compiler::visit(SetExpr * set_expr) {
     set_expr->left->accept(*this);
 
     uint64_t name = make_string(set_expr->id->get_name());
+
+    // TODO: Type check
     set_expr->value->accept(*this);
+
     emit(OpCode::SetProperty);
     emit(name);
 }
 
 void Compiler::visit(GetExpr * get_expr) {
+    last_type = nullptr;
+
     get_expr->left->accept(*this);
     uint64_t name = make_string(get_expr->id->get_name());
     emit(OpCode::GetProperty);

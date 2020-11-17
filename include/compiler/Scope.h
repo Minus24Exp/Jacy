@@ -18,6 +18,7 @@ struct Variable {
 
     VarDeclKind kind;
     type_ptr type;
+    bool is_defined{false};
 };
 
 struct Local : Variable {
@@ -25,7 +26,6 @@ struct Local : Variable {
 
     std::string name;
     uint64_t depth{0};
-    bool is_defined{false};
     bool is_captured{false};
 };
 

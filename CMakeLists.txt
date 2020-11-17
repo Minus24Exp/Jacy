@@ -11,6 +11,6 @@ set(GCC_COVERAGE_LINK_FLAGS "-coverage -lgcov")
 
 file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/**/*.cpp)
 
-add_executable(${PROJECT_NAME} ${SOURCES} include/common/Logger.h include/common/Options.h include/common/Config.h)
+add_executable(${PROJECT_NAME} ${SOURCES} include/common/Logger.h include/common/Options.h include/common/Config.h include/object/Object.h include/object/classes.h)
 
 target_include_directories(Jacy PRIVATE ${PROJECT_SOURCE_DIR}/include)

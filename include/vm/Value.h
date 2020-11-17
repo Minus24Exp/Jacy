@@ -2,6 +2,7 @@
 #define VALUE_H
 
 #include "compiler/opcode.h"
+
 #include <string>
 #include <functional>
 #include <utility>
@@ -10,11 +11,15 @@
 #include <limits>
 
 struct Value;
+struct Object;
+using object_ptr = std::shared_ptr<Object>;
 using value_ptr = std::shared_ptr<Value>;
 
 struct Value {
     virtual bool to_b() = 0;
     virtual std::string to_string() = 0;
+
+    object_ptr object;
 };
 
 struct NullValue : Value {
@@ -86,7 +91,7 @@ struct String : Value {
     std::string value;
 
     bool to_b() override {
-        return value.size() != 0;
+        return !value.empty();
     }
 
     std::string to_string() override {
@@ -109,7 +114,7 @@ struct NativeFunc : Value {
     }
 
     std::string to_string() override {
-        return "native_func_" + name;
+        return "<native_func_" + name + ">";
     }
 };
 

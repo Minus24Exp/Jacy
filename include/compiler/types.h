@@ -1,14 +1,22 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include "tree/nodes.h"
+
 #include <string>
 #include <memory>
-#include "tree/nodes.h"
+#include <map>
 
 // TODO: ! Move all structs to top and constants to bottom
 
 struct Type;
+struct Class;
+using class_ptr = std::shared_ptr<Class>;
 using type_ptr = std::shared_ptr<Type>;
+
+extern class_ptr cAny;
+extern class_ptr cNull;
+extern class_ptr
 
 enum class TypeTag {
     None,
@@ -23,14 +31,16 @@ enum class TypeTag {
 };
 
 struct Type {
-    explicit Type(TypeTag tag) : tag(tag) {}
+    explicit Type(TypeTag tag, const class_ptr & _class) : tag(tag), _class(_class) {}
 
     TypeTag tag{TypeTag::None};
+    class_ptr _class;
+
     virtual bool compare(const type_ptr & other) = 0;
 };
 
 struct Any : Type {
-    Any() : Type(TypeTag::Any) {}
+    Any() : Type(TypeTag::Any, nullptr) {}
 
     bool compare(const type_ptr & other) override {
         return true;
@@ -39,7 +49,7 @@ struct Any : Type {
 const type_ptr any_t = std::make_shared<Any>();
 
 struct NullType : Type {
-    NullType() : Type(TypeTag::Null) {}
+    NullType() : Type(TypeTag::Null, cNull) {}
 
     bool compare(const type_ptr & other) override {
         return other->tag == TypeTag::Null;

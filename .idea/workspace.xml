@@ -33,11 +33,18 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="BaseVM derived classes opcode functions">
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Union type">
+      <change afterPath="$PROJECT_DIR$/include/common/Logger.inl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/object/classes.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/object/objects.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/types.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/globals.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globals.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +150,7 @@
       <workItem from="1605271510996" duration="13699000" />
       <workItem from="1605359612166" duration="9196000" />
       <workItem from="1605453890877" duration="17553000" />
-      <workItem from="1605486281871" duration="8002000" />
+      <workItem from="1605486281871" duration="13471000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -243,7 +250,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605488524928</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Union type">
+      <created>1605499372615</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1605499372615</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,9 +289,15 @@
     <MESSAGE value="Update)" />
     <MESSAGE value="Logger level update" />
     <MESSAGE value="BaseVM derived classes opcode functions" />
-    <option name="LAST_COMMIT_MESSAGE" value="BaseVM derived classes opcode functions" />
+    <MESSAGE value="Union types" />
+    <MESSAGE value="Union type" />
+    <option name="LAST_COMMIT_MESSAGE" value="Union type" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="906" y="203" key="#Inspections" timestamp="1605584389892">
+      <screen x="0" y="0" width="2560" height="1050" />
+    </state>
+    <state x="906" y="203" key="#Inspections/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605584389892" />
     <state x="1167" y="361" width="540" height="510" key="#Notifications" timestamp="1605032383293">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
@@ -331,10 +351,10 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state width="491" height="902" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605488495888" />
-    <state x="781" y="170" width="1383" height="832" key="SettingsEditor" timestamp="1605477038377">
+    <state x="791" y="171" width="1383" height="832" key="SettingsEditor" timestamp="1605584354717">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="781" y="170" width="1383" height="832" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605477038377" />
+    <state x="791" y="171" width="1383" height="832" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605584354717" />
     <state x="781" y="170" key="SettingsEditor/0.0.2560.1052/2560.27.1280.1024@0.0.2560.1052" timestamp="1604290775117" />
     <state x="872" y="254" key="Vcs.Push.Dialog.v2" timestamp="1604778846245">
       <screen x="0" y="0" width="2560" height="1050" />
