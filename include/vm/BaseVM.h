@@ -9,7 +9,7 @@
 #include <map>
 
 struct CallFrame {
-    std::vector<value_ptr> slots;
+    std::vector<object_ptr> slots;
 };
 
 class BaseVM {
@@ -58,17 +58,17 @@ protected:
     uint64_t read8();
 
     // Stack //
-    std::vector<value_ptr> stack;
-    void push(const value_ptr & value);
-    value_ptr pop();
-    value_ptr top(uint64_t offset = 0);
+    std::vector<object_ptr> stack;
+    void push(const object_ptr & value);
+    object_ptr pop();
+    object_ptr top(uint64_t offset = 0);
 
-    std::map<std::string, value_ptr> globals;
+    std::map<std::string, object_ptr> globals;
 
-    // Callframes //
+    // Call-frames //
     std::vector<CallFrame> call_frames;
     std::vector<CallFrame>::iterator frame;
-    std::vector<value_ptr> read_args(uint64_t arg_count);
+    std::vector<object_ptr> read_args(uint64_t arg_count);
 
     // Constants //
     constant_ptr read_const();

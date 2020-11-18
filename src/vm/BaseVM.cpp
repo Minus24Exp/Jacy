@@ -131,17 +131,17 @@ uint64_t BaseVM::read8() {
 ///////////
 // Stack //
 ///////////
-void BaseVM::push(const value_ptr & value) {
+void BaseVM::push(const object_ptr & value) {
     stack.push_back(value);
 }
 
-value_ptr BaseVM::pop() {
-    value_ptr back = stack.back();
+object_ptr BaseVM::pop() {
+    object_ptr back = stack.back();
     stack.pop_back();
     return back;
 }
 
-value_ptr BaseVM::top(uint64_t offset) {
+object_ptr BaseVM::top(uint64_t offset) {
     return stack.at(stack.size() - offset - 1);
 }
 

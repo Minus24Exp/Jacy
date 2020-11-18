@@ -1,7 +1,7 @@
 #ifndef SCOPE_H
 #define SCOPE_H
 
-#include "compiler/types.h"
+#include "compiler/type.h"
 #include "tree/Stmt/VarDecl.h"
 #include <vector>
 #include <map>

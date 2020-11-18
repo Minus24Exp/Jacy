@@ -6,7 +6,7 @@
 #include "compiler/opcode.h"
 #include "Exception.h"
 #include "compiler/Scope.h"
-#include "compiler/types.h"
+#include "compiler/type.h"
 #include "../../lib/globals.h"
 #include "common/Logger.h"
 
@@ -86,7 +86,7 @@ private:
     void patch_jump(int64_t offset);
 
     // Type checking //
-    // TODO: ? Maybe add reset_type and set_type funcs for explicity
+    // TODO: ? Maybe add reset_type and set_type funcs for explicitly
     type_ptr last_type{nullptr};
     std::map<std::string, var_ptr> globals;
     type_ptr resolve_type(Identifier * id);

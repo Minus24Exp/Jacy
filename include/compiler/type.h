@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef TYPE_H
+#define TYPE_H
 
 #include "tree/nodes.h"
 
@@ -171,4 +171,4 @@ struct UnionType : Type {
     }
 };
 
-#endif // TYPES_H
+#endif // TYPE_H

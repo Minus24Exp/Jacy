@@ -28,7 +28,7 @@ void Disasm::before_eval() {
     std::cout << "-- Constant Pool --" << std::endl;
     uint64_t cp_offset = 0;
     for (const auto & constant : chunk.constants) {
-        std::cout << cp_offset++ << " - " << static_cast<int>(constant->type) << " - " << constant->to_string() << std::endl;
+        std::cout << cp_offset++ << " - " << constant->to_string() << std::endl;
     }
 
     std::cout << "-- Code --" << std::endl;
@@ -66,19 +66,19 @@ void Disasm::_true_const() {
 
 void Disasm::_int_const() {
     const auto & int_const = read_int_const();
-    push(std::make_shared<Int>(int_const));
+    push(std::make_shared<IntObject>(int_const));
     std::cout << top()->to_string();
 }
 
 void Disasm::_float_const() {
     const auto & float_const = read_float_const();
-    push(std::make_shared<Float>(float_const));
+    push(std::make_shared<FloatObject>(float_const));
     std::cout << float_const->value;
 }
 
 void Disasm::_string_const() {
     const auto & string_const = read_string_const();
-    push(std::make_shared<String>(string_const));
+    push(std::make_shared<StringObject>(string_const));
     std::cout << string_const->value;
 }
 
@@ -136,7 +136,7 @@ void Disasm::_jump_false() {
 
 void Disasm::_invoke() {
     uint64_t arg_count = read8();
-    value_ptr func = top(arg_count);
+    object_ptr func = top(arg_count);
     std::cout << func->to_string() << "(";
     for (uint64_t i = 0; i < arg_count; i++) {
         std::cout << top(arg_count - i - 1)->to_string();

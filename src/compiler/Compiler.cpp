@@ -51,7 +51,7 @@ void Compiler::visit(VarDecl * var_decl) {
         emit(OpCode::DefineGlobal);
         emit(static_cast<uint64_t>(global));
 
-        // TODO: ! No val variables without assgin_expr and explicit type !
+        // TODO: ! No val variables without assign_expr and explicit type !
         globals[var_name] = std::make_shared<Variable>(kind, type);
 
         if (var_decl->assign_expr) {

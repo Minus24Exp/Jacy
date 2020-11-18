@@ -2,7 +2,7 @@
 #define GLOBALS_H
 
 #include "vm/Value.h"
-#include "compiler/types.h"
+#include "compiler/type.h"
 #include <map>
 
 namespace G {

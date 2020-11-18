@@ -33,10 +33,24 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="WIP Classes">
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="WIP_2 Classes">
+      <change afterPath="$PROJECT_DIR$/include/compiler/constant.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/PYJOHN.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/PYJOHN.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/types.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/classes.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/object/classes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/type.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/classes.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/class.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/object/objects.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/globals.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globals.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/VM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/VM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +96,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\Projects\Jacy\Jacy\include\vm" />
+      <recent name="F:\Projects\Jacy\Jacy\include\compiler" />
       <recent name="F:\Projects\Jacy\Jacy\lib" />
     </key>
   </component>
@@ -142,7 +158,8 @@
       <workItem from="1605271510996" duration="13699000" />
       <workItem from="1605359612166" duration="9196000" />
       <workItem from="1605453890877" duration="17553000" />
-      <workItem from="1605486281871" duration="14769000" />
+      <workItem from="1605486281871" duration="18159000" />
+      <workItem from="1605680727802" duration="2358000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -256,7 +273,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605585738129</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="WIP_2 Classes">
+      <created>1605587872314</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1605587872314</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -291,7 +315,8 @@
     <MESSAGE value="Union types" />
     <MESSAGE value="Union type" />
     <MESSAGE value="WIP Classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP Classes" />
+    <MESSAGE value="WIP_2 Classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP_2 Classes" />
   </component>
   <component name="WindowStateProjectService">
     <state x="906" y="203" key="#Inspections" timestamp="1605584389892">
@@ -380,9 +405,9 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605477402461" />
-    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1605471813636">
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1605682363217">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605471813636" />
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605682363217" />
   </component>
 </project>

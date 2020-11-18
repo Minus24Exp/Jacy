@@ -1,8 +1,8 @@
-#ifndef CLASSES_H
-#define CLASSES_H
+#ifndef CLASS_H
+#define CLASS_H
 
 #include "tree/nodes.h"
-#include "compiler/types.h"
+#include "compiler/type.h"
 
 /**
  * Classes describes compile-time signatures
@@ -29,4 +29,4 @@ struct cString {};
 struct cFunc {};
 struct cUnion {};
 
-#endif // CLASSES_H
+#endif // CLASS_H

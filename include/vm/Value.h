@@ -2,6 +2,8 @@
 #define VALUE_H
 
 #include "compiler/opcode.h"
+#include "compiler/class.h"
+#include "compiler/constant.h"
 
 #include <string>
 #include <functional>
@@ -9,20 +11,32 @@
 #include <sstream>
 #include <iomanip>
 #include <limits>
+#include <map>
 
-struct Value;
 struct Object;
 using object_ptr = std::shared_ptr<Object>;
-using value_ptr = std::shared_ptr<Value>;
 
-struct Value {
+struct NativeFunc;
+using FuncArgs = std::vector<object_ptr>;
+using nf_ptr = std::shared_ptr<NativeFunc>;
+using NFBody = std::function<object_ptr(FuncArgs)>;
+
+struct Object {
+//    class_ptr _class;
+//    std::map<std::string, Field> fields;
+
     virtual bool to_b() = 0;
     virtual std::string to_string() = 0;
 
-    object_ptr object;
+//    bool has_field(const std::string & name) {
+//        return fields.find(name) != fields.end() || _class->methods.find(name) != _class->methods.end();
+//    }
+
+//     TODO
+//     value_ptr get();
 };
 
-struct NullValue : Value {
+struct NullObject : Object {
     bool to_b() override {
         return false;
     }
@@ -31,9 +45,9 @@ struct NullValue : Value {
         return "null";
     }
 };
-const auto Null = std::make_shared<NullValue>();
+const auto Null = std::make_shared<NullObject>();
 
-struct FalseValue : Value {
+struct FalseObject : Object {
     bool to_b() override {
         return false;
     }
@@ -42,9 +56,9 @@ struct FalseValue : Value {
         return "false";
     }
 };
-const auto False = std::make_shared<FalseValue>();
+const auto False = std::make_shared<FalseObject>();
 
-struct TrueValue : Value {
+struct TrueObject : Object {
     bool to_b() override {
         return true;
     }
@@ -53,10 +67,10 @@ struct TrueValue : Value {
         return "true";
     }
 };
-const auto True = std::make_shared<TrueValue>();
+const auto True = std::make_shared<TrueObject>();
 
-struct Int : Value {
-    explicit Int(const std::shared_ptr<IntConstant> & int_constant) : value(int_constant->value) {}
+struct IntObject : Object {
+    explicit IntObject(const std::shared_ptr<IntConstant> & int_constant) : value(int_constant->value) {}
 
     long long value;
 
@@ -69,8 +83,8 @@ struct Int : Value {
     }
 };
 
-struct Float : Value {
-    explicit Float(const std::shared_ptr<FloatConstant> & float_constant) : value(float_constant->value) {}
+struct FloatObject : Object {
+    explicit FloatObject(const std::shared_ptr<FloatConstant> & float_constant) : value(float_constant->value) {}
 
     double value;
 
@@ -85,8 +99,8 @@ struct Float : Value {
     }
 };
 
-struct String : Value {
-    explicit String(const std::shared_ptr<StringConstant> & string_constant) : value(string_constant->value) {}
+struct StringObject : Object {
+    explicit StringObject(const std::shared_ptr<StringConstant> & string_constant) : value(string_constant->value) {}
 
     std::string value;
 
@@ -99,15 +113,11 @@ struct String : Value {
     }
 };
 
-struct NativeFunc;
-using FuncArgs = std::vector<value_ptr>;
-using nf_ptr = std::shared_ptr<NativeFunc>;
-using NFBody = std::function<value_ptr(FuncArgs)>;
-struct NativeFunc : Value {
+struct NativeFunc : Object {
+    explicit NativeFunc(std::string name, NFBody body) : name(std::move(name)), body(std::move(body)) {}
+
     std::string name;
     NFBody body;
-
-    explicit NativeFunc(std::string name, NFBody body) : name(std::move(name)), body(std::move(body)) {}
 
     bool to_b() override {
         return true;

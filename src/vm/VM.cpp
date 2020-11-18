@@ -25,17 +25,17 @@ void VM::_true_const() {
 
 void VM::_int_const() {
     const auto & int_const = read_int_const();
-    push(std::make_shared<Int>(int_const));
+    push(std::make_shared<IntObject>(int_const));
 }
 
 void VM::_float_const() {
     const auto & float_const = read_float_const();
-    push(std::make_shared<Float>(float_const));
+    push(std::make_shared<FloatObject>(float_const));
 }
 
 void VM::_string_const() {
     const auto & string_const = read_string_const();
-    push(std::make_shared<String>(string_const));
+    push(std::make_shared<StringObject>(string_const));
 }
 
 void VM::_define_global() {
@@ -99,8 +99,8 @@ void VM::_invoke() {
 void VM::_invoke_nf() {
     uint64_t arg_count = read8();
     std::shared_ptr<NativeFunc> func = std::static_pointer_cast<NativeFunc>(top(arg_count));
-    std::vector<value_ptr> args = read_args(arg_count);
-    value_ptr value = func->body(args);
+    std::vector<object_ptr> args = read_args(arg_count);
+    object_ptr value = func->body(args);
     // TODO: !!! Create `void`, DO NOT USE NULL
     value = value ? value : Null;
     push(value);
