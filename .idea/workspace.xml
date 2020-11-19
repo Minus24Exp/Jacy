@@ -33,16 +33,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Nice...">
-      <change afterPath="$PROJECT_DIR$/docs/dev_notes/varargs.md" afterDir="false" />
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="Logger level update">
+      <change afterPath="$PROJECT_DIR$/include/common/Config.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/class.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/class.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/type.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/type.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jacy.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/globals.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globals.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sample/script.jc" beforeDir="false" afterPath="$PROJECT_DIR$/sample/script.jc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Jacy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Jacy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/compiler/class.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/class.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,13 +79,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/bin/target.exe" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
     <property name="settings.editor.splitter.proportion" value="0.1923921" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="F:\Projects\Jacy\Jacy\include\vm" />
-      <recent name="F:\Projects\Jacy\Jacy\include\compiler" />
       <recent name="F:\Projects\Jacy\Jacy\lib" />
     </key>
   </component>
@@ -98,7 +92,7 @@
       <command value="cowsay" />
     </option>
   </component>
-  <component name="RunManager" selected="CMake Application.Develop-Debug">
+  <component name="RunManager" selected="CMake Application.Develop">
     <configuration name="Develop-Debug" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-debug F:\Projects\Jacy\Jacy\sample\script.jc" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Jacy" TARGET_NAME="Jacy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Jacy" RUN_TARGET_NAME="Jacy">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -150,9 +144,6 @@
       <workItem from="1605271510996" duration="13699000" />
       <workItem from="1605359612166" duration="9196000" />
       <workItem from="1605453890877" duration="17553000" />
-      <workItem from="1605486281871" duration="18159000" />
-      <workItem from="1605680727802" duration="3084000" />
-      <workItem from="1605723537321" duration="10793000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -245,49 +236,7 @@
       <option name="project" value="LOCAL" />
       <updated>1605475533223</updated>
     </task>
-    <task id="LOCAL-00014" summary="BaseVM derived classes opcode functions">
-      <created>1605488524927</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1605488524928</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Union type">
-      <created>1605499372615</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1605499372615</updated>
-    </task>
-    <task id="LOCAL-00016" summary="WIP Classes">
-      <created>1605585738129</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1605585738129</updated>
-    </task>
-    <task id="LOCAL-00017" summary="WIP_2 Classes">
-      <created>1605587872314</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1605587872314</updated>
-    </task>
-    <task id="LOCAL-00018" summary="WIP New project structure">
-      <created>1605683115682</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1605683115682</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Nice...">
-      <created>1605767284893</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1605767284893</updated>
-    </task>
-    <option name="localTasksCounter" value="20" />
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -318,20 +267,9 @@
     <MESSAGE value="Logger varargs, yeah" />
     <MESSAGE value="Update)" />
     <MESSAGE value="Logger level update" />
-    <MESSAGE value="BaseVM derived classes opcode functions" />
-    <MESSAGE value="Union types" />
-    <MESSAGE value="Union type" />
-    <MESSAGE value="WIP Classes" />
-    <MESSAGE value="WIP_2 Classes" />
-    <MESSAGE value="WIP New project structure" />
-    <MESSAGE value="Nice..." />
-    <option name="LAST_COMMIT_MESSAGE" value="Nice..." />
+    <option name="LAST_COMMIT_MESSAGE" value="Logger level update" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="906" y="203" key="#Inspections" timestamp="1605584389892">
-      <screen x="0" y="0" width="2560" height="1050" />
-    </state>
-    <state x="906" y="203" key="#Inspections/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605584389892" />
     <state x="1167" y="361" width="540" height="510" key="#Notifications" timestamp="1605032383293">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
@@ -340,10 +278,10 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="734" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604892120075" />
-    <state x="1039" y="315" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1605767456553">
+    <state x="1039" y="315" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602093618850">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="1039" y="315" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767456553" />
+    <state x="1039" y="315" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1602093618850" />
     <state x="1013" y="276" width="528" height="500" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1604505985043">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
@@ -353,42 +291,42 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="1060" y="280" key="FileChooserDialogImpl/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604885104034" />
-    <state width="487" height="902" key="GridCell.Tab.0.bottom" timestamp="1605767680705">
+    <state width="491" height="902" key="GridCell.Tab.0.bottom" timestamp="1605475502887">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="487" height="902" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767680705" />
-    <state width="487" height="902" key="GridCell.Tab.0.center" timestamp="1605767680705">
+    <state width="491" height="902" key="GridCell.Tab.0.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502887" />
+    <state width="491" height="902" key="GridCell.Tab.0.center" timestamp="1605475502887">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="487" height="902" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767680705" />
-    <state width="487" height="902" key="GridCell.Tab.0.left" timestamp="1605767680705">
+    <state width="491" height="902" key="GridCell.Tab.0.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502887" />
+    <state width="491" height="902" key="GridCell.Tab.0.left" timestamp="1605475502887">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="487" height="902" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767680705" />
-    <state width="487" height="902" key="GridCell.Tab.0.right" timestamp="1605767680705">
+    <state width="491" height="902" key="GridCell.Tab.0.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502887" />
+    <state width="491" height="902" key="GridCell.Tab.0.right" timestamp="1605475502887">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="487" height="902" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767680705" />
-    <state width="487" height="902" key="GridCell.Tab.1.bottom" timestamp="1605767680705">
+    <state width="491" height="902" key="GridCell.Tab.0.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502887" />
+    <state width="491" height="902" key="GridCell.Tab.1.bottom" timestamp="1605475502888">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="487" height="902" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767680705" />
-    <state width="487" height="902" key="GridCell.Tab.1.center" timestamp="1605767680705">
+    <state width="491" height="902" key="GridCell.Tab.1.bottom/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502888" />
+    <state width="491" height="902" key="GridCell.Tab.1.center" timestamp="1605475502888">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="487" height="902" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767680705" />
-    <state width="487" height="902" key="GridCell.Tab.1.left" timestamp="1605767680705">
+    <state width="491" height="902" key="GridCell.Tab.1.center/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502888" />
+    <state width="491" height="902" key="GridCell.Tab.1.left" timestamp="1605475502888">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="487" height="902" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767680705" />
-    <state width="487" height="902" key="GridCell.Tab.1.right" timestamp="1605767680705">
+    <state width="491" height="902" key="GridCell.Tab.1.left/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502888" />
+    <state width="491" height="902" key="GridCell.Tab.1.right" timestamp="1605475502888">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state width="487" height="902" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605767680705" />
-    <state x="791" y="171" width="1383" height="832" key="SettingsEditor" timestamp="1605818059245">
+    <state width="491" height="902" key="GridCell.Tab.1.right/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605475502888" />
+    <state x="781" y="170" width="1383" height="832" key="SettingsEditor" timestamp="1605477038377">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="791" y="171" width="1383" height="832" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605818059245" />
+    <state x="781" y="170" width="1383" height="832" key="SettingsEditor/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605477038377" />
     <state x="781" y="170" key="SettingsEditor/0.0.2560.1052/2560.27.1280.1024@0.0.2560.1052" timestamp="1604290775117" />
     <state x="872" y="254" key="Vcs.Push.Dialog.v2" timestamp="1604778846245">
       <screen x="0" y="0" width="2560" height="1050" />
@@ -402,10 +340,10 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="831" y="172" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604802956775" />
-    <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1605765385222">
+    <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1605462226157">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605765385222" />
+    <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605462226157" />
     <state width="600" height="440" key="javadoc.popup" timestamp="1602093882720">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
@@ -414,9 +352,9 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="936" y="243" width="672" height="677" key="run.anything.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605477402461" />
-    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1605682363217">
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1605471813636">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605682363217" />
+    <state x="943" y="227" width="672" height="678" key="search.everywhere.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605471813636" />
   </component>
 </project>
