@@ -2,17 +2,22 @@
 #define TYPE_H
 
 #include "tree/nodes.h"
+#include "Exception.h"
 
 #include <string>
 #include <memory>
 #include <map>
+#include <commctrl.h>
 
 // TODO: ! Move all structs to top and constants to bottom
 
 struct Type;
 struct Class;
+struct FuncType;
 using class_ptr = std::shared_ptr<Class>;
 using type_ptr = std::shared_ptr<Type>;
+using t_list = std::vector<type_ptr>;
+using func_t_ptr = std::shared_ptr<FuncType>;
 
 enum class TypeTag {
     None,
@@ -26,6 +31,7 @@ enum class TypeTag {
     Func,
     NativeFunc,
     Class,
+    VarargTag,
     Union,
 };
 
@@ -104,16 +110,12 @@ struct StringType : Type {
     }
 };
 
-
-struct FuncType;
-using func_t_ptr = std::shared_ptr<FuncType>;
-using t_list = std::vector<type_ptr>;
-
 struct FuncType : Type {
     FuncType(TypeTag callable_type, const type_ptr & return_type, const t_list & arg_types, const class_ptr & cFunc)
         : Type(callable_type, cFunc), return_type(return_type), arg_types(arg_types) {}
 
     type_ptr return_type;
+    // TODO: Default values
     t_list arg_types;
 
     bool compare(const type_ptr & other) override {
@@ -126,17 +128,65 @@ struct FuncType : Type {
         return compare(func_type->return_type, func_type->arg_types);
     }
 
-    bool compare(const type_ptr & _return_type, const std::vector<type_ptr> & _arg_types) {
-        // TODO: Rewrite when varargs will be implemented
-        if (arg_types.size() != _arg_types.size()) {
+    bool compare(const type_ptr & _return_type, const std::vector<type_ptr> & other_arg_types) {
+        if (arg_types.size() > other_arg_types.size() || arg_types.empty() && !other_arg_types.empty()) {
             return false;
         }
-        for (uint64_t i = 0; i < arg_types.size(); i++) {
-            if (!arg_types.at(i)->compare(_arg_types.at(i))) {
+
+        size_t index = 0;
+        for (size_t arg_t_i = 0; arg_t_i < arg_types.size(); arg_t_i++) {
+            const auto & cur_t = arg_types.at(arg_t_i);
+            type_ptr vararg_t = cur_t->tag == TypeTag::VarargTag ? cur_t : nullptr;
+            if (vararg_t) {
+                const auto & cmp_t = other_arg_types.at(index);
+                while (index < other_arg_types.size() && vararg_t->compare(other_arg_types.at(index))) {
+                    index++;
+                }
+                // If next type after vararg is the same as vararg_t, go to previous type
+                if (arg_t_i + 1 < arg_types.size()
+                && vararg_t->compare(arg_types.at(arg_t_i + 1))) {
+                    index--;
+                }
+            } else if (!cur_t->compare(other_arg_types.at(index))) {
                 return false;
+            } else {
+                // Go to next if not vararg and type was right
+                index++;
             }
+            // Go to next type for comparison
+            arg_t_i++;
         }
+
+//        type_ptr cur_t = arg_types.at(0);
+//        size_t cur_i = 0;
+//        for (size_t i = 0; i < other_arg_types.size(); i++) {
+//            const auto & cmp_arg = other_arg_types.at(i);
+//            type_ptr vararg_t = cur_t->tag == TypeTag::VarargTag ? cur_t : nullptr;
+//            if (vararg_t) {
+//                if (!vararg_t->compare(cmp_arg)) {
+//                    return false;
+//                } else if (cur_i + 1 >= arg_types.size()) {
+//                    // If there's one more type after vararg, reset vararg
+//                    vararg_t = nullptr;
+//                }
+//            } else if (!cur_t->compare(cmp_arg)) {
+//                return false;
+//            } else {
+//                // Go to next if not vararg
+//                cur_t = arg_types.at(++cur_i);
+//            }
+//        }
         return _return_type == return_type;
+    }
+};
+
+struct VarargTagType : Type {
+    explicit VarargTagType(const type_ptr & vararg_type) : Type(TypeTag::None, nullptr), vararg_type(vararg_type) {}
+
+    type_ptr vararg_type;
+
+    bool compare(const type_ptr & other) override {
+        return other->compare(vararg_type);
     }
 };
 

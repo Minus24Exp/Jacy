@@ -8,7 +8,7 @@
 
 namespace G {
     // print //
-    const func_t_ptr print_signature = get_func_t(TypeTag::NativeFunc, get_void_t(), t_list{get_any_t()});
+    const func_t_ptr print_signature = get_func_t(TypeTag::NativeFunc, get_void_t(), t_list{make_vararg_t(get_any_t())});
     static object_ptr print(const FuncArgs & args) {
         for (const auto & arg : args) {
             std::cout << arg->to_string();

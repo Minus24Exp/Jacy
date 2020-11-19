@@ -73,3 +73,7 @@ type_ptr get_string_t() {
 func_t_ptr get_func_t(TypeTag callable_type, const type_ptr & return_type, const t_list & arg_types) {
     return std::make_shared<FuncType>(callable_type, return_type, arg_types, get_cFunc());
 }
+
+type_ptr make_vararg_t(const type_ptr & vararg_type) {
+    return std::make_shared<VarargTagType>(vararg_type);
+}

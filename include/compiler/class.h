@@ -29,5 +29,6 @@ type_ptr get_int_t();
 type_ptr get_float_t();
 type_ptr get_string_t();
 func_t_ptr get_func_t(TypeTag callable_type, const type_ptr & return_type, const t_list & arg_types);
+type_ptr make_vararg_t(const type_ptr & vararg_type);
 
 #endif // CLASS_H

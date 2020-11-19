@@ -1,5 +1,1 @@
-val a = 'asdasdasdsads'
-
-if a {
-    print(a)
-}
+print(1)
