@@ -1,7 +1,7 @@
 #ifndef BASEVM_H
 #define BASEVM_H
 
-#include "vm/Value.h"
+#include "vm/Object.h"
 #include "compiler/opcode.h"
 #include "Exception.h"
 #include "../../lib/globals.h"

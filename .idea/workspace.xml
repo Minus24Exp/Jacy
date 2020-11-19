@@ -33,24 +33,20 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="WIP_2 Classes">
-      <change afterPath="$PROJECT_DIR$/include/compiler/constant.h" afterDir="false" />
+    <list default="true" id="56ca8762-566b-4fe3-a9ef-c70a90f1efaa" name="Default Changelist" comment="WIP New project structure">
+      <change afterPath="$PROJECT_DIR$/src/compiler/class.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/PYJOHN.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/PYJOHN.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/Scope.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/Scope.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/opcode.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/opcode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/compiler/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/type.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/classes.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/class.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/object/objects.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/class.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/class.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/constant.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/constant.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/compiler/type.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/compiler/type.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/vm/BaseVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/BaseVM.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Value.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/vm/Value.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/vm/Object.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/globals.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globals.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/compiler/Compiler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/vm/BaseVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/BaseVM.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/Disasm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/Disasm.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vm/VM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/vm/VM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +155,8 @@
       <workItem from="1605359612166" duration="9196000" />
       <workItem from="1605453890877" duration="17553000" />
       <workItem from="1605486281871" duration="18159000" />
-      <workItem from="1605680727802" duration="2358000" />
+      <workItem from="1605680727802" duration="3084000" />
+      <workItem from="1605723537321" duration="3361000" />
     </task>
     <task id="LOCAL-00001" summary="Constants ... )))">
       <created>1604515216293</created>
@@ -280,7 +277,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605587872314</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="WIP New project structure">
+      <created>1605683115682</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1605683115682</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,7 +320,8 @@
     <MESSAGE value="Union type" />
     <MESSAGE value="WIP Classes" />
     <MESSAGE value="WIP_2 Classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP_2 Classes" />
+    <MESSAGE value="WIP New project structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP New project structure" />
   </component>
   <component name="WindowStateProjectService">
     <state x="906" y="203" key="#Inspections" timestamp="1605584389892">
@@ -393,10 +398,10 @@
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
     <state x="831" y="172" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1604802956775" />
-    <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1605462226157">
+    <state x="988" y="103" width="583" height="843" key="find.popup" timestamp="1605765385222">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>
-    <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605462226157" />
+    <state x="988" y="103" width="583" height="843" key="find.popup/0.0.2560.1050/2560.0.1280.994@0.0.2560.1050" timestamp="1605765385222" />
     <state width="600" height="440" key="javadoc.popup" timestamp="1602093882720">
       <screen x="0" y="0" width="2560" height="1050" />
     </state>

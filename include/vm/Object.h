@@ -1,5 +1,5 @@
-#ifndef VALUE_H
-#define VALUE_H
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include "compiler/opcode.h"
 #include "compiler/class.h"
@@ -132,4 +132,4 @@ static inline nf_ptr make_nf(const std::string & name, const NFBody & body) {
     return std::make_shared<NativeFunc>(name, body);
 }
 
-#endif // VALUE_H
+#endif // OBJECT_H

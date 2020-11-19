@@ -16,7 +16,7 @@ struct Constant {
 };
 
 struct IntConstant : Constant {
-    explicit IntConstant(long long value) : Constant(int_t), value(value) {}
+    explicit IntConstant(long long value) : Constant(get_int_t()), value(value) {}
 
     long long value;
 
@@ -34,7 +34,7 @@ struct IntConstant : Constant {
 };
 
 struct FloatConstant : Constant {
-    explicit FloatConstant(double value) : Constant(float_t), value(value) {}
+    explicit FloatConstant(double value) : Constant(get_float_t()), value(value) {}
 
     double value;
 
@@ -53,7 +53,7 @@ struct FloatConstant : Constant {
 };
 
 struct StringConstant : Constant {
-    explicit StringConstant(std::string value) : Constant(string_t), value(std::move(value)) {}
+    explicit StringConstant(std::string value) : Constant(get_string_t()), value(std::move(value)) {}
 
     std::string value;
 

@@ -14,20 +14,15 @@ struct Class;
 using class_ptr = std::shared_ptr<Class>;
 using type_ptr = std::shared_ptr<Type>;
 
-extern class_ptr cNull;
-extern class_ptr cBool;
-extern class_ptr cInt;
-extern class_ptr cFloat;
-extern class_ptr cString;
-extern class_ptr cFunc;
-extern class_ptr cUnion;
-
 enum class TypeTag {
     None,
     Any,
     Null,
     Void,
-    Primitive,
+    Bool,
+    Int,
+    Float,
+    String,
     Func,
     NativeFunc,
     Class,
@@ -50,25 +45,14 @@ struct Any : Type {
         return true;
     }
 };
-const type_ptr any_t = std::make_shared<Any>();
 
 struct NullType : Type {
-    NullType() : Type(TypeTag::Null, cNull) {}
+    NullType(const class_ptr & cNull) : Type(TypeTag::Null, cNull) {}
 
     bool compare(const type_ptr & other) override {
         return other->tag == TypeTag::Null;
     }
 };
-const type_ptr null_t = std::make_shared<NullType>();
-
-struct VoidType : Type {
-    VoidType() : Type(TypeTag::Void, nullptr) {}
-
-    bool compare(const type_ptr & other) override {
-        return other->tag == TypeTag::Void;
-    }
-};
-const type_ptr void_t = std::make_shared<VoidType>();
 
 struct NullableType : Type {
     explicit NullableType(const type_ptr & type) : Type(type->tag, type->_class), type(type) {}
@@ -80,40 +64,53 @@ struct NullableType : Type {
     }
 };
 
-enum class Primitive {
-    Bool,
-    Int,
-    Float,
-    String,
-};
-
-std::map<Primitive, class_ptr> primitive_t_class = {
-    {Primitive::Bool, cBool},
-    {Primitive::Int, cInt},
-    {Primitive::Float, cFloat},
-    {Primitive::String, cString},
-};
-
-struct PrimitiveType : Type {
-    explicit PrimitiveType(Primitive type) : Type(TypeTag::Primitive, primitive_t_class[type]), type(type) {}
-
-    Primitive type;
+struct VoidType : Type {
+    VoidType() : Type(TypeTag::Void, nullptr) {}
 
     bool compare(const type_ptr & other) override {
-        return other->tag == TypeTag::Primitive && std::static_pointer_cast<PrimitiveType>(other)->type == type;
+        return other->tag == TypeTag::Void;
     }
 };
-const type_ptr bool_t = std::make_shared<PrimitiveType>(Primitive::Bool);
-const type_ptr int_t = std::make_shared<PrimitiveType>(Primitive::Int);
-const type_ptr float_t = std::make_shared<PrimitiveType>(Primitive::Float);
-const type_ptr string_t = std::make_shared<PrimitiveType>(Primitive::String);
+
+struct BoolType : Type {
+    BoolType(const class_ptr & cBool) : Type(TypeTag::Bool, cBool) {}
+
+    bool compare(const type_ptr & other) override {
+        return other->tag == TypeTag::Bool;
+    }
+};
+
+struct IntType : Type {
+    IntType(const class_ptr & cInt) : Type(TypeTag::Int, cInt) {}
+
+    bool compare(const type_ptr & other) override {
+        return other->tag == TypeTag::Int;
+    }
+};
+
+struct FloatType : Type {
+    FloatType(const class_ptr & cFloat) : Type(TypeTag::Float, cFloat) {}
+
+    bool compare(const type_ptr & other) override {
+        return other->tag == TypeTag::Float;
+    }
+};
+
+struct StringType : Type {
+    StringType(const class_ptr & cString) : Type(TypeTag::String, cString) {}
+
+    bool compare(const type_ptr & other) override {
+        return other->tag == TypeTag::String;
+    }
+};
+
 
 struct FuncType;
 using func_t_ptr = std::shared_ptr<FuncType>;
 using t_list = std::vector<type_ptr>;
 
 struct FuncType : Type {
-    FuncType(TypeTag callable_type, const type_ptr & return_type, const t_list & arg_types)
+    FuncType(TypeTag callable_type, const type_ptr & return_type, const t_list & arg_types, const class_ptr & cFunc)
         : Type(callable_type, cFunc), return_type(return_type), arg_types(arg_types) {}
 
     type_ptr return_type;
@@ -144,7 +141,7 @@ struct FuncType : Type {
 };
 
 struct UnionType : Type {
-    explicit UnionType(t_list && types) : Type(TypeTag::Union, cUnion), types(std::move(types)) {}
+    explicit UnionType(t_list && types, const class_ptr & cUnion) : Type(TypeTag::Union, cUnion), types(std::move(types)) {}
 
     t_list types;
 
@@ -171,4 +168,4 @@ struct UnionType : Type {
     }
 };
 
-#endif // TYPE_H
+#endif // CLASS_H

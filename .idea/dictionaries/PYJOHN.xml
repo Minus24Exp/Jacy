@@ -2,6 +2,7 @@
   <dictionary name="PYJOHN">
     <words>
       <w>classdecl</w>
+      <w>cout</w>
       <w>disasm</w>
       <w>jacy</w>
       <w>opcode</w>

@@ -36,7 +36,7 @@ void Compiler::visit(VarDecl * var_decl) {
     VarDeclKind kind = var_decl->kind;
 
     // TODO: Add real types (now any)
-    type_ptr type = any_t;
+    type_ptr type = get_any_t();
 
     const auto & var_name = var_decl->id->get_name();
 
@@ -108,33 +108,33 @@ void Compiler::visit(Literal * literal) {
     switch (literal->token.type) {
         case TokenType::Null: {
             emit(OpCode::NullConst);
-            last_type = null_t;
+            last_type = get_null_t();
         } break;
         case TokenType::True: {
             emit(OpCode::TrueConst);
-            last_type = bool_t;
+            last_type = get_bool_t();
         } break;
         case TokenType::False: {
             emit(OpCode::FalseConst);
-            last_type = bool_t;
+            last_type = get_bool_t();
         } break;
         case TokenType::Int: {
             // TODO: Add conversion exception handling
             long long int_val = std::stoll(literal->token.val);
             emit_int(int_val);
-            last_type = int_t;
+            last_type = get_int_t();
         } break;
         case TokenType::Float: {
             // TODO: Add conversion exception handling
             double float_val = std::stod(literal->token.val);
             emit_float(float_val);
-            last_type = float_t;
+            last_type = get_float_t();
         } break;
         case TokenType::String: {
             // TODO: Add encodings support
             const auto & string_val = literal->token.val;
             emit_string(string_val);
-            last_type = string_t;
+            last_type = get_string_t();
         } break;
         default: {
             throw DevError("Unexpected type of literal token");
