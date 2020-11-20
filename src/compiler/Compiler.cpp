@@ -216,6 +216,7 @@ void Compiler::visit(FuncCall * func_call) {
         }
     }
 
+    // We know that expr_type is FuncType
     std::shared_ptr<FuncType> func_type = std::static_pointer_cast<FuncType>(expr_type);
     std::vector<type_ptr> arg_types;
 
@@ -228,7 +229,7 @@ void Compiler::visit(FuncCall * func_call) {
         arg_types.push_back(last_type);
     }
 
-    if (!func_type->compare(func_type->return_type, arg_types)) {
+    if (!func_type->compare(arg_types)) {
         // TODO: Position of first parentheses
         error("Function invocation does not match any declaration", func_call->left->pos);
     }

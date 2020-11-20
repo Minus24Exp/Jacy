@@ -7,24 +7,27 @@
 #include <map>
 
 namespace G {
+    // TODO: ? Kind ?
+    struct Global {
+        type_ptr type;
+        object_ptr value;
+    };
+
     // print //
     const func_t_ptr print_signature = get_func_t(TypeTag::NativeFunc, get_void_t(), t_list{make_vararg_t(get_any_t())});
     static object_ptr print(const FuncArgs & args) {
-        for (const auto & arg : args) {
-            std::cout << arg->to_string();
+        for (int i = 0; i < args.size(); i++) {
+            std::cout << args.at(i)->to_string();
+            if (i < args.size() - 1) {
+                std::cout << " ";
+            }
         }
         std::cout << std::endl;
         return nullptr;
     }
 }
 
-// TODO: ? Kind ?
-struct Global {
-    type_ptr type;
-    object_ptr value;
-};
-
-const std::map<std::string, Global> jcGlobals = {
+const std::map<std::string, G::Global> jcGlobals = {
     {"print", {G::print_signature, make_nf("print", G::print)}},
 };
 

@@ -34,6 +34,5 @@
 #.vscode
 #.idea
 
-bin/**
-**/cmake-build-*
+cmake-build-*
 Doxyfile
