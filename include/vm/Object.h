@@ -32,8 +32,6 @@ struct Object {
 //        return fields.find(name) != fields.end() || _class->methods.find(name) != _class->methods.end();
 //    }
 
-//     TODO
-//     value_ptr get();
 };
 
 struct NullObject : Object {

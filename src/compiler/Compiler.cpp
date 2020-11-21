@@ -76,6 +76,8 @@ void Compiler::visit(VarDecl * var_decl) {
 
 void Compiler::visit(FuncDecl * func_decl) {
 
+//
+//    last_type = std::make_shared<FuncType>(return_type, arg_types);
 }
 
 void Compiler::visit(ReturnStmt * expr_stmt) {
@@ -146,8 +148,33 @@ void Compiler::visit(Identifier * id) {
     emit_id(id);
 }
 
-void Compiler::visit(Infix * expr_stmt) {
+void Compiler::visit(Infix * infix) {
+    last_type = nullptr;
+    infix->left->accept(*this);
+    const auto & lhs_t = last_type;
 
+    last_type = nullptr;
+    infix->right->accept(*this);
+    const auto & rhs_t = last_type;
+
+    switch (infix->op.type) {
+        case TokenType::Add: {
+            const auto & return_type = class_has_method(lhs_t, "add", make_func_t(get_any_t(), {rhs_t}, true));
+            if (!return_type) {
+                error("Unable to resolve infix operator function (add)", infix->pos);
+            }
+
+            emit(OpCode::InvokeMethod);
+            emit(static_cast<uint64_t>(1));
+
+            // Return type
+            last_type = return_type;
+        } break;
+        default: {
+            // Note: rewrite if infix functions will be added
+            throw DevError("Invalid infix token operator");
+        }
+    }
 }
 
 void Compiler::visit(Prefix * expr_stmt) {

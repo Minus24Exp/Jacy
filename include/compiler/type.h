@@ -99,7 +99,7 @@ struct VoidType : Type {
 };
 
 struct BoolType : Type {
-    BoolType(const class_ptr & cBool) : Type(TypeTag::Bool, cBool) {}
+    explicit BoolType(const class_ptr & cBool) : Type(TypeTag::Bool, cBool) {}
 
     bool compare(const type_ptr & other) override {
         return other->tag == TypeTag::Bool;
@@ -111,7 +111,7 @@ struct BoolType : Type {
 };
 
 struct IntType : Type {
-    IntType(const class_ptr & cInt) : Type(TypeTag::Int, cInt) {}
+    explicit IntType(const class_ptr & cInt) : Type(TypeTag::Int, cInt) {}
 
     bool compare(const type_ptr & other) override {
         return other->tag == TypeTag::Int;
@@ -123,7 +123,7 @@ struct IntType : Type {
 };
 
 struct FloatType : Type {
-    FloatType(const class_ptr & cFloat) : Type(TypeTag::Float, cFloat) {}
+    explicit FloatType(const class_ptr & cFloat) : Type(TypeTag::Float, cFloat) {}
 
     bool compare(const type_ptr & other) override {
         return other->tag == TypeTag::Float;
@@ -135,7 +135,7 @@ struct FloatType : Type {
 };
 
 struct StringType : Type {
-    StringType(const class_ptr & cString) : Type(TypeTag::String, cString) {}
+    explicit StringType(const class_ptr & cString) : Type(TypeTag::String, cString) {}
 
     bool compare(const type_ptr & other) override {
         return other->tag == TypeTag::String;
@@ -146,21 +146,50 @@ struct StringType : Type {
     }
 };
 
+struct FuncParamType : Type {
+    FuncParamType(const type_ptr & type, bool has_default_val)
+        : Type(type->tag, type->_class), type(type), has_default_val(has_default_val) {}
+
+    type_ptr type;
+    bool has_default_val;
+
+    bool compare(const type_ptr & other) override {
+        return type->compare(other);
+    }
+
+    std::string to_string() override {
+        return type->to_string() + (has_default_val ? ":default" : "");
+    }
+};
+
 struct FuncType : Type {
-    FuncType(TypeTag callable_type, const type_ptr & return_type, const t_list & arg_types, const class_ptr & cFunc)
-        : Type(callable_type, cFunc), return_type(return_type), arg_types(arg_types) {}
+    FuncType(
+        const type_ptr & return_type,
+        const t_list & arg_types,
+        const class_ptr & cFunc,
+        bool is_operator = false,
+        TypeTag callable_type = TypeTag::Func
+    ) : Type(callable_type, cFunc),
+        return_type(return_type),
+        arg_types(arg_types),
+        is_operator(is_operator) {}
 
     type_ptr return_type;
     // TODO: Default values
     t_list arg_types;
+    bool is_operator{false};
 
     bool compare(const type_ptr & other) override {
-        if (other->tag != TypeTag::Func &&
-            other->tag != TypeTag::NativeFunc &&
-            other->tag != TypeTag::Class) {
+        if (other->tag != TypeTag::Func && other->tag != TypeTag::NativeFunc) {
             return false;
         }
         std::shared_ptr<FuncType> func_type = std::static_pointer_cast<FuncType>(other);
+
+        // Compare for operator attribute only in FuncType-FuncType comparison
+        if (func_type->is_operator != is_operator) {
+            return false;
+        }
+
         return compare(func_type->return_type, func_type->arg_types);
     }
 
