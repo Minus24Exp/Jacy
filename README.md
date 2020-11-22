@@ -1,7 +1,4 @@
-<p align="center">
-    <img src="img/JacyWide.png" width="300">
-    <!-- #F46D6D -->
-</p>
+![Jacy](img/JacyBorders.jpg)
 
 # *Jacy*
 (*Previously __Yocto__*)
