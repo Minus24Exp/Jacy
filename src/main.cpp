@@ -18,8 +18,8 @@ int main(int argc, const char * argv[]) {
     #endif
 
     try {
-        Jacy::get_instance().launch(argc, argv);
-    } catch (JacyException & e) {
+        jc::Jacy::get_instance().launch(argc, argv);
+    } catch (jc::JacyException & e) {
         std::cout << e.what() << std::endl;
     } catch (std::exception & e) {
         std::cout << "Uncaught error: " << e.what() << std::endl;

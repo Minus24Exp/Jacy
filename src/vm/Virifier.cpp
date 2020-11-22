@@ -1,3 +1,5 @@
 #include "vm/Verifier.h"
 
-Verifier::Verifier() = default;
+namespace jc::vm {
+    Verifier::Verifier() = default;
+}

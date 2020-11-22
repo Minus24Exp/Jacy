@@ -5,13 +5,17 @@
 #include "parser/Token.h"
 #include "tree/BaseVisitor.h"
 
-struct Node {
-    explicit Node(const Position & pos) : pos(pos) {}
-    virtual ~Node() = default;
+using jc::parser::Position;
 
-    virtual void accept(BaseVisitor & visitor) = 0;
+namespace jc::tree {
+    struct Node {
+        explicit Node(const Position & pos) : pos(pos) {}
+        virtual ~Node() = default;
 
-    Position pos;
-};
+        virtual void accept(BaseVisitor & visitor) = 0;
+
+        Position pos;
+    };
+}
 
 #endif

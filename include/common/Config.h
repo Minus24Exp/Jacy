@@ -1,12 +1,14 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-class Config {
-public:
-    Config() = default;
-    virtual ~Config() = default;
+namespace jc::common {
+    class Config {
+    public:
+        Config() = default;
+        virtual ~Config() = default;
 
-private:
-};
+    private:
+    };
+}
 
 #endif // CONFIG_H

@@ -1,25 +1,29 @@
 #ifndef ASSIGN_H
 #define ASSIGN_H
 
-// Note: In Jacy assignment is an expression
-// Note: `Assign` is expression for assignment with identifier only !!!
-// It means, that it's only valid for `id = value`
-// For other assignments there's `SetExpr` and for array will be one separate too.
+#include "tree/Expr/Expr.h"
 
-struct Assign : Expr {
-    id_ptr id;
-    expr_ptr value;
+namespace jc::tree {
+    // Note: In Jacy assignment is an expression
+    // Note: `Assign` is expression for assignment with identifier only !!!
+    // It means, that it's only valid for `id = value`
+    // For other assignments there's `SetExpr` and for array will be one separate too.
 
-    // Used by augmented assignment, like `+=` (here `augment` is operator `+`)
-    Token assign_op;
+    struct Assign : Expr {
+        id_ptr id;
+        expr_ptr value;
 
-    Assign(id_ptr id, expr_ptr value, Token assign_op)
-        : Expr(id->pos, ExprType::Assign), id(id), value(value), assign_op(assign_op) {}
-    virtual ~Assign() = default;
+        // Used by augmented assignment, like `+=` (here `augment` is operator `+`)
+        parser::Token assign_op;
 
-    void accept(BaseVisitor & visitor) override {
-        visitor.visit(this);
-    }
-};
+        Assign(id_ptr id, expr_ptr value, parser::Token assign_op)
+                : Expr(id->pos, ExprType::Assign), id(id), value(value), assign_op(assign_op) {}
+        virtual ~Assign() = default;
+
+        void accept(BaseVisitor & visitor) override {
+            visitor.visit(this);
+        }
+    };
+}
 
 #endif

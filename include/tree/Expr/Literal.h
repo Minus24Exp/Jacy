@@ -4,18 +4,20 @@
 #include "tree/Expr/Expr.h"
 #include "parser/Token.h"
 
-// I don't want to create many classes for all literal tokens
-// so why do not just use one class that contains a token?
+namespace jc::tree {
+    // I don't want to create many classes for all literal tokens
+    // so why do not just use one class that contains a token?
 
-struct Literal : Expr {
-    Token token;
+    struct Literal : Expr {
+        parser::Token token;
 
-    explicit Literal(const Token & token) : Expr(token.pos, ExprType::Literal), token(token) {}
-    ~Literal() override = default;
+        explicit Literal(const parser::Token & token) : Expr(token.pos, ExprType::Literal), token(token) {}
+        ~Literal() override = default;
 
-    void accept(BaseVisitor & visitor) override {
-        visitor.visit(this);
-    }
-};
+        void accept(BaseVisitor & visitor) override {
+            visitor.visit(this);
+        }
+    };
+}
 
 #endif

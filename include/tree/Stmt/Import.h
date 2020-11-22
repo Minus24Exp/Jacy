@@ -3,32 +3,34 @@
 
 #include "tree/Stmt/Stmt.h"
 
-struct ImportEntity {
-    // Note: Can be `all=true` or `object!=nullptr`
-    bool all;
-    id_ptr object;
+namespace jc::tree {
+    struct ImportEntity {
+        // Note: Can be `all=true` or `object!=nullptr`
+        bool all;
+        id_ptr object;
 
-    id_ptr as;
+        id_ptr as;
 
-    ImportEntity(bool all, id_ptr object, id_ptr as) : all(all), object(object), as(as) {}
-    virtual ~ImportEntity() = default;
-};
+        ImportEntity(bool all, id_ptr object, id_ptr as) : all(all), object(object), as(as) {}
+        virtual ~ImportEntity() = default;
+    };
 
-using ImportEntityList = std::vector<ImportEntity>;
+    using ImportEntityList = std::vector<ImportEntity>;
 
-struct Import : Stmt {
-    ImportEntityList entities;
-    std::string path;
+    struct Import : Stmt {
+        ImportEntityList entities;
+        std::string path;
 
-    Import(const Position & pos, const std::string & path, const ImportEntityList & entities)
-        : Stmt(pos, StmtType::Import), path(path), entities(entities) {}
-    Import(const Position & pos, const std::string & path)
-        : Stmt(pos, StmtType::Import), path(path) {}
-    virtual ~Import() = default;
+        Import(const Position & pos, const std::string & path, const ImportEntityList & entities)
+                : Stmt(pos, StmtType::Import), path(path), entities(entities) {}
+        Import(const Position & pos, const std::string & path)
+                : Stmt(pos, StmtType::Import), path(path) {}
+        virtual ~Import() = default;
 
-    void accept(BaseVisitor & visitor) override {
-        visitor.visit(this);
-    }
-};
+        void accept(BaseVisitor & visitor) override {
+            visitor.visit(this);
+        }
+    };
+}
 
 #endif
