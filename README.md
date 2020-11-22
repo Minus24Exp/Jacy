@@ -1,4 +1,4 @@
-![Jacy](./img/JacyBorders.jpg)
+![Jacy](./img/JacyBorders.png)
 
 # *Jacy*
 (*Previously __Yocto__*)
