@@ -1,7 +1,7 @@
 #ifndef BASEVM_H
 #define BASEVM_H
 
-#include "vm/Object.h"
+#include "vm/class.h"
 #include "bytecode/opcode.h"
 #include "Exception.h"
 #include "../../lib/globals.h"
@@ -18,7 +18,7 @@ namespace jc::vm {
         BaseVM();
         virtual ~BaseVM() = default;
 
-        virtual void eval(const bytecode::Chunk & chunk);
+        virtual void eval(const bytecode::Chunk & _chunk);
 
     protected:
         // Opcodes //

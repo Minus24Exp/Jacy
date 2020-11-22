@@ -107,12 +107,14 @@ namespace jc::vm {
         push(value);
     }
 
-    void VM::_invoke_method() {
-        // TODO
-    }
+    void VM::_invoke_method() {}
 
     void VM::_get_property() {
-        // TODO
+        // TODO: Rewrite for functions
+        const auto & object = top();
+        const auto & prop_name = read_string_const();
+        pop();
+        push(object->fields.at(prop_name->value));
     }
 
     void VM::_set_property() {

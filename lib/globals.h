@@ -1,8 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include "vm/Object.h"
-#include "compiler/class.h"
+#include "vm/object.h"
+#include "compiler/type_class.h"
 
 #include <map>
 
@@ -29,7 +29,7 @@ namespace jc::globals {
     }
 
     const std::map<std::string, G::Global> jcGlobals = {
-            {"print", {G::print_signature, make_nf("print", G::print)}},
+        {"print", {G::print_signature, make_nf("print", G::print)}},
     };
 }
 

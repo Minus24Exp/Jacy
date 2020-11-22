@@ -1,11 +1,11 @@
 #ifndef CONSTANT_H
 #define CONSTANT_H
 
-#include <compiler/class.h>
 #include "bytecode/opcode.h"
 #include "compiler/type.h"
 
 // TODO: constant_from_code() function for VM
+// TODO: Remove types from constants and create helpers for type determination, constants must not depend on compiler
 
 namespace jc::bytecode {
     struct Constant {

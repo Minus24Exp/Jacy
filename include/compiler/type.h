@@ -12,9 +12,9 @@ namespace jc::compiler {
     // TODO: ! Move all structs to top and constants to bottom
 
     struct Type;
-    struct Class;
+    struct TypeClass;
     struct FuncType;
-    using class_ptr = std::shared_ptr<Class>;
+    using type_class_ptr = std::shared_ptr<TypeClass>;
     using type_ptr = std::shared_ptr<Type>;
     using t_list = std::vector<type_ptr>;
     using func_t_ptr = std::shared_ptr<FuncType>;
@@ -36,10 +36,10 @@ namespace jc::compiler {
     };
 
     struct Type {
-        explicit Type(TypeTag tag, const class_ptr & _class) : tag(tag), _class(_class) {}
+        explicit Type(TypeTag tag, const type_class_ptr & _class) : tag(tag), _class(_class) {}
 
         TypeTag tag{TypeTag::None};
-        class_ptr _class;
+        type_class_ptr _class;
 
         virtual bool compare(const type_ptr & other) = 0;
 
@@ -61,7 +61,7 @@ namespace jc::compiler {
     };
 
     struct NullType : Type {
-        NullType(const class_ptr & cNull) : Type(TypeTag::Null, cNull) {}
+        NullType() : Type(TypeTag::Null, nullptr) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Null;
@@ -100,7 +100,7 @@ namespace jc::compiler {
     };
 
     struct BoolType : Type {
-        explicit BoolType(const class_ptr & cBool) : Type(TypeTag::Bool, cBool) {}
+        explicit BoolType(const type_class_ptr & cBool) : Type(TypeTag::Bool, cBool) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Bool;
@@ -112,7 +112,7 @@ namespace jc::compiler {
     };
 
     struct IntType : Type {
-        explicit IntType(const class_ptr & cInt) : Type(TypeTag::Int, cInt) {}
+        explicit IntType(const type_class_ptr & cInt) : Type(TypeTag::Int, cInt) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Int;
@@ -124,7 +124,7 @@ namespace jc::compiler {
     };
 
     struct FloatType : Type {
-        explicit FloatType(const class_ptr & cFloat) : Type(TypeTag::Float, cFloat) {}
+        explicit FloatType(const type_class_ptr & cFloat) : Type(TypeTag::Float, cFloat) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Float;
@@ -136,7 +136,7 @@ namespace jc::compiler {
     };
 
     struct StringType : Type {
-        explicit StringType(const class_ptr & cString) : Type(TypeTag::String, cString) {}
+        explicit StringType(const type_class_ptr & cString) : Type(TypeTag::String, cString) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::String;
@@ -167,7 +167,7 @@ namespace jc::compiler {
         FuncType(
                 const type_ptr & return_type,
                 const t_list & arg_types,
-                const class_ptr & cFunc,
+                const type_class_ptr & cFunc,
                 bool is_operator = false,
                 TypeTag callable_type = TypeTag::Func
         ) : Type(callable_type, cFunc),
@@ -266,7 +266,7 @@ namespace jc::compiler {
     };
 
     struct UnionType : Type {
-        explicit UnionType(t_list && types, const class_ptr & cUnion) : Type(TypeTag::Union, cUnion), types(std::move(types)) {}
+        explicit UnionType(t_list && types, const type_class_ptr & cUnion) : Type(TypeTag::Union, cUnion), types(std::move(types)) {}
 
         t_list types;
 
@@ -305,4 +305,4 @@ namespace jc::compiler {
     };
 }
 
-#endif // CLASS_H
+#endif // TYPE_CLASS_H

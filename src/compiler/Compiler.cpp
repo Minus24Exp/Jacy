@@ -2,8 +2,13 @@
 
 namespace jc::compiler {
     Compiler::Compiler() : scope_depth(0), log("Compiler", options.log) {
-        for (const auto & global : globals::jcGlobals) {
-            globals[global.first] = std::make_shared<Variable>(tree::VarDeclKind::Val, global.second.type);
+        init_cBool();
+        init_cInt();
+        init_cFloat();
+        init_cString();
+
+        for (const auto & g : globals::jcGlobals) {
+            globals[g.first] = std::make_shared<Variable>(tree::VarDeclKind::Val, g.second.type);
         }
     }
 
@@ -150,32 +155,42 @@ namespace jc::compiler {
     }
 
     void Compiler::visit(tree::Infix * infix) {
-        last_type = nullptr;
-        infix->left->accept(*this);
-        const auto & lhs_t = last_type;
+        // FIXME: I cannot use infix as GetProperty - Invoke, because VM does not know about signatures
 
-        last_type = nullptr;
-        infix->right->accept(*this);
-        const auto & rhs_t = last_type;
+//        last_type = nullptr;
+//        infix->left->accept(*this);
+//        const auto & lhs_t = last_type;
+//
+//        last_type = nullptr;
+//        infix->right->accept(*this);
+//        const auto & rhs_t = last_type;
 
-        switch (infix->op.type) {
-            case parser::TokenType::Add: {
-                const auto & return_type = class_has_method(lhs_t, "add", make_func_t(get_any_t(), {rhs_t}, true));
-                if (!return_type) {
-                    error("Unable to resolve infix operator function (add)", infix->pos);
-                }
 
-                emit(bytecode::OpCode::InvokeMethod);
-                emit(static_cast<uint64_t>(1));
-
-                // Return type
-                last_type = return_type;
-            } break;
-            default: {
-                // Note: rewrite if infix functions will be added
-                throw DevError("Invalid infix token operator");
-            }
-        }
+//        switch (infix->op.type) {
+//            case parser::TokenType::Add: {
+//                const auto & op_method = class_has_method(lhs_t, "add", make_func_t(get_any_t(), {rhs_t}, true));
+//                if (!op_method) {
+//                    error("Unable to resolve infix operator function (add)", infix->pos);
+//                }
+//
+//                bytecode::OpCode opcode;
+//                if (op_method->tag == TypeTag::NativeFunc) {
+//                    opcode = bytecode::OpCode::InvokeNF;
+//                } else {
+//                    opcode = bytecode::OpCode::Invoke;
+//                }
+//
+//                emit(opcode);
+//                emit(static_cast<uint64_t>(1));
+//
+//                // Return type
+//                last_type = op_method->return_type;
+//            } break;
+//            default: {
+//                // Note: rewrite if infix functions will be added
+//                throw DevError("Invalid infix token operator");
+//            }
+//        }
     }
 
     void Compiler::visit(tree::Prefix * expr_stmt) {

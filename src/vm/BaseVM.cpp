@@ -7,8 +7,8 @@ namespace jc::vm {
         }
     }
 
-    void BaseVM::eval(const bytecode::Chunk & chunk) {
-        this->chunk = chunk;
+    void BaseVM::eval(const bytecode::Chunk & _chunk) {
+        this->chunk = _chunk;
 
         while (ip < chunk.code.size()) {
             const auto & byte = read();

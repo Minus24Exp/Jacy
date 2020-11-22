@@ -7,7 +7,7 @@
 #include "Exception.h"
 #include "compiler/Scope.h"
 #include "compiler/type.h"
-#include "compiler/class.h"
+#include "compiler/type_class.h"
 #include "../../lib/globals.h"
 #include "common/Logger.h"
 

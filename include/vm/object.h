@@ -1,8 +1,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "bytecode/opcode.h"
-#include "compiler/class.h"
 #include "bytecode/constant.h"
 
 #include <string>
@@ -15,24 +13,23 @@
 
 namespace jc::vm {
     struct Object;
-    using object_ptr = std::shared_ptr<Object>;
-
+    struct Class;
+    struct Func;
     struct NativeFunc;
+
+    using object_ptr = std::shared_ptr<Object>;
+    using class_ptr = std::shared_ptr<Class>;
     using FuncArgs = std::vector<object_ptr>;
+    using func_ptr = std::shared_ptr<Func>;
     using nf_ptr = std::shared_ptr<NativeFunc>;
     using NFBody = std::function<object_ptr(FuncArgs)>;
 
     struct Object {
-    //    class_ptr _class;
-    //    std::map<std::string, Field> fields;
+        class_ptr _class;
+        std::map<std::string, object_ptr> fields;
 
         virtual bool to_b() = 0;
         virtual std::string to_string() = 0;
-
-    //    bool has_field(const std::string & name) {
-    //        return fields.find(name) != fields.end() || _class->methods.find(name) != _class->methods.end();
-    //    }
-
     };
 
     struct NullObject : Object {
@@ -69,7 +66,8 @@ namespace jc::vm {
     const auto True = std::make_shared<TrueObject>();
 
     struct IntObject : Object {
-        explicit IntObject(const std::shared_ptr<bytecode::IntConstant> & int_constant) : value(int_constant->value) {}
+        explicit IntObject(long long value) : value(value) {}
+        explicit IntObject(const std::shared_ptr<bytecode::IntConstant> & int_constant) : IntObject(int_constant->value) {}
 
         long long value;
 
@@ -99,7 +97,11 @@ namespace jc::vm {
     };
 
     struct StringObject : Object {
-        explicit StringObject(const std::shared_ptr<bytecode::StringConstant> & string_constant) : value(string_constant->value) {}
+        explicit StringObject(const std::string & value) : value(value) {
+            // TODO: Remove everything from here
+            fields.insert({"size", std::make_shared<IntObject>(value.size())});
+        }
+        explicit StringObject(const std::shared_ptr<bytecode::StringConstant> & string_constant) : StringObject(string_constant->value) {}
 
         std::string value;
 
@@ -109,6 +111,22 @@ namespace jc::vm {
 
         std::string to_string() override {
             return value;
+        }
+    };
+
+    // TODO: Function
+    struct Func : Object {
+        explicit Func(std::string name) : name(std::move(name)) {}
+
+        std::string name;
+        // TODO: Body
+
+        bool to_b() override {
+            return true;
+        }
+
+        std::string to_string() override {
+            return "<func:"+ name +">";
         }
     };
 
