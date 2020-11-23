@@ -54,12 +54,12 @@ namespace jc::vm {
         // TODO!: Use class
         // TODO!: Use mangling functions
         // TODO!: This is the cause why I need API...
-        _class->methods.insert({
-            "_J[op]Int(Int)",
-            make_nf("_J[op]Int(Int)", [&](const FuncArgs & args) {
-                return std::make_shared<IntObject>(value + std::static_pointer_cast<IntObject>(args.at(0))->value);
-            })
-        });
+//        _class->methods.insert({
+//            "_J[op]Int(Int)",
+//            make_nf("_J[op]Int(Int)", [&](const FuncArgs & args) {
+//                return std::make_shared<IntObject>(value + std::static_pointer_cast<IntObject>(args.at(0))->value);
+//            })
+//        });
     }
 
     IntObject::IntObject(const std::shared_ptr<bytecode::IntConstant> & int_constant)

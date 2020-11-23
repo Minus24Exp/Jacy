@@ -30,10 +30,10 @@ namespace jc::compiler {
     type_ptr get_string_t();
 
     // Classes initializers //
-    void init_cBool();
-    void init_cInt();
-    void init_cFloat();
-    void init_cString();
+    void init_tcBool();
+    void init_tcInt();
+    void init_tcFloat();
+    void init_tcString();
 
     // Helpers //
     func_t_ptr make_func_t(const type_ptr & return_type, const t_list & arg_types, bool is_operator = false, TypeTag callable_type = TypeTag::Func);

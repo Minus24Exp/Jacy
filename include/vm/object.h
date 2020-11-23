@@ -26,6 +26,8 @@ namespace jc::vm {
     using callable_ptr = std::shared_ptr<Callable>;
     using NFBody = std::function<object_ptr(const FuncArgs&)>;
 
+    class_ptr get_cNull();
+
     struct Object {
         class_ptr _class;
         std::map<std::string, object_ptr> fields;
@@ -93,7 +95,9 @@ namespace jc::vm {
         std::string to_string() override;
     };
 
-    struct Callable : Object {};
+    struct Callable : Object {
+        ~Callable() = default;
+    };
 
     // TODO: Function
     struct Func : Callable {

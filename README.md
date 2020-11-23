@@ -5,8 +5,6 @@
 
 10⁻²⁴ size programming language written in pure C++.
 
-> __Evaluation part of interpreter is now deleted, because of rewriting__
-
 | [__Documentation (*In progress*)__](docs/en_docs/getting_started.md) |
 | - |
 | [__Документация (*В процессе*)__](docs/ru_docs/getting_started.md) |

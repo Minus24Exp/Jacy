@@ -2,10 +2,10 @@
 
 namespace jc::compiler {
     Compiler::Compiler() : scope_depth(0), log("Compiler", options.log) {
-        init_cBool();
-        init_cInt();
-        init_cFloat();
-        init_cString();
+        init_tcBool();
+        init_tcInt();
+        init_tcFloat();
+        init_tcString();
 
         for (const auto & g : globals::jcGlobals) {
             globals[g.first] = std::make_shared<Variable>(tree::VarDeclKind::Val, g.second.type);

@@ -4,42 +4,42 @@ namespace jc::compiler {
     /////////////
     // Classes //
     /////////////
-    type_class_ptr get_cBool() {
+    type_class_ptr get_tcBool() {
         static const type_class_ptr cBool = std::make_shared<TypeClass>();
         cBool->name = "Bool";
         return cBool;
     }
 
-    type_class_ptr get_cInt() {
+    type_class_ptr get_tcInt() {
         static const type_class_ptr cInt = std::make_shared<TypeClass>();
         cInt->name = "Int";
         return cInt;
     }
 
-    type_class_ptr get_cFloat() {
+    type_class_ptr get_tcFloat() {
         static const type_class_ptr cFloat = std::make_shared<TypeClass>();
         cFloat->name = "Float";
         return cFloat;
     }
 
-    type_class_ptr get_cString() {
+    type_class_ptr get_tcString() {
         static const type_class_ptr cString = std::make_shared<TypeClass>();
         cString->name = "String";
         return cString;
     }
 
-    type_class_ptr get_cFunc() {
+    type_class_ptr get_tcFunc() {
         static const type_class_ptr cFunc = std::make_shared<TypeClass>();
         cFunc->name = "Func";
         return cFunc;
     }
 
-    type_class_ptr get_cUnion() {
-        // TODO: I don't think I need Union class
-//        static const type_class_ptr cUnion = std::make_shared<TypeClass>();
-//        cUnion->name = "cUnion";
-//        return cUnion;
-    }
+//    type_class_ptr get_cUnion() {
+//        // TODO: I don't think I need Union class
+////        static const type_class_ptr cUnion = std::make_shared<TypeClass>();
+////        cUnion->name = "cUnion";
+////        return cUnion;
+//    }
 
     ///////////
     // Types //
@@ -60,29 +60,29 @@ namespace jc::compiler {
     }
 
     type_ptr get_bool_t() {
-        static const type_ptr bool_t = std::make_shared<BoolType>(get_cBool());
+        static const type_ptr bool_t = std::make_shared<BoolType>(get_tcBool());
         return bool_t;
     }
 
     type_ptr get_int_t() {
-        static const type_ptr int_t = std::make_shared<IntType>(get_cInt());
+        static const type_ptr int_t = std::make_shared<IntType>(get_tcInt());
         return int_t;
     }
 
     type_ptr get_float_t() {
-        static const type_ptr float_t = std::make_shared<FloatType>(get_cFloat());
+        static const type_ptr float_t = std::make_shared<FloatType>(get_tcFloat());
         return float_t;
     }
 
     type_ptr get_string_t() {
-        static const type_ptr string_t = std::make_shared<StringType>(get_cString());
+        static const type_ptr string_t = std::make_shared<StringType>(get_tcString());
         return string_t;
     }
 
     //////////////////////////
     // Classes Initializers //
     //////////////////////////
-    void init_cNull() {
+    void init_tcBool() {
         static bool inited = false;
         if (inited) {
             return;
@@ -93,18 +93,7 @@ namespace jc::compiler {
         inited = true;
     }
 
-    void init_cBool() {
-        static bool inited = false;
-        if (inited) {
-            return;
-        }
-
-        // ...
-
-        inited = true;
-    }
-
-    void init_cInt() {
+    void init_tcInt() {
         static bool inited = false;
         if (inited) {
             return;
@@ -120,7 +109,7 @@ namespace jc::compiler {
         inited = true;
     }
 
-    void init_cFloat() {
+    void init_tcFloat() {
         static bool inited = false;
         if (inited) {
             return;
@@ -131,7 +120,7 @@ namespace jc::compiler {
         inited = true;
     }
 
-    void init_cString() {
+    void init_tcString() {
         static bool inited = false;
         if (inited) {
             return;
@@ -148,7 +137,7 @@ namespace jc::compiler {
     // Helpers //
     /////////////
     func_t_ptr make_func_t(const type_ptr & return_type, const t_list & arg_types, bool is_operator, TypeTag callable_type) {
-        return std::make_shared<FuncType>(return_type, arg_types, get_cFunc(), is_operator, callable_type);
+        return std::make_shared<FuncType>(return_type, arg_types, get_tcFunc(), is_operator, callable_type);
     }
 
     func_t_ptr make_nf_t(const type_ptr & return_type, const t_list & arg_types, bool is_operator) {
