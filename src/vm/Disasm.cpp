@@ -136,6 +136,7 @@ namespace jc::vm {
     }
 
     void Disasm::_invoke() {
+        // TODO: Should I push result of invoke???
         uint64_t arg_count = read8();
         object_ptr func = top(arg_count);
         std::cout << func->to_string() << "(";
@@ -146,13 +147,23 @@ namespace jc::vm {
     }
 
     void Disasm::_invoke_nf() {
-        // TODO: ?
         _invoke();
     }
 
     void Disasm::_invoke_method() {
-        // TODO: !?!
-        _invoke();
+        // TODO: Should I push result of invoke???
+        uint64_t arg_count = read8();
+        const auto & method_name = read_string_const();
+        const auto & object = top(arg_count);
+        std::cout << object->to_string() << "." << method_name->to_string() << "(";
+        for (uint64_t i = 0; i < arg_count; i++) {
+            std::cout << top(arg_count - i - 1)->to_string();
+        }
+        std::cout << ")";
+    }
+
+    void Disasm::_invoke_nf_method() {
+        _invoke_method();
     }
 
     void Disasm::_get_property() {

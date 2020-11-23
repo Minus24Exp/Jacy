@@ -28,6 +28,7 @@ namespace jc::vm {
         {bytecode::OpCode::Invoke, "Invoke"},
         {bytecode::OpCode::InvokeNF, "InvokeNF"},
         {bytecode::OpCode::InvokeMethod, "InvokeMethod"},
+        {bytecode::OpCode::InvokeNFMethod, "InvokeNFMethod"},
         {bytecode::OpCode::GetProperty, "GetProperty"},
         {bytecode::OpCode::SetProperty, "SetProperty"},
     };
@@ -59,6 +60,7 @@ namespace jc::vm {
         void _jump_false() override;
         void _invoke() override;
         void _invoke_nf() override;
+        void _invoke_nf_method() override;
         void _invoke_method() override;
         void _get_property() override;
         void _set_property() override;

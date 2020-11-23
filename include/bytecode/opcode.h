@@ -87,8 +87,8 @@ namespace jc::bytecode {
 
         Invoke,
         InvokeNF,
-        // TOOD: Do I need InvokeMethod ??!! I can just use invoke
         InvokeMethod,
+        InvokeNFMethod,
 
         GetProperty,
         SetProperty,

@@ -14,6 +14,7 @@
 namespace jc::vm {
     struct Object;
     struct Class;
+    struct Callable;
     struct Func;
     struct NativeFunc;
 
@@ -22,7 +23,8 @@ namespace jc::vm {
     using FuncArgs = std::vector<object_ptr>;
     using func_ptr = std::shared_ptr<Func>;
     using nf_ptr = std::shared_ptr<NativeFunc>;
-    using NFBody = std::function<object_ptr(FuncArgs)>;
+    using callable_ptr = std::shared_ptr<Callable>;
+    using NFBody = std::function<object_ptr(const FuncArgs&)>;
 
     struct Object {
         class_ptr _class;
@@ -91,8 +93,10 @@ namespace jc::vm {
         std::string to_string() override;
     };
 
+    struct Callable : Object {};
+
     // TODO: Function
-    struct Func : Object {
+    struct Func : Callable {
         explicit Func(std::string name);
 
         std::string name;
@@ -103,7 +107,7 @@ namespace jc::vm {
         std::string to_string() override;
     };
 
-    struct NativeFunc : Object {
+    struct NativeFunc : Callable {
         explicit NativeFunc(std::string name, NFBody body);
 
         std::string name;

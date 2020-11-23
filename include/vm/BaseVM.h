@@ -43,6 +43,7 @@ namespace jc::vm {
         virtual void _jump_false() = 0;
         virtual void _invoke() = 0;
         virtual void _invoke_nf() = 0;
+        virtual void _invoke_nf_method() = 0;
         virtual void _invoke_method() = 0;
         virtual void _get_property() = 0;
         virtual void _set_property() = 0;

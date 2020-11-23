@@ -238,22 +238,18 @@ namespace jc::compiler {
         last_type = nullptr;
         func_call->left->accept(*this);
 
-        bytecode::OpCode opcode;
         type_ptr expr_type = last_type;
+        bytecode::OpCode opcode;
         switch (expr_type->tag) {
             case TypeTag::Func: {
-                if (func_call->type == tree::ExprType::Get) {
-                    opcode = bytecode::OpCode::InvokeMethod;
-                } else {
-                    opcode = bytecode::OpCode::Invoke;
-                }
+                opcode = bytecode::OpCode::Invoke;
             } break;
             case TypeTag::NativeFunc: {
                 opcode = bytecode::OpCode::InvokeNF;
             } break;
-            case TypeTag::Class: {
-    //            opcode = bytecode::OpCode::Construct;
-            } break;
+//            case TypeTag::Class: {
+//    //            opcode = bytecode::OpCode::Construct;
+//            } break;
             default: {
                 error("Is not a function", func_call->left->pos);
             }
@@ -268,7 +264,6 @@ namespace jc::compiler {
             last_type = nullptr;
             arg->accept(*this);
             arg_count++;
-
             arg_types.push_back(last_type);
         }
 
@@ -282,6 +277,58 @@ namespace jc::compiler {
 
         // Return type
         last_type = func_type->return_type;
+    }
+
+    void Compiler::visit(tree::MethodCall * method_call) {
+        // TODO: Unite FuncCall and MethodCall to one common function
+
+        last_type = nullptr;
+        method_call->left->accept(*this);
+
+        const auto & object = last_type;
+
+        // We know that expr_type is FuncType
+        t_list arg_types;
+        uint64_t arg_count = 0;
+        for (const auto & arg : method_call->args) {
+            last_type = nullptr;
+            arg->accept(*this);
+            arg_count++;
+            arg_types.push_back(last_type);
+        }
+
+        const auto & method_signature = make_func_t(get_any_t(), arg_types);
+        func_t_ptr method = class_has_method(object, method_call->id->get_name(), method_signature);
+
+        if (!method) {
+            error("Method invocation does not match any declaration in class " + object->_class->name, method_call->left->pos);
+        }
+
+        bytecode::OpCode opcode;
+        switch (method->tag) {
+            case TypeTag::Func: {
+                opcode = bytecode::OpCode::InvokeMethod;
+            } break;
+            case TypeTag::NativeFunc: {
+                opcode = bytecode::OpCode::InvokeNFMethod;
+            } break;
+//            case TypeTag::Class: {
+//                //            opcode = bytecode::OpCode::Construct;
+//            } break;
+            default: {
+                error("Is not a method", method_call->left->pos);
+            }
+        }
+
+        emit(opcode);
+        emit(arg_count);
+
+        // Note!: Here's used `method` signature, not `method_signature`,
+        //  because we need the signature that we found, not what we requested (type inheritance...)
+        emit(make_string(mangle_type(method, method_call->id->get_name())));
+
+        // Return type
+        last_type = method->return_type;
     }
 
     void Compiler::visit(tree::IfExpr * if_expr) {
@@ -561,5 +608,4 @@ namespace jc::compiler {
     void Compiler::undefined_entity() {
         throw IUndefinedEntity();
     }
-
 }

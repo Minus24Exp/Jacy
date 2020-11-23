@@ -32,6 +32,7 @@ namespace jc::vm {
         void _invoke() override;
         void _invoke_nf() override;
         void _invoke_method() override;
+        void _invoke_nf_method() override;
         void _get_property() override;
         void _set_property() override;
 

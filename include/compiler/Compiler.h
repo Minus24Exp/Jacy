@@ -44,6 +44,7 @@ namespace jc::compiler {
         void visit(tree::SetExpr * set_expr) override;
         void visit(tree::GetExpr * get_expr) override;
         void visit(tree::FuncCall * func_call) override;
+        void visit(tree::MethodCall * method_call) override;
         void visit(tree::IfExpr * if_expr) override;
         void visit(tree::ListExpr * list) override;
         void visit(tree::GetItem * get_item) override;

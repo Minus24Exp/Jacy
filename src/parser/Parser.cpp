@@ -591,10 +591,9 @@ namespace jc::parser {
         tree::expr_ptr left = named_checks();
 
         while (is(TokenType::LT)
-               || is(TokenType::GT)
-               || is(TokenType::LE)
-               || is(TokenType::GE))
-        {
+            || is(TokenType::GT)
+            || is(TokenType::LE)
+            || is(TokenType::GE)) {
             print_parsing_entity("comp");
 
             const auto & op_token = peek();
@@ -748,7 +747,14 @@ namespace jc::parser {
 
                 advance();
                 tree::id_ptr id = parse_id();
-                left = std::make_shared<tree::GetExpr>(left, id);
+
+                if (is(TokenType::LParen)) {
+                    // We put left as nullptr, cause we already know left expression
+                    const auto & func_call = std::static_pointer_cast<tree::FuncCall>(parse_func_call(nullptr));
+                    left = std::make_shared<tree::MethodCall>(left, id, func_call->args);
+                } else {
+                    left = std::make_shared<tree::GetExpr>(left, id);
+                }
             } else if (is(TokenType::LBracket)) {
                 print_parsing_entity("sub-expression");
 

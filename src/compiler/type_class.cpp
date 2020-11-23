@@ -164,6 +164,9 @@ namespace jc::compiler {
     }
 
     func_t_ptr class_has_method(const type_ptr & type, const std::string & method_name, const func_t_ptr & signature) {
+        // TODO: Improve for most inherited types,
+        //  for a(int) call must be used a(int) if exists, not a(any)
+
         const auto & eq_range = type->_class->methods.equal_range(method_name);
 
         for (auto it = eq_range.first; it != eq_range.second; it++) {
@@ -216,7 +219,7 @@ namespace jc::compiler {
 ////                return mangle_type(std::static_pointer_cast<ClassType>(type));
 //            }
             case TypeTag::VarargTag: {
-                return mangle_type(std::static_pointer_cast<VarargTagType>(type)->vararg_type);
+                return "vararg:" + mangle_type(std::static_pointer_cast<VarargTagType>(type)->vararg_type);
             }
             case TypeTag::Union: {
                 // TODO
@@ -228,8 +231,11 @@ namespace jc::compiler {
     }
 
     std::string mangle_type(const func_t_ptr & func_t) {
-        std::string mangled_func_t = mangle_type(func_t->return_type);
-        mangled_func_t += "(";
+        std::string mangled_func_t;
+        if (func_t->is_operator) {
+            mangled_func_t += "[op]";
+        }
+        mangled_func_t += mangle_type(func_t->return_type) + "(";
         for (size_t i = 0; i < func_t->arg_types.size(); i++) {
             mangled_func_t += mangle_type(func_t->arg_types.at(i));
             if (i < func_t->arg_types.size() - 1) {

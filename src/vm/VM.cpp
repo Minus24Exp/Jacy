@@ -99,15 +99,30 @@ namespace jc::vm {
 
     void VM::_invoke_nf() {
         uint64_t arg_count = read8();
-        std::shared_ptr<NativeFunc> func = std::static_pointer_cast<NativeFunc>(top(arg_count));
-        std::vector<object_ptr> args = read_args(arg_count);
-        object_ptr value = func->body(args);
+        const auto & func = std::static_pointer_cast<NativeFunc>(top(arg_count));
+        const auto & args = read_args(arg_count);
+        auto value = func->body(args);
         // TODO: !!! Create `void`, DO NOT USE NULL
+        //  Void is not about run-time, so it must be caught on compile-time and push nothing on run-time
         value = value ? value : Null;
         push(value);
     }
 
-    void VM::_invoke_method() {}
+    void VM::_invoke_method() {
+        // TODO
+    }
+
+    void VM::_invoke_nf_method() {
+        uint64_t arg_count = read8();
+        const auto & method_name = read_string_const()->value;
+        const auto & object = top(arg_count);
+        const auto & args = read_args(arg_count);
+        const auto & method = std::static_pointer_cast<NativeFunc>(object->_class->methods.at(method_name));
+        auto value = method->body(args);
+        // TODO: Look above (about void)
+        value = value ? value : Null;
+        push(value);
+    }
 
     void VM::_get_property() {
         // TODO: Rewrite for functions

@@ -5,11 +5,11 @@
 
 namespace jc::vm {
     struct Class {
-        Class(std::string name) : name(std::move(name)) {}
+        explicit Class(std::string name) : name(std::move(name)) {}
 
         std::string name;
         std::map<std::string, object_ptr> fields;
-        std::map<std::string, func_ptr> methods;
+        std::map<std::string, callable_ptr> methods;
     };
 }
 
