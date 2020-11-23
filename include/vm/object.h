@@ -33,121 +33,88 @@ namespace jc::vm {
     };
 
     struct NullObject : Object {
-        bool to_b() override {
-            return false;
-        }
+        NullObject();
 
-        std::string to_string() override {
-            return "null";
-        }
+        bool to_b() override;
+
+        std::string to_string() override;
     };
     const auto Null = std::make_shared<NullObject>();
 
     struct FalseObject : Object {
-        bool to_b() override {
-            return false;
-        }
+        FalseObject();
 
-        std::string to_string() override {
-            return "false";
-        }
+        bool to_b() override;
+
+        std::string to_string() override;
     };
     const auto False = std::make_shared<FalseObject>();
 
     struct TrueObject : Object {
-        bool to_b() override {
-            return true;
-        }
+        TrueObject();
 
-        std::string to_string() override {
-            return "true";
-        }
+        bool to_b() override;
+
+        std::string to_string() override;
     };
     const auto True = std::make_shared<TrueObject>();
 
     struct IntObject : Object {
-        explicit IntObject(long long value) : value(value) {}
-        explicit IntObject(const std::shared_ptr<bytecode::IntConstant> & int_constant) : IntObject(int_constant->value) {}
+        explicit IntObject(long long value);
+        explicit IntObject(const std::shared_ptr<bytecode::IntConstant> & int_constant);
 
         long long value;
 
-        bool to_b() override {
-            return value != 0L;
-        }
+        bool to_b() override;
 
-        std::string to_string() override {
-            return std::to_string(value);
-        }
+        std::string to_string() override;
     };
 
     struct FloatObject : Object {
-        explicit FloatObject(const std::shared_ptr<bytecode::FloatConstant> & float_constant) : value(float_constant->value) {}
+        explicit FloatObject(const std::shared_ptr<bytecode::FloatConstant> & float_constant);
 
         double value;
 
-        bool to_b() override {
-            return value != 0.0F;
-        }
+        bool to_b() override;
 
-        std::string to_string() override {
-            std::stringstream ss;
-            ss << std::fixed << std::setprecision(std::numeric_limits<double>::max_digits10) << value;
-            return ss.str();
-        }
+        std::string to_string() override;
     };
 
     struct StringObject : Object {
-        explicit StringObject(const std::string & value) : value(value) {
-            // TODO: Remove everything from here
-            fields.insert({"size", std::make_shared<IntObject>(value.size())});
-        }
-        explicit StringObject(const std::shared_ptr<bytecode::StringConstant> & string_constant) : StringObject(string_constant->value) {}
+        explicit StringObject(const std::string & value);
+        explicit StringObject(const std::shared_ptr<bytecode::StringConstant> & string_constant);
 
         std::string value;
 
-        bool to_b() override {
-            return !value.empty();
-        }
+        bool to_b() override;
 
-        std::string to_string() override {
-            return value;
-        }
+        std::string to_string() override;
     };
 
     // TODO: Function
     struct Func : Object {
-        explicit Func(std::string name) : name(std::move(name)) {}
+        explicit Func(std::string name);
 
         std::string name;
         // TODO: Body
 
-        bool to_b() override {
-            return true;
-        }
+        bool to_b() override;
 
-        std::string to_string() override {
-            return "<func:"+ name +">";
-        }
+        std::string to_string() override;
     };
 
     struct NativeFunc : Object {
-        explicit NativeFunc(std::string name, NFBody body) : name(std::move(name)), body(std::move(body)) {}
+        explicit NativeFunc(std::string name, NFBody body);
 
         std::string name;
         NFBody body;
 
-        bool to_b() override {
-            return true;
-        }
+        bool to_b() override;
 
-        std::string to_string() override {
-            return "<native_func_" + name + ">";
-        }
+        std::string to_string() override;
     };
 
-    static inline nf_ptr make_nf(const std::string & name, const NFBody & body) {
-        return std::make_shared<NativeFunc>(name, body);
-    }
+    nf_ptr make_nf(const std::string & name, const NFBody & body);
 }
 
 #endif // OBJECT_H
