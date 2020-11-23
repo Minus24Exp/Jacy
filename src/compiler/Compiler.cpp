@@ -298,7 +298,7 @@ namespace jc::compiler {
         }
 
         const auto & method_signature = make_func_t(get_any_t(), arg_types);
-        func_t_ptr method = class_has_method(object, method_call->id->get_name(), method_signature);
+        func_t_ptr method = class_has_method(object, method_call->id->get_name(), method_signature, true);
 
         if (!method) {
             error("Method invocation does not match any declaration in class " + object->_class->name, method_call->left->pos);

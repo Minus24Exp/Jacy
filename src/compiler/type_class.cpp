@@ -163,14 +163,14 @@ namespace jc::compiler {
         return std::make_shared<VarargTagType>(vararg_type);
     }
 
-    func_t_ptr class_has_method(const type_ptr & type, const std::string & method_name, const func_t_ptr & signature) {
+    func_t_ptr class_has_method(const type_ptr & type, const std::string & method_name, const func_t_ptr & signature, bool is_op_optional) {
         // TODO: Improve for most inherited types,
         //  for a(int) call must be used a(int) if exists, not a(any)
 
         const auto & eq_range = type->_class->methods.equal_range(method_name);
 
         for (auto it = eq_range.first; it != eq_range.second; it++) {
-            if (it->second->compare(signature)) {
+            if (it->second->compare(signature, is_op_optional)) {
                 return it->second;
             }
         }

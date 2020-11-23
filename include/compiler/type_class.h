@@ -42,7 +42,7 @@ namespace jc::compiler {
 
     type_ptr make_vararg_t(const type_ptr & vararg_type);
 
-    func_t_ptr class_has_method(const type_ptr & type, const std::string & method_name, const func_t_ptr & signature);
+    func_t_ptr class_has_method(const type_ptr & type, const std::string & method_name, const func_t_ptr & signature, bool is_op_optional);
 
     // Mangling //
     std::string mangle_type(const type_ptr & type, const std::string & name);

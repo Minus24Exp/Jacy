@@ -181,13 +181,19 @@ namespace jc::compiler {
         bool is_operator{false};
 
         bool compare(const type_ptr & other) override {
+            compare(other, false);
+        }
+
+        // Note: Use this function mostly always instead of overriden compare
+        bool compare(const type_ptr & other, bool is_op_optional) {
             if (other->tag != TypeTag::Func && other->tag != TypeTag::NativeFunc) {
                 return false;
             }
             std::shared_ptr<FuncType> func_type = std::static_pointer_cast<FuncType>(other);
 
             // Compare for operator attribute only in FuncType-FuncType comparison
-            if (func_type->is_operator != is_operator) {
+            // Avoid this comparison if operator flag is optional
+            if (!is_op_optional && func_type->is_operator != is_operator) {
                 return false;
             }
 
