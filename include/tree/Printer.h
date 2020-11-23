@@ -40,6 +40,7 @@ namespace jc::tree {
         void visit(GetItem * get_item) override;
         void visit(SetItem * set_item) override;
         void visit(DictExpr * dict) override;
+        void visit(MethodCall * method_call) override;
 
     private:
         void print_indent() const;

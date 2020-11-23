@@ -17,6 +17,7 @@ namespace jc::tree {
         Set,
         Get,
         Call,
+        MethodCall,
         If,
         GetItem,
         SetItem,

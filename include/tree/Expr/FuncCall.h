@@ -10,7 +10,7 @@ namespace jc::tree {
         expr_ptr left;
         ExprList args;
 
-        FuncCall(const expr_ptr & left, ExprList  args)
+        FuncCall(const expr_ptr & left, ExprList args)
                 : Expr(left->pos, ExprType::Call), left(left), args(std::move(args)) {}
         ~FuncCall() override = default;
 

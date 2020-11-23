@@ -271,4 +271,18 @@ namespace jc::tree {
         }
         std::cout << "\n}";
     }
+
+    void Printer::visit(MethodCall * method_call) {
+        method_call->left->accept(*this);
+        std::cout << ".";
+        method_call->id->accept(*this);
+        std::cout << "(";
+        for (size_t i = 0; i < method_call->args.size(); i++) {
+            method_call->args.at(i)->accept(*this);
+            if (i < method_call->args.size() - 1) {
+                std::cout << ", ";
+            }
+        }
+        std::cout << ")";
+    }
 }

@@ -32,6 +32,7 @@ namespace jc::tree {
     struct GetItem;
     struct SetItem;
     struct DictExpr;
+    struct MethodCall;
 
     class BaseVisitor {
     public:
@@ -44,7 +45,7 @@ namespace jc::tree {
         virtual void visit(VarDecl * var_decl) = 0;
         virtual void visit(FuncDecl * func_decl) = 0;
         virtual void visit(ReturnStmt * return_stmt) = 0;
-        virtual void visit(WhileStmt * w) = 0;
+        virtual void visit(WhileStmt * while_stmt) = 0;
         virtual void visit(ForStmt * for_stmt) = 0;
         virtual void visit(ClassDecl * class_decl) = 0;
         virtual void visit(Import * import) = 0;
@@ -64,6 +65,7 @@ namespace jc::tree {
         virtual void visit(GetItem * get_item) = 0;
         virtual void visit(SetItem * set_item) = 0;
         virtual void visit(DictExpr * dict) = 0;
+        virtual void visit(MethodCall * method_call) = 0;
 
     };
 }
