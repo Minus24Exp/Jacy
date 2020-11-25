@@ -377,6 +377,7 @@ namespace jc::compiler {
     }
 
     void Compiler::emit(const uint8_t * byte_array, int size) {
+        // TODO!: Endianness
         for (uint64_t i = 0; i < size; i++) {
             emit(byte_array[i]);
         }
