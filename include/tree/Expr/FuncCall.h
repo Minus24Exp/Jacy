@@ -12,7 +12,6 @@ namespace jc::tree {
 
         FuncCall(const expr_ptr & left, ExprList args)
                 : Expr(left->pos, ExprType::Call), left(left), args(std::move(args)) {}
-        ~FuncCall() override = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

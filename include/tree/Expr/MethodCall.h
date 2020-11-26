@@ -11,7 +11,6 @@ namespace jc::tree {
 
         MethodCall(expr_ptr left, id_ptr id, ExprList args)
             : Expr(left->pos, ExprType::MethodCall), left(left), id(id), args(std::move(args)) {}
-        ~MethodCall() override = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

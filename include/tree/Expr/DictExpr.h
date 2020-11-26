@@ -17,7 +17,6 @@ namespace jc::tree {
         DictElementList elements;
 
         DictExpr(const Position & pos, const DictElementList & elements) : Expr(pos, ExprType::Dict), elements(elements) {}
-        virtual ~DictExpr() = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

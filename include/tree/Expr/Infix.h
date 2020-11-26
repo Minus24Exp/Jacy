@@ -12,8 +12,6 @@ namespace jc::tree {
         Infix(expr_ptr left, const parser::Token & op, expr_ptr right)
                 : Expr(left->pos, ExprType::Infix), left(left), op(op), right(right) {}
 
-        virtual ~Infix() = default;
-
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);
         }

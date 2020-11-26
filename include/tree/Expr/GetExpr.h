@@ -10,7 +10,6 @@ namespace jc::tree {
 
         GetExpr(expr_ptr left, id_ptr id)
                 : Expr(left->pos, ExprType::Get), left(left), id(id) {}
-        ~GetExpr() override = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

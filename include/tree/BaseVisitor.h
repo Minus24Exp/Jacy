@@ -33,6 +33,7 @@ namespace jc::tree {
     struct SetItem;
     struct DictExpr;
     struct MethodCall;
+    struct SpreadExpr;
 
     class BaseVisitor {
     public:
@@ -66,6 +67,7 @@ namespace jc::tree {
         virtual void visit(SetItem * set_item) = 0;
         virtual void visit(DictExpr * dict) = 0;
         virtual void visit(MethodCall * method_call) = 0;
+        virtual void visit(SpreadExpr * spread_expr) = 0;
 
     };
 }

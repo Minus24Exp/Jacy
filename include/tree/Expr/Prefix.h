@@ -10,7 +10,6 @@ namespace jc::tree {
 
         Prefix(const parser::Token & op, expr_ptr right)
                 : Expr(op.pos, ExprType::Prefix), op(op), right(right) {}
-        virtual ~Prefix() = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

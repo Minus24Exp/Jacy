@@ -22,12 +22,12 @@ namespace jc::tree {
         GetItem,
         SetItem,
         List,
-        Dict
+        Dict,
+        Spread,
     };
 
     struct Expr : Node {
         Expr(const Position & pos, ExprType type) : Node(pos), type(type) {}
-        ~Expr() override = default;
 
         void accept(BaseVisitor & visitor) override = 0;
 

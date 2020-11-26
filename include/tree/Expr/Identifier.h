@@ -12,7 +12,6 @@ namespace jc::tree {
         parser::Token token;
 
         explicit Identifier(const parser::Token & token) : Expr(token.pos, ExprType::Id), token(token) {}
-        ~Identifier() override = default;
 
         std::string get_name() const {
             return token.val;

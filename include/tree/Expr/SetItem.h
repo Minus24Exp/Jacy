@@ -13,7 +13,6 @@ namespace jc::tree {
                 expr_ptr index,
                 expr_ptr value)
                 : Expr(left->pos, ExprType::SetItem), left(left), index(index), value(value) {}
-        virtual ~SetItem() = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

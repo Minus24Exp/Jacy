@@ -10,7 +10,6 @@ namespace jc::tree {
 
         GetItem(expr_ptr left, expr_ptr index)
                 : Expr(left->pos, ExprType::GetItem), left(left), index(index) {}
-        virtual ~GetItem() = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

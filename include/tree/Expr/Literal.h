@@ -12,7 +12,6 @@ namespace jc::tree {
         parser::Token token;
 
         explicit Literal(const parser::Token & token) : Expr(token.pos, ExprType::Literal), token(token) {}
-        ~Literal() override = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

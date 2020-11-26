@@ -13,7 +13,6 @@ namespace jc::tree {
 
         ListExpr(const Position & pos, const ExprList & elements)
                 : Expr(pos, ExprType::List), elements(elements) {}
-        virtual ~ListExpr() = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);
