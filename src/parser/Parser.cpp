@@ -33,12 +33,18 @@ namespace jc::parser {
     bool Parser::is_assign_op() {
         // Fixme: Maybe reduce checkers?
         return is(TokenType::Assign)
-               || is(TokenType::AddAssign)
-               || is(TokenType::SubAssign)
-               || is(TokenType::MulAssign)
-               || is(TokenType::DivAssign)
-               || is(TokenType::ModAssign)
-               || is(TokenType::ExpAssign);
+            || is(TokenType::AddAssign)
+            || is(TokenType::SubAssign)
+            || is(TokenType::MulAssign)
+            || is(TokenType::DivAssign)
+            || is(TokenType::ModAssign)
+            || is(TokenType::ExpAssign)
+            || is(TokenType::ShlAssign)
+            || is(TokenType::ShrAssign)
+            || is(TokenType::BitAndAssign)
+            || is(TokenType::BitOrAssign)
+            || is(TokenType::XorAssign)
+            || is(TokenType::NullishAssign);
     }
 
     bool Parser::is_literal() {
@@ -514,12 +520,12 @@ namespace jc::parser {
 
             if (expr->type == tree::ExprType::Get) {
                 std::shared_ptr<tree::GetExpr> get_expr = std::static_pointer_cast<tree::GetExpr>(expr);
-                return std::make_shared<tree::SetExpr>(get_expr->left, get_expr->id, value);
+                return std::make_shared<tree::SetExpr>(get_expr->left, get_expr->id, assign_op, value);
             }
 
             if (expr->type == tree::ExprType::GetItem) {
                 std::shared_ptr<tree::GetItem> get_item = std::static_pointer_cast<tree::GetItem>(expr);
-                return std::make_shared<tree::SetItem>(get_item->left, get_item->index, value);
+                return std::make_shared<tree::SetItem>(get_item->left, get_item->index, assign_op, value);
             }
 
             unexpected_error();
