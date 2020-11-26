@@ -791,7 +791,7 @@ namespace jc::parser {
             return expr;
         }
 
-        Position pos = peek().pos;
+        Position primary_pos = peek().pos;
 
         // If expression
         if (is(TokenType::If)) {
@@ -818,10 +818,18 @@ namespace jc::parser {
                 if (is(TokenType::RBracket)) {
                     break;
                 }
-                elements.push_back(parse_expr());
+                // ...element
+                if (is(TokenType::Spread)) {
+                    const auto & pos = peek().pos;
+                    skip(TokenType::Spread, false, false);
+                    const auto & expr = parse_expr();
+                    elements.push_back(std::make_shared<tree::SpreadExpr>(pos, expr));
+                } else {
+                    elements.push_back(parse_expr());
+                }
             }
             skip(TokenType::RBracket, true, false);
-            return std::make_shared<tree::ListExpr>(pos, elements);
+            return std::make_shared<tree::ListExpr>(primary_pos, elements);
         }
 
         // Dictionary
@@ -858,12 +866,18 @@ namespace jc::parser {
                 }
 
                 skip(TokenType::Colon, true, true);
-                tree::expr_ptr val = parse_expr();
 
-                elements.push_back({id_key, expr_key, val});
+                if (is(TokenType::Spread)) {
+                    const auto & pos = peek().pos;
+                    const auto & val = parse_expr();
+                    elements.push_back({id_key, expr_key, std::make_shared<tree::SpreadExpr>(pos, val)});
+                } else {
+                    const auto & val = parse_expr();
+                    elements.push_back({id_key, expr_key, val});
+                }
             }
             skip(TokenType::RBrace, true, false);
-            return std::make_shared<tree::DictExpr>(pos, elements);
+            return std::make_shared<tree::DictExpr>(primary_pos, elements);
         }
 
         expected_error("primary expression");

@@ -357,11 +357,15 @@ namespace jc::parser {
                         if (is_digit(peek_next())) {
                             lex_number();
                         } else if (peek_next() == '.') {
-                            if (peek_next(2) == '<') {
+                            if (peek_next(2) == '.') {
+                                add_token(TokenType::Spread);
+                                advance(3);
+                            } else if (peek_next(2) == '<') {
                                 add_token(TokenType::RangeRE);
                                 advance(3);
                             } else {
                                 add_token(TokenType::Range);
+                                advance(2);
                             }
                         } else {
                             add_token(TokenType::Dot);

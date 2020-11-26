@@ -49,6 +49,7 @@ namespace jc::parser {
         LBracket, RBracket,
         Comma, Colon,
         Quest,
+        Spread,
 
         // Keywords
         Null,
@@ -86,6 +87,7 @@ namespace jc::parser {
         "is", "!is",
         "in", "!in",
         "as", "as?",
+        "...",
 
         // Punctuations
         ";",

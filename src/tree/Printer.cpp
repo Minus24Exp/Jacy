@@ -285,4 +285,9 @@ namespace jc::tree {
         }
         std::cout << ")";
     }
+
+    void Printer::visit(SpreadExpr * spread_expr) {
+        std::cout << "...";
+        spread_expr->expr->accept(*this);
+    }
 }

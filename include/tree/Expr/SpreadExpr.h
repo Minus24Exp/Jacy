@@ -10,7 +10,7 @@ namespace jc::tree {
         SpreadExpr(const Position & pos, expr_ptr expr) : Expr(pos, ExprType::Spread), expr(std::move(expr)) {}
 
         void accept(BaseVisitor & visitor) override {
-            visitor.visit(*this);
+            visitor.visit(this);
         }
     };
 }

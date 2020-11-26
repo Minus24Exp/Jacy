@@ -24,6 +24,7 @@
 #include "tree/Expr/GetItem.h"
 #include "tree/Expr/SetItem.h"
 #include "tree/Expr/DictExpr.h"
+#include "tree/Expr/SpreadExpr.h"
 
 #include "tree/Node.h"
 /**
