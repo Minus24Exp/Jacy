@@ -372,6 +372,9 @@ namespace jc::parser {
                         if (peek_next() == '&') {
                             add_token(TokenType::And);
                             advance(2);
+                        } else if (peek_next() == '=') {
+                            add_token(TokenType::BitAndAssign);
+                            advance(2);
                         } else {
                             add_token(TokenType::BitAnd);
                             advance();
@@ -405,6 +408,9 @@ namespace jc::parser {
                         } else if (peek_next() == '>') {
                             add_token(TokenType::Pipe);
                             advance(2);
+                        } else if (peek_next() == '=') {
+                            add_token(TokenType::BitOrAssign);
+                            advance(2);
                         } else {
                             add_token(TokenType::BitOr);
                             advance();
@@ -412,8 +418,13 @@ namespace jc::parser {
                     } break;
                     case '<': {
                         if (peek_next() == '=') {
-                            add_token(TokenType::LE);
-                            advance(2);
+                            if (peek_next(2) == '>') {
+                                add_token(TokenType::Cmp);
+                                advance(3);
+                            } else {
+                                add_token(TokenType::LE);
+                                advance(2);
+                            }
                         } else if (peek_next() == '<') {
                             if (peek_next(2) == '=') {
                                 add_token(TokenType::ShlAssign);
@@ -455,8 +466,13 @@ namespace jc::parser {
                         }
                     } break;
                     case '^': {
-                        add_token(TokenType::Xor);
-                        advance();
+                        if (peek_next() == '=') {
+                            add_token(TokenType::XorAssign);
+                            advance(2);
+                        } else {
+                            add_token(TokenType::Xor);
+                            advance();
+                        }
                     } break;
                     case '~': {
                         add_token(TokenType::BitNot);
