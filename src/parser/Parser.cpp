@@ -285,8 +285,8 @@ namespace jc::parser {
         }
 
         bool allow_one_line = false;
-        if (is(TokenType::Arrow)) {
-            skip(TokenType::Arrow, true, true);
+        if (is(TokenType::DoubleArrow)) {
+            skip(TokenType::DoubleArrow, true, true);
             allow_one_line = true;
         }
 
@@ -310,8 +310,8 @@ namespace jc::parser {
             allow_one_line = true;
         }
 
-        if (is(TokenType::Arrow)) {
-            skip(TokenType::Arrow, true, true);
+        if (is(TokenType::DoubleArrow)) {
+            skip(TokenType::DoubleArrow, true, true);
             allow_one_line = true;
         }
 
@@ -339,8 +339,8 @@ namespace jc::parser {
             allow_one_line = true;
         }
 
-        if (is(TokenType::Arrow)) {
-            skip(TokenType::Arrow, true, true);
+        if (is(TokenType::DoubleArrow)) {
+            skip(TokenType::DoubleArrow, true, true);
             allow_one_line = true;
         }
 
@@ -932,8 +932,8 @@ namespace jc::parser {
             allow_one_line = true;
         }
 
-        if (is(TokenType::Arrow)) {
-            skip(TokenType::Arrow, true, true);
+        if (is(TokenType::DoubleArrow)) {
+            skip(TokenType::DoubleArrow, true, true);
             allow_one_line = true;
         }
 
