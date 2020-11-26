@@ -28,7 +28,7 @@ namespace jc::parser {
         Token peek();
         Token advance();
 
-        // Chekers //
+        // Checkers //
         bool eof();
         bool is(const TokenType & type);
         bool is_nl();

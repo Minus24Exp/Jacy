@@ -369,7 +369,7 @@ namespace jc::parser {
 
         skip(TokenType::LBrace, true, true);
 
-        // @Note: Think about nested classes
+        // Note: Think about nested classes
 
         // Parse declarations
         tree::StmtList decls;

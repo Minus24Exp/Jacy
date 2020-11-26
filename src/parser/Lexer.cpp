@@ -479,8 +479,23 @@ namespace jc::parser {
                         advance();
                     } break;
                     case '?': {
-                        add_token(TokenType::Quest);
-                        advance();
+                        if (peek_next() == '?') {
+                            if (peek_next(2) == '=') {
+                                add_token(TokenType::NullishAssign);
+                                advance(3);
+                            } else {
+                                add_token(TokenType::NullCoalesce);
+                                advance(2);
+                            }
+                        } else {
+                            if (peek_next() == '.') {
+                                add_token(TokenType::SafeCall);
+                                advance(2);
+                            } else {
+                                add_token(TokenType::Quest);
+                                advance();
+                            }
+                        }
                     } break;
                     default: {
                         unexpected_token_error();
