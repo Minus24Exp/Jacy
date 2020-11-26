@@ -435,6 +435,10 @@ namespace jc::parser {
                         add_token(TokenType::Xor);
                         advance();
                     } break;
+                    case '~': {
+                        add_token(TokenType::BitNot);
+                        advance();
+                    } break;
                     default: {
                         unexpected_token_error();
                     }
