@@ -20,7 +20,7 @@ namespace jc::parser {
         Nl,
         Eof,
 
-        // Operators
+        // Operators and punctuations
         Assign,
         AddAssign, SubAssign, MulAssign, DivAssign, ModAssign, ExpAssign,
         Add, Sub, Mul, Div, Mod, Exp,
@@ -29,12 +29,17 @@ namespace jc::parser {
         LBracket, RBracket,
         Comma, Colon, Dot,
         Semi,
+        Inc, Dec,
         Or, And,
         Not, Eq, NotEq,
         LT, GT, LE, GE,
         RefEq, RefNotEq,
         Range, RangeLE, RangeRE, RangeBothE,
-        Arrow,
+        DoubleArrow, Arrow,
+        Is, NotIs,
+        In, NotIn,
+        As, AsQM,
+        Shl, Shr,
         Pipe,
 
         // Keywords
@@ -50,47 +55,48 @@ namespace jc::parser {
         From,
         For,
         Type,
-        Is, NotIs,
-        In, NotIn,
-        As, AsQM,
 
         None,
     };
 
     const auto op_start = static_cast<int>(TokenType::Assign);
     const std::vector <std::string> operators {
-            "=",
+        "=",
 
-            // Augmented assignment
-            "+=", "-=", "*=", "/=", "%=", "**=",
+        // Augmented assignment
+        "+=", "-=", "*=", "/=", "%=", "**=",
 
-            "+", "-", "*", "/", "%", "**",
+        "+", "-", "*", "/", "%", "**",
 
-            "(", ")",
-            "{", "}",
-            "[", "]",
+        "(", ")",
+        "{", "}",
+        "[", "]",
 
-            ",", ":", ".",
+        ",", ":", ".",
 
-            ";",
+        ";",
 
-            "||", "&&",
+        "++", "--",
 
-            "!", "==", "!=",
-            "<", ">", "<=", ">=",
+        "||", "&&",
 
-            "===", "!==",
+        "!", "==", "!=",
+        "<", ">", "<=", ">=",
 
-            "..", ">..", "..<", ">.<",
+        "===", "!==",
 
-            "=>",
+        "..", ">..", "..<", ">.<",
 
-            "is", "!is",
-            "in", "!in",
+        "=>", "->",
 
-            "as", "as?",
+        "is", "!is",
+        "in", "!in",
 
-            "|>",
+        "as", "as?",
+
+        "<<", ">>",
+
+        "|>",
     };
 
     inline std::string op_to_str(TokenType t) {
@@ -98,17 +104,17 @@ namespace jc::parser {
     }
 
     const std::vector <std::string> keywords {
-            "true", "false",
-            "var", "val",
-            "func",
-            "return",
-            "if", "else",
-            "while",
-            "class",
-            "import",
-            "from",
-            "for",
-            "type"
+        "true", "false",
+        "var", "val",
+        "func",
+        "return",
+        "if", "else",
+        "while",
+        "class",
+        "import",
+        "from",
+        "for",
+        "type",
     };
 
     const auto kw_start = static_cast<int>(TokenType::True);

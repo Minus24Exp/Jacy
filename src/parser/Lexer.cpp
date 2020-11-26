@@ -211,7 +211,7 @@ namespace jc::parser {
                 switch (peek()) {
                     case '=': {
                         if (peek_next() == '>') {
-                            add_token(TokenType::Arrow);
+                            add_token(TokenType::DoubleArrow);
                             advance(2);
                         } else if (peek_next() == '=') {
                             if (peek_next(2) == '=') {
@@ -230,6 +230,9 @@ namespace jc::parser {
                         if (peek_next() == '=') {
                             add_token(TokenType::AddAssign);
                             advance(2);
+                        } else if (peek_next() == '+') {
+                            add_token(TokenType::Inc);
+                            advance(2);
                         } else {
                             add_token(TokenType::Add);
                             advance();
@@ -241,6 +244,11 @@ namespace jc::parser {
                         } else if (peek_next() == '=') {
                             add_token(TokenType::SubAssign);
                             advance(2);
+                        } else if (peek_next() == '-') {
+                            add_token(TokenType::Dec);
+                            advance(2);
+                        } else if (peek_next() == '>') {
+                            add_token(TokenType::Arrow);
                         } else {
                             add_token(TokenType::Sub);
                             advance();
@@ -392,6 +400,9 @@ namespace jc::parser {
                         if (peek_next() == '=') {
                             add_token(TokenType::LE);
                             advance(2);
+                        } else if (peek_next() == '<') {
+                            add_token(TokenType::Shl);
+                            advance(2);
                         } else {
                             add_token(TokenType::LT);
                             advance();
@@ -411,6 +422,9 @@ namespace jc::parser {
                             } else {
                                 unexpected_token_error();
                             }
+                        } else if (peek_next() == '>') {
+                            add_token(TokenType::Shr);
+                            advance(2);
                         } else {
                             add_token(TokenType::GT);
                             advance();
