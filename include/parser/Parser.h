@@ -92,7 +92,7 @@ namespace jc::parser {
         common::Logger log;
 
     private:
-        void print_parsing_entity(const std::string & entitiy);
+        void print_parsing_entity(const std::string & entity);
     };
 }
 

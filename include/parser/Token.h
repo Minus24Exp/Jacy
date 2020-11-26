@@ -20,6 +20,7 @@ namespace jc::parser {
         Nl,
         Eof,
 
+        // TODO: Separate operators and punctuations ?
         // Operators and punctuations
         Assign,
         AddAssign, SubAssign, MulAssign, DivAssign, ModAssign, ExpAssign,
@@ -40,6 +41,7 @@ namespace jc::parser {
         In, NotIn,
         As, AsQM,
         Shl, Shr,
+        BitAnd, BitOr, Xor,
         Pipe,
 
         // Keywords
@@ -95,6 +97,7 @@ namespace jc::parser {
         "as", "as?",
 
         "<<", ">>",
+        "&", "|", "^",
 
         "|>",
     };

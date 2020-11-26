@@ -359,6 +359,9 @@ namespace jc::parser {
                         if (peek_next() == '&') {
                             add_token(TokenType::And);
                             advance(2);
+                        } else {
+                            add_token(TokenType::BitAnd);
+                            advance();
                         }
                     } break;
                     case '!': {
@@ -390,7 +393,8 @@ namespace jc::parser {
                             add_token(TokenType::Pipe);
                             advance(2);
                         } else {
-                            unexpected_token_error();
+                            add_token(TokenType::BitOr);
+                            advance();
                         }
                     } break;
                     case '<': {
@@ -426,6 +430,10 @@ namespace jc::parser {
                             add_token(TokenType::GT);
                             advance();
                         }
+                    } break;
+                    case '^': {
+                        add_token(TokenType::Xor);
+                        advance();
                     } break;
                     default: {
                         unexpected_token_error();
