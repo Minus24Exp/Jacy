@@ -24,7 +24,7 @@ namespace jc::parser {
 
         // Operators
         Assign,
-        AddAssign, SubAssign, MulAssign, DivAssign, ModAssign, ExpAssign,
+        AddAssign, SubAssign, MulAssign, DivAssign, ModAssign, ExpAssign, ShlAssign, ShrAssign,
         Add, Sub, Mul, Div, Mod, Exp,
         Inc, Dec,
         Or, And,
@@ -47,6 +47,7 @@ namespace jc::parser {
         LBrace, RBrace,
         LBracket, RBracket,
         Comma, Colon,
+        Quest,
 
         // Keywords
         Null,
@@ -69,7 +70,7 @@ namespace jc::parser {
     const std::vector <std::string> operators {
         // Operators
         "=",
-        "+=", "-=", "*=", "/=", "%=", "**=",
+        "+=", "-=", "*=", "/=", "%=", "**=", "<<=", ">>=",
         "+", "-", "*", "/", "%", "**",
         "++", "--",
         "||", "&&",

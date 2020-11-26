@@ -179,6 +179,19 @@ namespace jc::parser {
                     add_token(TokenType::Else);
                     add_token(TokenType::If);
                     continue;
+                } else if (id == "is") {
+                    add_token(TokenType::Is);
+                    continue;
+                } else if (id == "in") {
+                    add_token(TokenType::In);
+                    continue;
+                } else if (id == "as") {
+                    if (peek() == '?') {
+                        add_token(TokenType::AsQM);
+                        advance();
+                    } else {
+                        add_token(TokenType::As);
+                    }
                 }
 
                 TokenType kw = str_to_kw(id);
@@ -402,8 +415,13 @@ namespace jc::parser {
                             add_token(TokenType::LE);
                             advance(2);
                         } else if (peek_next() == '<') {
-                            add_token(TokenType::Shl);
-                            advance(2);
+                            if (peek_next(2) == '=') {
+                                add_token(TokenType::ShlAssign);
+                                advance(3);
+                            } else {
+                                add_token(TokenType::Shl);
+                                advance(2);
+                            }
                         } else {
                             add_token(TokenType::LT);
                             advance();
@@ -424,8 +442,13 @@ namespace jc::parser {
                                 unexpected_token_error();
                             }
                         } else if (peek_next() == '>') {
-                            add_token(TokenType::Shr);
-                            advance(2);
+                            if (peek_next(2) == '=') {
+                                add_token(TokenType::ShrAssign);
+                                advance(3);
+                            } else {
+                                add_token(TokenType::Shr);
+                                advance(2);
+                            }
                         } else {
                             add_token(TokenType::GT);
                             advance();
@@ -437,6 +460,10 @@ namespace jc::parser {
                     } break;
                     case '~': {
                         add_token(TokenType::BitNot);
+                        advance();
+                    } break;
+                    case '?': {
+                        add_token(TokenType::Quest);
                         advance();
                     } break;
                     default: {
