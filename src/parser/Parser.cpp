@@ -561,10 +561,58 @@ namespace jc::parser {
     }
 
     tree::expr_ptr Parser::And() {
-        tree::expr_ptr left = eq();
+        tree::expr_ptr left = bit_or();
 
         while (is(TokenType::And)) {
             print_parsing_entity("and");
+
+            const auto & op_token = peek();
+            advance();
+            skip_nl(true);
+            tree::expr_ptr right = bit_or();
+            left = std::make_shared<tree::Infix>(left, op_token, right);
+        }
+
+        return left;
+    }
+
+    tree::expr_ptr Parser::bit_or() {
+        tree::expr_ptr left = Xor();
+
+        while (is(TokenType::BitOr)) {
+            print_parsing_entity("bit_or");
+
+            const auto & op_token = peek();
+            advance();
+            skip_nl(true);
+            tree::expr_ptr right = Xor();
+            left = std::make_shared<tree::Infix>(left, op_token, right);
+        }
+
+        return left;
+    }
+
+    tree::expr_ptr Parser::Xor() {
+        tree::expr_ptr left = bit_and();
+
+        while (is(TokenType::BitAnd)) {
+            print_parsing_entity("xor");
+
+            const auto & op_token = peek();
+            advance();
+            skip_nl(true);
+            tree::expr_ptr right = bit_and();
+            left = std::make_shared<tree::Infix>(left, op_token, right);
+        }
+
+        return left;
+    }
+
+    tree::expr_ptr Parser::bit_and() {
+        tree::expr_ptr left = eq();
+
+        while (is(TokenType::BitAnd)) {
+            print_parsing_entity("bit_and");
 
             const auto & op_token = peek();
             advance();
@@ -595,13 +643,29 @@ namespace jc::parser {
     }
 
     tree::expr_ptr Parser::comp() {
-        tree::expr_ptr left = named_checks();
+        tree::expr_ptr left = spaceship();
 
         while (is(TokenType::LT)
             || is(TokenType::GT)
             || is(TokenType::LE)
             || is(TokenType::GE)) {
             print_parsing_entity("comp");
+
+            const auto & op_token = peek();
+            advance();
+            skip_nl(true);
+            tree::expr_ptr right = spaceship();
+            left = std::make_shared<tree::Infix>(left, op_token, right);
+        }
+
+        return left;
+    }
+
+    tree::expr_ptr Parser::spaceship() {
+        tree::expr_ptr left = named_checks();
+
+        while (is(TokenType::Cmp)) {
+            print_parsing_entity("spaceship");
 
             const auto & op_token = peek();
             advance();
@@ -614,14 +678,45 @@ namespace jc::parser {
     }
 
     tree::expr_ptr Parser::named_checks() {
-        tree::expr_ptr left = range();
+        tree::expr_ptr left = null_coalesce();
 
         while (is(TokenType::Is)
-               || is(TokenType::NotIs)
-               || is(TokenType::In)
-               || is(TokenType::NotIn))
-        {
+            || is(TokenType::NotIs)
+            || is(TokenType::In)
+            || is(TokenType::NotIn)) {
             print_parsing_entity("named_checks");
+
+            const auto & op_token = peek();
+            advance();
+            skip_nl(true);
+            tree::expr_ptr right = null_coalesce();
+            left = std::make_shared<tree::Infix>(left, op_token, right);
+        }
+
+        return left;
+    }
+
+    tree::expr_ptr Parser::null_coalesce() {
+        tree::expr_ptr left = shift();
+
+        while (is(TokenType::NullCoalesce)) {
+            print_parsing_entity("null_coalesce");
+
+            const auto & op_token = peek();
+            advance();
+            skip_nl(true);
+            tree::expr_ptr right = shift();
+            left = std::make_shared<tree::Infix>(left, op_token, right);
+        }
+
+        return left;
+    }
+
+    tree::expr_ptr Parser::shift() {
+        tree::expr_ptr left = range();
+
+        while (is(TokenType::Shr) || is(TokenType::Shl)) {
+            print_parsing_entity("shift");
 
             const auto & op_token = peek();
             advance();
@@ -904,7 +999,6 @@ namespace jc::parser {
         advance();
         return id;
     }
-
 
     // FuncCall //
     tree::expr_ptr Parser::parse_func_call(const tree::expr_ptr & left) {

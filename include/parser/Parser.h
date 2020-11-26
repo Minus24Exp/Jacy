@@ -62,9 +62,15 @@ namespace jc::parser {
         tree::expr_ptr pipe();
         tree::expr_ptr Or();
         tree::expr_ptr And();
+        tree::expr_ptr bit_or();
+        tree::expr_ptr Xor();
+        tree::expr_ptr bit_and();
         tree::expr_ptr eq();
         tree::expr_ptr comp();
+        tree::expr_ptr spaceship();
         tree::expr_ptr named_checks();
+        tree::expr_ptr null_coalesce();
+        tree::expr_ptr shift();
         tree::expr_ptr range();
         tree::expr_ptr add();
         tree::expr_ptr mult();
