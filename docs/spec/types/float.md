@@ -1,4 +1,4 @@
-### Float type
+## Float type - `float`
 Float type represent floating-point numbers.
 
 Examples:

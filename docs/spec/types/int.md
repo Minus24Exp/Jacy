@@ -1,4 +1,4 @@
-### Int type - `int`
+## Int type - `int`
 Int type represents integral numbers.
 
 Examples:
@@ -21,6 +21,7 @@ Examples:
 
 #### Sized ints
 **Sized integers are not available in version 0.0.1 and will be implemented in the future, now only `int` is available**
+
 Several sized integer are available:
 - `i8` - signed 8-bit integer
 - `i16` - signed 16-bit integer

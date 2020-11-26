@@ -58,8 +58,8 @@ namespace jc::parser {
 
     bool Lexer::is_id_first(const char & c) {
         return (c >= 'a' && c <= 'z')
-               || (c >= 'A' && c <= 'Z')
-               || (c == '_');
+            || (c >= 'A' && c <= 'Z')
+            || (c == '_');
     }
 
     bool Lexer::is_id(const char & c) {
