@@ -260,6 +260,13 @@ namespace jc::parser {
                 } else {
                     skip(TokenType::Comma, true, true);
                 }
+
+                bool vararg = false;
+                if (is(TokenType::Spread)) {
+                    vararg = true;
+                    skip(TokenType::Spread, false, false);
+                }
+
                 tree::id_ptr param_id = parse_id();
 
                 // Find duplicates
@@ -278,7 +285,7 @@ namespace jc::parser {
                     default_val = parse_expr();
                 }
 
-                params.push_back({ param_id, default_val });
+                params.push_back({param_id, default_val, vararg});
             }
 
             skip(TokenType::RParen, true, true);
@@ -905,7 +912,7 @@ namespace jc::parser {
 
         skip(TokenType::LParen, false, true);
 
-        tree::ExprList args;
+        tree::FuncArgs args;
 
         bool first = true;
         while (!eof()) {
@@ -921,7 +928,12 @@ namespace jc::parser {
             if (is(TokenType::RParen)) {
                 break;
             }
-            args.push_back(parse_expr());
+            bool spread = false;
+            if (is(TokenType::Spread)) {
+                skip(TokenType::Spread, false, false);
+                spread = true;
+            }
+            args.push_back({parse_expr(), spread});
         }
 
         skip(TokenType::RParen, true, false);
