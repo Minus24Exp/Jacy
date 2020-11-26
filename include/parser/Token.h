@@ -20,29 +20,33 @@ namespace jc::parser {
         Nl,
         Eof,
 
-        // TODO: Separate operators and punctuations ?
-        // Operators and punctuations
+        // Operators and punctuations //
+
+        // Operators
         Assign,
         AddAssign, SubAssign, MulAssign, DivAssign, ModAssign, ExpAssign,
         Add, Sub, Mul, Div, Mod, Exp,
-        LParen, RParen,
-        LBrace, RBrace,
-        LBracket, RBracket,
-        Comma, Colon, Dot,
-        Semi,
         Inc, Dec,
         Or, And,
+        Shl, Shr,
+        BitAnd, BitOr, Xor,
         Not, Eq, NotEq,
         LT, GT, LE, GE,
         RefEq, RefNotEq,
         Range, RangeLE, RangeRE, RangeBothE,
-        DoubleArrow, Arrow,
+        Dot,
         Is, NotIs,
         In, NotIn,
         As, AsQM,
-        Shl, Shr,
-        BitAnd, BitOr, Xor,
+
+        // Punctuations
+        Semi,
+        DoubleArrow, Arrow,
         Pipe,
+        LParen, RParen,
+        LBrace, RBrace,
+        LBracket, RBracket,
+        Comma, Colon,
 
         // Keywords
         Null,
@@ -63,43 +67,31 @@ namespace jc::parser {
 
     const auto op_start = static_cast<int>(TokenType::Assign);
     const std::vector <std::string> operators {
+        // Operators
         "=",
-
-        // Augmented assignment
         "+=", "-=", "*=", "/=", "%=", "**=",
-
         "+", "-", "*", "/", "%", "**",
+        "++", "--",
+        "||", "&&",
+        "&", "|", "^",
+        "<<", ">>",
+        "!", "==", "!=",
+        "<", ">", "<=", ">=",
+        "===", "!==",
+        "..", ">..", "..<", ">.<",
+        ".",
+        "is", "!is",
+        "in", "!in",
+        "as", "as?",
 
+        // Punctuations
+        ";",
+        "=>", "->",
+        "|>",
         "(", ")",
         "{", "}",
         "[", "]",
-
-        ",", ":", ".",
-
-        ";",
-
-        "++", "--",
-
-        "||", "&&",
-
-        "!", "==", "!=",
-        "<", ">", "<=", ">=",
-
-        "===", "!==",
-
-        "..", ">..", "..<", ">.<",
-
-        "=>", "->",
-
-        "is", "!is",
-        "in", "!in",
-
-        "as", "as?",
-
-        "<<", ">>",
-        "&", "|", "^",
-
-        "|>",
+        ",", ":",
     };
 
     inline std::string op_to_str(TokenType t) {
