@@ -50,6 +50,7 @@ namespace jc::compiler {
         void visit(tree::GetItem * get_item) override;
         void visit(tree::SetItem * set_item) override;
         void visit(tree::DictExpr * dict) override;
+        void visit(tree::SpreadExpr * spread_expr) override;
 
     private:
         // Bytecode //

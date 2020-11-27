@@ -208,7 +208,7 @@ namespace jc::tree {
 
         std::cout << "(";
         for (int i = 0; i < func_call->args.size(); i++) {
-            func_call->args[i]->accept(*this);
+            func_call->args[i].val->accept(*this);
             if (i < func_call->args.size() - 1) {
                 std::cout << ", ";
             }

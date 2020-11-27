@@ -32,9 +32,21 @@ namespace jc::common {
         LogLevel level{LogLevel::Warn};
     };
 
+    // What parts to run
+    // Works
+    enum RunLevel {
+        Lexer,
+        Parser,
+        PrintTree,
+        Compiler,
+        Disasm,
+        Vm,
+    };
+
     // Jacy main options //
     struct JacyOptions {
         bool debug{false};
+        RunLevel run_level{RunLevel::Vm};
 
         LoggerOptions log = {
                 .log_class = false, // Jacy main class does not provide class name

@@ -124,10 +124,20 @@ namespace jc {
             std::cout << t.to_string(true) << std::endl;
         }
 
+        if (options.run_level == common::RunLevel::Lexer) {
+            log.verbose("Stop after lexing");
+            return;
+        }
+
         // Parse tokens
         auto parser_start = bench();
         tree::StmtList tree = parser.parse(tokens);
         auto parser_end = bench();
+
+        if (options.run_level == common::RunLevel::Parser) {
+            log.verbose("Stop after parsing");
+            return;
+        }
 
         // Print tree
         tree::Printer printer;
@@ -135,15 +145,35 @@ namespace jc {
         printer.print(tree);
         std::cout << std::endl;
 
+        if (options.run_level == common::RunLevel::PrintTree) {
+            log.verbose("Stop after tree printing");
+            return;
+        }
+
         auto compiler_start = bench();
         bytecode::Chunk chunk = compiler.compile(tree);
         auto compiler_end = bench();
 
+        if (options.run_level == common::RunLevel::Compiler) {
+            log.verbose("Stop after compiling");
+            return;
+        }
+
         disasm.eval(chunk);
+
+        if (options.run_level == common::RunLevel::Disasm) {
+            log.verbose("Stop after disassembling");
+            return;
+        }
 
         auto vm_start = bench();
         vm.eval(chunk);
         auto vm_end = bench();
+
+        if (options.run_level == common::RunLevel::Vm) {
+            log.verbose("Stop after evaluation");
+            return;
+        }
 
         std::cout << "\n\nBenchmarks:" << std::endl;
 

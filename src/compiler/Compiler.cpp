@@ -262,7 +262,7 @@ namespace jc::compiler {
         uint64_t arg_count = 0;
         for (const auto & arg : func_call->args) {
             last_type = nullptr;
-            arg->accept(*this);
+            arg.val->accept(*this);
             arg_count++;
             arg_types.push_back(last_type);
         }
@@ -362,6 +362,10 @@ namespace jc::compiler {
     }
 
     void Compiler::visit(tree::DictExpr * expr_stmt) {
+
+    }
+
+    void Compiler::visit(tree::SpreadExpr * spread_expr) {
 
     }
 
