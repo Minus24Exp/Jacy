@@ -1,6 +1,7 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
+#include <string>
 #include <cstdint>
 
 namespace jc::common {

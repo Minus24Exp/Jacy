@@ -292,7 +292,7 @@ namespace jc::compiler {
         uint64_t arg_count = 0;
         for (const auto & arg : method_call->args) {
             last_type = nullptr;
-            arg->accept(*this);
+            arg.val->accept(*this);
             arg_count++;
             arg_types.push_back(last_type);
         }

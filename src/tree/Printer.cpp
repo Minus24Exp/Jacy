@@ -278,7 +278,10 @@ namespace jc::tree {
         method_call->id->accept(*this);
         std::cout << "(";
         for (size_t i = 0; i < method_call->args.size(); i++) {
-            method_call->args.at(i)->accept(*this);
+            if (method_call->args.at(i).spread) {
+                std::cout << "...";
+            }
+            method_call->args.at(i).val->accept(*this);
             if (i < method_call->args.size() - 1) {
                 std::cout << ", ";
             }

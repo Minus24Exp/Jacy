@@ -66,7 +66,7 @@ namespace jc {
     };
 
     /////////////////////////
-    // Parsring Exceptions //
+    // Parsing Exceptions //
     /////////////////////////
     class ParserException : public JacyException {
     public:

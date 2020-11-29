@@ -77,8 +77,8 @@ namespace jc::parser {
         "+", "-", "*", "/", "%", "**",
         "++", "--",
         "||", "&&", "??",
-        "&", "|", "^", "~",
         "<<", ">>",
+        "&", "|", "^", "~",
         "!", "==", "!=",
         "<", ">", "<=", ">=", "<=>",
         "===", "!==",
@@ -87,7 +87,6 @@ namespace jc::parser {
         "is", "!is",
         "in", "!in",
         "as", "as?",
-        "...",
 
         // Punctuations
         ";",
@@ -97,6 +96,8 @@ namespace jc::parser {
         "{", "}",
         "[", "]",
         ",", ":",
+        "?",
+        "...",
     };
 
     inline std::string op_to_str(TokenType t) {
@@ -117,7 +118,7 @@ namespace jc::parser {
         "type",
     };
 
-    const auto kw_start = static_cast<int>(TokenType::True);
+    const auto kw_start = static_cast<int>(TokenType::Null);
     inline TokenType str_to_kw(const std::string & str) {
         const auto & found = std::find(keywords.begin(), keywords.end(), str);
         if (found == keywords.end()) {
