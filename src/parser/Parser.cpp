@@ -125,6 +125,8 @@ namespace jc::parser {
     // Statements //
     ////////////////
     tree::stmt_ptr Parser::parse_stmt() {
+        log.debug("parse stmt peek type:", peek().to_string());
+
         switch (peek().type) {
             case TokenType::Var:
             case TokenType::Val: {
@@ -891,6 +893,8 @@ namespace jc::parser {
 
         // Grouping
         if (is(TokenType::LParen)) {
+            print_parsing_entity("grouping");
+
             skip(TokenType::LParen, false, true);
             tree::expr_ptr expr = parse_expr();
             skip(TokenType::RParen, true, false);
@@ -908,6 +912,8 @@ namespace jc::parser {
 
         // List
         if (is(TokenType::LBracket)) {
+            print_parsing_entity("list");
+
             skip(TokenType::LBracket, false, true);
 
             tree::ExprList elements;
@@ -942,6 +948,8 @@ namespace jc::parser {
 
         // Dictionary
         if (is(TokenType::LBrace)) {
+            print_parsing_entity("dict");
+
             skip(TokenType::LBrace, false, true);
 
             tree::DictElementList elements;
@@ -1113,6 +1121,6 @@ namespace jc::parser {
         if (!options.log_parsing_entity) {
             return;
         }
-        log.debug("Parse ", entity);
+        log.debug("Parse", entity);
     }
 }

@@ -6,7 +6,7 @@ Examples:
 0.123123
 -0.0683
 
-// You can omit 0 at start
+// You can omit 0 at the beginning
 .1231
 -.949
 ```

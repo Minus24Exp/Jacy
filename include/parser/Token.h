@@ -105,6 +105,7 @@ namespace jc::parser {
     }
 
     const std::vector <std::string> keywords {
+        "null",
         "true", "false",
         "var", "val",
         "func",
