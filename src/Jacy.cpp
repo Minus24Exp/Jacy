@@ -3,53 +3,27 @@
 namespace jc {
     Jacy::Jacy() : log("", options.log) {}
 
-    void Jacy::launch(int argc, const char * argv[]) {
-        // Parse argv
+    void Jacy::launch(int argc, const char ** argv) {
+        config.config(argc, argv);
 
-        // jacy_args -> false when main file appears
-        bool jacy_args = true;
-
-        std::vector<std::string> script_argv;
-        for (int i = 1; i < argc; i++) {
-            std::string arg(argv[i]);
-
-            if (arg[0] == '-') {
-                if (jacy_args) {
-                    // Parse Jacy arguments
-                    if (arg.substr(1) == "debug") {
-                        options.debug = true;
-                    }
-                } else {
-                    script_argv.emplace_back(argv[i]);
-                }
-            } else {
-                // Check if argument is Jacy file (ends with ".jc")
-                if (arg.size() > 3 && arg.compare(arg.size() - 3, 3, ".jc") == 0) {
-                    if (main_file.empty()) {
-                        jacy_args = false;
-                        main_file = arg;
-                    } else {
-                        throw JacyException("Expected only one input file");
-                    }
-                }
-            }
-        }
-
-        // TODO: Add OptionController or something...
-        if (!options.debug) {
-            log.options.level = common::LogLevel::Warn;
-            lexer.log.options.level = common::LogLevel::Warn;
-            parser.log.options.level = common::LogLevel::Warn;
-            compiler.log.options.level = common::LogLevel::Warn;
-            vm.log.options.level = common::LogLevel::Warn;
-            disasm.log.options.level = common::LogLevel::Warn;
-        }
+        options = config.jacy_options;
+        log.options = config.jacy_options.log;
+        lexer.options = config.lexer_options;
+        lexer.log.options = config.lexer_options.log;
+        parser.options = config.parser_options;
+        parser.log.options = config.parser_options.log;
+        compiler.options = config.compiler_options;
+        compiler.log.options = config.compiler_options.log;
+        lexer.options = config.lexer_options;
+        lexer.log.options = config.lexer_options.log;
+        lexer.options = config.lexer_options;
+        lexer.log.options = config.lexer_options.log;
 
         // TODO: Add command line arguments module
-        if (main_file.empty()) {
+        if (options.main_file.empty()) {
             run_repl();
         } else {
-            run_script(main_file);
+            run_script(options.main_file);
         }
     }
 

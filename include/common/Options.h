@@ -46,7 +46,8 @@ namespace jc::common {
     // Jacy main options //
     struct JacyOptions {
         bool debug{false};
-        RunLevel run_level{RunLevel::Vm};
+        RunLevel run_level{RunLevel::Parser}; // Note: For parser debug only
+        std::string main_file;
 
         LoggerOptions log = {
                 .log_class = false, // Jacy main class does not provide class name
@@ -89,6 +90,8 @@ namespace jc::common {
         // Note: ! Do not use logger inside vm logic, only for warnings and errors !
         LoggerOptions log = {};
     };
+
+    // TODO: Think about Tree Printer options
 }
 
 #endif // OPTIONS_H

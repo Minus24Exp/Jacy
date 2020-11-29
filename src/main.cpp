@@ -11,7 +11,7 @@ void signal_handler(int signal_num) {
 }
 #endif
 
-int main(int argc, const char * argv[]) {
+int main(int argc, const char ** argv) {
     #if IS_WIN
     signal(SIGSEGV, signal_handler);
     signal(SIGINT, signal_handler);
