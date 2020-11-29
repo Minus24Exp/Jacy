@@ -174,7 +174,7 @@ namespace jc::parser {
         // One-line //
         // If one-line block is allowed then try to parse single stmt
         if (!is(TokenType::LBrace) && allow_one_line) {
-            // @TODO: Think about this skip_nl
+            // TODO: Think about this skip_nl
             // Is it okay?
             skip_nl(true);
             stmts.push_back(parse_stmt());
@@ -416,7 +416,7 @@ namespace jc::parser {
         // No new-lines in import
         skip(TokenType::Import, false, false);
 
-        // @TODO: Improve `import`
+        // TODO: Improve `import`
         // - Multiple objects import
 
         // Import nothing, just run source
@@ -501,7 +501,7 @@ namespace jc::parser {
     tree::expr_ptr Parser::assignment() {
         tree::expr_ptr expr = pipe();
 
-        // @TODO: Add compound assignment operators
+        // TODO: Add compound assignment operators
 
         if (is_assign_op()) {
             print_parsing_entity("assignment");
@@ -737,7 +737,7 @@ namespace jc::parser {
     tree::expr_ptr Parser::range() {
         tree::expr_ptr left = add();
 
-        // @TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
+        // TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
         if (is(TokenType::Range)
             || is(TokenType::RangeLE)
             || is(TokenType::RangeRE)
@@ -895,7 +895,7 @@ namespace jc::parser {
             tree::expr_ptr expr = parse_expr();
             skip(TokenType::RParen, true, false);
 
-            // @TODO: !!! Think do I need special node for grouping? (precedence problem?)
+            // TODO: !!! Think do I need special node for grouping? (precedence problem?)
             return expr;
         }
 

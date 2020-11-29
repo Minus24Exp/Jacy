@@ -45,7 +45,6 @@ namespace jc {
                 } else {
                     run(line);
                 }
-
             } catch (JacyException & e) {
                 log.error(e.what());
             }
@@ -84,7 +83,7 @@ namespace jc {
     }
 
     void Jacy::run_debug(const std::string & script) {
-        // @TODO: Create base exceptions for Lexer, Parser, Interpreter and catch them separately
+        // TODO: Create base exceptions for Lexer, Parser, Interpreter and catch them separately
 
         const auto bench = std::chrono::high_resolution_clock::now;
 

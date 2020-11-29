@@ -5,7 +5,7 @@
 
 namespace jc::tree {
     /**
-     * @TODO: Think about alternative for ListExpr, it sounds pretty strange
+     * TODO: Think about alternative for ListExpr, it sounds pretty strange
      */
 
     struct ListExpr : Expr {
