@@ -125,8 +125,6 @@ namespace jc::parser {
     // Statements //
     ////////////////
     tree::stmt_ptr Parser::parse_stmt() {
-        log.debug("parse stmt peek type:", peek().to_string());
-
         switch (peek().type) {
             case TokenType::Var:
             case TokenType::Val: {

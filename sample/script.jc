@@ -1,3 +1,35 @@
-0b1101010
+'kek'
+"lol"
+123123
+0.123123
+.123123
+0xff
+0xFFAA
+0xaaFF
+0b101001
 
-var kek
+var just_var;
+var var_init = 1;
+val just_val;
+val val_init = 123;
+
+func raw_func() {
+    print('raw_func')
+}
+
+func func_no_paren {
+    print('func_no_paren')
+}
+
+func one_line_func() => print('online_func')
+
+func one_line_func_no_paren => print('online_func_no_paren')
+
+func args_func(arg1, arg2) {
+    print('argc_func')
+}
+
+func vararg_func(...varargs, arg2) {
+    print(...varargs, arg2)
+}
+

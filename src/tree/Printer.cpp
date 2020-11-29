@@ -65,7 +65,10 @@ namespace jc::tree {
         func_decl->id->accept(*this);
         std::cout << "(";
         for (int i = 0; i < func_decl->params.size(); i++) {
-            func_decl->params[i].id->accept(*this);
+            if (func_decl->params.at(i).vararg) {
+                std::cout << "...";
+            }
+            func_decl->params.at(i).id->accept(*this);
             if (i < func_decl->params.size() - 1) {
                 std::cout << ", ";
             }
@@ -208,7 +211,10 @@ namespace jc::tree {
 
         std::cout << "(";
         for (int i = 0; i < func_call->args.size(); i++) {
-            func_call->args[i].val->accept(*this);
+            if (func_call->args.at(i).spread) {
+                std::cout << "...";
+            }
+            func_call->args.at(i).val->accept(*this);
             if (i < func_call->args.size() - 1) {
                 std::cout << ", ";
             }
