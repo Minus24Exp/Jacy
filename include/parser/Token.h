@@ -39,17 +39,17 @@ namespace jc::parser {
         Is, NotIs,
         In, NotIn,
         As, AsQM,
+        Spread,
+        Pipe,
 
         // Punctuations
         Semi,
         DoubleArrow, Arrow,
-        Pipe,
         LParen, RParen,
         LBrace, RBrace,
         LBracket, RBracket,
         Comma, Colon,
         Quest,
-        Spread,
 
         // Keywords
         Null,
@@ -87,17 +87,17 @@ namespace jc::parser {
         "is", "!is",
         "in", "!in",
         "as", "as?",
+        "...",
+        "|>",
 
         // Punctuations
         ";",
         "=>", "->",
-        "|>",
         "(", ")",
         "{", "}",
         "[", "]",
         ",", ":",
         "?",
-        "...",
     };
 
     inline std::string op_to_str(TokenType t) {

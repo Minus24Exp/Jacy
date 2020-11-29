@@ -1,16 +1,19 @@
 #ifndef TYPEDECL_H
 #define TYPEDECL_H
 
+#include <utility>
+
 #include "tree/Stmt/Stmt.h"
+#include "tree/TypeAnno.h"
 
 namespace jc::tree {
     struct TypeDecl : Stmt {
         id_ptr id;
-        expr_ptr type_expr;
+        TypeAnno type;
 
         TypeDecl(const Position & pos, id_ptr id, expr_ptr type_expr)
-                : Stmt(pos, StmtType::Type), id(id), type_expr(type_expr) {}
-        virtual ~TypeDecl() = default;
+                : Stmt(pos, StmtType::Type), id(std::move(id)), type(std::move(type)) {}
+        ~TypeDecl() override = default;
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

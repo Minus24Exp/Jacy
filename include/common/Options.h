@@ -34,7 +34,6 @@ namespace jc::common {
     };
 
     // What parts to run
-    // Works
     enum RunLevel {
         Lexer,
         Parser,

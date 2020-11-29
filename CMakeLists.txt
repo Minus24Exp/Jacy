@@ -13,6 +13,6 @@ set(GCC_COVERAGE_LINK_FLAGS "-coverage -lgcov")
 include_directories("${PROJECT_SOURCE_DIR}/include")
 file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/**/*.cpp)
 
-add_executable(${PROJECT_NAME} ${SOURCES} include/common/Logger.h include/common/Options.h include/common/Config.h include/compiler/type_class.h include/bytecode/constant.h include/compiler/type.h src/compiler/type_class.cpp include/common/Logger.inl include/vm/class.h src/vm/object.cpp include/tree/Expr/MethodCall.h src/vm/class.cpp include/tree/Expr/SpreadExpr.h src/common/Config.cpp)
+add_executable(${PROJECT_NAME} ${SOURCES} include/common/Logger.h include/common/Options.h include/common/Config.h include/compiler/type_class.h include/bytecode/constant.h include/compiler/type.h src/compiler/type_class.cpp include/common/Logger.inl include/vm/class.h src/vm/object.cpp include/tree/Expr/MethodCall.h src/vm/class.cpp include/tree/Expr/SpreadExpr.h src/common/Config.cpp include/tree/TypeAnno.h)
 
 target_include_directories(Jacy PRIVATE ${PROJECT_SOURCE_DIR}/include)

@@ -26,6 +26,8 @@
 #include "tree/Expr/DictExpr.h"
 #include "tree/Expr/SpreadExpr.h"
 
+#include "tree/TypeAnno.h"
+
 #include "tree/Node.h"
 /**
  * This file just includes all nodes

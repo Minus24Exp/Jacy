@@ -87,6 +87,8 @@ namespace jc::parser {
         tree::expr_ptr parse_if_expr();
         tree::expr_ptr parse_literal();
 
+        tree::TypeAnno parse_type();
+
         // Errors //
         void error(const std::string & msg);
         void unexpected_error();
