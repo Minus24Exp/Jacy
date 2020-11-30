@@ -259,62 +259,82 @@ namespace jc::parser {
 
         tree::id_ptr id = parse_id();
 
-        // TODO!: FuncDecl multi-syntax
-
         tree::FuncParams params;
+        bool using_parens = false;
         if (is(TokenType::LParen)) {
             skip(TokenType::LParen, true, true);
-
-            bool first = true;
-            while (!eof()) {
-                if (is(TokenType::RParen)) {
-                    break;
-                }
-                if (first) {
-                    first = false;
-                } else {
-                    skip(TokenType::Comma, true, true);
-                }
-
-                bool vararg = false;
-                if (is(TokenType::Spread)) {
-                    vararg = true;
-                    skip(TokenType::Spread, false, false);
-                }
-
-                tree::id_ptr param_id = parse_id();
-
-                // Find duplicates
-                // TODO: Think about checking after all parameters added
-                for (const auto & param : params) {
-                    if (param.id->get_name() == param_id->get_name()) {
-                        error("Parameter duplication");
-                        return nullptr;
-                    }
-                }
-
-                // Note: Type annotation is required for parameters (with future inference too)
-                if (!is(TokenType::Colon)) {
-                    error("Expected type annotation for parameter " + param_id->get_name());
-                }
-
-                // TODO: Use is_after_nl
-                skip(TokenType::Colon, true, true);
-                tree::type_ptr arg_type = parse_type();
-
-                // Check for default value
-                tree::expr_ptr default_val = nullptr;
-                if (is(TokenType::Assign)) {
-                    skip(TokenType::Assign, true, true);
-                    default_val = parse_expr();
-                }
-
-                params.push_back({param_id, default_val, vararg, arg_type});
-            }
-
-            skip(TokenType::RParen, true, true);
+            using_parens = true;
         }
 
+        bool first = true;
+        while (!eof()) {
+            // For using_paren break on paren
+            // For no-paren break on `=>` (block start) or `->` (type anno) or `{` (block start)
+            // Note: This syntax is inference-capable because params parsing stops on `=>` or `{` but return type may be expected...
+            if (using_parens && is(TokenType::RParen)
+            || is(TokenType::DoubleArrow) || is(TokenType::Arrow) || is(TokenType::LBrace)) {
+                break;
+            }
+            if (first) {
+                first = false;
+            } else {
+                skip(TokenType::Comma, true, true);
+            }
+
+            bool vararg = false;
+            if (is(TokenType::Spread)) {
+                vararg = true;
+                skip(TokenType::Spread, false, false);
+            }
+
+            tree::id_ptr param_id = parse_id();
+
+            // Find duplicates
+            // TODO: Think about checking after all parameters added
+            for (const auto & param : params) {
+                if (param.id->get_name() == param_id->get_name()) {
+                    error("Parameter duplication");
+                    return nullptr;
+                }
+            }
+
+            // Note: Type annotation is required for parameters (with future inference too)
+            if (!is(TokenType::Colon)) {
+                error("Expected type annotation for parameter " + param_id->get_name());
+            }
+
+            // TODO: Use is_after_nl
+            skip(TokenType::Colon, true, true);
+            tree::type_ptr arg_type = parse_type();
+
+            // Check for default value
+            tree::expr_ptr default_val = nullptr;
+            if (is(TokenType::Assign)) {
+                skip(TokenType::Assign, true, true);
+                default_val = parse_expr();
+            }
+
+            params.push_back({param_id, default_val, vararg, arg_type});
+        }
+
+        if (using_parens) {
+            skip(TokenType::RParen, true, true);
+            skip_nl(true);
+
+            // Note: Not inference-capable syntax
+            if (is(TokenType::Arrow)) {
+                skip(TokenType::Arrow, false, true);
+            } else if (is(TokenType::Colon)) {
+                skip(TokenType::Colon, false, true);
+            } else {
+                error("Expected type annotation punctuation (':' or '->')");
+            }
+        } else {
+            // For no-paren syntax only `->` anno is available
+            skip(TokenType::Arrow, true, true);
+        }
+
+        // Parse type after `:` or `->`
         skip(TokenType::Colon, true, true);
         tree::type_ptr return_type = parse_type();
 

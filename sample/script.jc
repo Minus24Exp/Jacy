@@ -1,0 +1,3 @@
+func foo(arg1: string, arg2: int): string {
+    
+}
