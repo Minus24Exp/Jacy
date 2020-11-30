@@ -26,7 +26,7 @@
 #include "tree/Expr/DictExpr.h"
 #include "tree/Expr/SpreadExpr.h"
 
-#include "tree/TypeAnno.h"
+#include "tree/Type.h"
 
 #include "tree/Node.h"
 /**

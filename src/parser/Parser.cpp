@@ -1102,6 +1102,50 @@ namespace jc::parser {
         return std::make_shared<tree::Literal>(current);
     }
 
+    tree::type_ptr Parser::parse_type() {
+        tree::type_ptr left;
+        if (is(TokenType::Id)) {
+            // IdType //
+            tree::id_type_ptr id_type = std::make_shared<tree::IdType>(parse_id());
+
+            if (is(TokenType::LT)) {
+                // GenericType //
+
+                // TODO: Use is_after_nl
+                skip(TokenType::LT, false, true);
+                std::vector<tree::type_ptr> types;
+                bool first = true;
+                while (!eof() || !is(TokenType::GT)) {
+                    skip_nl(true);
+                    if (first) {
+                        first = false;
+                    } else {
+                        skip(TokenType::Comma, true, true);
+                    }
+                    types.push_back(parse_type());
+                    skip_nl(true);
+                }
+                skip(TokenType::GT, true, true);
+                left = std::make_shared<tree::GenericType>(id_type, types);
+            } else {
+                left = id_type;
+            }
+        } else if (is(TokenType::LBracket)) {
+            // ListType //
+            left = std::make_shared<tree::ListType>(parse_type());
+        } else if (is(TokenType::LBrace)) {
+            // DictType //
+            left = std::make_shared<tree::DictType>(parse_type(), parse_type());
+        }
+
+        if (is(TokenType::BitOr)) {
+            // UnionType
+            return std::make_shared<tree::UnionType>(left, parse_type());
+        }
+
+        return left;
+    }
+
     ////////////
     // Errors //
     ////////////

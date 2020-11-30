@@ -1,7 +1,6 @@
 ![Jacy](./img/JacyBorders.jpg)
 
 # *Jacy*
-(*Previously __Yocto__*)
 
 *Jacy* [JC, pronounced as J&#769;C or JC&#769;] is multi-paradigm programming language
 
