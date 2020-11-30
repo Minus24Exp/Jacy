@@ -284,6 +284,13 @@ namespace jc::parser {
                     }
                 }
 
+                // Note: Type annotation is required for parameters (with future inference too)
+                if (!is(TokenType::Colon)) {
+                    error("Expected type annotation for parameter " + param_id->get_name());
+                }
+
+                skip(TokenType::Colon, );
+
                 // Check for default value
                 tree::expr_ptr default_val = nullptr;
                 if (is(TokenType::Assign)) {

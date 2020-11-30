@@ -11,8 +11,8 @@ namespace jc::tree {
         id_ptr id;
         TypeAnno type;
 
-        TypeDecl(const Position & pos, id_ptr id, expr_ptr type_expr)
-                : Stmt(pos, StmtType::Type), id(std::move(id)), type(std::move(type)) {}
+        TypeDecl(const Position & pos, id_ptr id, const TypeAnno & type)
+                : Stmt(pos, StmtType::Type), id(std::move(id)), type(type) {}
         ~TypeDecl() override = default;
 
         void accept(BaseVisitor & visitor) override {
