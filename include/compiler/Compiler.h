@@ -52,6 +52,13 @@ namespace jc::compiler {
         void visit(tree::DictExpr * dict) override;
         void visit(tree::SpreadExpr * spread_expr) override;
 
+        // Types //
+        void visit(tree::IdType * id_type) override;
+        void visit(tree::ListType * list_type) override;
+        void visit(tree::DictType * dict_type) override;
+        void visit(tree::GenericType * generic_type) override;
+        void visit(tree::UnionType * union_type) override;
+
     private:
         // Bytecode //
         bytecode::Chunk chunk;

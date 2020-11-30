@@ -86,8 +86,7 @@ namespace jc::parser {
         if (is(type)) {
             advance();
         } else {
-            // TODO: Add TokenType to string conversion by range
-    //        expected_error("`"+ op_to_str(op) + "`");
+            expected_error("[NOT IMPLEMENTED EXPECTED MESSAGE]");
         }
         if (skip_r_nl) {
             skip_nl(true);
@@ -299,6 +298,8 @@ namespace jc::parser {
             }
 
             // Note: Type annotation is required for parameters (with future inference too)
+            // TODO: Use is_after_nl
+            // TODO: Use expected_error after error message update
             if (!is(TokenType::Colon)) {
                 error("Expected type annotation for parameter " + param_id->get_name());
             }
@@ -326,8 +327,6 @@ namespace jc::parser {
                 skip(TokenType::Arrow, false, true);
             } else if (is(TokenType::Colon)) {
                 skip(TokenType::Colon, false, true);
-            } else {
-                error("Expected type annotation punctuation (':' or '->')");
             }
         } else {
             // For no-paren syntax only `->` anno is available
@@ -335,7 +334,6 @@ namespace jc::parser {
         }
 
         // Parse type after `:` or `->`
-        skip(TokenType::Colon, true, true);
         tree::type_ptr return_type = parse_type();
 
         bool allow_one_line = false;
@@ -920,17 +918,17 @@ namespace jc::parser {
     }
 
     tree::expr_ptr Parser::primary() {
-        // Literal
+        // Literal //
         if (is_literal()) {
             return parse_literal();
         }
 
-        // Identifier
+        // Id //
         if (is(TokenType::Id)) {
             return parse_id();
         }
 
-        // Grouping
+        // Grouping //
         if (is(TokenType::LParen)) {
             print_parsing_entity("grouping");
 
@@ -944,12 +942,12 @@ namespace jc::parser {
 
         Position primary_pos = peek().pos;
 
-        // If expression
+        // IfExpr //
         if (is(TokenType::If)) {
             return parse_if_expr();
         }
 
-        // List
+        // ListExpr //
         if (is(TokenType::LBracket)) {
             print_parsing_entity("list");
 
@@ -1136,11 +1134,15 @@ namespace jc::parser {
         return std::make_shared<tree::Literal>(current);
     }
 
+    ///////////
+    // Types //
+    ///////////
     tree::type_ptr Parser::parse_type() {
         const auto & pos = peek().pos;
         tree::type_ptr left;
         if (is(TokenType::Id)) {
-            // IdType //
+            print_parsing_entity("id_type");
+
             tree::id_type_ptr id_type = std::make_shared<tree::IdType>(pos, parse_id());
 
             if (is(TokenType::LT)) {
@@ -1166,12 +1168,14 @@ namespace jc::parser {
                 left = id_type;
             }
         } else if (is(TokenType::LBracket)) {
-            // ListType //
+            print_parsing_entity("list_type");
+
             skip(TokenType::LBracket, true, true);
             left = std::make_shared<tree::ListType>(pos, parse_type());
             skip(TokenType::RBracket, true, true);
         } else if (is(TokenType::LBrace)) {
-            // DictType //
+            print_parsing_entity("dict_type");
+
             skip(TokenType::LBrace, true, true);
 
             const auto & key = parse_type();
@@ -1183,7 +1187,8 @@ namespace jc::parser {
         }
 
         if (is(TokenType::BitOr)) {
-            // UnionType
+            print_parsing_entity("union_type");
+
             return std::make_shared<tree::UnionType>(left, parse_type());
         }
 

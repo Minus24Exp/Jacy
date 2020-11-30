@@ -369,6 +369,29 @@ namespace jc::compiler {
 
     }
 
+    /////////////////
+    // tree::Types //
+    /////////////////
+    void Compiler::visit(tree::IdType * id_type) {
+
+    }
+
+    void Compiler::visit(tree::ListType * list_type) {
+
+    }
+
+    void Compiler::visit(tree::DictType * dict_type) {
+
+    }
+
+    void Compiler::visit(tree::GenericType * generic_type) {
+
+    }
+
+    void Compiler::visit(tree::UnionType * union_type) {
+
+    }
+
     //////////////
     // Bytecode //
     //////////////

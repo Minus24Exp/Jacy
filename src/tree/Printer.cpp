@@ -51,7 +51,11 @@ namespace jc::tree {
         }
         std::cout << " ";
 
-        visit(var_decl->id.get());
+        var_decl->id->accept(*this);
+
+        if (var_decl->type) {
+            var_decl->type->accept(*this);
+        }
 
         if (var_decl->assign_expr) {
             std::cout << " = ";
@@ -69,20 +73,32 @@ namespace jc::tree {
                 std::cout << "...";
             }
             func_decl->params.at(i).id->accept(*this);
+            if (func_decl->params.at(i).type) {
+                std::cout << ": ";
+                func_decl->params.at(i).type->accept(*this);
+            }
             if (i < func_decl->params.size() - 1) {
                 std::cout << ", ";
             }
         }
-        std::cout << ") ";
+        std::cout << ")";
+
+        if (func_decl->return_type) {
+            std::cout << ": ";
+            func_decl->return_type->accept(*this);
+        }
+
+        std::cout << " ";
+
         func_decl->body->accept(*this);
     }
 
-    void Printer::visit(WhileStmt * w) {
+    void Printer::visit(WhileStmt * while_stmt) {
         print_indent();
         std::cout << "while ";
-        w->cond->accept(*this);
+        while_stmt->cond->accept(*this);
         std::cout << " ";
-        w->body->accept(*this);
+        while_stmt->body->accept(*this);
     }
 
     void Printer::visit(ForStmt * for_stmt) {
@@ -159,7 +175,7 @@ namespace jc::tree {
         std::cout << "type ";
         type_decl->id->accept(*this);
         std::cout << " = ";
-        type_decl->type_expr->accept(*this);
+        type_decl->type->accept(*this);
     }
 
     /////////////////

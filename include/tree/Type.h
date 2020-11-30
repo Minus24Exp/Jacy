@@ -1,6 +1,8 @@
 #ifndef TREE_TYPE_H
 #define TREE_TYPE_H
 
+#include <utility>
+
 #include "tree/Expr/Identifier.h"
 
 namespace jc::tree {
@@ -12,9 +14,9 @@ namespace jc::tree {
     // TODO: Think if we need Type type :)
     //  Like to statically check what Type node do we use
     struct Type : Node {
-        Type(const Position & pos) : Node(pos) {}
+        explicit Type(const Position & pos) : Node(pos) {}
 
-        virtual void accept(BaseVisitor & visitor) = 0;
+        void accept(BaseVisitor & visitor) override = 0;
     };
 
     struct IdType : Type {
@@ -53,7 +55,8 @@ namespace jc::tree {
         id_type_ptr id;
         std::vector<type_ptr> types;
 
-        GenericType(id_type_ptr id, const std::vector<type_ptr> & types) : Type(id->pos), id(id), types(types) {}
+        GenericType(id_type_ptr id, std::vector<type_ptr> types)
+            : Type(id->pos), id(std::move(id)), types(std::move(types)) {}
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);
@@ -66,7 +69,8 @@ namespace jc::tree {
         type_ptr left;
         type_ptr right;
 
-        UnionType(type_ptr left, type_ptr right) : Type(left->pos), left(std::move(left)), right(std::move(right)) {}
+        UnionType(type_ptr left, type_ptr right)
+            : Type(left->pos), left(std::move(left)), right(std::move(right)) {}
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);
