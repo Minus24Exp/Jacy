@@ -1,15 +1,3 @@
-func foo(arg1: string, arg2: int): string {
+func bax arg1: int -> {
 
 }
-
-func bar arg1: string {
-
-}
-
-func bax arg1: int -> string {
-
-}
-
-func bax arg1: int -> string => print('kek')
-
-func bax arg1: string, ...arg2: MyClass: string {}

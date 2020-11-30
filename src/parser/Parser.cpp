@@ -12,7 +12,7 @@ namespace jc::parser {
     }
 
     /////////////
-    // Chekers //
+    // Checkers //
     /////////////
     bool Parser::eof() {
         return is(TokenType::Eof);
@@ -274,6 +274,7 @@ namespace jc::parser {
             || is(TokenType::DoubleArrow) || is(TokenType::Arrow) || is(TokenType::LBrace)) {
                 break;
             }
+            log.verbose("parse arg:", peek().to_string());
             if (first) {
                 first = false;
             } else {
@@ -304,9 +305,13 @@ namespace jc::parser {
                 error("Expected type annotation for parameter " + param_id->get_name());
             }
 
+            log.verbose("Expect colon:", peek().to_string());
             // TODO: Use is_after_nl
             skip(TokenType::Colon, true, true);
+            log.verbose("expect type:", peek().to_string());
             tree::type_ptr arg_type = parse_type();
+
+            log.verbose("after arg type:", peek().to_string());
 
             // Check for default value
             tree::expr_ptr default_val = nullptr;
@@ -317,6 +322,8 @@ namespace jc::parser {
 
             params.push_back({param_id, default_val, vararg, arg_type});
         }
+
+        log.verbose("using parens:", using_parens ? "using parens" : "no paren");
 
         if (using_parens) {
             skip(TokenType::RParen, true, true);
@@ -329,6 +336,7 @@ namespace jc::parser {
                 skip(TokenType::Colon, false, true);
             }
         } else {
+            log.verbose("type anno:", peek().to_string());
             // For no-paren syntax only `->` anno is available
             skip(TokenType::Arrow, true, true);
         }
