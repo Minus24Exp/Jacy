@@ -39,7 +39,7 @@ namespace jc::parser {
         // Skippers //
         void skip_nl(const bool & optional = false);
         void skip_semis();
-        void skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl);
+        void skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl, const std::string & expected);
 
         // Parsers //
 
