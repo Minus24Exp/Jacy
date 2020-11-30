@@ -1137,10 +1137,11 @@ namespace jc::parser {
     }
 
     tree::type_ptr Parser::parse_type() {
+        const auto & pos = peek().pos;
         tree::type_ptr left;
         if (is(TokenType::Id)) {
             // IdType //
-            tree::id_type_ptr id_type = std::make_shared<tree::IdType>(parse_id());
+            tree::id_type_ptr id_type = std::make_shared<tree::IdType>(pos, parse_id());
 
             if (is(TokenType::LT)) {
                 // GenericType //
@@ -1166,10 +1167,19 @@ namespace jc::parser {
             }
         } else if (is(TokenType::LBracket)) {
             // ListType //
-            left = std::make_shared<tree::ListType>(parse_type());
+            skip(TokenType::LBracket, true, true);
+            left = std::make_shared<tree::ListType>(pos, parse_type());
+            skip(TokenType::RBracket, true, true);
         } else if (is(TokenType::LBrace)) {
             // DictType //
-            left = std::make_shared<tree::DictType>(parse_type(), parse_type());
+            skip(TokenType::LBrace, true, true);
+
+            const auto & key = parse_type();
+            skip(TokenType::Colon, true, true);
+            const auto & val = parse_type();
+            left = std::make_shared<tree::DictType>(pos, key, val);
+
+            skip(TokenType::RBrace, true, true);
         }
 
         if (is(TokenType::BitOr)) {

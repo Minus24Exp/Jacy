@@ -6,6 +6,7 @@
 namespace jc::tree {
     struct Node;
 
+    // Statements //
     struct Stmt;
     struct ExprStmt;
     struct VarDecl;
@@ -18,6 +19,7 @@ namespace jc::tree {
     struct Import;
     struct TypeDecl;
 
+    // Expressions //
     struct Expr;
     struct Literal;
     struct Identifier;
@@ -34,6 +36,13 @@ namespace jc::tree {
     struct DictExpr;
     struct MethodCall;
     struct SpreadExpr;
+
+    // Types //
+    struct IdType;
+    struct ListType;
+    struct DictType;
+    struct GenericType;
+    struct UnionType;
 
     class BaseVisitor {
     public:
@@ -69,6 +78,12 @@ namespace jc::tree {
         virtual void visit(MethodCall * method_call) = 0;
         virtual void visit(SpreadExpr * spread_expr) = 0;
 
+        // Types //
+        virtual void visit(IdType * id_type) = 0;
+        virtual void visit(ListType * list_type) = 0;
+        virtual void visit(DictType * dict_type) = 0;
+        virtual void visit(GenericType * generic_type) = 0;
+        virtual void visit(UnionType * union_type) = 0;
     };
 }
 

@@ -299,4 +299,43 @@ namespace jc::tree {
         std::cout << "...";
         spread_expr->expr->accept(*this);
     }
+
+    ///////////
+    // Types //
+    ///////////
+    void Printer::visit(IdType * id_type) {
+        id_type->id->accept(*this);
+    }
+
+    void Printer::visit(ListType * list_type) {
+        std::cout << "[";
+        list_type->type->accept(*this);
+        std::cout << "]";
+    }
+
+    void Printer::visit(DictType * dict_type) {
+        std::cout << "{";
+        dict_type->key->accept(*this);
+        std::cout << ",";
+        dict_type->val->accept(*this);
+        std::cout << "}";
+    }
+
+    void Printer::visit(GenericType * generic_type) {
+        generic_type->id->accept(*this);
+        std::cout << "<";
+        for (size_t i = 0; i < generic_type->types.size(); i++) {
+            generic_type->types.at(i)->accept(*this);
+            if (i < generic_type->types.size() - 1) {
+                std::cout << ", ";
+            }
+        }
+        std::cout << ">";
+    }
+
+    void Printer::visit(UnionType * union_type) {
+        union_type->left->accept(*this);
+        std::cout << " | ";
+        union_type->right->accept(*this);
+    }
 }

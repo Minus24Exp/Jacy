@@ -43,6 +43,13 @@ namespace jc::tree {
         void visit(MethodCall * method_call) override;
         void visit(SpreadExpr * spread_expr) override;
 
+        // Types //
+        void visit(IdType * id_type) override;
+        void visit(ListType * list_type) override;
+        void visit(DictType * dict_type) override;
+        void visit(GenericType * generic_type) override;
+        void visit(UnionType * union_type) override;
+
     private:
         void print_indent() const;
 
