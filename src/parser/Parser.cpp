@@ -231,6 +231,13 @@ namespace jc::parser {
 
         tree::id_ptr id = parse_id();
 
+        tree::type_ptr type = nullptr;
+        // TODO: Use is_after_nl
+        if (is(TokenType::Colon)) {
+            skip(TokenType::Colon, true, true);
+            type = parse_type();
+        }
+
         tree::expr_ptr assign_expr = nullptr;
 
         // It's obvious, but mark that augmented assignment cannot appear in variable declaration
@@ -239,7 +246,7 @@ namespace jc::parser {
             assign_expr = parse_expr();
         }
 
-        return std::make_shared<tree::VarDecl>(var_decl_pos, decl, id, assign_expr);
+        return std::make_shared<tree::VarDecl>(var_decl_pos, decl, id, type, assign_expr);
     }
 
     // FuncDecl //
@@ -251,6 +258,8 @@ namespace jc::parser {
         skip(TokenType::Func, false, true);
 
         tree::id_ptr id = parse_id();
+
+        // TODO!: FuncDecl multi-syntax
 
         tree::FuncParams params;
         if (is(TokenType::LParen)) {
