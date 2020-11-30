@@ -3,9 +3,9 @@
 # *Jacy*
 (*Previously __Yocto__*)
 
-*Jacy* [JC] multi-paradigm programming language.
+*Jacy* [JC, pronounced as J&#769;C or JC&#769;] is multi-paradigm programming language
 
-[Pure C++ implementation]
+> Pure C++ implementation
 
 ### Docs - WIP (Please do not read them -- read [specification](docs/spec/index.md))
 
