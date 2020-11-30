@@ -289,7 +289,9 @@ namespace jc::parser {
                     error("Expected type annotation for parameter " + param_id->get_name());
                 }
 
-                skip(TokenType::Colon, );
+                // TODO: Use is_after_nl
+                skip(TokenType::Colon, true, true);
+                tree::type_ptr arg_type = parse_type();
 
                 // Check for default value
                 tree::expr_ptr default_val = nullptr;
@@ -298,11 +300,14 @@ namespace jc::parser {
                     default_val = parse_expr();
                 }
 
-                params.push_back({param_id, default_val, vararg});
+                params.push_back({param_id, default_val, vararg, arg_type});
             }
 
             skip(TokenType::RParen, true, true);
         }
+
+        skip(TokenType::Colon, true, true);
+        tree::type_ptr return_type = parse_type();
 
         bool allow_one_line = false;
         if (is(TokenType::DoubleArrow)) {
@@ -312,7 +317,7 @@ namespace jc::parser {
 
         tree::block_ptr body = parse_block(allow_one_line);
 
-        return std::make_shared<tree::FuncDecl>(func_decl_pos, id, params, body);
+        return std::make_shared<tree::FuncDecl>(func_decl_pos, id, params, body, return_type);
     }
 
     // WhileStmt //
@@ -493,9 +498,9 @@ namespace jc::parser {
         skip(TokenType::Type, false, false);
         tree::id_ptr id = parse_id();
         skip(TokenType::Assign, false, false);
-        tree::expr_ptr type_expr = parse_expr();
+        tree::type_ptr type = parse_type();
 
-        return std::make_shared<tree::TypeDecl>(type_decl_pos, id, type_expr);
+        return std::make_shared<tree::TypeDecl>(type_decl_pos, id, type);
     }
 
     /////////////////
