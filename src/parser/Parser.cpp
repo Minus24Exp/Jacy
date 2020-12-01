@@ -187,7 +187,7 @@ namespace jc::parser {
 
     // Block //
     tree::block_ptr Parser::parse_block(bool allow_one_line) {
-        print_parsing_entity("block");
+        log_parsing_entity("block");
 
         Position block_pos = peek().pos;
         tree::StmtList stmts;
@@ -236,7 +236,7 @@ namespace jc::parser {
 
     // VarDecl //
     tree::stmt_ptr Parser::parse_var_decl() {
-        print_parsing_entity("var_decl");
+        log_parsing_entity("var_decl");
 
         Position var_decl_pos = peek().pos;
 
@@ -269,7 +269,7 @@ namespace jc::parser {
 
     // FuncDecl //
     tree::stmt_ptr Parser::parse_func_decl() {
-        print_parsing_entity("func_decl");
+        log_parsing_entity("func_decl");
 
         Position func_decl_pos = peek().pos;
 
@@ -359,7 +359,7 @@ namespace jc::parser {
 
     // WhileStmt //
     tree::stmt_ptr Parser::parse_while_stmt() {
-        print_parsing_entity("while_stmt");
+        log_parsing_entity("while_stmt");
 
         Position while_pos = peek().pos;
 
@@ -383,7 +383,7 @@ namespace jc::parser {
 
     // ForStmt //
     tree::stmt_ptr Parser::parse_for_stmt() {
-        print_parsing_entity("for_stmt");
+        log_parsing_entity("for_stmt");
 
         Position for_stmt_pos = peek().pos;
 
@@ -411,7 +411,7 @@ namespace jc::parser {
 
     // ClassDecl //
     tree::stmt_ptr Parser::parse_class_decl() {
-        print_parsing_entity("class_decl");
+        log_parsing_entity("class_decl");
 
         Position class_decl_pos = peek().pos;
 
@@ -456,7 +456,7 @@ namespace jc::parser {
 
     // Import //
     tree::stmt_ptr Parser::parse_import() {
-        print_parsing_entity("import");
+        log_parsing_entity("import");
 
         Position import_pos = peek().pos;
         // No new-lines in import
@@ -525,7 +525,7 @@ namespace jc::parser {
 
     // TypeDecl //
     tree::stmt_ptr Parser::parse_type_decl() {
-        print_parsing_entity("type_decl");
+        log_parsing_entity("type_decl");
 
         Position type_decl_pos = peek().pos;
 
@@ -550,7 +550,7 @@ namespace jc::parser {
         // TODO: Add compound assignment operators
 
         if (is_assign_op()) {
-            print_parsing_entity("assignment");
+            log_parsing_entity("assignment");
 
             Token assign_op = peek();
             advance();
@@ -584,7 +584,7 @@ namespace jc::parser {
         tree::expr_ptr left = Or();
 
         while (is(TokenType::Pipe)) {
-            print_parsing_entity("pipe");
+            log_parsing_entity("pipe");
 
             const auto & op_token = peek();
             advance();
@@ -600,7 +600,7 @@ namespace jc::parser {
         tree::expr_ptr left = And();
 
         while (is(TokenType::Or)) {
-            print_parsing_entity("or");
+            log_parsing_entity("or");
 
             const auto & op_token = peek();
             advance();
@@ -616,7 +616,7 @@ namespace jc::parser {
         tree::expr_ptr left = bit_or();
 
         while (is(TokenType::And)) {
-            print_parsing_entity("and");
+            log_parsing_entity("and");
 
             const auto & op_token = peek();
             advance();
@@ -632,7 +632,7 @@ namespace jc::parser {
         tree::expr_ptr left = Xor();
 
         while (is(TokenType::BitOr)) {
-            print_parsing_entity("bit_or");
+            log_parsing_entity("bit_or");
 
             const auto & op_token = peek();
             advance();
@@ -648,7 +648,7 @@ namespace jc::parser {
         tree::expr_ptr left = bit_and();
 
         while (is(TokenType::BitAnd)) {
-            print_parsing_entity("xor");
+            log_parsing_entity("xor");
 
             const auto & op_token = peek();
             advance();
@@ -664,7 +664,7 @@ namespace jc::parser {
         tree::expr_ptr left = eq();
 
         while (is(TokenType::BitAnd)) {
-            print_parsing_entity("bit_and");
+            log_parsing_entity("bit_and");
 
             const auto & op_token = peek();
             advance();
@@ -681,7 +681,7 @@ namespace jc::parser {
 
         while (is(TokenType::Eq) || is(TokenType::NotEq)
             || is(TokenType::RefEq) || is(TokenType::RefNotEq)) {
-            print_parsing_entity("eq");
+            log_parsing_entity("eq");
 
             const auto & op_token = peek();
             advance();
@@ -700,7 +700,7 @@ namespace jc::parser {
             || is(TokenType::GT)
             || is(TokenType::LE)
             || is(TokenType::GE)) {
-            print_parsing_entity("comp");
+            log_parsing_entity("comp");
 
             const auto & op_token = peek();
             advance();
@@ -716,7 +716,7 @@ namespace jc::parser {
         tree::expr_ptr left = named_checks();
 
         while (is(TokenType::Cmp)) {
-            print_parsing_entity("spaceship");
+            log_parsing_entity("spaceship");
 
             const auto & op_token = peek();
             advance();
@@ -735,7 +735,7 @@ namespace jc::parser {
             || is(TokenType::NotIs)
             || is(TokenType::In)
             || is(TokenType::NotIn)) {
-            print_parsing_entity("named_checks");
+            log_parsing_entity("named_checks");
 
             const auto & op_token = peek();
             advance();
@@ -751,7 +751,7 @@ namespace jc::parser {
         tree::expr_ptr left = shift();
 
         while (is(TokenType::NullCoalesce)) {
-            print_parsing_entity("null_coalesce");
+            log_parsing_entity("null_coalesce");
 
             const auto & op_token = peek();
             advance();
@@ -767,7 +767,7 @@ namespace jc::parser {
         tree::expr_ptr left = range();
 
         while (is(TokenType::Shr) || is(TokenType::Shl)) {
-            print_parsing_entity("shift");
+            log_parsing_entity("shift");
 
             const auto & op_token = peek();
             advance();
@@ -787,7 +787,7 @@ namespace jc::parser {
          || is(TokenType::RangeLE)
          || is(TokenType::RangeRE)
          || is(TokenType::RangeBothE)) {
-            print_parsing_entity("range");
+            log_parsing_entity("range");
 
             const auto & op_token = peek();
             advance();
@@ -803,7 +803,7 @@ namespace jc::parser {
         tree::expr_ptr left = mult();
 
         while (is(TokenType::Add) || is(TokenType::Sub)) {
-            print_parsing_entity("add");
+            log_parsing_entity("add");
 
             const auto & op_token = peek();
             advance();
@@ -819,7 +819,7 @@ namespace jc::parser {
         tree::expr_ptr left = power();
 
         while (is(TokenType::Mul) || is(TokenType::Div) || is(TokenType::Mod)) {
-            print_parsing_entity("mult");
+            log_parsing_entity("mult");
 
             const auto & op_token = peek();
             advance();
@@ -835,7 +835,7 @@ namespace jc::parser {
         tree::expr_ptr left = type_cast();
 
         while (is(TokenType::Exp)) {
-            print_parsing_entity("power");
+            log_parsing_entity("power");
 
             const auto & op_token = peek();
             advance();
@@ -851,7 +851,7 @@ namespace jc::parser {
         tree::expr_ptr left = prefix();
 
         if (is(TokenType::As) || is(TokenType::AsQM)) {
-            print_parsing_entity("type_cast");
+            log_parsing_entity("type_cast");
 
             const auto & op_token = peek();
             advance();
@@ -865,7 +865,7 @@ namespace jc::parser {
 
     tree::expr_ptr Parser::prefix() {
         if (is(TokenType::Not) || is(TokenType::Sub)) {
-            print_parsing_entity("prefix");
+            log_parsing_entity("prefix");
 
             const auto & op_token = peek();
             advance();
@@ -895,7 +895,7 @@ namespace jc::parser {
 
         while (!eof()) {
             if (is(TokenType::Dot)) {
-                print_parsing_entity("get_expr");
+                log_parsing_entity("get_expr");
 
                 advance();
                 tree::id_ptr id = parse_id();
@@ -908,7 +908,7 @@ namespace jc::parser {
                     left = std::make_shared<tree::GetExpr>(left, id);
                 }
             } else if (is(TokenType::LBracket)) {
-                print_parsing_entity("sub-expression");
+                log_parsing_entity("sub-expression");
 
                 skip(TokenType::LBracket, false, true, "opening bracket '[' for index access");
                 tree::expr_ptr ind = parse_expr();
@@ -935,7 +935,7 @@ namespace jc::parser {
 
         // Grouping //
         if (opt_skip(TokenType::LParen, false, true)) {
-            print_parsing_entity("grouping");
+            log_parsing_entity("grouping");
 
             tree::expr_ptr expr = parse_expr();
 
@@ -954,7 +954,7 @@ namespace jc::parser {
 
         // ListExpr //
         if (opt_skip(TokenType::LBracket, false, true)) {
-            print_parsing_entity("list");
+            log_parsing_entity("list");
 
             tree::ExprList elements;
             bool first = true;
@@ -987,7 +987,7 @@ namespace jc::parser {
 
         // Dictionary
         if (opt_skip(TokenType::LBrace, false, true)) {
-            print_parsing_entity("dict");
+            log_parsing_entity("dict");
 
             tree::DictElementList elements;
             bool first = true;
@@ -1041,7 +1041,7 @@ namespace jc::parser {
 
     // Identifier //
     tree::id_ptr Parser::parse_id() {
-        print_parsing_entity("id");
+        log_parsing_entity("id");
 
         if (!is(TokenType::Id)) {
             expected_error("identifier");
@@ -1054,7 +1054,7 @@ namespace jc::parser {
 
     // FuncCall //
     tree::expr_ptr Parser::parse_func_call(const tree::expr_ptr & left) {
-        print_parsing_entity("func_call");
+        log_parsing_entity("func_call");
 
         skip(TokenType::LParen, false, true, "[DEV_ERROR] opening parenthesis '(' in function call");
 
@@ -1088,7 +1088,7 @@ namespace jc::parser {
 
     // IfExpr //
     tree::expr_ptr Parser::parse_if_expr() {
-        print_parsing_entity("if_expr");
+        log_parsing_entity("if_expr");
 
         Position if_pos = peek().pos;
 
@@ -1125,7 +1125,7 @@ namespace jc::parser {
     }
 
     tree::expr_ptr Parser::parse_literal() {
-        print_parsing_entity("literal");
+        log_parsing_entity("literal");
 
         Token current = peek();
         advance();
@@ -1141,7 +1141,7 @@ namespace jc::parser {
         const auto & pos = peek().pos;
         tree::type_ptr left;
         if (is(TokenType::Id)) {
-            print_parsing_entity("id_type");
+            log_parsing_entity("id_type");
 
             tree::id_type_ptr id_type = std::make_shared<tree::IdType>(pos, parse_id());
 
@@ -1166,12 +1166,12 @@ namespace jc::parser {
                 left = id_type;
             }
         } else if (opt_skip(TokenType::LBracket, false, true)) {
-            print_parsing_entity("list_type");
+            log_parsing_entity("list_type");
 
             left = std::make_shared<tree::ListType>(pos, parse_type("list type"));
             skip(TokenType::RBracket, true, false, "closing bracket ']' at end of list type");
         } else if (opt_skip(TokenType::LBrace, true, true)) {
-            print_parsing_entity("dict_type");
+            log_parsing_entity("dict_type");
 
             const auto & key = parse_type("dictionary key type");
             skip(TokenType::Colon, true, true, "colon ':' to separate key and value in dictionary type");
@@ -1184,7 +1184,7 @@ namespace jc::parser {
         }
 
         if (opt_skip(TokenType::BitOr, true, true)) {
-            print_parsing_entity("union_type");
+            log_parsing_entity("union_type");
 
             return std::make_shared<tree::UnionType>(left, parse_type("union type right-hand side"));
         }
@@ -1213,7 +1213,7 @@ namespace jc::parser {
     ///////////
     // Debug //
     ///////////
-    void Parser::print_parsing_entity(const std::string & entity) {
+    void Parser::log_parsing_entity(const std::string & entity) {
         if (!options.log_parsing_entity) {
             return;
         }

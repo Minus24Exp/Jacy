@@ -16,53 +16,53 @@ namespace jc::common {
 
         LoggerOptions options;
 
-        template<typename ...Args>
-        void verbose(Args && ...args);
+        template<class ...Args>
+        void verbose(Args && ...args, const Position & pos = {});
 
-        template<typename ...Args>
-        void debug(Args && ...args);
+        template<class ...Args>
+        void debug(Args && ...args, const Position & pos = {});
 
-        template<typename ...Args>
-        void info(Args && ...args);
+        template<class ...Args>
+        void info(Args && ...args, const Position & pos = {});
 
-        template<typename ...Args>
-        void warn(Args && ...args);
+        template<class ...Args>
+        void warn(Args && ...args, const Position & pos = {});
 
-        template<typename ...Args>
-        void error(Args && ...args);
+        template<class ...Args>
+        void error(Args && ...args, const Position & pos = {});
 
     private:
         std::string _class;
 
         const std::map<LogLevel, std::string> level_names = {
-                {LogLevel::Verbose, "verbose"},
-                {LogLevel::Debug, "debug"},
-                {LogLevel::Info, "info"},
-                {LogLevel::Warn, "warn"},
-                {LogLevel::Error, "error"},
+            {LogLevel::Verbose, "verbose"},
+            {LogLevel::Debug, "debug"},
+            {LogLevel::Info, "info"},
+            {LogLevel::Warn, "warn"},
+            {LogLevel::Error, "error"},
         };
 
         const std::map<LogLevel, Color> level_colors = {
-                {LogLevel::Verbose, Color::Magenta},
-                {LogLevel::Debug, Color::Blue},
-                {LogLevel::Info, Color::Green},
-                {LogLevel::Warn, Color::Yellow},
-                {LogLevel::Error, Color::Red},
+            {LogLevel::Verbose, Color::Magenta},
+            {LogLevel::Debug, Color::Blue},
+            {LogLevel::Info, Color::Green},
+            {LogLevel::Warn, Color::Yellow},
+            {LogLevel::Error, Color::Red},
         };
 
         const std::map<Color, std::string> colors = {
-                {Color::Red, "\033[1;31m"},
-                {Color::Green, "\033[1;32m"},
-                {Color::Blue, "\033[1;34m"},
-                {Color::Yellow, "\033[1;33m"},
-                {Color::Magenta, "\033[1;35m"},
-                {Color::Cyan, "\033[1;36m"},
+            {Color::Red, "\033[1;31m"},
+            {Color::Green, "\033[1;32m"},
+            {Color::Blue, "\033[1;34m"},
+            {Color::Yellow, "\033[1;33m"},
+            {Color::Magenta, "\033[1;35m"},
+            {Color::Cyan, "\033[1;36m"},
         };
 
         const std::string ansi_reset = "\033[1;0m";
 
-        template<typename Arg, typename ...Args>
-        void log(LogLevel level, Arg && first, Args && ...other);
+        template<class Arg, class ...Args>
+        void log(LogLevel level, Arg && first, Args && ...other, const Position & pos = {});
     };
 
     #include "common/Logger.inl"

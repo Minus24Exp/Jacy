@@ -1,33 +1,39 @@
-template<typename ...Args>
-void Logger::verbose(Args && ...args) {
-    log(LogLevel::Verbose, args...);
+
+#include "Logger.h"
+
+template<class ...Args>
+void Logger::verbose(Args && ...args, const Position & pos) {
+    log(LogLevel::Verbose, args..., pos);
 }
 
-template<typename ...Args>
-void Logger::debug(Args && ...args) {
-    log(LogLevel::Debug, args...);
+template<class ...Args>
+void Logger::debug(Args && ...args, const Position & pos) {
+    log(LogLevel::Debug, args..., pos);
 }
 
-template<typename ...Args>
-void Logger::info(Args && ...args) {
-    log(LogLevel::Info, args...);
+template<class ...Args>
+void Logger::info(Args && ...args, const Position & pos) {
+    log(LogLevel::Info, args..., pos);
 }
 
-template<typename ...Args>
-void Logger::warn(Args && ...args) {
-    log(LogLevel::Warn, args...);
+template<class ...Args>
+void Logger::warn(Args && ...args, const Position & pos) {
+    log(LogLevel::Warn, args..., pos);
 }
 
-template<typename ...Args>
-void Logger::error(Args && ...args) {
-    log(LogLevel::Error, args...);
+template<class ...Args>
+void Logger::error(Args && ...args, const Position & pos) {
+    log(LogLevel::Error, args..., pos);
 }
 
-
-template<typename Arg, typename ...Args>
-void Logger::log(LogLevel level, Arg && first, Args && ...other) {
+template<class Arg, class ...Args>
+void Logger::log(LogLevel level, Arg && first, Args && ...other, const Position & pos) {
     if (static_cast<uint8_t>(level) < static_cast<uint8_t>(options.level)) {
         return;
+    }
+
+    if (!pos.filename.empty() && pos.line > 0 && pos.column > 0) {
+        pos.filename + ":" + std::to_string(pos.line) + ":" + std::to_string(pos.column) + ": ";
     }
 
     if (options.log_class) {

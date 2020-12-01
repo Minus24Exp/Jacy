@@ -21,17 +21,8 @@ namespace jc {
         explicit JacyException(std::string msg) : message(std::move(msg)) {}
         JacyException(std::string msg, Position pos) : message(std::move(msg)), pos(std::move(pos)) {}
 
-        std::string what() noexcept {
-            // TODO!: Move to Logger
-            std::string compound_msg;
-
-            if (pos.line > 0 && pos.column > 0) {
-                compound_msg += pos.filename + ":" + std::to_string(pos.line) + ":" + std::to_string(pos.column) + ": ";
-            }
-
-            compound_msg += message;
-
-            return compound_msg;
+        const char * what() const noexcept override {
+            return message.c_str();
         }
 
     private:
@@ -68,7 +59,7 @@ namespace jc {
     class ExpectedException : public JacyException {
     public:
         ExpectedException(const std::string & expected, const std::string & given, const Position & pos)
-                : JacyException("expected " + expected + ", " + given + " given", pos) {}
+            : JacyException("expected " + expected + ", " + given + " given", pos) {}
 
         ExpectedException(const std::string & expected, const parser::Token & given_token)
             : ExpectedException(expected, given_token.to_string(), given_token.pos) {}
@@ -82,10 +73,10 @@ namespace jc {
         explicit ParserException(const std::string & msg, Position pos) : JacyException(msg, pos) {}
 
         ParserException(const std::string & pre_msg, const parser::Token & t, const std::string & post_msg)
-                : ParserException(pre_msg +" "+ t.to_string() +" "+ post_msg, t.pos) {}
+            : ParserException(pre_msg +" "+ t.to_string() +" "+ post_msg, t.pos) {}
 
         ParserException(const std::string & pre_msg, const parser::Token & t)
-                : ParserException(pre_msg, t, "") {}
+            : ParserException(pre_msg, t, "") {}
     };
 
     /**
