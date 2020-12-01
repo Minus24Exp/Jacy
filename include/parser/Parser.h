@@ -31,6 +31,7 @@ namespace jc::parser {
         // Checkers //
         bool eof();
         bool is(const TokenType & type);
+        bool is_after_nl(const TokenType & type);
         bool is_nl();
         bool is_semis();
         bool is_assign_op();
@@ -40,6 +41,7 @@ namespace jc::parser {
         void skip_nl(const bool & optional = false);
         void skip_semis();
         void skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl, const std::string & expected);
+        bool opt_skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl, const std::string & expected);
 
         // Parsers //
 

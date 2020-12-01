@@ -22,6 +22,16 @@ namespace jc::parser {
         return peek().type == type;
     }
 
+    bool Parser::is_after_nl(const TokenType & type) {
+        uint32_t old_index = index;
+        skip_nl(true);
+        if (is(type)) {
+            return true;
+        }
+        index = old_index;
+        return false;
+    }
+
     bool Parser::is_nl() {
         return is(TokenType::Nl);
     }
@@ -92,6 +102,24 @@ namespace jc::parser {
         if (skip_r_nl) {
             skip_nl(true);
         }
+    }
+
+    bool Parser::opt_skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl, const std::string & expected) {
+        uint32_t old_index = index;
+        if (skip_l_nl) {
+            skip_nl(true);
+        }
+        bool result = false;
+        if (is(type)) {
+            advance();
+            result = true;
+            if (skip_r_nl) {
+                skip_nl(true);
+            }
+        } else {
+            index = old_index;
+        }
+        return result;
     }
 
     /////////////
@@ -180,8 +208,8 @@ namespace jc::parser {
             stmts.push_back(parse_stmt());
 
             // Note: there's no need to expect semis after one-line block
-            // because block is always part of statement and after all statements
-            // there must be semi
+            //  because block is always part of statement and after all statements
+            //  there must be semi
 
             return std::make_shared<tree::Block>(block_pos, stmts);
         }
