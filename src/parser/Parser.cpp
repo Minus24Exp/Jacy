@@ -328,15 +328,15 @@ namespace jc::parser {
             params.push_back({param_id, default_val, vararg, arg_type});
         }
 
+        log.verbose("use parens:", using_parens ? "using parens" : "no parens");
+
         if (using_parens) {
             skip(TokenType::RParen, true, true, "closing parenthesis ')' after parameter list");
 
             // Note: Not inference-capable syntax
-            if (is(TokenType::Arrow)) {
-                skip(TokenType::Arrow, false, true, "'->' for return type annotation");
-            } else if (is(TokenType::Colon)) {
-                skip(TokenType::Colon, false, true, "':' for return type annotation");
-            } else {
+            // Skip `->` or `:`
+            if (!opt_skip(TokenType::Arrow, true, true)
+            &&  !opt_skip(TokenType::Colon, true, true)) {
                 expected_error("'->' or ':' for return type annotation");
             }
         } else {
@@ -1135,7 +1135,9 @@ namespace jc::parser {
     ///////////
     // Types //
     ///////////
-    tree::type_ptr Parser::parse_type() {
+    tree::type_ptr Parser::parse_type(const std::string & expected_type) {
+        log.verbose("parse_type:", peek().to_string());
+
         const auto & pos = peek().pos;
         tree::type_ptr left;
         if (is(TokenType::Id)) {
@@ -1155,7 +1157,7 @@ namespace jc::parser {
                     } else {
                         skip(TokenType::Comma, true, true, "comma ',' to separate generic type arguments");
                     }
-                    types.push_back(parse_type());
+                    types.push_back(parse_type("generic type argument"));
                     skip_nl(true);
                 }
                 skip(TokenType::GT, true, false, "'>' to end generic type arguments");
@@ -1166,25 +1168,25 @@ namespace jc::parser {
         } else if (opt_skip(TokenType::LBracket, false, true)) {
             print_parsing_entity("list_type");
 
-            left = std::make_shared<tree::ListType>(pos, parse_type());
+            left = std::make_shared<tree::ListType>(pos, parse_type("list type"));
             skip(TokenType::RBracket, true, false, "closing bracket ']' at end of list type");
         } else if (opt_skip(TokenType::LBrace, true, true)) {
             print_parsing_entity("dict_type");
 
-            const auto & key = parse_type();
-            skip(TokenType::Colon, true, true, "colon ':' to separate key and value types in dictionary type");
-            const auto & val = parse_type();
+            const auto & key = parse_type("dictionary key type");
+            skip(TokenType::Colon, true, true, "colon ':' to separate key and value in dictionary type");
+            const auto & val = parse_type("dictionary value type");
             left = std::make_shared<tree::DictType>(pos, key, val);
 
             skip(TokenType::RBrace, true, false, "closing curly bracket '}' at end of dictionary type");
         } else {
-            expected_error("type");
+            expected_error(expected_type);
         }
 
-        if (is(TokenType::BitOr)) {
+        if (opt_skip(TokenType::BitOr, true, true)) {
             print_parsing_entity("union_type");
 
-            return std::make_shared<tree::UnionType>(left, parse_type());
+            return std::make_shared<tree::UnionType>(left, parse_type("union type right-hand side"));
         }
 
         return left;
@@ -1202,6 +1204,9 @@ namespace jc::parser {
     }
 
     void Parser::expected_error(const std::string & expected) {
+        if (eof()) {
+            throw ExpectedException(expected, "[EOF]", tokens.at(index - 1).pos);
+        }
         throw ExpectedException(expected, peek());
     }
 

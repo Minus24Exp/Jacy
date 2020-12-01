@@ -54,6 +54,7 @@ namespace jc::tree {
         var_decl->id->accept(*this);
 
         if (var_decl->type) {
+            std::cout << ": ";
             var_decl->type->accept(*this);
         }
 
@@ -332,7 +333,7 @@ namespace jc::tree {
     void Printer::visit(DictType * dict_type) {
         std::cout << "{";
         dict_type->key->accept(*this);
-        std::cout << ",";
+        std::cout << ": ";
         dict_type->val->accept(*this);
         std::cout << "}";
     }

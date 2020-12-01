@@ -67,8 +67,11 @@ namespace jc {
      */
     class ExpectedException : public JacyException {
     public:
+        ExpectedException(const std::string & expected, const std::string & given, const Position & pos)
+                : JacyException("expected " + expected + ", " + given + " given", pos) {}
+
         ExpectedException(const std::string & expected, const parser::Token & given_token)
-            : JacyException(expected + ", " + given_token.to_string() + " given", given_token.pos) {}
+            : ExpectedException(expected, given_token.to_string(), given_token.pos) {}
     };
 
     /////////////////////////

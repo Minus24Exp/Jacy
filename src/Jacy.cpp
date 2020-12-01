@@ -90,8 +90,6 @@ namespace jc {
 
         const auto bench = std::chrono::high_resolution_clock::now;
 
-        log.verbose("main file:", main_file);
-
         // Lexing
         auto lexer_start = bench();
         parser::TokenStream tokens = lexer.lex(script, main_file);
@@ -103,7 +101,7 @@ namespace jc {
         }
 
         if (options.run_level == common::RunLevel::Lexer) {
-            log.verbose("Stop after lexing");
+            log.info("Stop after lexing");
             return;
         }
 
@@ -113,7 +111,7 @@ namespace jc {
         auto parser_end = bench();
 
         if (options.run_level == common::RunLevel::Parser) {
-            log.verbose("Stop after parsing");
+            log.info("Stop after parsing");
             return;
         }
 
@@ -124,7 +122,7 @@ namespace jc {
         std::cout << std::endl;
 
         if (options.run_level == common::RunLevel::PrintTree) {
-            log.verbose("Stop after tree printing");
+            log.info("Stop after tree printing");
             return;
         }
 
@@ -133,14 +131,14 @@ namespace jc {
         auto compiler_end = bench();
 
         if (options.run_level == common::RunLevel::Compiler) {
-            log.verbose("Stop after compiling");
+            log.info("Stop after compiling");
             return;
         }
 
         disasm.eval(chunk);
 
         if (options.run_level == common::RunLevel::Disasm) {
-            log.verbose("Stop after disassembling");
+            log.info("Stop after disassembling");
             return;
         }
 
@@ -149,7 +147,7 @@ namespace jc {
         auto vm_end = bench();
 
         if (options.run_level == common::RunLevel::Vm) {
-            log.verbose("Stop after evaluation");
+            log.info("Stop after evaluation");
             return;
         }
 
