@@ -73,7 +73,7 @@ namespace jc::parser {
     void Lexer::add_token(Token t) {
         t.pos.line = token_line;
         t.pos.column = token_column;
-
+        t.pos.filename = filename;
         tokens.push_back(t);
     }
 
@@ -151,9 +151,12 @@ namespace jc::parser {
         }
     }
 
-    TokenStream Lexer::lex(const std::string & s) {
-        this->script = s;
+    TokenStream Lexer::lex(const std::string & _script, const std::string & _filename) {
         tokens.clear();
+
+        this->script = _script;
+        this->filename = _filename;
+
         index = 0;
         line = 1;
         column = 1;

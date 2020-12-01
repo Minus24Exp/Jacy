@@ -14,7 +14,7 @@ namespace jc::parser {
         Lexer();
         virtual ~Lexer() = default;
 
-        TokenStream lex(const std::string & script);
+        TokenStream lex(const std::string & _script, const std::string & _filename);
 
     private:
         std::string script;
@@ -27,6 +27,7 @@ namespace jc::parser {
         uint32_t index;
         uint32_t line;
         uint32_t column;
+        std::string filename;
 
         // Token column points to start of token
         uint32_t token_column;

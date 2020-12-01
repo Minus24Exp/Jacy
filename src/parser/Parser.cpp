@@ -1177,9 +1177,9 @@ namespace jc::parser {
             left = std::make_shared<tree::DictType>(pos, key, val);
 
             skip(TokenType::RBrace, true, false, "closing curly bracket '}' at end of dictionary type");
+        } else {
+            expected_error("type");
         }
-
-        // TODO!!!: Else!!! Negative case
 
         if (is(TokenType::BitOr)) {
             print_parsing_entity("union_type");

@@ -133,6 +133,9 @@ namespace jc::parser {
     }
 
     struct Position {
+        // TODO!: Optimize Position.file
+        //  Create files table or something :)
+        std::string filename;
         uint32_t line = 0;
         uint32_t column = 0;
     };

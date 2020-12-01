@@ -76,7 +76,7 @@ namespace jc {
     }
 
     void Jacy::run(const std::string & script) {
-        parser::TokenStream tokens = lexer.lex(script);
+        parser::TokenStream tokens = lexer.lex(script, main_file);
         tree::StmtList tree = parser.parse(tokens);
         bytecode::Chunk chunk = compiler.compile(tree);
         vm.eval(chunk);
@@ -89,7 +89,7 @@ namespace jc {
 
         // Lexing
         auto lexer_start = bench();
-        parser::TokenStream tokens = lexer.lex(script);
+        parser::TokenStream tokens = lexer.lex(script, main_file);
         auto lexer_end = bench();
 
         std::cout << "Tokens:" << std::endl;
