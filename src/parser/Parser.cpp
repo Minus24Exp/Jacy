@@ -309,7 +309,7 @@ namespace jc::parser {
             // TODO: Think about checking after all parameters added
             for (const auto & param : params) {
                 if (param.id->get_name() == param_id->get_name()) {
-                    error("Parameter duplication");
+                    error("Parameter duplication", param_id->pos);
                     return nullptr;
                 }
             }
@@ -1193,10 +1193,8 @@ namespace jc::parser {
     ////////////
     // Errors //
     ////////////
-    void Parser::error(const std::string & msg) {
-        auto message = msg;
-        message += " at " + std::to_string(peek().pos.column) + ":" + std::to_string(peek().pos.line);
-        throw ParserException(message);
+    void Parser::error(const std::string & msg, const Position & pos) {
+        throw ParserException(msg, pos);
     }
 
     void Parser::unexpected_error() {

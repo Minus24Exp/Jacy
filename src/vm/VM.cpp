@@ -142,6 +142,6 @@ namespace jc::vm {
     void VM::error(const std::string & msg) {
         // TODO: Current file
         // TODO: Position tracking
-        throw RuntimeError(msg, {0, 0}, "<main>");
+        throw RuntimeError(msg, {});
     }
 }

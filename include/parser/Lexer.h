@@ -25,9 +25,7 @@ namespace jc::parser {
         void add_token(const TokenType & type, const std::string & val);
 
         uint32_t index;
-        uint32_t line;
-        uint32_t column;
-        std::string filename;
+        Position pos;
 
         // Token column points to start of token
         uint32_t token_column;
@@ -52,7 +50,7 @@ namespace jc::parser {
 
         // Errors //
         void unexpected_token_error();
-        static void unexpected_eof_error();
+        void unexpected_eof_error();
 
         // DEBUG //
     public:

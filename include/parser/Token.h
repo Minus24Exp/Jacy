@@ -136,8 +136,9 @@ namespace jc::parser {
         // TODO!: Optimize Position.file
         //  Create files table or something :)
         std::string filename;
-        uint32_t line = 0;
-        uint32_t column = 0;
+        // 0 means that position is not set, 'cause counting starts from 1
+        uint32_t line{0};
+        uint32_t column{0};
     };
 
     struct Token {

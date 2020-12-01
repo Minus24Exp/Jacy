@@ -92,7 +92,7 @@ namespace jc::parser {
         tree::type_ptr parse_type();
 
         // Errors //
-        void error(const std::string & msg);
+        void error(const std::string & msg, const Position & pos);
         void unexpected_error();
         void expected_error(const std::string & expected);
 

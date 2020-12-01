@@ -28,6 +28,7 @@ namespace jc {
     }
 
     void Jacy::run_repl() {
+        main_file = "<REPL>";
         std::string line;
         while (!std::cin.eof()) {
             std::cout << "> ";

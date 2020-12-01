@@ -3,8 +3,8 @@
 namespace jc::parser {
     Lexer::Lexer() : log("Lexer", options.log) {
         index = 0;
-        line = 0;
-        column = 0;
+        pos.line = 0;
+        pos.column = 0;
         token_column = 0;
         token_line = 0;
     }
@@ -24,10 +24,10 @@ namespace jc::parser {
     char Lexer::advance(int inc) {
         for (int i = 0; i < inc; i++) {
             if (peek() == '\n') {
-                line++;
-                column = 1;
+                pos.line++;
+                pos.column = 1;
             } else {
-                column++;
+                pos.column++;
             }
             index++;
         }
@@ -73,7 +73,7 @@ namespace jc::parser {
     void Lexer::add_token(Token t) {
         t.pos.line = token_line;
         t.pos.column = token_column;
-        t.pos.filename = filename;
+        t.pos.filename = pos.filename;
         tokens.push_back(t);
     }
 
@@ -152,18 +152,18 @@ namespace jc::parser {
     }
 
     TokenStream Lexer::lex(const std::string & _script, const std::string & _filename) {
+        this->script = _script;
+
         tokens.clear();
 
-        this->script = _script;
-        this->filename = _filename;
-
         index = 0;
-        line = 1;
-        column = 1;
+        pos.line = 1;
+        pos.column = 1;
+        pos.filename = _filename;
 
         while (!eof()) {
-            token_line = line;
-            token_column = column;
+            token_line = pos.line;
+            token_column = pos.column;
 
             if (skip(peek())) {
                 advance();
@@ -518,11 +518,10 @@ namespace jc::parser {
 
     void Lexer::unexpected_token_error() {
         std::string error = "token `"+ std::string(1, peek()) +"`";
-        error += " at "+ std::to_string(line) +":"+ std::to_string(column);
-        throw UnexpectedTokenException(error);
+        throw UnexpectedTokenException(error, pos);
     }
 
     void Lexer::unexpected_eof_error() {
-        throw UnexpectedEofException();
+        throw UnexpectedEofException(pos);
     }
 }

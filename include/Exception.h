@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <string>
+#include <utility>
 #include "parser/Token.h"
 #include "tree/Node.h"
 
@@ -17,17 +18,25 @@ namespace jc {
      */
     class JacyException : public std::exception {
     public:
-        explicit JacyException(const std::string & msg) : message(msg) {}
+        explicit JacyException(std::string msg) : message(std::move(msg)) {}
+        JacyException(std::string msg, Position pos) : message(std::move(msg)), pos(std::move(pos)) {}
 
-        /**
-         * @return String message that exception was created with
-         */
-        const char * what() const noexcept override {
-            return message.c_str();
+        std::string what() noexcept {
+            // TODO!: Move to Logger
+            std::string compound_msg;
+
+            if (pos.line > 0 && pos.column > 0) {
+                compound_msg += pos.filename + ":" + std::to_string(pos.line) + ":" + std::to_string(pos.column) + ":";
+            }
+
+            compound_msg += message;
+
+            return compound_msg;
         }
 
     private:
         const std::string message;
+        Position pos;
     };
 
     ///////////////////////
@@ -59,10 +68,10 @@ namespace jc {
     class ExpectedException : public JacyException {
     public:
         ExpectedException(const std::string & expected, const std::string & given)
-                : JacyException("Expected "+ expected +", "+ given +" given") {}
+            : JacyException("Expected "+ expected +", "+ given +" given") {}
 
         ExpectedException(const std::string & expected, parser::Token given_token)
-                : ExpectedException(expected, given_token.to_string(true)) {}
+            : ExpectedException(expected, given_token.to_string(true)) {}
     };
 
     /////////////////////////
@@ -70,16 +79,13 @@ namespace jc {
     /////////////////////////
     class ParserException : public JacyException {
     public:
-        explicit ParserException(const std::string & msg) : JacyException(msg) {}
+        explicit ParserException(const std::string & msg, Position pos) : JacyException(msg, pos) {}
 
-        ParserException(const std::string & pre_msg, parser::Token t, const std::string & post_msg)
-                : ParserException(pre_msg +" "+ t.to_string() +" "+ post_msg) {}
+        ParserException(const std::string & pre_msg, const parser::Token & t, const std::string & post_msg)
+                : ParserException(pre_msg +" "+ t.to_string() +" "+ post_msg, t.pos) {}
 
-        ParserException(const std::string & pre_msg, parser::Token t)
+        ParserException(const std::string & pre_msg, const parser::Token & t)
                 : ParserException(pre_msg, t, "") {}
-
-        ParserException(parser::Token t, const std::string & post_msg)
-                : ParserException("", t, post_msg) {}
     };
 
     /**
@@ -87,8 +93,9 @@ namespace jc {
      */
     class UnexpectedTokenException : public ParserException {
     public:
-        explicit UnexpectedTokenException(parser::Token t) : ParserException("Unexpected", t) {}
-        explicit UnexpectedTokenException(const std::string & token_str) : ParserException("Unexpected "+ token_str) {}
+        explicit UnexpectedTokenException(const parser::Token & t) : ParserException("Unexpected", t) {}
+        explicit UnexpectedTokenException(const std::string & token_str, Position pos)
+            : ParserException("Unexpected "+ token_str, std::move(pos)) {}
     };
 
     /**
@@ -97,7 +104,7 @@ namespace jc {
      */
     class UnexpectedEofException : public ParserException {
     public:
-        UnexpectedEofException() : ParserException("Unexpected end of file") {}
+        explicit UnexpectedEofException(Position pos) : ParserException("Unexpected end of file", std::move(pos)) {}
     };
 
     /////////////////////////////
@@ -116,28 +123,25 @@ namespace jc {
      * RuntimeError
      *
      * @param msg String error message
-     * @param pos Position where error occured
-     * @param in_file File where error occured
+     * @param pos Position where error occurred
+     * @param in_file File where error occurred
      */
     class RuntimeError : public JacyException {
     public:
-        RuntimeError(const std::string & msg, const Position & pos, const std::string & in_file)
-                : JacyException("Runtime error: "+ msg +"\n"+ in_file +":"+
-                                std::to_string(pos.line) +":"+ std::to_string(pos.column)) {}
+        RuntimeError(const std::string & msg, const Position & pos) : JacyException(msg, pos) {}
     };
 
     /**
      * RecursionDepthLimit
-     * @brief Error that occure when maximum recursion depth limit exceeded
+     * @brief Error that occurs when maximum recursion depth limit exceeded
      *
-     * @param pos Position where error occured
-     * @param in_file File where error occured
+     * @param pos Position where error occurred
+     * @param in_file File where error occurred
      */
     class RecursionDepthExceeded : public RuntimeError {
     public:
-        RecursionDepthExceeded(const Position & pos, const std::string & in_file)
-                : RuntimeError("Maximum recursion depth exceeded ("+
-                               std::to_string(RECURSION_DEPTH_LIMIT) +")", pos, in_file) {}
+        explicit RecursionDepthExceeded(const Position & pos)
+            : RuntimeError("Maximum recursion depth exceeded ("+ std::to_string(RECURSION_DEPTH_LIMIT) +")", pos) {}
     };
 
     // Verifier Errors //
