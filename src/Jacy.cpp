@@ -63,6 +63,8 @@ namespace jc {
         ss << file.rdbuf();
         std::string script = ss.str();
 
+        main_file = path;
+
         try {
             if (options.debug) {
                 run_debug(script);
@@ -87,6 +89,8 @@ namespace jc {
         // TODO: Create base exceptions for Lexer, Parser, Interpreter and catch them separately
 
         const auto bench = std::chrono::high_resolution_clock::now;
+
+        log.verbose("main file:", main_file);
 
         // Lexing
         auto lexer_start = bench();

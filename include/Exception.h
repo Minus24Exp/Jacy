@@ -26,7 +26,7 @@ namespace jc {
             std::string compound_msg;
 
             if (pos.line > 0 && pos.column > 0) {
-                compound_msg += pos.filename + ":" + std::to_string(pos.line) + ":" + std::to_string(pos.column) + ":";
+                compound_msg += pos.filename + ":" + std::to_string(pos.line) + ":" + std::to_string(pos.column) + ": ";
             }
 
             compound_msg += message;
@@ -67,11 +67,8 @@ namespace jc {
      */
     class ExpectedException : public JacyException {
     public:
-        ExpectedException(const std::string & expected, const std::string & given)
-            : JacyException("Expected "+ expected +", "+ given +" given") {}
-
-        ExpectedException(const std::string & expected, parser::Token given_token)
-            : ExpectedException(expected, given_token.to_string(true)) {}
+        ExpectedException(const std::string & expected, const parser::Token & given_token)
+            : JacyException(expected + ", " + given_token.to_string() + " given", given_token.pos) {}
     };
 
     /////////////////////////

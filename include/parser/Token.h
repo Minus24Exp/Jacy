@@ -163,9 +163,9 @@ namespace jc::parser {
 
                 default: {
                     if (index >= op_start && index < kw_start) {
-                        str += op_to_str(type);
+                        str += "'" + op_to_str(type) + "'";
                     } else if (index >= kw_start) {
-                        str += kw_to_str(type);
+                        str += "'" + kw_to_str(type) + "'";
                     } else {
                         str += "[unknown token " + std::to_string(index) + "]";
                     }
