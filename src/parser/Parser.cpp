@@ -49,11 +49,11 @@ namespace jc::parser {
 
     bool Parser::is_literal() {
         return is(TokenType::True)
-               || is(TokenType::False)
-               || is(TokenType::Int)
-               || is(TokenType::Float)
-               || is(TokenType::String)
-               || is(TokenType::Null);
+            || is(TokenType::False)
+            || is(TokenType::Int)
+            || is(TokenType::Float)
+            || is(TokenType::String)
+            || is(TokenType::Null);
     }
 
     //////////////
@@ -75,7 +75,7 @@ namespace jc::parser {
                 advance();
             } while(is_semis());
         } else {
-            expected_error("`;` or [new line]");
+            expected_error("';' or [new line] after statement");
         }
     }
 
@@ -175,7 +175,7 @@ namespace jc::parser {
         // If one-line block is allowed then try to parse single stmt
         if (!is(TokenType::LBrace) && allow_one_line) {
             // TODO: Think about this skip_nl
-            // Is it okay?
+            //  Is it okay?
             skip_nl(true);
             stmts.push_back(parse_stmt());
 
@@ -187,7 +187,7 @@ namespace jc::parser {
         }
 
         // Multi-line //
-        skip(TokenType::LBrace, false, true, "{");
+        skip(TokenType::LBrace, false, true, "opening curly bracket '{' at block start");
 
         bool first = true;
         while (!eof()) {
@@ -206,7 +206,7 @@ namespace jc::parser {
             stmts.push_back(parse_stmt());
         }
 
-        skip(TokenType::RBrace, true, false, "}");
+        skip(TokenType::RBrace, true, false, "closing curly bracket '}' at block end");
 
         virtual_semi = true;
 
@@ -234,7 +234,7 @@ namespace jc::parser {
         tree::type_ptr type = nullptr;
         // TODO: Use is_after_nl
         if (is(TokenType::Colon)) {
-            skip(TokenType::Colon, true, true, "type annotation (:)");
+            skip(TokenType::Colon, true, true, "semicolon ':' for type annotation");
             type = parse_type();
         }
 
@@ -242,7 +242,7 @@ namespace jc::parser {
 
         // It's obvious, but mark that augmented assignment cannot appear in variable declaration
         if (is(TokenType::Assign)) {
-            skip(TokenType::Assign, true, true, "=");
+            skip(TokenType::Assign, true, true, "assignment '='");
             assign_expr = parse_expr();
         }
 
@@ -262,7 +262,7 @@ namespace jc::parser {
         tree::FuncParams params;
         bool using_parens = false;
         if (is(TokenType::LParen)) {
-            skip(TokenType::LParen, true, true, "(");
+            skip(TokenType::LParen, true, true, "opening parenthesis '(' at parameter list start");
             using_parens = true;
         }
 
@@ -279,14 +279,14 @@ namespace jc::parser {
             if (first) {
                 first = false;
             } else {
-                skip(TokenType::Comma, true, true, "comma (,) after argument");
+                skip(TokenType::Comma, true, true, "comma ',' to separate parameters");
             }
 
             bool vararg = false;
             if (is(TokenType::Spread)) {
                 vararg = true;
                 // TODO: Remove useless `skip`s
-                skip(TokenType::Spread, false, false, "vararg (...)");
+                skip(TokenType::Spread, false, false, "vararg operator '...'");
             }
 
             tree::id_ptr param_id = parse_id();
@@ -309,7 +309,7 @@ namespace jc::parser {
 
             log.verbose("Expect colon:", peek().to_string());
             // TODO: Use is_after_nl
-            skip(TokenType::Colon, true, true, "type annotation (:)");
+            skip(TokenType::Colon, true, true, "colon ':' for type annotation");
             log.verbose("expect type:", peek().to_string());
             tree::type_ptr arg_type = parse_type();
 
@@ -318,7 +318,7 @@ namespace jc::parser {
             // Check for default value
             tree::expr_ptr default_val = nullptr;
             if (is(TokenType::Assign)) {
-                skip(TokenType::Assign, true, true, "=");
+                skip(TokenType::Assign, true, true, "assignment '='");
                 default_val = parse_expr();
             }
 
@@ -328,21 +328,21 @@ namespace jc::parser {
         log.verbose("using parens:", using_parens ? "using parens" : "no paren");
 
         if (using_parens) {
-            skip(TokenType::RParen, true, true, "closing parenthesis");
+            skip(TokenType::RParen, true, true, "closing parenthesis ')' after parameter list");
             skip_nl(true);
 
             // Note: Not inference-capable syntax
             if (is(TokenType::Arrow)) {
-                skip(TokenType::Arrow, false, true, "->");
+                skip(TokenType::Arrow, false, true, "'->' for return type annotation");
             } else if (is(TokenType::Colon)) {
-                skip(TokenType::Colon, false, true, ":");
+                skip(TokenType::Colon, false, true, "':' for return type annotation");
             } else {
-                expected_error("type annotation (-> or :)");
+                expected_error("'->' or ':' for return type annotation");
             }
         } else {
             log.verbose("type anno:", peek().to_string());
             // For no-paren syntax only `->` anno is available
-            skip(TokenType::Arrow, true, true, "type annotation (->)");
+            skip(TokenType::Arrow, true, true, "'->' for return type annotation");
         }
 
         // Parse type after `:` or `->`
@@ -351,7 +351,7 @@ namespace jc::parser {
         bool allow_one_line = false;
         if (is(TokenType::DoubleArrow)) {
             // Note: useless
-            skip(TokenType::DoubleArrow, true, true, "=>");
+            skip(TokenType::DoubleArrow, true, true, "'=>' for one-line function body");
             allow_one_line = true;
         }
 
@@ -378,7 +378,7 @@ namespace jc::parser {
 
         if (is(TokenType::DoubleArrow)) {
             // Note: useless
-            skip(TokenType::DoubleArrow, true, true, "=>");
+            skip(TokenType::DoubleArrow, true, true, "'=>' for one-line 'while' body");
             allow_one_line = true;
         }
 
@@ -409,7 +409,7 @@ namespace jc::parser {
 
         if (is(TokenType::DoubleArrow)) {
             // Note: useless
-            skip(TokenType::DoubleArrow, true, true, "=>");
+            skip(TokenType::DoubleArrow, true, true, "'=>' for one-line 'for' body");
             allow_one_line = true;
         }
 
@@ -438,7 +438,7 @@ namespace jc::parser {
         }
 
         // Note: useless
-        skip(TokenType::LBrace, true, true, "{");
+        skip(TokenType::LBrace, true, true, "opening curly bracket '{' at start of class body");
 
         // Note: Think about nested classes
 
@@ -461,7 +461,7 @@ namespace jc::parser {
             skip_semis();
         }
 
-        skip(TokenType::RBrace, true, false, "closing curly bracket '}'");
+        skip(TokenType::RBrace, true, false, "closing curly bracket '}' at end of class body");
 
         return std::make_shared<tree::ClassDecl>(class_decl_pos, id, super, decls);
     }
@@ -523,7 +523,7 @@ namespace jc::parser {
             entities.push_back({ all, object, as });
         }
 
-        skip(TokenType::From, false, false, "'from' keyword");
+        skip(TokenType::From, false, false, "'from' keyword to specify importing file");
 
         if (!is(TokenType::String)) {
             expected_error("path to file (String)");
@@ -543,7 +543,7 @@ namespace jc::parser {
 
         skip(TokenType::Type, false, false, "'type' keyword");
         tree::id_ptr id = parse_id();
-        skip(TokenType::Assign, false, false, "'=' operator");
+        skip(TokenType::Assign, false, false, "'=' operator. Type aliases require immediate initialization");
         tree::type_ptr type = parse_type();
 
         return std::make_shared<tree::TypeDecl>(type_decl_pos, id, type);
@@ -692,8 +692,7 @@ namespace jc::parser {
         tree::expr_ptr left = comp();
 
         while (is(TokenType::Eq) || is(TokenType::NotEq)
-               || is(TokenType::RefEq) || is(TokenType::RefNotEq))
-        {
+            || is(TokenType::RefEq) || is(TokenType::RefNotEq)) {
             print_parsing_entity("eq");
 
             const auto & op_token = peek();
@@ -797,10 +796,9 @@ namespace jc::parser {
 
         // TODO: Think if range to range is possible, now parse only `a..b` not `a..b..c`
         if (is(TokenType::Range)
-            || is(TokenType::RangeLE)
-            || is(TokenType::RangeRE)
-            || is(TokenType::RangeBothE))
-        {
+         || is(TokenType::RangeLE)
+         || is(TokenType::RangeRE)
+         || is(TokenType::RangeBothE)) {
             print_parsing_entity("range");
 
             const auto & op_token = peek();
@@ -924,9 +922,9 @@ namespace jc::parser {
             } else if (is(TokenType::LBracket)) {
                 print_parsing_entity("sub-expression");
 
-                skip(TokenType::LBracket, false, true, "'['");
+                skip(TokenType::LBracket, false, true, "opening bracket '[' for index access");
                 tree::expr_ptr ind = parse_expr();
-                skip(TokenType::RBracket, true, false, "']'");
+                skip(TokenType::RBracket, true, false, "closing bracket ']' after index access");
                 left = std::make_shared<tree::GetItem>(left, ind);
             } else {
                 break;
@@ -951,9 +949,9 @@ namespace jc::parser {
         if (is(TokenType::LParen)) {
             print_parsing_entity("grouping");
 
-            skip(TokenType::LParen, false, true, "'('");
+            skip(TokenType::LParen, false, true, "opening parenthesis '(' at start of grouping");
             tree::expr_ptr expr = parse_expr();
-            skip(TokenType::RParen, true, false, "')'");
+            skip(TokenType::RParen, true, false, "closing parenthesis ')' at end of grouping");
 
             // TODO: !!! Think do I need special node for grouping? (precedence problem?)
             return expr;
@@ -970,7 +968,7 @@ namespace jc::parser {
         if (is(TokenType::LBracket)) {
             print_parsing_entity("list");
 
-            skip(TokenType::LBracket, false, true, "'['");
+            skip(TokenType::LBracket, false, true, "opening bracket '[' at start of list literal");
 
             tree::ExprList elements;
             bool first = true;
@@ -982,7 +980,7 @@ namespace jc::parser {
                 if (first) {
                     first = false;
                 } else {
-                    skip(TokenType::Comma, true, true, "closing bracket ']'");
+                    skip(TokenType::Comma, true, true, "comma ',' to separate list elements");
                 }
                 // Note: Allow `[1,]` (comma without next element)
                 if (is(TokenType::RBracket)) {
@@ -998,7 +996,7 @@ namespace jc::parser {
                     elements.push_back(parse_expr());
                 }
             }
-            skip(TokenType::RBracket, true, false, "closing bracket ']'");
+            skip(TokenType::RBracket, true, false, "closing bracket ']' after list literal");
             return std::make_shared<tree::ListExpr>(primary_pos, elements);
         }
 
@@ -1006,7 +1004,7 @@ namespace jc::parser {
         if (is(TokenType::LBrace)) {
             print_parsing_entity("dict");
 
-            skip(TokenType::LBrace, false, true, "opening curly bracket '{'");
+            skip(TokenType::LBrace, false, true, "opening curly bracket '{' at start of dictionary literal");
 
             tree::DictElementList elements;
             bool first = true;
@@ -1018,7 +1016,7 @@ namespace jc::parser {
                 if (first) {
                     first = false;
                 } else {
-                    skip(TokenType::Comma, true, true, "comma ',' to separate list elements");
+                    skip(TokenType::Comma, true, true, "comma ',' to separate dictionary elements");
                 }
                 if (is(TokenType::RBrace)) {
                     break;
@@ -1028,13 +1026,15 @@ namespace jc::parser {
                 tree::expr_ptr expr_key = nullptr;
 
                 if (is(TokenType::LBracket)) {
-                    skip(TokenType::LBracket, true, true, "opening bracket '['");
+                    skip(TokenType::LBracket, true, true, "opening bracket '[' to capture expression as key");
                     expr_key = parse_expr();
-                    skip(TokenType::RBracket, true, true, "closing bracket ']");
+                    skip(TokenType::RBracket, true, true, "closing bracket ']' after expression key");
                 } else if (is_literal()) {
                     expr_key = parse_literal();
-                } else {
+                } else if (is(TokenType::Id)) {
                     id_key = parse_id();
+                } else {
+                    expected_error("key: [expression], literal or identifier");
                 }
 
                 skip(TokenType::Colon, true, true, "colon ':' to separate key and value in dictionary");
@@ -1048,7 +1048,7 @@ namespace jc::parser {
                     elements.push_back({id_key, expr_key, val});
                 }
             }
-            skip(TokenType::RBrace, true, false, "closing curly bracket after dictionary");
+            skip(TokenType::RBrace, true, false, "closing curly bracket '}' after dictionary literal");
             return std::make_shared<tree::DictExpr>(primary_pos, elements);
         }
 
@@ -1123,7 +1123,7 @@ namespace jc::parser {
         }
 
         if (is(TokenType::DoubleArrow)) {
-            skip(TokenType::DoubleArrow, true, true, "double arrow '=>'");
+            skip(TokenType::DoubleArrow, true, true, "double arrow '=>' for one-line 'if' body");
             allow_one_line = true;
         }
 
@@ -1189,21 +1189,23 @@ namespace jc::parser {
         } else if (is(TokenType::LBracket)) {
             print_parsing_entity("list_type");
 
-            skip(TokenType::LBracket, true, true, "'['");
+            skip(TokenType::LBracket, true, true, "opening bracket '[' at start of list type");
             left = std::make_shared<tree::ListType>(pos, parse_type());
-            skip(TokenType::RBracket, true, true, "']'");
+            skip(TokenType::RBracket, true, true, "closing bracket ']' at end of list type");
         } else if (is(TokenType::LBrace)) {
             print_parsing_entity("dict_type");
 
-            skip(TokenType::LBrace, true, true, "{");
+            skip(TokenType::LBrace, true, true, "opening curly bracket '{' at start of dictionary type");
 
             const auto & key = parse_type();
             skip(TokenType::Colon, true, true, "colon ':' to separate key and value types in dictionary type");
             const auto & val = parse_type();
             left = std::make_shared<tree::DictType>(pos, key, val);
 
-            skip(TokenType::RBrace, true, true, "closing curly bracket in dictionary type");
+            skip(TokenType::RBrace, true, true, "closing curly bracket '}' at end of dictionary type");
         }
+
+        // TODO!!!: Else!!! Negative case
 
         if (is(TokenType::BitOr)) {
             print_parsing_entity("union_type");
