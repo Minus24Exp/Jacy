@@ -104,22 +104,15 @@ namespace jc::parser {
         }
     }
 
-    bool Parser::opt_skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl, const std::string & expected) {
-        uint32_t old_index = index;
-        if (skip_l_nl) {
-            skip_nl(true);
-        }
-        bool result = false;
-        if (is(type)) {
+    bool Parser::opt_skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl) {
+        if (skip_l_nl && is_after_nl(type) || is(type)) {
             advance();
-            result = true;
             if (skip_r_nl) {
                 skip_nl(true);
             }
-        } else {
-            index = old_index;
+            return true;
         }
-        return result;
+        return false;
     }
 
     /////////////
@@ -260,17 +253,14 @@ namespace jc::parser {
         tree::id_ptr id = parse_id();
 
         tree::type_ptr type = nullptr;
-        // TODO: Use is_after_nl
-        if (is(TokenType::Colon)) {
-            skip(TokenType::Colon, true, true, "semicolon ':' for type annotation");
+        if (opt_skip(TokenType::Colon, true, true)) {
             type = parse_type();
         }
 
         tree::expr_ptr assign_expr = nullptr;
 
-        // It's obvious, but mark that augmented assignment cannot appear in variable declaration
-        if (is(TokenType::Assign)) {
-            skip(TokenType::Assign, true, true, "assignment '='");
+        // It's obvious, but I'm marking that augmented assignment cannot appear in variable declaration
+        if (opt_skip(TokenType::Assign, true, true)) {
             assign_expr = parse_expr();
         }
 
@@ -288,11 +278,7 @@ namespace jc::parser {
         tree::id_ptr id = parse_id();
 
         tree::FuncParams params;
-        bool using_parens = false;
-        if (is(TokenType::LParen)) {
-            skip(TokenType::LParen, true, true, "opening parenthesis '(' at parameter list start");
-            using_parens = true;
-        }
+        bool using_parens = opt_skip(TokenType::LParen, true, true);
 
         bool first = true;
         while (!eof()) {
@@ -329,35 +315,21 @@ namespace jc::parser {
             }
 
             // Note: Type annotation is required for parameters (with future inference too)
-            // TODO: Use is_after_nl
-            // TODO: Use expected_error after error message update
-            if (!is(TokenType::Colon)) {
-                error("Expected type annotation for parameter " + param_id->get_name());
-            }
+            skip(TokenType::Colon, true, true, "type annotation for parameter " + param_id->get_name());
 
-            log.verbose("Expect colon:", peek().to_string());
-            // TODO: Use is_after_nl
-            skip(TokenType::Colon, true, true, "colon ':' for type annotation");
-            log.verbose("expect type:", peek().to_string());
             tree::type_ptr arg_type = parse_type();
-
-            log.verbose("after arg type:", peek().to_string());
 
             // Check for default value
             tree::expr_ptr default_val = nullptr;
-            if (is(TokenType::Assign)) {
-                skip(TokenType::Assign, true, true, "assignment '='");
+            if (opt_skip(TokenType::Assign, true, true)) {
                 default_val = parse_expr();
             }
 
             params.push_back({param_id, default_val, vararg, arg_type});
         }
 
-        log.verbose("using parens:", using_parens ? "using parens" : "no paren");
-
         if (using_parens) {
             skip(TokenType::RParen, true, true, "closing parenthesis ')' after parameter list");
-            skip_nl(true);
 
             // Note: Not inference-capable syntax
             if (is(TokenType::Arrow)) {
@@ -368,7 +340,6 @@ namespace jc::parser {
                 expected_error("'->' or ':' for return type annotation");
             }
         } else {
-            log.verbose("type anno:", peek().to_string());
             // For no-paren syntax only `->` anno is available
             skip(TokenType::Arrow, true, true, "'->' for return type annotation");
         }
@@ -377,9 +348,7 @@ namespace jc::parser {
         tree::type_ptr return_type = parse_type();
 
         bool allow_one_line = false;
-        if (is(TokenType::DoubleArrow)) {
-            // Note: useless
-            skip(TokenType::DoubleArrow, true, true, "'=>' for one-line function body");
+        if (opt_skip(TokenType::DoubleArrow, true, true)) {
             allow_one_line = true;
         }
 
@@ -394,8 +363,7 @@ namespace jc::parser {
 
         Position while_pos = peek().pos;
 
-        // Note: useless
-        skip(TokenType::While, false, false, "'while' keyword");
+        skip(TokenType::While, false, true, "'while' keyword");
 
         tree::expr_ptr cond = parse_expr();
 
@@ -404,9 +372,7 @@ namespace jc::parser {
             allow_one_line = true;
         }
 
-        if (is(TokenType::DoubleArrow)) {
-            // Note: useless
-            skip(TokenType::DoubleArrow, true, true, "'=>' for one-line 'while' body");
+        if (opt_skip(TokenType::DoubleArrow, true, true)) {
             allow_one_line = true;
         }
 
@@ -421,12 +387,11 @@ namespace jc::parser {
 
         Position for_stmt_pos = peek().pos;
 
-        // Note: useless
-        skip(TokenType::For, false, false, "'for' keyword");
+        skip(TokenType::For, false, true, "'for' keyword");
 
         tree::id_ptr For = parse_id();
 
-        skip(TokenType::In, false, false, "'in' keyword");
+        skip(TokenType::In, true, true, "'in' keyword");
 
         tree::expr_ptr In = parse_expr();
 
@@ -435,9 +400,7 @@ namespace jc::parser {
             allow_one_line = true;
         }
 
-        if (is(TokenType::DoubleArrow)) {
-            // Note: useless
-            skip(TokenType::DoubleArrow, true, true, "'=>' for one-line 'for' body");
+        if (opt_skip(TokenType::DoubleArrow, true, true)) {
             allow_one_line = true;
         }
 
@@ -459,16 +422,13 @@ namespace jc::parser {
         skip_nl(true);
 
         tree::expr_ptr super = nullptr;
-        if (is(TokenType::Colon)) {
-            // Note: useless
-            skip(TokenType::Colon, true, true, "colon ':' before superclass");
+        if (opt_skip(TokenType::Colon, true, true)) {
             super = parse_expr();
         }
 
-        // Note: useless
         skip(TokenType::LBrace, true, true, "opening curly bracket '{' at start of class body");
 
-        // Note: Think about nested classes
+        // TODO!: Think about nested classes
 
         // Parse declarations
         tree::StmtList decls;
@@ -500,7 +460,7 @@ namespace jc::parser {
 
         Position import_pos = peek().pos;
         // No new-lines in import
-        skip(TokenType::Import, false, false, "'import' keyword");
+        skip(TokenType::Import, false, true, "'import' keyword");
 
         // TODO: Improve `import`
         // - Multiple objects import
@@ -551,7 +511,7 @@ namespace jc::parser {
             entities.push_back({ all, object, as });
         }
 
-        skip(TokenType::From, false, false, "'from' keyword to specify importing file");
+        skip(TokenType::From, true, true, "'from' keyword to specify importing file");
 
         if (!is(TokenType::String)) {
             expected_error("path to file (String)");
@@ -569,9 +529,9 @@ namespace jc::parser {
 
         Position type_decl_pos = peek().pos;
 
-        skip(TokenType::Type, false, false, "'type' keyword");
+        skip(TokenType::Type, false, true, "'type' keyword");
         tree::id_ptr id = parse_id();
-        skip(TokenType::Assign, false, false, "'=' operator. Type aliases require immediate initialization");
+        skip(TokenType::Assign, true, true, "'=' operator. Type aliases require immediate initialization");
         tree::type_ptr type = parse_type();
 
         return std::make_shared<tree::TypeDecl>(type_decl_pos, id, type);
@@ -974,11 +934,11 @@ namespace jc::parser {
         }
 
         // Grouping //
-        if (is(TokenType::LParen)) {
+        if (opt_skip(TokenType::LParen, false, true)) {
             print_parsing_entity("grouping");
 
-            skip(TokenType::LParen, false, true, "opening parenthesis '(' at start of grouping");
             tree::expr_ptr expr = parse_expr();
+
             skip(TokenType::RParen, true, false, "closing parenthesis ')' at end of grouping");
 
             // TODO: !!! Think do I need special node for grouping? (precedence problem?)
@@ -993,10 +953,8 @@ namespace jc::parser {
         }
 
         // ListExpr //
-        if (is(TokenType::LBracket)) {
+        if (opt_skip(TokenType::LBracket, false, true)) {
             print_parsing_entity("list");
-
-            skip(TokenType::LBracket, false, true, "opening bracket '[' at start of list literal");
 
             tree::ExprList elements;
             bool first = true;
@@ -1015,9 +973,8 @@ namespace jc::parser {
                     break;
                 }
                 // ...element
-                if (is(TokenType::Spread)) {
-                    const auto & pos = peek().pos;
-                    skip(TokenType::Spread, false, false, "spread operator '...'");
+                const auto & pos = peek().pos;
+                if (opt_skip(TokenType::Spread, true, true)){
                     const auto & expr = parse_expr();
                     elements.push_back(std::make_shared<tree::SpreadExpr>(pos, expr));
                 } else {
@@ -1029,10 +986,8 @@ namespace jc::parser {
         }
 
         // Dictionary
-        if (is(TokenType::LBrace)) {
+        if (opt_skip(TokenType::LBrace, false, true)) {
             print_parsing_entity("dict");
-
-            skip(TokenType::LBrace, false, true, "opening curly bracket '{' at start of dictionary literal");
 
             tree::DictElementList elements;
             bool first = true;
@@ -1053,8 +1008,7 @@ namespace jc::parser {
                 tree::id_ptr id_key = nullptr;
                 tree::expr_ptr expr_key = nullptr;
 
-                if (is(TokenType::LBracket)) {
-                    skip(TokenType::LBracket, true, true, "opening bracket '[' to capture expression as key");
+                if (opt_skip(TokenType::LBracket, true, true)) {
                     expr_key = parse_expr();
                     skip(TokenType::RBracket, true, true, "closing bracket ']' after expression key");
                 } else if (is_literal()) {
@@ -1102,7 +1056,7 @@ namespace jc::parser {
     tree::expr_ptr Parser::parse_func_call(const tree::expr_ptr & left) {
         print_parsing_entity("func_call");
 
-        skip(TokenType::LParen, false, true, "opening parenthesis '(' in function call");
+        skip(TokenType::LParen, false, true, "[DEV_ERROR] opening parenthesis '(' in function call");
 
         tree::FuncArgs args;
 
@@ -1121,8 +1075,7 @@ namespace jc::parser {
                 break;
             }
             bool spread = false;
-            if (is(TokenType::Spread)) {
-                skip(TokenType::Spread, false, false, "spread operator '...'");
+            if (opt_skip(TokenType::Spread, false, true)) {
                 spread = true;
             }
             args.push_back({parse_expr(), spread});
@@ -1150,8 +1103,7 @@ namespace jc::parser {
             allow_one_line = true;
         }
 
-        if (is(TokenType::DoubleArrow)) {
-            skip(TokenType::DoubleArrow, true, true, "double arrow '=>' for one-line 'if' body");
+        if (opt_skip(TokenType::DoubleArrow, true, true)) {
             allow_one_line = true;
         }
 
@@ -1165,8 +1117,7 @@ namespace jc::parser {
         }
 
         tree::block_ptr else_branch = nullptr;
-        if (is(TokenType::Else)) {
-            skip(TokenType::Else, false, true, "'else' keyword");
+        if (opt_skip(TokenType::Else, false, true)) {
             else_branch = parse_block(true);
         }
 
@@ -1192,11 +1143,9 @@ namespace jc::parser {
 
             tree::id_type_ptr id_type = std::make_shared<tree::IdType>(pos, parse_id());
 
-            if (is(TokenType::LT)) {
+            if (opt_skip(TokenType::LT, false, true)) {
                 // GenericType //
 
-                // TODO: Use is_after_nl
-                skip(TokenType::LT, false, true, "'<' to list generic type arguments");
                 std::vector<tree::type_ptr> types;
                 bool first = true;
                 while (!eof() || !is(TokenType::GT)) {
@@ -1209,28 +1158,25 @@ namespace jc::parser {
                     types.push_back(parse_type());
                     skip_nl(true);
                 }
-                skip(TokenType::GT, true, true, "'>' to end generic type arguments");
+                skip(TokenType::GT, true, false, "'>' to end generic type arguments");
                 left = std::make_shared<tree::GenericType>(id_type, types);
             } else {
                 left = id_type;
             }
-        } else if (is(TokenType::LBracket)) {
+        } else if (opt_skip(TokenType::LBracket, false, true)) {
             print_parsing_entity("list_type");
 
-            skip(TokenType::LBracket, true, true, "opening bracket '[' at start of list type");
             left = std::make_shared<tree::ListType>(pos, parse_type());
-            skip(TokenType::RBracket, true, true, "closing bracket ']' at end of list type");
-        } else if (is(TokenType::LBrace)) {
+            skip(TokenType::RBracket, true, false, "closing bracket ']' at end of list type");
+        } else if (opt_skip(TokenType::LBrace, true, true)) {
             print_parsing_entity("dict_type");
-
-            skip(TokenType::LBrace, true, true, "opening curly bracket '{' at start of dictionary type");
 
             const auto & key = parse_type();
             skip(TokenType::Colon, true, true, "colon ':' to separate key and value types in dictionary type");
             const auto & val = parse_type();
             left = std::make_shared<tree::DictType>(pos, key, val);
 
-            skip(TokenType::RBrace, true, true, "closing curly bracket '}' at end of dictionary type");
+            skip(TokenType::RBrace, true, false, "closing curly bracket '}' at end of dictionary type");
         }
 
         // TODO!!!: Else!!! Negative case
