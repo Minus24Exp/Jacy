@@ -86,6 +86,10 @@ namespace jc {
     }
 
     void Jacy::run_debug(const std::string & script) {
+        if (options.run_tokens_test) {
+            tokens_test();
+        }
+
         // TODO: Create base exceptions for Lexer, Parser, Interpreter and catch them separately
 
         const auto bench = std::chrono::high_resolution_clock::now;
@@ -164,5 +168,14 @@ namespace jc {
 
         auto vm_duration = std::chrono::duration<double>(vm_end - vm_start).count();
         std::cout << "Execution: " << vm_duration << "s" << std::endl;
+    }
+
+    void Jacy::tokens_test() {
+        log.info("Run tokens_test");
+        const auto last_index = static_cast<uint8_t>(parser::TokenType::None);
+        for (uint8_t token_index = 0; token_index < last_index; token_index++) {
+            parser::Token token{static_cast<parser::TokenType>(token_index), "[random value]"};
+            std::cout << token.to_string(false, true) << std::endl;
+        }
     }
 }

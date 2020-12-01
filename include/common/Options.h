@@ -50,9 +50,12 @@ namespace jc::common {
         std::string main_file;
 
         LoggerOptions log = {
-                .log_class = false, // Jacy main class does not provide class name
-                .level = LogLevel::Verbose, // Note: Verbose for debug
+            .log_class = false, // Jacy main class does not provide class name
+            .level = LogLevel::Verbose, // Note: Verbose for debug
         };
+
+        // Tests //
+        bool run_tokens_test{false};
     };
 
     // Lexer //
@@ -65,7 +68,7 @@ namespace jc::common {
         bool log_parsing_entity{true};
 
         LoggerOptions log = {
-                .level = LogLevel::Verbose, // Note: Verbose for debug
+            .level = LogLevel::Verbose, // Note: Verbose for debug
         };
     };
 
@@ -74,7 +77,7 @@ namespace jc::common {
         bool print_compiling_opcode{true};
 
         LoggerOptions log = {
-                .level = LogLevel::Verbose, // Note: Verbose for debug
+            .level = LogLevel::Verbose, // Note: Verbose for debug
         };
     };
 

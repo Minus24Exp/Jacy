@@ -1,1 +1,3 @@
-->
+func a arg1: string : string {
+
+}

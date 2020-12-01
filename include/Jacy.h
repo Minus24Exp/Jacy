@@ -92,6 +92,11 @@ namespace jc {
          * @param script Source code as string
          */
         void run_debug(const std::string & script);
+
+        ///////////
+        // Debug //
+        ///////////
+        void tokens_test();
     };
 }
 

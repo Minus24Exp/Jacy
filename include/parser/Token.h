@@ -7,12 +7,14 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cstdint>
 
 namespace jc::parser {
     struct Token;
     using TokenStream = std::vector<Token>;
 
-    enum class TokenType {
+    // Note!: uint8_t type is for debug, it should be removed in prod
+    enum class TokenType : uint8_t {
         Int,
         Float,
         String,
@@ -149,9 +151,22 @@ namespace jc::parser {
 
         Token(const TokenType & type, std::string val) : type(type), val(std::move(val)) {}
 
-        std::string to_string(bool with_pos = false) const {
+        std::string to_string(bool with_pos = false, bool with_type = false) const {
             std::string str;
             int index = static_cast<int>(type);
+            std::string token_type_str;
+
+            if (with_type) {
+                switch (type) {
+                    case TokenType::Int: token_type_str = "int"; break;
+                    case TokenType::Float: token_type_str = "float"; break;
+                    case TokenType::String: token_type_str = "string"; break;
+                    case TokenType::Id: token_type_str = "id"; break;
+                }
+                str += " " + token_type_str;
+            }
+
+
             switch (type) {
                 case TokenType::Int:
                 case TokenType::Float:

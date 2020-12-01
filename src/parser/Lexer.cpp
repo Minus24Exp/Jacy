@@ -265,6 +265,7 @@ namespace jc::parser {
                             advance(2);
                         } else if (peek_next() == '>') {
                             add_token(TokenType::Arrow);
+                            advance(2);
                         } else {
                             add_token(TokenType::Sub);
                             advance();
