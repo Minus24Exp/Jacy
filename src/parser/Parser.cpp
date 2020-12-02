@@ -293,7 +293,7 @@ namespace jc::parser {
             if (first) {
                 first = false;
             } else {
-                skip(TokenType::Comma, true, true, "comma ',' to separate parameters");
+                skip(TokenType::Comma, true, true, "comma ',' to separate function parameters");
             }
 
             bool vararg = false;
@@ -933,6 +933,8 @@ namespace jc::parser {
             return parse_id();
         }
 
+        Position primary_pos = peek().pos;
+
         // Grouping //
         if (opt_skip(TokenType::LParen, false, true)) {
             log_parsing_entity("grouping");
@@ -941,11 +943,8 @@ namespace jc::parser {
 
             skip(TokenType::RParen, true, false, "closing parenthesis ')' at end of grouping");
 
-            // TODO: !!! Think do I need special node for grouping? (precedence problem?)
-            return expr;
+            return std::make_shared<tree::Grouping>(primary_pos, expr);
         }
-
-        Position primary_pos = peek().pos;
 
         // IfExpr //
         if (is(TokenType::If)) {

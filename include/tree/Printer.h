@@ -27,6 +27,7 @@ namespace jc::tree {
         void visit(TypeDecl * type_decl) override;
 
         // Expressions //
+        void visit(Grouping * grouping) override;
         void visit(Literal * literal) override;
         void visit(Identifier * id) override;
         void visit(Infix * infix) override;

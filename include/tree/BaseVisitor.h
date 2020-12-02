@@ -21,6 +21,7 @@ namespace jc::tree {
 
     // Expressions //
     struct Expr;
+    struct Grouping;
     struct Literal;
     struct Identifier;
     struct Infix;
@@ -62,6 +63,7 @@ namespace jc::tree {
         virtual void visit(TypeDecl * type_decl) = 0;
 
         // Expressions //
+        virtual void visit(Grouping * grouping) = 0;
         virtual void visit(Literal * literal) = 0;
         virtual void visit(Identifier * id) = 0;
         virtual void visit(Infix * infix) = 0;

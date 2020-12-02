@@ -112,6 +112,10 @@ namespace jc::compiler {
     /////////////////
     // Expressions //
     /////////////////
+    void Compiler::visit(tree::Grouping * grouping) {
+        grouping->expr->accept(*this);
+    }
+
     void Compiler::visit(tree::Literal * literal) {
         switch (literal->token.type) {
             case parser::TokenType::Null: {

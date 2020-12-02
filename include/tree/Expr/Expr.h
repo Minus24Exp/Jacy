@@ -9,6 +9,7 @@ namespace jc::tree {
     using ExprList = std::vector<expr_ptr>;
 
     enum class ExprType {
+        Grouping,
         Literal,
         Id,
         Infix,

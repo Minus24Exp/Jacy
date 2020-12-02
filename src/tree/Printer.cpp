@@ -182,6 +182,12 @@ namespace jc::tree {
     /////////////////
     // Expressions //
     /////////////////
+    void Printer::visit(Grouping * grouping) {
+        std::cout << "(";
+        grouping->expr->accept(*this);
+        std::cout << ")";
+    }
+
     void Printer::visit(Literal * literal) {
         std::cout << literal->token.val;
     }

@@ -1,3 +1,4 @@
-func a arg1: string : string {
+if (a || b)
+&& (c || d) {
 
 }

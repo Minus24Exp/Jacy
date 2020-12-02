@@ -10,6 +10,7 @@
 #include "tree/Stmt/TypeDecl.h"
 
 // Expressions //
+#include "tree/Expr/Grouping.h"
 #include "tree/Expr/Literal.h"
 #include "tree/Expr/Identifier.h"
 #include "tree/Expr/Infix.h"

@@ -1,9 +1,11 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <memory>
 #include "parser/Token.h"
 #include "tree/BaseVisitor.h"
+
+#include <memory>
+#include <utility>
 
 using jc::parser::Position;
 

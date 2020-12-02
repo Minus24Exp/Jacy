@@ -36,6 +36,7 @@ namespace jc::compiler {
         void visit(tree::TypeDecl * type_decl) override;
 
         // Expressions //
+        void visit(tree::Grouping * grouping) override;
         void visit(tree::Literal * literal) override;
         void visit(tree::Identifier * id) override;
         void visit(tree::Infix * infix) override;

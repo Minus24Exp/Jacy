@@ -72,6 +72,9 @@ namespace jc::common {
         };
     };
 
+    // Printer //
+    // struct PrinterOptions {};
+
     // Compiler //
     struct CompilerOptions {
         bool print_compiling_opcode{true};
