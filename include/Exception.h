@@ -25,7 +25,6 @@ namespace jc {
             return message.c_str();
         }
 
-    private:
         const std::string message;
         Position pos;
     };

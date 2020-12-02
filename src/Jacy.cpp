@@ -47,7 +47,7 @@ namespace jc {
                     run(line);
                 }
             } catch (JacyException & e) {
-                log.error(e.what());
+                std::cout << common::Logger::format_error(e) << std::endl;
             }
         }
     }
@@ -72,7 +72,7 @@ namespace jc {
                 run(script);
             }
         } catch (JacyException & e) {
-            log.error(e.what());
+            std::cout << common::Logger::format_error(e) << std::endl;
         }
 
         file.close();
