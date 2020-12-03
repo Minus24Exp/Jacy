@@ -302,15 +302,6 @@ namespace jc::parser {
 
             tree::id_ptr param_id = parse_id();
 
-            // Find duplicates
-            // TODO: Think about checking after all parameters added
-            for (const auto & param : params) {
-                if (param.id->get_name() == param_id->get_name()) {
-                    error("Parameter duplication", param_id->pos);
-                    return nullptr;
-                }
-            }
-
             // Note: Type annotation is required for parameters (with future inference too)
             skip(TokenType::Colon, true, true, "type annotation for parameter " + param_id->get_name());
 
@@ -323,6 +314,12 @@ namespace jc::parser {
             }
 
             params.push_back({param_id, default_val, vararg, arg_type});
+        }
+
+        // Find duplicates
+        const auto & check_unique = std::unique(params.begin(), params.end());
+        if (check_unique != params.end()) {
+            error("Duplicate parameter name " + check_unique->id->get_name(), check_unique->id->pos);
         }
 
         if (using_parens) {

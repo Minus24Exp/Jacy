@@ -189,9 +189,7 @@ namespace jc::tree {
     }
 
     void Printer::visit(Literal * literal) {
-        switch () {
 
-        }
         std::cout << literal->token.val;
     }
 
