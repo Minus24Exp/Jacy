@@ -72,7 +72,7 @@ namespace jc::parser {
     //////////////
     // Skippers //
     //////////////
-    void Parser::skip_nl(const bool & optional) {
+    void Parser::skip_nl(bool optional) {
         if (is_nl()) {
             do {
                 advance();
@@ -92,7 +92,7 @@ namespace jc::parser {
         }
     }
 
-    void Parser::skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl, const std::string & expected) {
+    void Parser::skip(const TokenType & type, bool skip_l_nl, bool skip_r_nl, const std::string & expected, bool _virtual_semi) {
         if (skip_l_nl) {
             skip_nl(true);
         }
@@ -103,10 +103,11 @@ namespace jc::parser {
         }
         if (skip_r_nl) {
             skip_nl(true);
+            virtual_semi = _virtual_semi ? true : virtual_semi;
         }
     }
 
-    bool Parser::opt_skip(const TokenType & type, const bool & skip_l_nl, const bool & skip_r_nl) {
+    bool Parser::opt_skip(const TokenType & type, bool skip_l_nl, bool skip_r_nl) {
         if (skip_l_nl && is_after_nl(type) || is(type)) {
             advance();
             if (skip_r_nl) {
@@ -227,9 +228,7 @@ namespace jc::parser {
             stmts.push_back(parse_stmt());
         }
 
-        skip(TokenType::RBrace, true, false, "closing curly bracket '}' at block end");
-
-        virtual_semi = true;
+        skip(TokenType::RBrace, true, true, "closing curly bracket '}' at block end", true);
 
         return std::make_shared<tree::Block>(block_pos, stmts);
     }
@@ -445,7 +444,7 @@ namespace jc::parser {
             skip_semis();
         }
 
-        skip(TokenType::RBrace, true, false, "closing curly bracket '}' at end of class body");
+        skip(TokenType::RBrace, true, true, "closing curly bracket '}' at end of class body", true);
 
         return std::make_shared<tree::ClassDecl>(class_decl_pos, id, super, decls);
     }
@@ -879,7 +878,7 @@ namespace jc::parser {
                 log_parsing_entity("sub-expression");
 
                 tree::expr_ptr ind = parse_expr();
-                skip(TokenType::RBracket, true, false, "closing bracket ']' after index access");
+                skip(TokenType::RBracket, true, true, "closing bracket ']' after index access", true);
                 left = std::make_shared<tree::GetItem>(left, ind);
             } else {
                 break;
@@ -913,8 +912,7 @@ namespace jc::parser {
 
             tree::expr_ptr expr = parse_expr();
 
-            skip(TokenType::RParen, true, true, "closing parenthesis ')' at end of grouping");
-            virtual_semi = true;
+            skip(TokenType::RParen, true, true, "closing parenthesis ')' at end of grouping", true);
 
             return std::make_shared<tree::Grouping>(primary_pos, expr);
         }
@@ -948,7 +946,7 @@ namespace jc::parser {
                     elements.push_back(parse_expr());
                 }
             }
-            skip(TokenType::RBracket, true, false, "closing bracket ']' after list literal");
+            skip(TokenType::RBracket, true, true, "closing bracket ']' after list literal", true);
             return std::make_shared<tree::ListExpr>(primary_pos, elements);
         }
 
@@ -997,7 +995,7 @@ namespace jc::parser {
                     elements.push_back({id_key, expr_key, val});
                 }
             }
-            skip(TokenType::RBrace, true, false, "closing curly bracket '}' after dictionary literal");
+            skip(TokenType::RBrace, true, true, "closing curly bracket '}' after dictionary literal", true);
             return std::make_shared<tree::DictExpr>(primary_pos, elements);
         }
 
@@ -1010,12 +1008,12 @@ namespace jc::parser {
     tree::id_ptr Parser::parse_id() {
         log_parsing_entity("id");
 
-        if (!is(TokenType::Id)) {
+        if (!is_after_nl(TokenType::Id)) {
             expected_error("identifier");
         }
 
         tree::id_ptr id = std::make_shared<tree::Identifier>(peek());
-        advance();
+        skip(TokenType::Id, true, true, "", true);
         return id;
     }
 
@@ -1047,7 +1045,7 @@ namespace jc::parser {
             args.push_back({parse_expr(), spread});
         }
 
-        skip(TokenType::RParen, true, false, "closing parenthesis ')'");
+        skip(TokenType::RParen, true, true, "closing parenthesis ')'", true);
 
         return std::make_shared<tree::FuncCall>(left, args);
     }
@@ -1094,7 +1092,7 @@ namespace jc::parser {
         log_parsing_entity("literal");
 
         Token current = peek();
-        advance();
+        skip(current.type, false, true, "", true);
         return std::make_shared<tree::Literal>(current);
     }
 
@@ -1124,7 +1122,7 @@ namespace jc::parser {
                     types.push_back(parse_type("generic type argument"));
                     skip_nl(true);
                 }
-                skip(TokenType::GT, true, false, "'>' to end generic type arguments");
+                skip(TokenType::GT, true, true, "'>' to end generic type arguments", true);
                 left = std::make_shared<tree::GenericType>(id_type, types);
             } else {
                 left = id_type;
@@ -1133,7 +1131,7 @@ namespace jc::parser {
             log_parsing_entity("list_type");
 
             left = std::make_shared<tree::ListType>(pos, parse_type("list type"));
-            skip(TokenType::RBracket, true, false, "closing bracket ']' at end of list type");
+            skip(TokenType::RBracket, true, true, "closing bracket ']' at end of list type", true);
         } else if (opt_skip(TokenType::LBrace, true, true)) {
             log_parsing_entity("dict_type");
 
@@ -1142,7 +1140,7 @@ namespace jc::parser {
             const auto & val = parse_type("dictionary value type");
             left = std::make_shared<tree::DictType>(pos, key, val);
 
-            skip(TokenType::RBrace, true, false, "closing curly bracket '}' at end of dictionary type");
+            skip(TokenType::RBrace, true, true, "closing curly bracket '}' at end of dictionary type", true);
         } else {
             expected_error(expected_type);
         }

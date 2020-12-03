@@ -189,6 +189,9 @@ namespace jc::tree {
     }
 
     void Printer::visit(Literal * literal) {
+        switch () {
+
+        }
         std::cout << literal->token.val;
     }
 
@@ -285,18 +288,43 @@ namespace jc::tree {
     }
 
     void Printer::visit(DictExpr * dict) {
-        std::cout << "{\n";
-        for (const auto & it : dict->elements) {
-            if (it.id_key) {
-                std::cout << it.id_key->get_name();
+        if (dict->elements.empty()) {
+            std::cout << "{}";
+            return;
+        }
+
+        if (dict->elements.size() == 1) {
+            const auto & el = dict->elements.at(0);
+            std::cout << "{";
+            if (dict->elements.at(0).id_key) {
+                std::cout << el.id_key->get_name();
             } else {
                 std::cout << "[";
-                it.expr_key->accept(*this);
+                el.expr_key->accept(*this);
                 std::cout << "]";
             }
             std::cout << ": ";
-            it.val->accept(*this);
-            std::cout << ",\n";
+            el.val->accept(*this);
+            std::cout << "}";
+            return;
+        }
+
+        std::cout << "{\n";
+        for (size_t i = 0; i < dict->elements.size(); i++) {
+            const auto & el = dict->elements.at(i);
+            if (el.id_key) {
+                std::cout << el.id_key->get_name();
+            } else {
+                std::cout << "[";
+                el.expr_key->accept(*this);
+                std::cout << "]";
+            }
+            std::cout << ": ";
+            el.val->accept(*this);
+
+            if (i < dict->elements.size() - 1) {
+                std::cout << ",\n";
+            }
         }
         std::cout << "\n}";
     }
