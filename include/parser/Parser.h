@@ -31,7 +31,7 @@ namespace jc::parser {
         // Checkers //
         bool eof();
         bool is(const TokenType & type);
-        bool is_after_nl(const TokenType & type);
+        bool is_after_nl(const TokenType & type, bool keep_nl = false);
         bool is_nl();
         bool is_semis();
         bool is_assign_op();
@@ -92,7 +92,7 @@ namespace jc::parser {
         tree::type_ptr parse_type(const std::string & expected_type = "type");
 
         // Errors //
-        void error(const std::string & msg, const Position & pos);
+        static void error(const std::string & msg, const Position & pos);
         void unexpected_error();
         void expected_error(const std::string & expected);
 

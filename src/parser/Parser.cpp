@@ -22,10 +22,13 @@ namespace jc::parser {
         return peek().type == type;
     }
 
-    bool Parser::is_after_nl(const TokenType & type) {
+    bool Parser::is_after_nl(const TokenType & type, bool keep_nl) {
         uint32_t old_index = index;
         skip_nl(true);
         if (is(type)) {
+            if (keep_nl) {
+                index = old_index;
+            }
             return true;
         }
         index = old_index;
@@ -96,7 +99,6 @@ namespace jc::parser {
         if (is(type)) {
             advance();
         } else {
-            // TODO: Pretty `given`
             expected_error(expected);
         }
         if (skip_r_nl) {
@@ -195,8 +197,6 @@ namespace jc::parser {
         // One-line //
         // If one-line block is allowed then try to parse single stmt
         if (!is(TokenType::LBrace) && allow_one_line) {
-            // TODO: Think about this skip_nl
-            //  Is it okay?
             skip_nl(true);
             stmts.push_back(parse_stmt());
 
@@ -282,6 +282,7 @@ namespace jc::parser {
 
         bool first = true;
         while (!eof()) {
+            skip_nl(true);
             // For using_paren break on paren
             // For no-paren break on `=>` (block start) or `->` (type anno) or `{` (block start)
             // Note: This syntax is inference-capable because params parsing stops on `=>` or `{` but return type may be expected...
@@ -296,10 +297,8 @@ namespace jc::parser {
             }
 
             bool vararg = false;
-            if (is(TokenType::Spread)) {
+            if (opt_skip(TokenType::Spread, true, true)) {
                 vararg = true;
-                // TODO: Remove useless `skip`s
-                skip(TokenType::Spread, false, false, "vararg operator '...'");
             }
 
             tree::id_ptr param_id = parse_id();
@@ -543,8 +542,6 @@ namespace jc::parser {
 
     tree::expr_ptr Parser::assignment() {
         tree::expr_ptr left = pipe();
-
-        // TODO: Add compound assignment operators
 
         const auto & assign_op = peek();
         if (is_assign_op()) {
@@ -847,7 +844,11 @@ namespace jc::parser {
         tree::expr_ptr left = member_access();
 
         while (!eof()) {
-            // TODO: Don't skip endl
+            // Note: For MethodCall too:
+            // Fixme: Call after nl ?!
+            //  Example:
+            //  `function
+            //  (...function_arguments)`
             if (is_after_nl(TokenType::LParen)) {
                 left = parse_func_call(left);
             } else {
@@ -867,7 +868,6 @@ namespace jc::parser {
 
                 tree::id_ptr id = parse_id();
 
-                // TODO: Use optional nl skipping
                 if (is_after_nl(TokenType::LParen)) {
                     // We put left as nullptr, cause we already know left expression
                     const auto & func_call = std::static_pointer_cast<tree::FuncCall>(parse_func_call(nullptr));
@@ -913,7 +913,8 @@ namespace jc::parser {
 
             tree::expr_ptr expr = parse_expr();
 
-            skip(TokenType::RParen, true, false, "closing parenthesis ')' at end of grouping");
+            skip(TokenType::RParen, true, true, "closing parenthesis ')' at end of grouping");
+            virtual_semi = true;
 
             return std::make_shared<tree::Grouping>(primary_pos, expr);
         }
@@ -1180,6 +1181,6 @@ namespace jc::parser {
         if (!options.log_parsing_entity) {
             return;
         }
-        log.debug("Parse", entity);
+        log.debug("Parse", "'" + entity + "'");
     }
 }
