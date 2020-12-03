@@ -5,35 +5,6 @@
 #include "compiler/type.h"
 
 namespace jc::compiler {
-    /**
-     * Classes describes compile-time signatures
-     */
-    struct Field {
-        tree::VarDeclKind kind;
-        type_ptr type;
-//        std::string name;
-    };
-
-    struct TypeClass {
-        std::string name;
-        std::map<std::string, Field> fields;
-        std::multimap<std::string, func_t_ptr> methods;
-    };
-
-    // Type getters //
-    type_ptr get_any_t();
-    type_ptr get_void_t();
-    type_ptr get_null_t();
-    type_ptr get_bool_t();
-    type_ptr get_int_t();
-    type_ptr get_float_t();
-    type_ptr get_string_t();
-
-    // Classes initializers //
-    void init_tcBool();
-    void init_tcInt();
-    void init_tcFloat();
-    void init_tcString();
 
     // Helpers //
     func_t_ptr make_func_t(const type_ptr & return_type, const t_list & arg_types, bool is_operator = false, TypeTag callable_type = TypeTag::Func);

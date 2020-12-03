@@ -12,9 +12,7 @@ namespace jc::compiler {
     // TODO: ! Move all structs to top and constants to bottom
 
     struct Type;
-    struct TypeClass;
     struct FuncType;
-    using type_class_ptr = std::shared_ptr<TypeClass>;
     using type_ptr = std::shared_ptr<Type>;
     using t_list = std::vector<type_ptr>;
     using func_t_ptr = std::shared_ptr<FuncType>;
@@ -30,16 +28,24 @@ namespace jc::compiler {
         String,
         Func,
         NativeFunc,
-        Class,
+        UserDefined,
         VarargTag,
         Union,
     };
 
+    struct Field {
+        tree::VarDeclKind kind;
+        type_ptr type;
+//        std::string name;
+    };
+
     struct Type {
-        explicit Type(TypeTag tag, const type_class_ptr & _class) : tag(tag), _class(_class) {}
+        explicit Type(TypeTag tag) : tag(tag) {}
 
         TypeTag tag{TypeTag::None};
-        type_class_ptr _class;
+        std::string name;
+        std::map<std::string, Field> fields;
+        std::multimap<std::string, func_t_ptr> methods;
 
         virtual bool compare(const type_ptr & other) = 0;
 
@@ -49,7 +55,7 @@ namespace jc::compiler {
     };
 
     struct Any : Type {
-        Any() : Type(TypeTag::Any, nullptr) {}
+        Any() : Type(TypeTag::Any) {}
 
         bool compare(const type_ptr & other) override {
             return true;
@@ -61,7 +67,7 @@ namespace jc::compiler {
     };
 
     struct NullType : Type {
-        NullType() : Type(TypeTag::Null, nullptr) {}
+        NullType() : Type(TypeTag::Null) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Null;
@@ -74,7 +80,7 @@ namespace jc::compiler {
 
     // TODO: Remove nullable type (it's just union type with null)
     struct NullableType : Type {
-        explicit NullableType(const type_ptr & type) : Type(type->tag, type->_class), type(type) {}
+        explicit NullableType(const type_ptr & type) : Type(type->tag), type(type) {}
 
         type_ptr type;
 
@@ -88,7 +94,7 @@ namespace jc::compiler {
     };
 
     struct VoidType : Type {
-        VoidType() : Type(TypeTag::Void, nullptr) {}
+        VoidType() : Type(TypeTag::Void) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Void;
@@ -100,7 +106,7 @@ namespace jc::compiler {
     };
 
     struct BoolType : Type {
-        explicit BoolType(const type_class_ptr & cBool) : Type(TypeTag::Bool, cBool) {}
+        explicit BoolType() : Type(TypeTag::Bool) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Bool;
@@ -112,7 +118,7 @@ namespace jc::compiler {
     };
 
     struct IntType : Type {
-        explicit IntType(const type_class_ptr & cInt) : Type(TypeTag::Int, cInt) {}
+        explicit IntType() : Type(TypeTag::Int) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Int;
@@ -124,7 +130,7 @@ namespace jc::compiler {
     };
 
     struct FloatType : Type {
-        explicit FloatType(const type_class_ptr & cFloat) : Type(TypeTag::Float, cFloat) {}
+        explicit FloatType() : Type(TypeTag::Float) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::Float;
@@ -136,7 +142,7 @@ namespace jc::compiler {
     };
 
     struct StringType : Type {
-        explicit StringType(const type_class_ptr & cString) : Type(TypeTag::String, cString) {}
+        explicit StringType() : Type(TypeTag::String) {}
 
         bool compare(const type_ptr & other) override {
             return other->tag == TypeTag::String;
@@ -148,8 +154,7 @@ namespace jc::compiler {
     };
 
     struct FuncParamType : Type {
-        FuncParamType(const type_ptr & type, bool has_default_val)
-                : Type(type->tag, type->_class), type(type), has_default_val(has_default_val) {}
+        FuncParamType(const type_ptr & type, bool has_default_val) : Type(type->tag), type(type), has_default_val(has_default_val) {}
 
         type_ptr type;
         bool has_default_val;
@@ -165,12 +170,11 @@ namespace jc::compiler {
 
     struct FuncType : Type {
         FuncType(
-                const type_ptr & return_type,
-                const t_list & arg_types,
-                const type_class_ptr & cFunc,
-                bool is_operator = false,
-                TypeTag callable_type = TypeTag::Func
-        ) : Type(callable_type, cFunc),
+            const type_ptr & return_type,
+            const t_list & arg_types,
+            bool is_operator = false,
+            TypeTag callable_type = TypeTag::Func
+        ) : Type(callable_type),
             return_type(return_type),
             arg_types(arg_types),
             is_operator(is_operator) {}
@@ -184,7 +188,7 @@ namespace jc::compiler {
             compare(other, false);
         }
 
-        // Note: Use this function mostly always instead of overriden compare
+        // Note: Use this function mostly always instead of overridden compare
         bool compare(const type_ptr & other, bool is_op_optional) {
             if (other->tag != TypeTag::Func && other->tag != TypeTag::NativeFunc) {
                 return false;
@@ -258,7 +262,7 @@ namespace jc::compiler {
     };
 
     struct VarargTagType : Type {
-        explicit VarargTagType(const type_ptr & vararg_type) : Type(TypeTag::VarargTag, nullptr), vararg_type(vararg_type) {}
+        explicit VarargTagType(const type_ptr & vararg_type) : Type(TypeTag::VarargTag), vararg_type(vararg_type) {}
 
         type_ptr vararg_type;
 
@@ -272,7 +276,7 @@ namespace jc::compiler {
     };
 
     struct UnionType : Type {
-        explicit UnionType(t_list && types, const type_class_ptr & cUnion) : Type(TypeTag::Union, cUnion), types(std::move(types)) {}
+        explicit UnionType(t_list && types) : Type(TypeTag::Union), types(std::move(types)) {}
 
         t_list types;
 
@@ -309,6 +313,15 @@ namespace jc::compiler {
             return united;
         }
     };
+
+    // Type getters //
+    type_ptr get_any_t();
+    type_ptr get_void_t();
+    type_ptr get_null_t();
+    type_ptr get_bool_t();
+    type_ptr get_int_t();
+    type_ptr get_float_t();
+    type_ptr get_string_t();
 }
 
 #endif // TYPE_CLASS_H

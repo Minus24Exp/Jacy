@@ -1,46 +1,6 @@
 #include "compiler/type_class.h"
 
 namespace jc::compiler {
-    /////////////
-    // Classes //
-    /////////////
-    type_class_ptr get_tcBool() {
-        static const type_class_ptr cBool = std::make_shared<TypeClass>();
-        cBool->name = "Bool";
-        return cBool;
-    }
-
-    type_class_ptr get_tcInt() {
-        static const type_class_ptr cInt = std::make_shared<TypeClass>();
-        cInt->name = "Int";
-        return cInt;
-    }
-
-    type_class_ptr get_tcFloat() {
-        static const type_class_ptr cFloat = std::make_shared<TypeClass>();
-        cFloat->name = "Float";
-        return cFloat;
-    }
-
-    type_class_ptr get_tcString() {
-        static const type_class_ptr cString = std::make_shared<TypeClass>();
-        cString->name = "String";
-        return cString;
-    }
-
-    type_class_ptr get_tcFunc() {
-        static const type_class_ptr cFunc = std::make_shared<TypeClass>();
-        cFunc->name = "Func";
-        return cFunc;
-    }
-
-//    type_class_ptr get_cUnion() {
-//        // TODO: I don't think I need Union class
-////        static const type_class_ptr cUnion = std::make_shared<TypeClass>();
-////        cUnion->name = "cUnion";
-////        return cUnion;
-//    }
-
     ///////////
     // Types //
     ///////////
@@ -60,22 +20,22 @@ namespace jc::compiler {
     }
 
     type_ptr get_bool_t() {
-        static const type_ptr bool_t = std::make_shared<BoolType>(get_tcBool());
+        static const type_ptr bool_t = std::make_shared<BoolType>();
         return bool_t;
     }
 
     type_ptr get_int_t() {
-        static const type_ptr int_t = std::make_shared<IntType>(get_tcInt());
+        static const type_ptr int_t = std::make_shared<IntType>();
         return int_t;
     }
 
     type_ptr get_float_t() {
-        static const type_ptr float_t = std::make_shared<FloatType>(get_tcFloat());
+        static const type_ptr float_t = std::make_shared<FloatType>();
         return float_t;
     }
 
     type_ptr get_string_t() {
-        static const type_ptr string_t = std::make_shared<StringType>(get_tcString());
+        static const type_ptr string_t = std::make_shared<StringType>();
         return string_t;
     }
 
