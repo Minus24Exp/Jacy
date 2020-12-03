@@ -7,11 +7,16 @@
 namespace jc::tree {
     struct MethodCall : Expr {
         expr_ptr left;
+        bool nullish;
         id_ptr id;
         FuncArgs args;
 
-        MethodCall(expr_ptr left, id_ptr id, FuncArgs args)
-            : Expr(left->pos, ExprType::MethodCall), left(std::move(left)), id(std::move(id)), args(std::move(args)) {}
+        MethodCall(expr_ptr left, bool nullish, id_ptr id, FuncArgs args)
+            : Expr(left->pos, ExprType::MethodCall),
+              left(std::move(left)),
+              nullish(nullish),
+              id(std::move(id)),
+              args(std::move(args)) {}
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

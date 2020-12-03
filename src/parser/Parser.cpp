@@ -828,7 +828,8 @@ namespace jc::parser {
     tree::expr_ptr Parser::prefix() {
         const auto & op_token = peek();
         if (opt_skip(TokenType::Not, true, true)
-         || opt_skip(TokenType::Sub, true, true)) {
+         || opt_skip(TokenType::Sub, true, true)
+         || opt_skip(TokenType::BitNot, true, true)) {
             log_parsing_entity("prefix");
 
             tree::expr_ptr right = call();
@@ -861,7 +862,12 @@ namespace jc::parser {
         tree::expr_ptr left = primary();
 
         while (!eof()) {
-            if (opt_skip(TokenType::Dot, true, true)) {
+            bool dot = opt_skip(TokenType::Dot, true, true);
+            bool nullish{false};
+            if (!dot) {
+                nullish = opt_skip(TokenType::SafeCall, true, true);
+            }
+            if (dot || nullish) {
                 log_parsing_entity("get_expr");
 
                 tree::id_ptr id = parse_id();
@@ -869,9 +875,9 @@ namespace jc::parser {
                 if (is_after_nl(TokenType::LParen)) {
                     // We put left as nullptr, cause we already know left expression
                     const auto & func_call = std::static_pointer_cast<tree::FuncCall>(parse_func_call(nullptr));
-                    left = std::make_shared<tree::MethodCall>(left, id, func_call->args);
+                    left = std::make_shared<tree::MethodCall>(left, nullish, id, func_call->args);
                 } else {
-                    left = std::make_shared<tree::GetExpr>(left, id);
+                    left = std::make_shared<tree::GetExpr>(left, nullish, id);
                 }
             } else if (opt_skip(TokenType::LBracket, true, true)) {
                 log_parsing_entity("sub-expression");
