@@ -317,9 +317,11 @@ namespace jc::parser {
         }
 
         // Find duplicates
-        const auto & check_unique = std::unique(params.begin(), params.end());
+        const auto & check_unique = std::unique(params.begin(), params.end(), [](const tree::FuncParam & left, const tree::FuncParam & right) {
+            return left.id->get_name() == right.id->get_name();
+        });
         if (check_unique != params.end()) {
-            error("Duplicate parameter name " + check_unique->id->get_name(), check_unique->id->pos);
+            error("Duplicate parameter name '" + check_unique->id->get_name() + "'", check_unique->id->pos);
         }
 
         if (using_parens) {

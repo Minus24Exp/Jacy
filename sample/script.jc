@@ -1,0 +1,3 @@
+func foo(a: string, a: string): string {
+
+}
