@@ -152,12 +152,12 @@ namespace jc::vm {
     bytecode::constant_ptr BaseVM::read_const() {
         // Note: read_const automatically reads constant offset and advances
         const auto & offset = read8();
-        if (offset >= chunk.constants.size()) {
+        if (offset >= chunk.constant_pool.size()) {
             // TODO: Remove cout
-            std::cout << std::endl << "offset: " << offset << ". size: " << chunk.constants.size() << std::endl;
+            std::cout << std::endl << "offset: " << offset << ". size: " << chunk.constant_pool.size() << std::endl;
             throw DevError("Constant offset is out of constant pool bounds");
         }
-        return chunk.constants.at(offset);
+        return chunk.constant_pool.at(offset);
     }
 
     std::shared_ptr<bytecode::IntConstant> BaseVM::read_int_const() {

@@ -434,9 +434,9 @@ namespace jc::compiler {
             return;
         }
         // Make int
-        chunk.constants.push_back(std::make_shared<bytecode::IntConstant>(int_val, IntType::get()));
-        int_constants[int_val] = chunk.constants.size() - 1;
-        emit(static_cast<uint64_t>(chunk.constants.size() - 1));
+        chunk.constant_pool.push_back(std::make_shared<bytecode::IntConstant>(int_val));
+        int_constants[int_val] = chunk.constant_pool.size() - 1;
+        emit(static_cast<uint64_t>(chunk.constant_pool.size() - 1));
     }
 
     void Compiler::emit_float(double float_val) {
@@ -446,9 +446,9 @@ namespace jc::compiler {
             emit(found->second);
             return;
         }
-        chunk.constants.push_back(std::make_shared<bytecode::FloatConstant>(float_val, FloatType::get()));
-        float_constants[float_val] = chunk.constants.size() - 1;
-        emit(static_cast<uint64_t>(chunk.constants.size() - 1));
+        chunk.constant_pool.push_back(std::make_shared<bytecode::FloatConstant>(float_val));
+        float_constants[float_val] = chunk.constant_pool.size() - 1;
+        emit(static_cast<uint64_t>(chunk.constant_pool.size() - 1));
     }
 
     void Compiler::emit_string(const std::string & string_val) {
@@ -461,9 +461,9 @@ namespace jc::compiler {
         if (found != string_constants.end()) {
             return found->second;
         }
-        chunk.constants.push_back(std::make_shared<bytecode::StringConstant>(string_val, StringType::get()));
-        string_constants[string_val] = chunk.constants.size() - 1;
-        return chunk.constants.size() - 1;
+        chunk.constant_pool.push_back(std::make_shared<bytecode::StringConstant>(string_val));
+        string_constants[string_val] = chunk.constant_pool.size() - 1;
+        return chunk.constant_pool.size() - 1;
     }
 
     ///////////

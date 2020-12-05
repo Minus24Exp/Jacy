@@ -28,7 +28,7 @@ namespace jc::vm {
 
         std::cout << "-- Constant Pool --" << std::endl;
         uint64_t cp_offset = 0;
-        for (const auto & constant : chunk.constants) {
+        for (const auto & constant : chunk.constant_pool) {
             std::cout << cp_offset++ << " - " << constant->to_string() << std::endl;
         }
 

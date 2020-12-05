@@ -94,10 +94,16 @@ namespace jc::bytecode {
         SetProperty,
     };
 
+    struct Function {
+        uint32_t name_index;
+        ByteList code;
+    };
+
     struct Chunk {
         ByteList code;
-        std::vector<constant_ptr> constants;
-    //    std::vector<Attribute> attributes;
+        std::vector<constant_ptr> constant_pool;
+        std::vector<>
+//        std::vector<Attribute> attributes;
     };
 }
 
