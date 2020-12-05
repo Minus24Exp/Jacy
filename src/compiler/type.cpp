@@ -9,8 +9,28 @@ namespace jc::compiler {
         return prefix + mangle();
     }
 
+    func_t_ptr Type::has_method(const std::string &method_name, const func_t_ptr &signature, bool is_op_optional) {
+        // TODO: Improve for most inherited types,
+        //  for a(int) call must be used a(int) if exists, not a(any)
+
+        const auto & eq_range = methods.equal_range(method_name);
+
+        for (auto it = eq_range.first; it != eq_range.second; it++) {
+            if (it->second->compare(signature, is_op_optional)) {
+                return it->second;
+            }
+        }
+
+        return nullptr;
+    }
+
     // Nothing //
     Nothing::Nothing() : Type(TypeTag::Bottom) {}
+
+    type_ptr Nothing::get() {
+        static type_ptr nothing_t = std::make_shared<Nothing>();
+        return nothing_t;
+    }
 
     bool Nothing::compare(const type_ptr & other) {
         return true; // Stub
@@ -27,6 +47,11 @@ namespace jc::compiler {
     // Unit //
     UnitType::UnitType() : Type(TypeTag::Unit) {}
 
+    type_ptr UnitType::get() {
+        static type_ptr unit_t = std::make_shared<UnitType>();
+        return unit_t;
+    }
+
     bool UnitType::compare(const type_ptr & other) {
         return other->tag == TypeTag::Unit;
     }
@@ -41,6 +66,11 @@ namespace jc::compiler {
 
     // Null //
     NullType::NullType() : Type(TypeTag::Null) {}
+
+    type_ptr NullType::get() {
+        static type_ptr null_t = std::make_shared<NullType>();
+        return null_t;
+    }
 
     bool NullType::compare(const type_ptr & other) {
         return other->tag == TypeTag::Null;
@@ -57,6 +87,11 @@ namespace jc::compiler {
     // BoolType //
     BoolType::BoolType() : Type(TypeTag::Bool) {}
 
+    type_ptr BoolType::get() {
+        static type_ptr bool_t = std::make_shared<BoolType>();
+        return bool_t;
+    }
+
     bool BoolType::compare(const type_ptr & other) {
         return other->tag == TypeTag::Bool;
     }
@@ -71,6 +106,11 @@ namespace jc::compiler {
 
     // Int //
     IntType::IntType() : Type(TypeTag::Int) {}
+
+    type_ptr IntType::get() {
+        static type_ptr int_t = std::make_shared<IntType>();
+        return int_t;
+    }
 
     bool IntType::compare(const type_ptr & other) {
         return other->tag == TypeTag::Int;
@@ -87,6 +127,11 @@ namespace jc::compiler {
     // Float //
     FloatType::FloatType() : Type(TypeTag::Float) {}
 
+    type_ptr FloatType::get() {
+        static type_ptr float_t = std::make_shared<FloatType>();
+        return float_t;
+    }
+
     bool FloatType::compare(const type_ptr & other) {
         return other->tag == TypeTag::Float;
     }
@@ -100,11 +145,16 @@ namespace jc::compiler {
     }
 
     // String //
+    StringType::StringType() : Type(TypeTag::String) {}
+
+    type_ptr StringType::get() {
+        static type_ptr string_t = std::make_shared<StringType>();
+        return string_t;
+    }
+
     bool StringType::compare(const type_ptr & other) {
         return other->tag == TypeTag::String;
     }
-
-    StringType::StringType() : Type(TypeTag::String) {}
 
     std::string StringType::to_string() {
         return "String";
@@ -117,6 +167,10 @@ namespace jc::compiler {
     // FuncParam //
     FuncParamType::FuncParamType(const type_ptr & type, bool has_default_val)
         : Type(type->tag), type(type), has_default_val(has_default_val) {}
+
+    type_ptr FuncParamType::get(const type_ptr & type, bool has_default_val) {
+        return std::make_shared<FuncParamType>(type, has_default_val);
+    }
 
     bool FuncParamType::compare(const type_ptr & other) {
         return type->compare(other);
@@ -136,6 +190,18 @@ namespace jc::compiler {
               return_type(return_type),
               arg_types(arg_types),
               is_operator(is_operator) {}
+
+    type_ptr FuncType::get_func_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator, TypeTag callable_type) {
+        return std::make_shared<FuncType>(return_type, arg_types, is_operator, callable_type);
+    }
+
+    type_ptr FuncType::get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator) {
+        return get_func_t(return_type, arg_types, is_operator, TypeTag::NativeFunc);
+    }
+
+    type_ptr FuncType::get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types) {
+        return get_nf_t(return_type, arg_types, true);
+    }
 
     bool FuncType::compare(const type_ptr & other) {
         compare(other, false);
@@ -226,20 +292,13 @@ namespace jc::compiler {
         return mangled_func_t;
     }
 
-    func_t_ptr FuncType::get_func_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator, TypeTag callable_type) {
-        return std::make_shared<FuncType>(return_type, arg_types, is_operator, callable_type);
-    }
-
-    func_t_ptr FuncType::get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator) {
-        return get_func_t(return_type, arg_types, is_operator, TypeTag::NativeFunc);
-    }
-
-    func_t_ptr FuncType::get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types) {
-        return get_nf_t(return_type, arg_types, true);
-    }
-
     // Any //
     Any::Any() : Type(TypeTag::Any) {}
+
+    type_ptr Any::get() {
+        static type_ptr any_t = std::make_shared<Any>();
+        return any_t;
+    }
 
     bool Any::compare(const type_ptr & other) {
         return true;
@@ -256,6 +315,10 @@ namespace jc::compiler {
     // Vararg //
     VarargTagType::VarargTagType(const type_ptr & vararg_type) : Type(TypeTag::VarargTag), vararg_type(vararg_type) {}
 
+    type_ptr VarargTagType::get(const type_ptr & vararg_type) {
+        return std::make_shared<VarargTagType>(vararg_type);
+    }
+
     bool VarargTagType::compare(const type_ptr & other) {
         return vararg_type->compare(other);
     }
@@ -268,12 +331,16 @@ namespace jc::compiler {
         return "[vararg:" + vararg_type->mangle() + "]";
     }
 
-    type_ptr VarargTagType::get_vararg_t(const type_ptr & vararg_type) {
-        return std::make_shared<VarargTagType>(vararg_type);
+    // Union //
+    UnionType::UnionType(const t_list & types) : Type(TypeTag::Union), types(types) {}
+
+    type_ptr UnionType::get(const t_list & types) {
+        return std::make_shared<UnionType>(types);
     }
 
-    // Union //
-    UnionType::UnionType(t_list && types) : Type(TypeTag::Union), types(std::move(types)) {}
+    type_ptr UnionType::get_nullable_t(const type_ptr & type) {
+        return std::make_shared<UnionType>(t_list{type, NullType::get()});
+    }
 
     bool UnionType::compare(const type_ptr & other) {
         if (other->tag == TypeTag::Union) {
@@ -317,9 +384,5 @@ namespace jc::compiler {
             }
         }
         return united + "]";
-    }
-
-    type_ptr UnionType::get_nullable_t(const type_ptr & type) {
-        return std::make_shared<UnionType>(t_list{type, get_null_t()});
     }
 }

@@ -20,8 +20,6 @@ namespace jc::compiler {
     using func_param_t_ptr = std::shared_ptr<FuncParamType>;
     using func_param_t_list = std::vector<func_param_t_ptr>;
 
-    type_ptr make_vararg_t(const type_ptr & vararg_type);
-
     func_t_ptr class_has_method(const type_ptr & type, const std::string & method_name, const func_t_ptr & signature, bool is_op_optional);
 
     enum class TypeTag {
@@ -65,6 +63,8 @@ namespace jc::compiler {
 
         // Inherited-dependent
         virtual std::string mangle() = 0;
+
+        func_t_ptr has_method(const std::string & method_name, const func_t_ptr & signature, bool is_op_optional);
     };
 
     struct Nothing : Type {
@@ -161,9 +161,9 @@ namespace jc::compiler {
         func_param_t_list arg_types;
         bool is_operator{false};
 
-        static func_t_ptr get_func_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false, TypeTag callable_type = TypeTag::Func);
-        static func_t_ptr get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false);
-        static func_t_ptr get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types);
+        static type_ptr get_func_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false, TypeTag callable_type = TypeTag::Func);
+        static type_ptr get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false);
+        static type_ptr get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types);
 
         bool compare(const type_ptr & other) override;
 
@@ -203,11 +203,11 @@ namespace jc::compiler {
     };
 
     struct UnionType : Type {
-        explicit UnionType(t_list && types);
+        explicit UnionType(const t_list & types);
 
         t_list types;
 
-        static type_ptr get(t_list && types);
+        static type_ptr get(const t_list & types);
         static type_ptr get_nullable_t(const type_ptr & type);
 
         bool compare(const type_ptr & other) override;
