@@ -2,11 +2,6 @@
 
 namespace jc::compiler {
     Compiler::Compiler() : scope_depth(0), log("Compiler", options.log) {
-        init_tcBool();
-        init_tcInt();
-        init_tcFloat();
-        init_tcString();
-
         for (const auto & g : globals::jcGlobals) {
             globals[g.first] = std::make_shared<Variable>(tree::VarDeclKind::Val, g.second.type);
         }
@@ -42,7 +37,7 @@ namespace jc::compiler {
         tree::VarDeclKind kind = var_decl->kind;
 
         // TODO: Add real types (now any)
-        type_ptr type = get_any_t();
+        type_ptr type = Any::get();
 
         const auto & var_name = var_decl->id->get_name();
 
@@ -120,33 +115,33 @@ namespace jc::compiler {
         switch (literal->token.type) {
             case parser::TokenType::Null: {
                 emit(bytecode::OpCode::NullConst);
-                last_type = get_null_t();
+                last_type = NullType::get();
             } break;
             case parser::TokenType::True: {
                 emit(bytecode::OpCode::TrueConst);
-                last_type = get_bool_t();
+                last_type = BoolType::get();
             } break;
             case parser::TokenType::False: {
                 emit(bytecode::OpCode::FalseConst);
-                last_type = get_bool_t();
+                last_type = BoolType::get();
             } break;
             case parser::TokenType::Int: {
                 // TODO: Add conversion exception handling
                 long long int_val = std::stoll(literal->token.val);
                 emit_int(int_val);
-                last_type = get_int_t();
+                last_type = IntType::get();
             } break;
             case parser::TokenType::Float: {
                 // TODO: Add conversion exception handling
                 double float_val = std::stod(literal->token.val);
                 emit_float(float_val);
-                last_type = get_float_t();
+                last_type = FloatType::get();
             } break;
             case parser::TokenType::String: {
                 // TODO: Add encodings support
                 const auto & string_val = literal->token.val;
                 emit_string(string_val);
-                last_type = get_string_t();
+                last_type = StringType::get();
             } break;
             default: {
                 throw DevError("Unexpected type of literal token");
@@ -172,7 +167,7 @@ namespace jc::compiler {
 
 //        switch (infix->op.type) {
 //            case parser::TokenType::Add: {
-//                const auto & op_method = class_has_method(lhs_t, "add", get_func_t(get_any_t(), {rhs_t}, true));
+//                const auto & op_method = class_has_method(lhs_t, "add", get(get_any_t(), {rhs_t}, true));
 //                if (!op_method) {
 //                    error("Unable to resolve infix operator function (add)", infix->pos);
 //                }
@@ -261,14 +256,15 @@ namespace jc::compiler {
 
         // We know that expr_type is FuncType
         std::shared_ptr<FuncType> func_type = std::static_pointer_cast<FuncType>(expr_type);
-        std::vector<type_ptr> arg_types;
+        func_param_t_list arg_types;
 
         uint64_t arg_count = 0;
         for (const auto & arg : func_call->args) {
             last_type = nullptr;
             arg.val->accept(*this);
             arg_count++;
-            arg_types.push_back(last_type);
+            // TODO!: Think about `false` stub for default value
+            arg_types.push_back(std::make_shared<FuncParamType>(last_type, false));
         }
 
         if (!func_type->compare(arg_types)) {
@@ -292,20 +288,21 @@ namespace jc::compiler {
         const auto & object = last_type;
 
         // We know that expr_type is FuncType
-        t_list arg_types;
+        func_param_t_list arg_types;
         uint64_t arg_count = 0;
         for (const auto & arg : method_call->args) {
             last_type = nullptr;
             arg.val->accept(*this);
             arg_count++;
-            arg_types.push_back(last_type);
+            // TODO!: Think about `false` stub for default value
+            arg_types.push_back(std::make_shared<FuncParamType>(last_type, false));
         }
 
-        const auto & method_signature = make_func_t(get_any_t(), arg_types);
-        func_t_ptr method = class_has_method(object, method_call->id->get_name(), method_signature, true);
+        func_t_ptr method_signature = FuncType::get(Any::get(), arg_types);
+        func_t_ptr method = object->has_method(method_call->id->get_name(), method_signature, true);
 
         if (!method) {
-            error("Method invocation does not match any declaration in class " + object->_class->name, method_call->left->pos);
+            error("Method invocation does not match any declaration in class " + object->name, method_call->left->pos);
         }
 
         bytecode::OpCode opcode;
@@ -329,7 +326,7 @@ namespace jc::compiler {
 
         // Note!: Here's used `method` signature, not `method_signature`,
         //  because we need the signature that we found, not what we requested (type inheritance...)
-        emit(make_string(mangle_type(method, method_call->id->get_name())));
+        emit(make_string(method->mangle_name(method_call->id->get_name())));
 
         // Return type
         last_type = method->return_type;
@@ -437,7 +434,7 @@ namespace jc::compiler {
             return;
         }
         // Make int
-        chunk.constants.push_back(std::make_shared<bytecode::IntConstant>(int_val, get_int_t()));
+        chunk.constants.push_back(std::make_shared<bytecode::IntConstant>(int_val, IntType::get()));
         int_constants[int_val] = chunk.constants.size() - 1;
         emit(static_cast<uint64_t>(chunk.constants.size() - 1));
     }
@@ -449,7 +446,7 @@ namespace jc::compiler {
             emit(found->second);
             return;
         }
-        chunk.constants.push_back(std::make_shared<bytecode::FloatConstant>(float_val, get_float_t()));
+        chunk.constants.push_back(std::make_shared<bytecode::FloatConstant>(float_val, FloatType::get()));
         float_constants[float_val] = chunk.constants.size() - 1;
         emit(static_cast<uint64_t>(chunk.constants.size() - 1));
     }
@@ -464,7 +461,7 @@ namespace jc::compiler {
         if (found != string_constants.end()) {
             return found->second;
         }
-        chunk.constants.push_back(std::make_shared<bytecode::StringConstant>(string_val, get_string_t()));
+        chunk.constants.push_back(std::make_shared<bytecode::StringConstant>(string_val, StringType::get()));
         string_constants[string_val] = chunk.constants.size() - 1;
         return chunk.constants.size() - 1;
     }

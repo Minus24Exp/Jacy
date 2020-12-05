@@ -2,20 +2,24 @@
 #define GLOBALS_H
 
 #include "vm/object.h"
-#include "compiler/type_class.h"
 
 #include <map>
 
 namespace jc::globals {
     namespace G {
+        // TODO: Hate yourself
+        using namespace compiler;
+        //
+
         // TODO: ? Kind ?
         struct Global {
+            tree::VarDeclKind kind;
             compiler::type_ptr type;
             vm::object_ptr value;
         };
 
         // print //
-        const compiler::func_t_ptr print_signature = make_nf_t(compiler::get_void_t(), compiler::t_list{make_vararg_t(compiler::get_any_t())});
+        const compiler::func_t_ptr print_signature = FuncType::get_nf_t(UnitType::get(), {FuncParamType::get(VarargType::get(Any::get()), false)});
         static vm::object_ptr print(const vm::FuncArgs & args) {
             for (int i = 0; i < args.size(); i++) {
                 std::cout << args.at(i)->to_string();
@@ -29,7 +33,7 @@ namespace jc::globals {
     }
 
     const std::map<std::string, G::Global> jcGlobals = {
-        {"print", {G::print_signature, make_nf("print", G::print)}},
+        {"print", {tree::VarDeclKind::Val, G::print_signature, make_nf("print", G::print)}},
     };
 }
 

@@ -57,11 +57,7 @@ namespace jc::compiler {
         virtual std::string to_string() = 0;
 
         // Mangling //
-
-        // Base
-        std::string mangle(const std::string & t_name);
-
-        // Inherited-dependent
+        std::string mangle_name(const std::string & t_name);
         virtual std::string mangle() = 0;
 
         func_t_ptr has_method(const std::string & method_name, const func_t_ptr & signature, bool is_op_optional);
@@ -143,7 +139,7 @@ namespace jc::compiler {
         type_ptr type;
         bool has_default_val;
 
-        static type_ptr get(const type_ptr & type, bool has_default_val);
+        static func_param_t_ptr get(const type_ptr & type, bool has_default_val);
 
         bool compare(const type_ptr & other) override;
         std::string to_string() override;
@@ -161,9 +157,9 @@ namespace jc::compiler {
         func_param_t_list arg_types;
         bool is_operator{false};
 
-        static type_ptr get_func_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false, TypeTag callable_type = TypeTag::Func);
-        static type_ptr get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false);
-        static type_ptr get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types);
+        static func_t_ptr get(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false, TypeTag callable_type = TypeTag::Func);
+        static func_t_ptr get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false);
+        static func_t_ptr get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types);
 
         bool compare(const type_ptr & other) override;
 
@@ -190,8 +186,8 @@ namespace jc::compiler {
         std::string mangle() override;
     };
 
-    struct VarargTagType : Type {
-        explicit VarargTagType(const type_ptr & vararg_type);
+    struct VarargType : Type {
+        explicit VarargType(const type_ptr & vararg_type);
 
         type_ptr vararg_type;
 

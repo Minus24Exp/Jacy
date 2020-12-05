@@ -4,7 +4,7 @@ namespace jc::compiler {
     // Type //
     Type::Type(TypeTag tag) : tag(tag) {}
 
-    std::string Type::mangle(const std::string & t_name) {
+    std::string Type::mangle_name(const std::string & t_name) {
         std::string prefix = "_J" + t_name;
         return prefix + mangle();
     }
@@ -168,7 +168,7 @@ namespace jc::compiler {
     FuncParamType::FuncParamType(const type_ptr & type, bool has_default_val)
         : Type(type->tag), type(type), has_default_val(has_default_val) {}
 
-    type_ptr FuncParamType::get(const type_ptr & type, bool has_default_val) {
+    func_param_t_ptr FuncParamType::get(const type_ptr & type, bool has_default_val) {
         return std::make_shared<FuncParamType>(type, has_default_val);
     }
 
@@ -191,15 +191,15 @@ namespace jc::compiler {
               arg_types(arg_types),
               is_operator(is_operator) {}
 
-    type_ptr FuncType::get_func_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator, TypeTag callable_type) {
+    func_t_ptr FuncType::get(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator, TypeTag callable_type) {
         return std::make_shared<FuncType>(return_type, arg_types, is_operator, callable_type);
     }
 
-    type_ptr FuncType::get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator) {
-        return get_func_t(return_type, arg_types, is_operator, TypeTag::NativeFunc);
+    func_t_ptr FuncType::get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator) {
+        return get(return_type, arg_types, is_operator, TypeTag::NativeFunc);
     }
 
-    type_ptr FuncType::get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types) {
+    func_t_ptr FuncType::get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types) {
         return get_nf_t(return_type, arg_types, true);
     }
 
@@ -313,21 +313,21 @@ namespace jc::compiler {
     }
 
     // Vararg //
-    VarargTagType::VarargTagType(const type_ptr & vararg_type) : Type(TypeTag::VarargTag), vararg_type(vararg_type) {}
+    VarargType::VarargType(const type_ptr & vararg_type) : Type(TypeTag::VarargTag), vararg_type(vararg_type) {}
 
-    type_ptr VarargTagType::get(const type_ptr & vararg_type) {
-        return std::make_shared<VarargTagType>(vararg_type);
+    type_ptr VarargType::get(const type_ptr & vararg_type) {
+        return std::make_shared<VarargType>(vararg_type);
     }
 
-    bool VarargTagType::compare(const type_ptr & other) {
+    bool VarargType::compare(const type_ptr & other) {
         return vararg_type->compare(other);
     }
 
-    std::string VarargTagType::to_string() {
+    std::string VarargType::to_string() {
         return "vararg:" + vararg_type->to_string();
     }
 
-    std::string VarargTagType::mangle() {
+    std::string VarargType::mangle() {
         return "[vararg:" + vararg_type->mangle() + "]";
     }
 
