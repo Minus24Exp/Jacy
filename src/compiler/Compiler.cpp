@@ -172,7 +172,7 @@ namespace jc::compiler {
 
 //        switch (infix->op.type) {
 //            case parser::TokenType::Add: {
-//                const auto & op_method = class_has_method(lhs_t, "add", make_func_t(get_any_t(), {rhs_t}, true));
+//                const auto & op_method = class_has_method(lhs_t, "add", get_func_t(get_any_t(), {rhs_t}, true));
 //                if (!op_method) {
 //                    error("Unable to resolve infix operator function (add)", infix->pos);
 //                }
