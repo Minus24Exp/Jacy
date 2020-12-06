@@ -94,11 +94,11 @@ namespace jc::vm {
     }
 
     void VM::_invoke() {
-        // TODO
+
     }
 
     void VM::_invoke_nf() {
-        uint64_t arg_count = read8();
+        uint32_t arg_count = read8();
         const auto & func = std::static_pointer_cast<NativeFunc>(top(arg_count));
         const auto & args = read_args(arg_count);
         auto value = func->body(args);
@@ -113,7 +113,7 @@ namespace jc::vm {
     }
 
     void VM::_invoke_nf_method() {
-        uint64_t arg_count = read8();
+        uint32_t arg_count = read8();
         const auto & method_name = read_string_const()->value;
         const auto & object = top(arg_count);
         const auto & args = read_args(arg_count);

@@ -11,11 +11,12 @@
 
 namespace jc::bytecode {
 
+    struct Constant;
+    struct Function;
     using ByteList = std::vector<uint8_t>;
     using opcode_it = ByteList::iterator;
-
-    struct Constant;
     using constant_ptr = std::shared_ptr<Constant>;
+    using function_ptr = std::shared_ptr<Function>;
 
     const int jump_space = 8;
     const uint8_t U255 = 0xFFu;
@@ -102,9 +103,11 @@ namespace jc::bytecode {
     };
 
     struct Chunk {
+        // Global code
         ByteList code;
+
         std::vector<constant_ptr> constant_pool;
-        std::map<std::string, Function> functions;
+        std::vector<function_ptr> functions;
 //        std::vector<Attribute> attributes;
     };
 }

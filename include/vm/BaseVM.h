@@ -50,7 +50,9 @@ namespace jc::vm {
 
         // Bytecode //
         bytecode::Chunk chunk;
+        uint32_t in_func;
         size_t ip{0};
+        size_t func_pc{0};
         uint8_t peek() const;
         bytecode::opcode_it peek_it();
         void advance(int distance = 1);
@@ -63,14 +65,14 @@ namespace jc::vm {
         std::vector<object_ptr> stack;
         void push(const object_ptr & value);
         object_ptr pop();
-        object_ptr top(uint64_t offset = 0);
+        object_ptr top(uint32_t offset = 0);
 
         std::map<std::string, object_ptr> globals;
 
         // Call-frames //
         std::vector<CallFrame> call_frames;
         std::vector<CallFrame>::iterator frame;
-        std::vector<object_ptr> read_args(uint64_t arg_count);
+        std::vector<object_ptr> read_args(uint32_t arg_count);
 
         // Constants //
         bytecode::constant_ptr read_const();

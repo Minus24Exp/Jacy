@@ -1,11 +1,12 @@
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
+#include "parser/Token.h"
+#include "tree/Node.h"
+
 #include <exception>
 #include <string>
 #include <utility>
-#include "parser/Token.h"
-#include "tree/Node.h"
 
 namespace jc {
     const int RECURSION_DEPTH_LIMIT = 1000;

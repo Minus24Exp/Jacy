@@ -137,12 +137,14 @@ namespace jc::compiler {
     };
 
     struct FuncParamType : Type {
-        FuncParamType(const type_ptr & type, bool has_default_val);
+        explicit FuncParamType(const type_ptr & type, bool has_default_val = false);
 
         type_ptr type;
+        // Note: has_default_val does not matter for type comparison, signature search and etc.
+        //  The only case is check in function call. default is false
         bool has_default_val;
 
-        static func_param_t_ptr get(const type_ptr & type, bool has_default_val);
+        static func_param_t_ptr get(const type_ptr & type, bool has_default_val = false);
 
         bool equals(const type_ptr & other) override;
         std::string to_string() override;
@@ -238,7 +240,6 @@ namespace jc::compiler {
         std::string to_string() override;
         std::string mangle() override;
     };
-
 
     struct UnionType : Type {
         explicit UnionType(const t_list & types);

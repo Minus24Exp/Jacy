@@ -91,15 +91,25 @@ namespace jc::vm {
     // Bytecode //
     //////////////
     uint8_t BaseVM::peek() const {
-        return chunk.code[ip];
+        if (in_func) {
+            return chunk.functions.at(chunk.functions.size() - in_func - 1)->code.at(in_func);
+        }
+        return chunk.code.at(ip);
     }
 
     bytecode::opcode_it BaseVM::peek_it() {
+        if (in_func) {
+            return chunk.functions.at(chunk.functions.size() - in_func - 1)->code.begin() + func_pc;
+        }
         return chunk.code.begin() + ip;
     }
 
     void BaseVM::advance(int distance) {
-        ip += distance;
+        if (in_func) {
+            func_pc += distance;
+        } else {
+            ip += distance;
+        }
     }
 
     uint8_t BaseVM::read() {
@@ -142,7 +152,7 @@ namespace jc::vm {
         return back;
     }
 
-    object_ptr BaseVM::top(uint64_t offset) {
+    object_ptr BaseVM::top(uint32_t offset) {
         return stack.at(stack.size() - offset - 1);
     }
 
@@ -175,10 +185,10 @@ namespace jc::vm {
         return std::static_pointer_cast<bytecode::StringConstant>(constant);
     }
 
-    std::vector<object_ptr> BaseVM::read_args(uint64_t arg_count) {
+    std::vector<object_ptr> BaseVM::read_args(uint32_t arg_count) {
         std::vector<object_ptr> args;
         args.reserve(arg_count);
-        for (uint64_t i = 0; i < arg_count; i++) {
+        for (uint32_t i = 0; i < arg_count; i++) {
             args.push_back(top(arg_count - i - 1));
         }
         return args;

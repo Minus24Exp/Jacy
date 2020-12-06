@@ -48,9 +48,9 @@ namespace jc::compiler {
             }
 
             // Define global
-            uint64_t global = make_string(var_name);
+            uint32_t global = make_string(var_name);
             emit(bytecode::OpCode::DefineGlobal);
-            emit(static_cast<uint64_t>(global));
+            emit(static_cast<uint32_t>(global));
 
             // TODO: ! No val variables without assign_expr and explicit type !
             globals[var_name] = std::make_shared<Variable>(kind, type);
@@ -58,7 +58,7 @@ namespace jc::compiler {
             if (var_decl->assign_expr) {
                 var_decl->assign_expr->accept(*this);
                 emit(bytecode::OpCode::StoreGlobal);
-                emit(static_cast<uint64_t>(global));
+                emit(static_cast<uint32_t>(global));
 
                 globals[var_name]->is_defined = true;
             }
@@ -68,7 +68,7 @@ namespace jc::compiler {
                 // TODO: Extract type of expression
                 var_decl->assign_expr->accept(*this);
                 emit(bytecode::OpCode::StoreLocal);
-                emit(static_cast<uint64_t>(scope->locals.size() - 1));
+                emit(static_cast<uint32_t>(scope->locals.size() - 1));
                 scope->locals.back().is_defined = true;
                 scope->locals.back().depth = scope_depth;
             }
@@ -78,14 +78,41 @@ namespace jc::compiler {
     void Compiler::visit(tree::FuncDecl * func_decl) {
         const auto & name = func_decl->id->get_name();
 
-        func_param_t_list params;
-        for (const auto & param : func_decl->params) {
+        func_decl->return_type->accept(*this);
+        const auto & return_type = last_type;
 
+        func_param_t_list params_t;
+        for (const auto & param : func_decl->params) {
+            // TODO!: Default value
+            param.type->accept(*this);
+            params_t.push_back(FuncParamType::get(last_type));
         }
 
-        const func_t_ptr signature;
+        const func_t_ptr signature = FuncType::get(return_type, params_t);
 
-        last_type = nullptr;
+        // Look for redefinitions
+        const auto & named_funcs = scope->functions.equal_range(name);
+        for (auto it = named_funcs.first; it != named_funcs.second; it++) {
+            if (it->second.signature->equals(signature)) {
+                error("Unable to redefine function " + name, func_decl->pos);
+            }
+        }
+
+        uint32_t name_offset = make_string(name);
+
+        const auto & prev_func = cur_func;
+        cur_func = std::make_shared<bytecode::Function>();
+        chunk.functions.push_back(cur_func);
+
+        const uint32_t offset = chunk.functions.size() - 1;
+        if (scope_depth == 0) {
+            functions.insert({name, FuncLocal{offset, name_offset, signature}});
+        } else {
+            scope->functions.insert({name, FuncLocal{offset, name_offset, signature}});
+        }
+
+        func_decl->body->accept(*this);
+        cur_func = prev_func;
     }
 
     void Compiler::visit(tree::ReturnStmt * expr_stmt) {
@@ -101,6 +128,7 @@ namespace jc::compiler {
     }
 
     void Compiler::visit(tree::ClassDecl * class_decl) {
+
     }
 
     void Compiler::visit(tree::Import * expr_stmt) {
@@ -207,7 +235,7 @@ namespace jc::compiler {
         // TODO: ! Disallow globals (and internal modules) reassignment
         assign->value->accept(*this);
         bytecode::OpCode opcode;
-        uint64_t operand;
+        uint32_t operand;
         try {
             operand = resolve_local(scope, assign->id.get());
             opcode = bytecode::OpCode::StoreLocal;
@@ -222,7 +250,7 @@ namespace jc::compiler {
     void Compiler::visit(tree::SetExpr * set_expr) {
         set_expr->left->accept(*this);
 
-        uint64_t name = make_string(set_expr->id->get_name());
+        uint32_t name = make_string(set_expr->id->get_name());
 
         // TODO: Type check
         set_expr->value->accept(*this);
@@ -235,7 +263,7 @@ namespace jc::compiler {
         last_type = nullptr;
 
         get_expr->left->accept(*this);
-        uint64_t name = make_string(get_expr->id->get_name());
+        uint32_t name = make_string(get_expr->id->get_name());
         emit(bytecode::OpCode::GetProperty);
         emit(name);
     }
@@ -265,7 +293,7 @@ namespace jc::compiler {
         std::shared_ptr<FuncType> func_type = std::static_pointer_cast<FuncType>(expr_type);
         func_param_t_list arg_types;
 
-        uint64_t arg_count = 0;
+        uint32_t arg_count = 0;
         for (const auto & arg : func_call->args) {
             last_type = nullptr;
             arg.val->accept(*this);
@@ -296,7 +324,7 @@ namespace jc::compiler {
 
         // We know that expr_type is FuncType
         func_param_t_list arg_types;
-        uint64_t arg_count = 0;
+        uint32_t arg_count = 0;
         for (const auto & arg : method_call->args) {
             last_type = nullptr;
             arg.val->accept(*this);
@@ -418,14 +446,28 @@ namespace jc::compiler {
     }
 
     void Compiler::visit(tree::FuncType * func_type) {
+        // Note: For FuncDecl type is processed in separate way, this is used for annotations
+        func_type->return_type->accept(*this);
+        const auto & return_type = last_type;
 
+        func_param_t_list params_t;
+        for (const auto & param_t : func_type->params_t) {
+            param_t->accept(*this);
+            params_t.push_back(FuncParamType::get(last_type));
+        }
+
+        last_type = std::make_shared<FuncType>(return_type, params_t);
     }
 
     //////////////
     // Bytecode //
     //////////////
     void Compiler::emit(uint8_t byte) {
-        chunk.code.push_back(byte);
+        if (cur_func) {
+            cur_func->code.push_back(byte);
+        } else {
+            chunk.code.push_back(byte);
+        }
     }
 
     void Compiler::emit(bytecode::OpCode opcode) {
@@ -434,7 +476,7 @@ namespace jc::compiler {
 
     void Compiler::emit(const uint8_t * byte_array, int size) {
         // TODO!: Endianness
-        for (uint64_t i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             emit(byte_array[i]);
         }
     }
@@ -464,7 +506,7 @@ namespace jc::compiler {
         // Make int
         chunk.constant_pool.push_back(std::make_shared<bytecode::IntConstant>(int_val));
         int_constants[int_val] = chunk.constant_pool.size() - 1;
-        emit(static_cast<uint64_t>(chunk.constant_pool.size() - 1));
+        emit(static_cast<uint32_t>(chunk.constant_pool.size() - 1));
     }
 
     void Compiler::emit_float(double float_val) {
@@ -476,7 +518,7 @@ namespace jc::compiler {
         }
         chunk.constant_pool.push_back(std::make_shared<bytecode::FloatConstant>(float_val));
         float_constants[float_val] = chunk.constant_pool.size() - 1;
-        emit(static_cast<uint64_t>(chunk.constant_pool.size() - 1));
+        emit(static_cast<uint32_t>(chunk.constant_pool.size() - 1));
     }
 
     void Compiler::emit_string(const std::string & string_val) {
@@ -484,7 +526,7 @@ namespace jc::compiler {
         emit(make_string(string_val));
     }
 
-    uint64_t Compiler::make_string(const std::string & string_val) {
+    uint32_t Compiler::make_string(const std::string & string_val) {
         const auto & found = string_constants.find(string_val);
         if (found != string_constants.end()) {
             return found->second;
@@ -513,14 +555,14 @@ namespace jc::compiler {
     ///////////////
     // Variables //
     ///////////////
-    uint64_t Compiler::resolve_local(const scope_ptr & _scope, tree::Identifier * id) {
+    uint32_t Compiler::resolve_local(const scope_ptr & _scope, tree::Identifier * id) {
         if (_scope->locals.empty()) {
             // local size is unsigned, so I cannot subtract it
             undefined_entity();
         }
 
-        // Note: I need to use (uint64_t)(0 - 1), 'cause unsigned 0 - 1 is not -1
-        for (uint64_t i = _scope->locals.size() - 1; i != (uint64_t)(0 - 1); i--) {
+        // Note: I need to use (uint32_t)(0 - 1), 'cause unsigned 0 - 1 is not -1
+        for (uint32_t i = _scope->locals.size() - 1; i != (uint32_t)(0 - 1); i--) {
             const auto & local = _scope->locals[i];
             if (local.name == id->get_name()) {
                 if (!local.is_defined) {
@@ -534,20 +576,37 @@ namespace jc::compiler {
         undefined_entity();
     }
 
-    uint64_t Compiler::resolve_upvalue(const scope_ptr & _scope, tree::Identifier * id) {
-        if (!_scope->parent) {
+    uint32_t Compiler::resolve_upvalue(const scope_ptr & _scope, tree::Identifier * id) {
+//        if (!_scope->parent) {
+//            undefined_entity();
+//        }
+//
+//        uint32_t local = resolve_local(_scope, id);
+//        if (local != -1) {
+//            _scope->parent->locals[local].is_captured = true;
+//    //        return add_upvalue(_scope, static_cast<uint32_t>(local), true);
+//        }
+//
+//        uint32_t upvalue = resolve_upvalue(_scope->parent, id);
+//        if (upvalue != -1) {
+//    //        return add_upvalue(_scope, static_cast<uint64_t>(upvalue), false);
+//        }
+
+        undefined_entity();
+    }
+
+    uint32_t Compiler::resolve_func(const scope_ptr & _scope, tree::Identifier * id, const func_t_ptr & signature) {
+        if (_scope->functions.empty()) {
             undefined_entity();
         }
 
-        uint64_t local = resolve_local(_scope, id);
-        if (local != -1) {
-            _scope->parent->locals[local].is_captured = true;
-    //        return add_upvalue(_scope, static_cast<uint64_t>(local), true);
-        }
-
-        uint64_t upvalue = resolve_upvalue(_scope->parent, id);
-        if (upvalue != -1) {
-    //        return add_upvalue(_scope, static_cast<uint64_t>(upvalue), false);
+        for (uint32_t i = _scope->functions.size() - 1; i != (uint32_t)(0 - 1); i++) {
+            const auto & named_funcs = _scope->functions.equal_range(id->get_name());
+            for (auto it = named_funcs.first; it != named_funcs.second; it++) {
+                if (it->second.signature->equals(signature)) {
+                    return it->second.offset;
+                }
+            }
         }
 
         undefined_entity();
@@ -555,13 +614,15 @@ namespace jc::compiler {
 
     void Compiler::emit_id(tree::Identifier * id) {
         bytecode::OpCode opcode;
-        uint64_t operand;
+        uint32_t operand;
 
         try {
+            // Try local
             operand = resolve_local(scope, id);
             opcode = bytecode::OpCode::LoadLocal;
             last_type = scope->locals.at(operand).type;
         } catch (IUndefinedEntity & e) {
+            // Try global
             operand = make_string(id->get_name());
             opcode = bytecode::OpCode::LoadGlobal;
 
@@ -610,7 +671,7 @@ namespace jc::compiler {
     ///////////
     // Jumps //
     ///////////
-    int64_t Compiler::emit_jump(bytecode::OpCode jump_instr) {
+    int32_t Compiler::emit_jump(bytecode::OpCode jump_instr) {
         emit(jump_instr);
         for (int i = 0; i < bytecode::jump_space; i++) {
             emit(bytecode::U255);
@@ -618,10 +679,10 @@ namespace jc::compiler {
         return chunk.code.size() - bytecode::jump_space;
     }
 
-    void Compiler::patch_jump(int64_t offset) {
-        int64_t jump = chunk.code.size() - offset - bytecode::jump_space;
+    void Compiler::patch_jump(int32_t offset) {
+        int32_t jump = chunk.code.size() - offset - bytecode::jump_space;
 
-        if (jump > UINT64_MAX) {
+        if (jump > UINT32_MAX) {
             throw DevError("Unable to handle too large jump: " + std::to_string(jump));
         }
 
