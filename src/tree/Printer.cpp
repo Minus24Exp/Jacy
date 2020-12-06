@@ -396,7 +396,8 @@ namespace jc::tree {
                 std::cout << ", ";
             }
         }
-        std::cout << ") -> ";
+        std::cout << ") -> (";
         func_type->return_type->accept(*this);
+        std::cout << ")";
     }
 }
