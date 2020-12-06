@@ -54,7 +54,7 @@ namespace jc::compiler {
         TypeTag tag{TypeTag::None};
         std::string name;
         std::map<std::string, Field> fields;
-        std::multimap<std::string, func_t_ptr> methods;
+        std::map<std::string, func_t_ptr> methods;
 
         virtual bool equals(const type_ptr & other) = 0;
         virtual std::string to_string() = 0;

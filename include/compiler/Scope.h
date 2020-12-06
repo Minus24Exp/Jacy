@@ -47,7 +47,7 @@ namespace jc::compiler {
         std::vector<Local> locals;
 
         // Functions //
-        std::multimap<std::string, FuncLocal> functions;
+        std::map<std::string, FuncLocal> functions;
     };
 }
 

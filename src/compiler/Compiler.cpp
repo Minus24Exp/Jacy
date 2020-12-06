@@ -622,6 +622,13 @@ namespace jc::compiler {
             opcode = bytecode::OpCode::LoadLocal;
             last_type = scope->locals.at(operand).type;
         } catch (IUndefinedEntity & e) {
+            try {
+                // Try function
+
+            } catch (IUndefinedEntity & e) {
+
+            }
+
             // Try global
             operand = make_string(id->get_name());
             opcode = bytecode::OpCode::LoadGlobal;

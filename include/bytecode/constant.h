@@ -72,6 +72,20 @@ namespace jc::bytecode {
             return value;
         }
     };
+
+    struct FuncConstant : Constant {
+        explicit FuncConstant(uint32_t offset) : offset(offset) {}
+
+        uint32_t offset;
+
+        ByteList codegen() override {
+            // TODO
+        }
+
+        std::string to_string() override {
+            return std::to_string(offset);
+        }
+    };
 }
 
 #endif // CONSTANT_H
