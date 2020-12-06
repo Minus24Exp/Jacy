@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include "vm/object.h"
+#include "compiler/type.h"
 
 #include <map>
 

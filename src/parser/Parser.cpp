@@ -1106,6 +1106,9 @@ namespace jc::parser {
     ///////////
     tree::type_ptr Parser::parse_type(const std::string & expected_type) {
         const auto & pos = peek().pos;
+
+        bool paren = opt_skip(TokenType::LParen, false, true);
+
         tree::type_ptr left;
         if (is(TokenType::Id)) {
             log_parsing_entity("id_type");
@@ -1153,7 +1156,33 @@ namespace jc::parser {
         if (opt_skip(TokenType::BitOr, true, true)) {
             log_parsing_entity("union_type");
 
-            return std::make_shared<tree::UnionType>(left, parse_type("union type right-hand side"));
+            left = std::make_shared<tree::UnionType>(left, parse_type("union type right-hand side"));
+        }
+
+        if (opt_skip(TokenType::Comma, true, true)) {
+            tree::t_list params_t;
+            params_t.push_back(left);
+
+            bool first = true;
+            while (!eof()) {
+                if (opt_skip(TokenType::RParen, true, true)) {
+                    break;
+                }
+                if (first) {
+                    first = false;
+                } else {
+                    skip(TokenType::Comma, true, true, "comma ',' to separate function type parameters");
+                }
+                params_t.push_back(parse_type());
+            }
+
+            // TODO: Rewrite if tuple type will be added
+            skip(TokenType::Arrow, true, true, "arrow '->' in function type");
+            tree::type_ptr return_type = parse_type();
+            return std::make_shared<tree::FuncType>(return_type, params_t);
+        } else if (paren) {
+            // Parenthesized type
+            skip(TokenType::RParen, true, true, "closing parenthesis ')' after parenthesized type");
         }
 
         return left;

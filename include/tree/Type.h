@@ -9,6 +9,7 @@ namespace jc::tree {
     struct Type;
     struct IdType;
     using type_ptr = std::shared_ptr<Type>;
+    using t_list = std::vector<type_ptr>;
     using id_type_ptr = std::shared_ptr<IdType>;
 
     // TODO: Think if we need Type type :)
@@ -71,6 +72,18 @@ namespace jc::tree {
 
         UnionType(type_ptr left, type_ptr right)
             : Type(left->pos), left(std::move(left)), right(std::move(right)) {}
+
+        void accept(BaseVisitor & visitor) override {
+            visitor.visit(this);
+        }
+    };
+
+    struct FuncType : Type {
+        type_ptr return_type;
+        t_list params_t;
+
+        FuncType(type_ptr return_type, const t_list & params_t)
+            : Type(return_type->pos), return_type(return_type), params_t(params_t) {}
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

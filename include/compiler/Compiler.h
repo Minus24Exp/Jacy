@@ -58,6 +58,7 @@ namespace jc::compiler {
         void visit(tree::DictType * dict_type) override;
         void visit(tree::GenericType * generic_type) override;
         void visit(tree::UnionType * union_type) override;
+        void visit(tree::FuncType * func_type) override;
 
     private:
         // Bytecode //
@@ -101,7 +102,7 @@ namespace jc::compiler {
         type_ptr last_type{nullptr};
         std::map<std::string, var_ptr> globals;
         type_ptr resolve_type(tree::IdType * id);
-        type_ptr resolve_type(tree::);
+//        type_ptr resolve_type(tree::);
 
         // Errors //
         static void error(const std::string & msg, const Position & pos);

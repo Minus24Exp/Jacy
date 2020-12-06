@@ -50,6 +50,7 @@ namespace jc::tree {
         void visit(DictType * dict_type) override;
         void visit(GenericType * generic_type) override;
         void visit(UnionType * union_type) override;
+        void visit(FuncType * func_type) override;
 
     private:
         void print_indent() const;

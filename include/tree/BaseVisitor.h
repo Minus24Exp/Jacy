@@ -44,6 +44,7 @@ namespace jc::tree {
     struct DictType;
     struct GenericType;
     struct UnionType;
+    struct FuncType;
 
     class BaseVisitor {
     public:
@@ -86,6 +87,7 @@ namespace jc::tree {
         virtual void visit(DictType * dict_type) = 0;
         virtual void visit(GenericType * generic_type) = 0;
         virtual void visit(UnionType * union_type) = 0;
+        virtual void visit(FuncType * func_type) = 0;
     };
 }
 

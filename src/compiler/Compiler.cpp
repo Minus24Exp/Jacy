@@ -400,6 +400,10 @@ namespace jc::compiler {
 
     }
 
+    void Compiler::visit(tree::FuncType * func_type) {
+
+    }
+
     //////////////
     // Bytecode //
     //////////////
@@ -612,19 +616,19 @@ namespace jc::compiler {
     ///////////
     // Types //
     ///////////
-    type_ptr Compiler::resolve_type(tree::Identifier * id) {
+    type_ptr Compiler::resolve_type(tree::IdType * id) {
         scope_ptr _scope = scope;
 
         while (_scope) {
             for (const auto & local : _scope->locals) {
-                if (local.name == id->get_name()) {
+                if (local.name == id->id->get_name()) {
                     return local.type;
                 }
             }
             _scope = _scope->parent;
         }
 
-        const auto & global = globals.find(id->get_name());
+        const auto & global = globals.find(id->id->get_name());
         if (global != globals.end()) {
             return global->second->type;
         }
