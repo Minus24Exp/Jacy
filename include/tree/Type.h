@@ -67,11 +67,9 @@ namespace jc::tree {
     // UnionType stores not a vector, but left and right types
     // So, `A | B | C` is UnionType(A, UnionType(B, C))
     struct UnionType : Type {
-        type_ptr left;
-        type_ptr right;
+        t_list types;
 
-        UnionType(type_ptr left, type_ptr right)
-            : Type(left->pos), left(std::move(left)), right(std::move(right)) {}
+        explicit UnionType(const t_list & types) : Type(types.at(0)->pos), types(types) {}
 
         void accept(BaseVisitor & visitor) override {
             visitor.visit(this);

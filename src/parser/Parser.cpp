@@ -1107,10 +1107,14 @@ namespace jc::parser {
     tree::type_ptr Parser::parse_type(const std::string & expected_type) {
         tree::type_ptr left = primary_type(expected_type);
 
-        while (opt_skip(TokenType::BitOr, true, true)) {
-            log_parsing_entity("union_type");
+        if (opt_skip(TokenType::BitOr, true, true)) {
+            tree::t_list types = {left};
+            do {
+                log_parsing_entity("union_type");
+                types.push_back(primary_type("union type right-hand side"));
+            } while (opt_skip(TokenType::BitOr, true, true));
 
-            left = std::make_shared<tree::UnionType>(left, primary_type("union type right-hand side"));
+            left = std::make_shared<tree::UnionType>(types);
         }
 
         return left;
@@ -1139,23 +1143,22 @@ namespace jc::parser {
                 }
                 skip(TokenType::GT, true, true, "'>' to end generic type arguments", true);
                 return std::make_shared<tree::GenericType>(id_type, types);
-            } else {
-                return id_type;
             }
+
+            return id_type;
         } else if (opt_skip(TokenType::LBracket, false, true)) {
             log_parsing_entity("list_type");
-
-            return std::make_shared<tree::ListType>(pos, parse_type("list type"));
+            const auto & list_type = parse_type("list type");
             skip(TokenType::RBracket, true, true, "closing bracket ']' at end of list type", true);
+            return std::make_shared<tree::ListType>(pos, list_type);
         } else if (opt_skip(TokenType::LBrace, true, true)) {
             log_parsing_entity("dict_type");
 
             const auto & key = parse_type("dictionary key type");
             skip(TokenType::Colon, true, true, "colon ':' to separate key and value in dictionary type");
             const auto & val = parse_type("dictionary value type");
-            return std::make_shared<tree::DictType>(pos, key, val);
-
             skip(TokenType::RBrace, true, true, "closing curly bracket '}' at end of dictionary type", true);
+            return std::make_shared<tree::DictType>(pos, key, val);
         } else if (opt_skip(TokenType::LParen, true, true)) {
             bool is_func_t = false;
             tree::t_list params_t;
@@ -1188,49 +1191,9 @@ namespace jc::parser {
             // primary_type because type cannot be union without parentheses
             tree::type_ptr return_type = primary_type("return type");
             return std::make_shared<tree::FuncType>(return_type, params_t);
-        } else {
-            expected_error(expected_type);
         }
 
-//        if (paren) {
-//            if (!left && is_after_nl(TokenType::LParen)) {
-//                return parse_type();
-//            }
-//
-//            if (opt_skip(TokenType::Comma, true, true)) {
-//                // Multiple-parameter function type
-//                tree::t_list params_t;
-//                params_t.push_back(left);
-//
-//                bool first = true;
-//                while (!eof()) {
-//                    if (opt_skip(TokenType::RParen, true, true)) {
-//                        break;
-//                    }
-//                    if (first) {
-//                        first = false;
-//                    } else {
-//                        skip(TokenType::Comma, true, true, "comma ',' to separate function type parameters");
-//                    }
-//                    params_t.push_back(parse_type());
-//                }
-//
-//                // TODO: Rewrite if tuple type will be added
-//                skip(TokenType::Arrow, true, true, "arrow '->' in function type");
-//                tree::type_ptr return_type = parse_type();
-//                left = std::make_shared<tree::FuncType>(return_type, params_t);
-//            } else {
-//                skip(TokenType::RParen, true, true, "closing parenthesis ')'");
-//
-//                if (opt_skip(TokenType::Arrow, true, true)) {
-//                    // Single-parameter function type
-//                    tree::type_ptr return_type = parse_type();
-//                    return std::make_shared<tree::FuncType>(return_type, tree::t_list{left});
-//                }
-//            }
-//        } else {
-//            expected_error(expected_type);
-//        }
+        expected_error(expected_type);
     }
 
     ////////////

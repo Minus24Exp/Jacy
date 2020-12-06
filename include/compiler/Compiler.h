@@ -102,7 +102,6 @@ namespace jc::compiler {
         type_ptr last_type{nullptr};
         std::map<std::string, var_ptr> globals;
         type_ptr resolve_type(tree::IdType * id);
-//        type_ptr resolve_type(tree::);
 
         // Errors //
         static void error(const std::string & msg, const Position & pos);

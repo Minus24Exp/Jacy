@@ -383,9 +383,12 @@ namespace jc::tree {
     }
 
     void Printer::visit(UnionType * union_type) {
-        union_type->left->accept(*this);
-        std::cout << " | ";
-        union_type->right->accept(*this);
+        for (size_t i = 0; i < union_type->types.size(); i++) {
+            union_type->types.at(i)->accept(*this);
+            if (i < union_type->types.size() - 1) {
+                std::cout << " | ";
+            }
+        }
     }
 
     void Printer::visit(FuncType * func_type) {

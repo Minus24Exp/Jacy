@@ -381,23 +381,40 @@ namespace jc::compiler {
     // tree::Types //
     /////////////////
     void Compiler::visit(tree::IdType * id_type) {
-
+        last_type = resolve_type(id_type);
     }
 
     void Compiler::visit(tree::ListType * list_type) {
-
+        list_type->type->accept(*this);
+        last_type = ListType::get(last_type);
     }
 
     void Compiler::visit(tree::DictType * dict_type) {
+        dict_type->key->accept(*this);
+        const auto & key_t = last_type;
+        dict_type->val->accept(*this);
+        const auto & val_t = last_type;
 
+        last_type = DictType::get(key_t, val_t);
     }
 
     void Compiler::visit(tree::GenericType * generic_type) {
-
+        const auto & generic = resolve_type(generic_type->id.get());
+        t_list types;
+        for (const auto & type : generic_type->types) {
+            type->accept(*this);
+            types.push_back(last_type);
+        }
+        last_type = GenericType::get(generic, types);
     }
 
     void Compiler::visit(tree::UnionType * union_type) {
-
+        t_list types;
+        for (const auto & type : union_type->types) {
+            type->accept(*this);
+            types.push_back(last_type);
+        }
+        last_type = UnionType::get(types);
     }
 
     void Compiler::visit(tree::FuncType * func_type) {
