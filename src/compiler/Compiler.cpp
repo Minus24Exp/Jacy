@@ -76,9 +76,16 @@ namespace jc::compiler {
     }
 
     void Compiler::visit(tree::FuncDecl * func_decl) {
+        const auto & name = func_decl->id->get_name();
 
-    //
-    //    last_type = std::make_shared<FuncType>(return_type, arg_types);
+        func_param_t_list params;
+        for (const auto & param : func_decl->params) {
+
+        }
+
+        const func_t_ptr signature;
+
+        last_type = nullptr;
     }
 
     void Compiler::visit(tree::ReturnStmt * expr_stmt) {
@@ -486,7 +493,7 @@ namespace jc::compiler {
     // Variables //
     ///////////////
     uint64_t Compiler::resolve_local(const scope_ptr & _scope, tree::Identifier * id) {
-        if (_scope->locals.size() == 0) {
+        if (_scope->locals.empty()) {
             // local size is unsigned, so I cannot subtract it
             undefined_entity();
         }

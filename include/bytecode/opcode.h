@@ -1,11 +1,13 @@
 #ifndef OPCODE_H
 #define OPCODE_H
 
+#include "parser/Token.h"
+#include "tree/Stmt/VarDecl.h"
+
 #include <utility>
 #include <vector>
 #include <cstdint>
-#include "parser/Token.h"
-#include "tree/Stmt/VarDecl.h"
+#include <map>
 
 namespace jc::bytecode {
 
@@ -102,7 +104,7 @@ namespace jc::bytecode {
     struct Chunk {
         ByteList code;
         std::vector<constant_ptr> constant_pool;
-        std::vector<>
+        std::map<std::string, Function> functions;
 //        std::vector<Attribute> attributes;
     };
 }

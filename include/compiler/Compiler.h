@@ -100,7 +100,8 @@ namespace jc::compiler {
         // TODO: ? Maybe add reset_type and set_type funcs for explicitly
         type_ptr last_type{nullptr};
         std::map<std::string, var_ptr> globals;
-        type_ptr resolve_type(tree::Identifier * id);
+        type_ptr resolve_type(tree::IdType * id);
+        type_ptr resolve_type(tree::);
 
         // Errors //
         static void error(const std::string & msg, const Position & pos);

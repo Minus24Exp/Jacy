@@ -31,6 +31,9 @@ namespace jc::compiler {
         Int,
         Float,
         String,
+        List,
+        Dict,
+        Generic,
         Func,
         NativeFunc,
         Class,
@@ -53,7 +56,7 @@ namespace jc::compiler {
         std::map<std::string, Field> fields;
         std::multimap<std::string, func_t_ptr> methods;
 
-        virtual bool compare(const type_ptr & other) = 0;
+        virtual bool equals(const type_ptr & other) = 0;
         virtual std::string to_string() = 0;
 
         // Mangling //
@@ -68,7 +71,7 @@ namespace jc::compiler {
 
         static type_ptr get();
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -78,7 +81,7 @@ namespace jc::compiler {
 
         static type_ptr get();
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -88,7 +91,7 @@ namespace jc::compiler {
 
         static type_ptr get();
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -98,7 +101,7 @@ namespace jc::compiler {
 
         static type_ptr get();
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -108,7 +111,7 @@ namespace jc::compiler {
 
         static type_ptr get();
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -118,7 +121,7 @@ namespace jc::compiler {
 
         static type_ptr get();
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -128,7 +131,7 @@ namespace jc::compiler {
 
         static type_ptr get();
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -141,7 +144,7 @@ namespace jc::compiler {
 
         static func_param_t_ptr get(const type_ptr & type, bool has_default_val);
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -161,7 +164,7 @@ namespace jc::compiler {
         static func_t_ptr get_nf_t(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator = false);
         static func_t_ptr get_nf_op_t(const type_ptr & return_type, const func_param_t_list & arg_types);
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
 
         // Note: Use this function mostly always instead of overridden compare
         bool compare(const type_ptr & other, bool is_op_optional);
@@ -181,7 +184,7 @@ namespace jc::compiler {
 
         static type_ptr get();
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
@@ -193,10 +196,49 @@ namespace jc::compiler {
 
         static type_ptr get(const type_ptr & vararg_type);
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };
+
+    struct ListType : Type {
+        explicit ListType(const type_ptr & type);
+
+        type_ptr type;
+
+        static type_ptr get(const type_ptr & type);
+
+        bool equals(const type_ptr & other) override;
+        std::string to_string() override;
+        std::string mangle() override;
+    };
+
+    struct DictType : Type {
+        DictType(const type_ptr & key, const type_ptr & val);
+
+        type_ptr key;
+        type_ptr val;
+
+        static type_ptr get(const type_ptr & key, const type_ptr & value);
+
+        bool equals(const type_ptr & other) override;
+        std::string to_string() override;
+        std::string mangle() override;
+    };
+
+    struct GenericType : Type {
+        GenericType(const type_ptr & generic, const t_list & types);
+
+        type_ptr generic;
+        t_list types;
+
+        static type_ptr get(const type_ptr & generic, const t_list & types);
+
+        bool equals(const type_ptr & other) override;
+        std::string to_string() override;
+        std::string mangle() override;
+    };
+
 
     struct UnionType : Type {
         explicit UnionType(const t_list & types);
@@ -206,7 +248,7 @@ namespace jc::compiler {
         static type_ptr get(const t_list & types);
         static type_ptr get_nullable_t(const type_ptr & type);
 
-        bool compare(const type_ptr & other) override;
+        bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
     };

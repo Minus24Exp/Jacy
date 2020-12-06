@@ -32,7 +32,7 @@ namespace jc::compiler {
         return nothing_t;
     }
 
-    bool Nothing::compare(const type_ptr & other) {
+    bool Nothing::equals(const type_ptr & other) {
         return true; // Stub
     }
 
@@ -52,7 +52,7 @@ namespace jc::compiler {
         return unit_t;
     }
 
-    bool UnitType::compare(const type_ptr & other) {
+    bool UnitType::equals(const type_ptr & other) {
         return other->tag == TypeTag::Unit;
     }
 
@@ -72,7 +72,7 @@ namespace jc::compiler {
         return null_t;
     }
 
-    bool NullType::compare(const type_ptr & other) {
+    bool NullType::equals(const type_ptr & other) {
         return other->tag == TypeTag::Null;
     }
 
@@ -92,7 +92,7 @@ namespace jc::compiler {
         return bool_t;
     }
 
-    bool BoolType::compare(const type_ptr & other) {
+    bool BoolType::equals(const type_ptr & other) {
         return other->tag == TypeTag::Bool;
     }
 
@@ -112,7 +112,7 @@ namespace jc::compiler {
         return int_t;
     }
 
-    bool IntType::compare(const type_ptr & other) {
+    bool IntType::equals(const type_ptr & other) {
         return other->tag == TypeTag::Int;
     }
 
@@ -132,7 +132,7 @@ namespace jc::compiler {
         return float_t;
     }
 
-    bool FloatType::compare(const type_ptr & other) {
+    bool FloatType::equals(const type_ptr & other) {
         return other->tag == TypeTag::Float;
     }
 
@@ -152,7 +152,7 @@ namespace jc::compiler {
         return string_t;
     }
 
-    bool StringType::compare(const type_ptr & other) {
+    bool StringType::equals(const type_ptr & other) {
         return other->tag == TypeTag::String;
     }
 
@@ -172,8 +172,8 @@ namespace jc::compiler {
         return std::make_shared<FuncParamType>(type, has_default_val);
     }
 
-    bool FuncParamType::compare(const type_ptr & other) {
-        return type->compare(other);
+    bool FuncParamType::equals(const type_ptr & other) {
+        return type->equals(other);
     }
 
     std::string FuncParamType::to_string() {
@@ -186,10 +186,10 @@ namespace jc::compiler {
 
     // Func //
     FuncType::FuncType(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator, TypeTag callable_type)
-            : Type(callable_type),
-              return_type(return_type),
-              arg_types(arg_types),
-              is_operator(is_operator) {}
+        : Type(callable_type),
+          return_type(return_type),
+          arg_types(arg_types),
+          is_operator(is_operator) {}
 
     func_t_ptr FuncType::get(const type_ptr & return_type, const func_param_t_list & arg_types, bool is_operator, TypeTag callable_type) {
         return std::make_shared<FuncType>(return_type, arg_types, is_operator, callable_type);
@@ -203,7 +203,7 @@ namespace jc::compiler {
         return get_nf_t(return_type, arg_types, true);
     }
 
-    bool FuncType::compare(const type_ptr & other) {
+    bool FuncType::equals(const type_ptr & other) {
         compare(other, false);
     }
 
@@ -224,7 +224,7 @@ namespace jc::compiler {
 
     bool FuncType::compare(const type_ptr & _return_type, const func_param_t_list & other_arg_types) {
         // Return type
-        if (!return_type->compare(_return_type)) {
+        if (!return_type->equals(_return_type)) {
             return false;
         }
         return compare(other_arg_types);
@@ -241,18 +241,18 @@ namespace jc::compiler {
             type_ptr vararg_t = cur_t->tag == TypeTag::VarargTag ? cur_t : nullptr;
             if (vararg_t) {
                 const auto & cmp_t = other_arg_types.at(index);
-                if (!vararg_t->compare(cmp_t)) {
+                if (!vararg_t->equals(cmp_t)) {
                     return false;
                 }
-                while (index < other_arg_types.size() && vararg_t->compare(cmp_t)) {
+                while (index < other_arg_types.size() && vararg_t->equals(cmp_t)) {
                     index++;
                 }
                 // If next type after vararg is the same as vararg_t, go to previous type
                 if (arg_t_i + 1 < arg_types.size()
-                    && vararg_t->compare(arg_types.at(arg_t_i + 1))) {
+                    && vararg_t->equals(arg_types.at(arg_t_i + 1))) {
                     index--;
                 }
-            } else if (!cur_t->compare(other_arg_types.at(index))) {
+            } else if (!cur_t->equals(other_arg_types.at(index))) {
                 return false;
             } else {
                 // Go to next if not vararg, but single type was right
@@ -300,7 +300,7 @@ namespace jc::compiler {
         return any_t;
     }
 
-    bool Any::compare(const type_ptr & other) {
+    bool Any::equals(const type_ptr & other) {
         return true;
     }
 
@@ -319,8 +319,8 @@ namespace jc::compiler {
         return std::make_shared<VarargType>(vararg_type);
     }
 
-    bool VarargType::compare(const type_ptr & other) {
-        return vararg_type->compare(other);
+    bool VarargType::equals(const type_ptr & other) {
+        return vararg_type->equals(other);
     }
 
     std::string VarargType::to_string() {
@@ -329,6 +329,108 @@ namespace jc::compiler {
 
     std::string VarargType::mangle() {
         return "[vararg:" + vararg_type->mangle() + "]";
+    }
+
+    // ListType //
+    ListType::ListType(const type_ptr & type) : Type(TypeTag::List), type(type) {}
+
+    type_ptr ListType::get(const type_ptr & type) {
+        return std::make_shared<ListType>(type);
+    }
+
+    bool ListType::equals(const type_ptr & other) {
+        if (other->tag != TypeTag::List) {
+            return false;
+        }
+
+        const auto & other_list_t = std::static_pointer_cast<ListType>(other);
+        return type->equals(other_list_t->type);
+    }
+
+    std::string ListType::to_string() {
+        return "[" + type->to_string() + "]";
+    }
+
+    std::string ListType::mangle() {
+        return "[" + type->mangle() + "]";
+    }
+
+    // DictType //
+    DictType::DictType(const type_ptr & key, const type_ptr & val)
+            : Type(TypeTag::Dict), key(key), val(val) {}
+
+    type_ptr DictType::get(const type_ptr & key, const type_ptr & value) {
+        return std::make_shared<DictType>(key, value);
+    }
+
+    bool DictType::equals(const type_ptr & other) {
+        if (other->tag != TypeTag::Dict) {
+            return false;
+        }
+
+        const auto & other_dict_t = std::static_pointer_cast<DictType>(other);
+        return key->equals(other_dict_t->key) && val->equals(other_dict_t->val);
+    }
+
+    std::string DictType::to_string() {
+        return "{" + key->to_string() + ": " + val->to_string() + "}";
+    }
+
+    std::string DictType::mangle() {
+        return "{" + key->mangle() + ":" + val->mangle() + "}";
+    }
+
+    // GenericType //
+    GenericType::GenericType(const type_ptr & generic, const t_list & types)
+            : Type(TypeTag::Generic), generic(generic), types(types) {}
+
+    type_ptr GenericType::get(const type_ptr & generic, const t_list & types) {
+        return std::make_shared<GenericType>(generic, types);
+    }
+
+    bool GenericType::equals(const type_ptr & other) {
+        if (other->tag != TypeTag::Generic) {
+            return false;
+        }
+
+        const auto & other_generic_t = std::static_pointer_cast<GenericType>(other);
+        if (!generic->equals(other_generic_t)) {
+            return false;
+        }
+
+        if (types.size() != other_generic_t->types.size()) {
+            return false;
+        }
+
+        for (size_t i = 0; i < types.size(); i++) {
+            if (!types.at(i)->equals(other_generic_t->types.at(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    std::string GenericType::to_string() {
+        std::string str = generic->to_string() + "<";
+        for (size_t i = 0; i < types.size(); i++) {
+            str += types.at(i)->to_string();
+            if (i < types.size() - 1) {
+                str += ", ";
+            }
+        }
+        return str + ">";
+    }
+
+    std::string GenericType::mangle() {
+        std::string str = generic->mangle() + "<";
+        for (size_t i = 0; i < types.size(); i++) {
+            str += types.at(i)->mangle();
+            if (i < types.size() - 1) {
+                str += ",";
+            }
+        }
+        return str + ">";
     }
 
     // Union //
@@ -342,26 +444,39 @@ namespace jc::compiler {
         return std::make_shared<UnionType>(t_list{type, NullType::get()});
     }
 
-    bool UnionType::compare(const type_ptr & other) {
-        if (other->tag == TypeTag::Union) {
-            const auto & other_union = std::static_pointer_cast<UnionType>(other);
-            // TODO: Type inheritance check
-            for (int i = 0; i < types.size(); i++) {
-                for (int j = i; j < other_union->types.size(); j++) {
-                    if (types[i]->compare(other_union->types[j])) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            for (const auto & type : types) {
-                if (type->compare(other)) {
-                    return true;
-                }
+    bool UnionType::equals(const type_ptr & other) {
+        if (other->tag != TypeTag::Union) {
+            return false;
+        }
+
+        const auto & other_union_t = std::static_pointer_cast<UnionType>(other);
+        for (size_t i = 0; i < types.size(); i++) {
+            if (!types.at(i)->equals(other_union_t->types.at(i))) {
+                return false;
             }
         }
 
-        return false;
+        return true;
+
+//        if (other->tag == TypeTag::Union) {
+//            const auto & other_union = std::static_pointer_cast<UnionType>(other);
+//            // TODO: Type inheritance check
+//            for (int i = 0; i < types.size(); i++) {
+//                for (int j = i; j < other_union->types.size(); j++) {
+//                    if (types[i]->compare(other_union->types[j])) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        } else {
+//            for (const auto & type : types) {
+//                if (type->compare(other)) {
+//                    return true;
+//                }
+//            }
+//        }
+//
+//        return false;
     }
 
     std::string UnionType::to_string() {
