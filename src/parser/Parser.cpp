@@ -4,11 +4,11 @@ namespace jc::parser {
     Parser::Parser() : log("Parser", options.log), index(0) {}
 
     Token Parser::peek() {
-        return tokens[index];
+        return tokens.at(index);
     }
 
     Token Parser::advance() {
-        return tokens[++index];
+        return tokens.at(++index);
     }
 
     /////////////
@@ -1159,30 +1159,38 @@ namespace jc::parser {
             left = std::make_shared<tree::UnionType>(left, parse_type("union type right-hand side"));
         }
 
-        if (opt_skip(TokenType::Comma, true, true)) {
-            tree::t_list params_t;
-            params_t.push_back(left);
+        if (paren) {
+            if (opt_skip(TokenType::Comma, true, true)) {
+                // Multiple-parameter function type
+                tree::t_list params_t;
+                params_t.push_back(left);
 
-            bool first = true;
-            while (!eof()) {
-                if (opt_skip(TokenType::RParen, true, true)) {
-                    break;
+                bool first = true;
+                while (!eof()) {
+                    if (opt_skip(TokenType::RParen, true, true)) {
+                        break;
+                    }
+                    if (first) {
+                        first = false;
+                    } else {
+                        skip(TokenType::Comma, true, true, "comma ',' to separate function type parameters");
+                    }
+                    params_t.push_back(parse_type());
                 }
-                if (first) {
-                    first = false;
-                } else {
-                    skip(TokenType::Comma, true, true, "comma ',' to separate function type parameters");
-                }
-                params_t.push_back(parse_type());
+
+                // TODO: Rewrite if tuple type will be added
+                skip(TokenType::Arrow, true, true, "arrow '->' in function type");
+                tree::type_ptr return_type = parse_type();
+                return std::make_shared<tree::FuncType>(return_type, params_t);
             }
 
-            // TODO: Rewrite if tuple type will be added
-            skip(TokenType::Arrow, true, true, "arrow '->' in function type");
-            tree::type_ptr return_type = parse_type();
-            return std::make_shared<tree::FuncType>(return_type, params_t);
-        } else if (paren) {
-            // Parenthesized type
-            skip(TokenType::RParen, true, true, "closing parenthesis ')' after parenthesized type");
+            skip(TokenType::RParen, true, true, "closing parenthesis ')'");
+
+            if (opt_skip(TokenType::Arrow, true, true)) {
+                // Single-parameter function type
+                tree::type_ptr return_type = parse_type();
+                return std::make_shared<tree::FuncType>(return_type, tree::t_list{left});
+            }
         }
 
         return left;

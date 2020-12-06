@@ -1,1 +1,1 @@
-print('kek')
+func a(f: (int) -> string): unit => {}
