@@ -17,5 +17,5 @@ func myError(msg: string): nothing {
 }
 ```
 
-| [< **Types**](./index.md) | [`unit` >](./unit.md) |
+| [< **Types**](index.md) | [`unit` >](unit.md) |
 |:---:|:---:|

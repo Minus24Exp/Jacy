@@ -4,17 +4,11 @@
 #include "tree/Expr/Identifier.h"
 #include "tree/Stmt/Stmt.h"
 #include "tree/Type.h"
+#include "common/common.h"
 
 #include <utility>
 
 namespace jc::tree {
-    // Note: I used enum for declaration type, but not a bool
-    //  because I want to add `const` in the future
-
-    // TODO: Add types
-
-    enum class VarDeclKind {Var, Val};
-
     struct VarDecl : Stmt {
         VarDeclKind kind;
         id_ptr id;

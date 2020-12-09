@@ -90,10 +90,10 @@ namespace jc::compiler {
         // Variables //
         uint32_t resolve_local(const scope_ptr & _scope, tree::Identifier * id);
         uint32_t resolve_upvalue(const scope_ptr & _scope, tree::Identifier * id);
-        uint32_t resolve_func(const scope_ptr & _scope, tree::Identifier * id, const func_t_ptr & signature);
+        uint32_t resolve_func(const std::map<std::string, FuncLocal> & funcs, tree::Identifier * id, scope_ptr parent = nullptr);
         void emit_id(tree::Identifier * id);
-        void declare_var(tree::VarDeclKind kind, type_ptr type, tree::Identifier * id);
-        void add_local(tree::VarDeclKind kind, type_ptr type, const std::string & name);
+        void declare_var(VarDeclKind kind, type_ptr type, tree::Identifier * id);
+        void add_local(VarDeclKind kind, type_ptr type, const std::string & name);
 
         // Jumps //
         int32_t emit_jump(bytecode::OpCode jump_instr);

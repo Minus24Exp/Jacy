@@ -18,5 +18,5 @@ func foo(): unit {
 }
 ```
 
-| [< `nothing`](./nothing.md) | [`null` >](./null.md) |
+| [< `nothing`](nothing.md) | [`null` >](null.md) |
 |:---:|:---:|

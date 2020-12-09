@@ -6,9 +6,9 @@
 
 > Pure C++ implementation
 
-### Docs - WIP (Please do not read them -- read [specification](docs/spec/index.md))
+### Docs - WIP (Please do not read them -- read [specification](docs/spec/v0/index.md))
 
-| [__Specification (WIP)__](docs/spec/index.md) |
+| [__Specification (WIP)__](docs/spec/v0/index.md) |
 | :--- |
 | [__Documentation (*In progress*)__](docs/en_docs/getting_started.md) |
 | [__Документация (*В процессе*)__](docs/ru_docs/getting_started.md) |

@@ -43,7 +43,7 @@ namespace jc::compiler {
     };
 
     struct Field {
-        tree::VarDeclKind kind;
+        VarDeclKind kind;
         type_ptr type;
 //        std::string name;
     };

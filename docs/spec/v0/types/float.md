@@ -17,5 +17,5 @@ Examples:
 - `float64`/`double` - 64-bit floating-point number
 
 
-| [< `int`](./int.md) | [Specification >](../index.md) |
+| [< `int`](int.md) | [Specification >](../index.md) |
 |:---:|:---:|

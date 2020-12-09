@@ -4,5 +4,5 @@ Boolean type as in all over languages represents only two values - `true` or `fa
 ### Inference
 ?
 
-| [< `null`](./null.md) | [`int` >](./int.md) |
+| [< `null`](null.md) | [`int` >](int.md) |
 |:---:|:---:|

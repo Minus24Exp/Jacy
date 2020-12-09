@@ -14,7 +14,7 @@ namespace jc::globals {
 
         // TODO: ? Kind ?
         struct Global {
-            tree::VarDeclKind kind;
+            VarDeclKind kind;
             compiler::type_ptr type;
             vm::object_ptr value;
         };
@@ -34,7 +34,7 @@ namespace jc::globals {
     }
 
     const std::map<std::string, G::Global> jcGlobals = {
-        {"print", {tree::VarDeclKind::Val, G::print_signature, make_nf("print", G::print)}},
+        {"print", {VarDeclKind::Val, G::print_signature, make_nf("print", G::print)}},
     };
 }
 

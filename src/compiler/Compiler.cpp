@@ -3,7 +3,7 @@
 namespace jc::compiler {
     Compiler::Compiler() : scope_depth(0), log("Compiler", options.log) {
         for (const auto & g : globals::jcGlobals) {
-            globals[g.first] = std::make_shared<Variable>(tree::VarDeclKind::Val, g.second.type);
+            globals[g.first] = std::make_shared<Variable>(VarDeclKind::Val, g.second.type);
         }
     }
 
@@ -34,7 +34,7 @@ namespace jc::compiler {
     }
 
     void Compiler::visit(tree::VarDecl * var_decl) {
-        tree::VarDeclKind kind = var_decl->kind;
+        VarDeclKind kind = var_decl->kind;
 
         // TODO: Add real types (now any)
         type_ptr type = Any::get();
@@ -595,18 +595,15 @@ namespace jc::compiler {
         undefined_entity();
     }
 
-    uint32_t Compiler::resolve_func(const scope_ptr & _scope, tree::Identifier * id, const func_t_ptr & signature) {
-        if (_scope->functions.empty()) {
-            undefined_entity();
+    uint32_t Compiler::resolve_func(const std::map<std::string, FuncLocal> & funcs, tree::Identifier * id, scope_ptr parent) {
+        for (const auto & func : funcs) {
+            if (func.first == id->get_name()) {
+                return func.second.offset;
+            }
         }
 
-        for (uint32_t i = _scope->functions.size() - 1; i != (uint32_t)(0 - 1); i++) {
-            const auto & named_funcs = _scope->functions.equal_range(id->get_name());
-            for (auto it = named_funcs.first; it != named_funcs.second; it++) {
-                if (it->second.signature->equals(signature)) {
-                    return it->second.offset;
-                }
-            }
+        if (parent) {
+            return resolve_func(parent->functions, id);
         }
 
         undefined_entity();
@@ -624,6 +621,8 @@ namespace jc::compiler {
         } catch (IUndefinedEntity & e) {
             try {
                 // Try function
+                operand = resolve_func(scope->functions, id, scope->parent);
+                opcode 
 
             } catch (IUndefinedEntity & e) {
 
@@ -650,7 +649,7 @@ namespace jc::compiler {
         emit(operand);
     }
 
-    void Compiler::declare_var(tree::VarDeclKind kind, type_ptr type, tree::Identifier * id) {
+    void Compiler::declare_var(VarDeclKind kind, type_ptr type, tree::Identifier * id) {
         if (scope_depth == 0) {
             return;
         }
@@ -667,7 +666,7 @@ namespace jc::compiler {
         add_local(kind, type, id->get_name());
     }
 
-    void Compiler::add_local(tree::VarDeclKind kind, type_ptr type, const std::string & name) {
+    void Compiler::add_local(VarDeclKind kind, type_ptr type, const std::string & name) {
         if (scope->locals.size() == UINT32_MAX) {
             throw DevError("Unable to handle too many locals");
         }

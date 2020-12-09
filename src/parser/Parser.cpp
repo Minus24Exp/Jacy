@@ -239,11 +239,11 @@ namespace jc::parser {
 
         Position var_decl_pos = peek().pos;
 
-        tree::VarDeclKind decl = tree::VarDeclKind::Var;
+        VarDeclKind decl = VarDeclKind::Var;
         if (is(TokenType::Var)) {
-            decl = tree::VarDeclKind::Var;
+            decl = VarDeclKind::Var;
         } else if (is(TokenType::Val)) {
-            decl = tree::VarDeclKind::Val;
+            decl = VarDeclKind::Val;
         } else {
             expected_error("`var` or `val` keyword");
         }

@@ -37,5 +37,5 @@ Several sized integer are available:
 *Note*: Likely 128-bit sized integers won't be implemented when other sized integers will be implemented.
 
 
-| [< `bool`](./bool.md) | [`float` >](./float.md) |
+| [< `bool`](bool.md) | [`float` >](float.md) |
 |:---:|:---:|

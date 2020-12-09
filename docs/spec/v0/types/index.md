@@ -10,13 +10,13 @@ Despite everything is an object in *Jacy* and types are classes, all built-in ty
 
 | Types |
 |:-----:|
-| [`nothing`](./nothing.md) |
-| [`unit`](./unit.md)  |
-| [`null`](./null.md) |
-| [`bool`](./bool.md) |
-| [`int`](./int.md) |
-| [`float`](./float.md) |
+| [`nothing`](nothing.md) |
+| [`unit`](unit.md)  |
+| [`null`](null.md) |
+| [`bool`](bool.md) |
+| [`int`](int.md) |
+| [`float`](float.md) |
 
 
-| [< Specification](../index.md) | [ `nothing` > ](./nothing.md) |
+| [< Specification](../index.md) | [ `nothing` > ](nothing.md) |
 |:---:|:---:|
