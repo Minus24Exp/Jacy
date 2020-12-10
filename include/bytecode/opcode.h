@@ -84,6 +84,7 @@ namespace jc::bytecode {
         StoreGlobal,
         LoadLocal,
         StoreLocal,
+        LoadFunc,
 
         Jump,
         JumpFalse,
@@ -98,7 +99,8 @@ namespace jc::bytecode {
     };
 
     struct Function {
-        uint32_t name_index;
+        uint32_t name_offset;
+        std::vector<uint32_t> param_names;
         ByteList code;
     };
 

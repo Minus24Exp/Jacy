@@ -149,6 +149,8 @@ namespace jc::compiler {
         bool equals(const type_ptr & other) override;
         std::string to_string() override;
         std::string mangle() override;
+
+        static std::string list_to_string(const func_param_t_list & param_t_list);
     };
 
     struct FuncType : Type {

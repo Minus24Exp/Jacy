@@ -164,7 +164,7 @@ namespace jc::compiler {
         return "String";
     }
 
-    // FuncParam //
+    // FuncParamType //
     FuncParamType::FuncParamType(const type_ptr & type, bool has_default_val)
         : Type(type->tag), type(type), has_default_val(has_default_val) {}
 
@@ -182,6 +182,14 @@ namespace jc::compiler {
 
     std::string FuncParamType::mangle() {
         return type->mangle();
+    }
+
+    std::string FuncParamType::list_to_string(const func_param_t_list & param_t_list) {
+        std::string str;
+        for (const auto & param_t : param_t_list) {
+            str += param_t->to_string();
+        }
+        return str;
     }
 
     // Func //

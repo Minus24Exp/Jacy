@@ -10,8 +10,10 @@
 
 namespace jc::compiler {
     struct Scope;
+    struct Closure;
     struct Variable;
     using scope_ptr = std::shared_ptr<Scope>;
+    using closure_ptr = std::shared_ptr<Closure>;
     using var_ptr = std::shared_ptr<Variable>;
 
     // Base class for Local and Compile-time global
@@ -31,15 +33,6 @@ namespace jc::compiler {
         bool is_captured{false};
     };
 
-    struct FuncLocal {
-        FuncLocal(uint32_t offset, uint32_t name_offset, const func_t_ptr & signature)
-            : offset(offset), name_offset(name_offset), signature(signature) {}
-
-        uint32_t offset;
-        uint32_t name_offset;
-        func_t_ptr signature;
-    };
-
     struct Scope {
         explicit Scope(scope_ptr parent = nullptr) : parent(parent) {}
 
@@ -48,7 +41,22 @@ namespace jc::compiler {
         std::vector<Local> locals;
 
         // Functions //
-        std::map<std::string, FuncLocal> functions;
+        std::map<std::string, closure_ptr> functions;
+    };
+
+    struct Closure : Scope {
+        Closure(scope_ptr parent,
+                uint32_t offset,
+                uint32_t name_offset,
+                const func_t_ptr & signature)
+            : Scope(parent),
+              offset(offset),
+              name_offset(name_offset),
+              signature(signature) {}
+
+        uint32_t offset;
+        uint32_t name_offset;
+        func_t_ptr signature;
     };
 }
 
