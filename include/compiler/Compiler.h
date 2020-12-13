@@ -81,22 +81,21 @@ namespace jc::compiler {
         uint32_t make_string(const std::string & string_val);
 
         // Scope //
-        bytecode::function_ptr cur_func;
         uint32_t scope_depth;
         scope_ptr scope;
-        void enter_scope(scope_ptr nested = nullptr);
-        void exit_scope();
+        void enter_scope();
+        scope_ptr exit_scope();
+        std::shared_ptr<bytecode::FuncConstant> current_function;
 
         std::map<std::string, var_ptr> globals;
-        std::map<std::string, closure_ptr> functions;
 
         // Variables //
-        uint32_t resolve_local(const scope_ptr & _scope, tree::Identifier * id);
-        uint32_t resolve_upvalue(const scope_ptr & _scope, tree::Identifier * id);
-        uint32_t resolve_func(const std::map<std::string, closure_ptr> & funcs, tree::Identifier * id, scope_ptr parent = nullptr);
+        int64_t resolve_local(const scope_ptr & _scope, tree::Identifier * id);
+        int64_t resolve_upvalue(const scope_ptr & _scope, tree::Identifier * id);
         void emit_id(tree::Identifier * id);
         void declare_var(VarDeclKind kind, type_ptr type, tree::Identifier * id);
         void add_local(VarDeclKind kind, type_ptr type, const std::string & name);
+        uint32_t add_upvalue(scope_ptr scope, uint32_t offset, bool is_local);
 
         // Jumps //
         int32_t emit_jump(bytecode::OpCode jump_instr);

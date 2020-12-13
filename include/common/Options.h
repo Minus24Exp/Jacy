@@ -46,7 +46,7 @@ namespace jc::common {
     // Jacy main options //
     struct JacyOptions {
         bool debug{false};
-        RunLevel run_level{RunLevel::Vm}; // Note: For parser debug only
+        RunLevel run_level{RunLevel::Compiler}; // Note: For parser debug only
         std::string main_file;
 
         LoggerOptions log = {

@@ -8,8 +8,7 @@
 
 namespace jc::bytecode {
     struct Constant {
-        // Constant receive type only on Compile-time, separate VM must use stub for compiler::type_ptr
-        explicit Constant() {}
+        Constant() = default;
 
         virtual ByteList codegen() = 0;
 
@@ -74,16 +73,21 @@ namespace jc::bytecode {
     };
 
     struct FuncConstant : Constant {
-        explicit FuncConstant(uint32_t offset) : offset(offset) {}
+        FuncConstant(uint32_t name_offset, uint32_t arg_count, uint32_t upvalue_count, ByteList code)
+            : name_offset(name_offset), arg_count(arg_count), upvalue_count(upvalue_count), code(std::move(code)) {}
 
-        uint32_t offset;
+        uint32_t name_offset;
+        uint32_t arg_count;
+        uint32_t upvalue_count;
+        ByteList code;
 
         ByteList codegen() override {
             // TODO
         }
 
         std::string to_string() override {
-            return std::to_string(offset);
+            // TODO:
+            return "TODO: function";
         }
     };
 }

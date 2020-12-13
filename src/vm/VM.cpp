@@ -41,7 +41,7 @@ namespace jc::vm {
 
     void VM::_define_global() {
         const auto & global_name = read_string_const();
-        globals[global_name->value] = nullptr;
+        globals.at(global_name->value) = nullptr;
     }
 
     void VM::_load_global() {

@@ -10,10 +10,8 @@
 
 namespace jc::compiler {
     struct Scope;
-    struct Closure;
     struct Variable;
     using scope_ptr = std::shared_ptr<Scope>;
-    using closure_ptr = std::shared_ptr<Closure>;
     using var_ptr = std::shared_ptr<Variable>;
 
     // Base class for Local and Compile-time global
@@ -29,8 +27,15 @@ namespace jc::compiler {
         Local(VarDeclKind kind, type_ptr type, std::string name) : Variable(kind, type), name(std::move(name)) {}
 
         std::string name;
-        uint64_t depth{0};
+        uint32_t depth{0};
         bool is_captured{false};
+    };
+
+    struct Upvalue {
+        Upvalue(uint32_t index, bool is_local) : index(index), is_local(is_local) {}
+
+        uint32_t index;
+        bool is_local;
     };
 
     struct Scope {
@@ -39,24 +44,7 @@ namespace jc::compiler {
         scope_ptr parent;
 
         std::vector<Local> locals;
-
-        // Functions //
-        std::map<std::string, closure_ptr> functions;
-    };
-
-    struct Closure : Scope {
-        Closure(scope_ptr parent,
-                uint32_t offset,
-                uint32_t name_offset,
-                const func_t_ptr & signature)
-            : Scope(parent),
-              offset(offset),
-              name_offset(name_offset),
-              signature(signature) {}
-
-        uint32_t offset;
-        uint32_t name_offset;
-        func_t_ptr signature;
+        std::vector<Upvalue> upvalues;
     };
 }
 

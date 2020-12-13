@@ -10,13 +10,10 @@
 #include <map>
 
 namespace jc::bytecode {
-
     struct Constant;
-    struct Function;
     using ByteList = std::vector<uint8_t>;
     using opcode_it = ByteList::iterator;
     using constant_ptr = std::shared_ptr<Constant>;
-    using function_ptr = std::shared_ptr<Function>;
 
     const int jump_space = 8;
     const uint8_t U255 = 0xFFu;
@@ -85,6 +82,10 @@ namespace jc::bytecode {
         LoadLocal,
         StoreLocal,
         LoadFunc,
+        GetUpvalue,
+        SetUpvalue,
+        CloseUpvalue,
+        Closure,
 
         Jump,
         JumpFalse,
@@ -98,18 +99,11 @@ namespace jc::bytecode {
         SetProperty,
     };
 
-    struct Function {
-        uint32_t name_offset;
-        std::vector<uint32_t> param_names;
-        ByteList code;
-    };
-
     struct Chunk {
         // Global code
         ByteList code;
 
         std::vector<constant_ptr> constant_pool;
-        std::vector<function_ptr> functions;
 //        std::vector<Attribute> attributes;
     };
 }

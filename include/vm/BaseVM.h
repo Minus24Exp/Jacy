@@ -9,8 +9,27 @@
 #include <map>
 
 namespace jc::vm {
+    struct Closure;
+    struct Upvalue;
+    using closure_ptr = std::shared_ptr<Closure>;
+    using upvalue_ptr = std::shared_ptr<Upvalue>;
+
     struct CallFrame {
+        // Closure is not nullptr if we are in function
+        std::shared_ptr<Closure> closure{nullptr};
         std::vector<object_ptr> slots;
+        uint64_t ip;
+    };
+
+    struct Upvalue : Object {
+
+    };
+
+    struct Closure : Object {
+        Closure(const std::shared_ptr<bytecode::FuncConstant> & function) : function(function) {}
+
+        std::shared_ptr<bytecode::FuncConstant> function;
+        std::vector<upvalue_ptr> upvalues{};
     };
 
     class BaseVM {

@@ -91,8 +91,8 @@ namespace jc::vm {
     // Bytecode //
     //////////////
     uint8_t BaseVM::peek() const {
-        if (in_func) {
-            return chunk.functions.at(chunk.functions.size() - in_func - 1)->code.at(in_func);
+        if (frame->closure) {
+            return frame->closure.at(chunk.functions.size() - in_func - 1)->code.at(in_func);
         }
         return chunk.code.at(ip);
     }

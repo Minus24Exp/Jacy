@@ -3,12 +3,13 @@
 namespace jc::compiler {
     Compiler::Compiler() : scope_depth(0), log("Compiler", options.log) {
         for (const auto & g : globals::jcGlobals) {
-            globals[g.first] = std::make_shared<Variable>(VarDeclKind::Val, g.second.type);
+            globals.emplace(g.first, std::make_shared<Variable>(VarDeclKind::Val, g.second.type));
         }
     }
 
     bytecode::Chunk Compiler::compile(const tree::StmtList & tree) {
-        enter_scope();
+        // FIXME: WTF???
+//        enter_scope();
         scope_depth = 0;
 
         for (const auto & stmt : tree) {
@@ -26,20 +27,18 @@ namespace jc::compiler {
     }
 
     void Compiler::visit(tree::Block * block) {
-        enter_scope();
         for (const auto & stmt : block->stmts) {
             stmt->accept(*this);
         }
-        exit_scope();
     }
 
     void Compiler::visit(tree::VarDecl * var_decl) {
         VarDeclKind kind = var_decl->kind;
 
-        // TODO: Add real types (now any)
-        type_ptr type = Any::get();
-
         const auto & var_name = var_decl->id->get_name();
+
+        var_decl->type->accept(*this);
+        const auto & var_type = last_type;
 
         if (scope_depth == 0) {
             const auto & found = globals.find(var_name);
@@ -48,22 +47,22 @@ namespace jc::compiler {
             }
 
             // Define global
-            uint32_t global = make_string(var_name);
+            uint32_t global_name_offset = make_string(var_name);
             emit(bytecode::OpCode::DefineGlobal);
-            emit(static_cast<uint32_t>(global));
+            emit(global_name_offset);
 
             // TODO: ! No val variables without assign_expr and explicit type !
-            globals[var_name] = std::make_shared<Variable>(kind, type);
+            globals.emplace(var_name, std::make_shared<Variable>(kind, var_type));
 
             if (var_decl->assign_expr) {
                 var_decl->assign_expr->accept(*this);
                 emit(bytecode::OpCode::StoreGlobal);
-                emit(static_cast<uint32_t>(global));
+                emit(global_name_offset);
 
-                globals[var_name]->is_defined = true;
+                globals.at(var_name)->is_defined = true;
             }
         } else {
-            declare_var(kind, type, var_decl->id.get());
+            declare_var(kind, var_type, var_decl->id.get());
             if (var_decl->assign_expr) {
                 // TODO: Extract type of expression
                 var_decl->assign_expr->accept(*this);
@@ -76,65 +75,68 @@ namespace jc::compiler {
     }
 
     void Compiler::visit(tree::FuncDecl * func_decl) {
-        const auto & name = func_decl->id->get_name();
+        const auto & func_name = func_decl->id->get_name();
 
+        // Resolve function signature //
         func_decl->return_type->accept(*this);
         const auto & return_type = last_type;
 
-        // Collect types and names
-        std::vector<std::string> param_names;
         func_param_t_list params_t;
         for (const auto & param : func_decl->params) {
-            // TODO!: Default value
             param.type->accept(*this);
             params_t.push_back(FuncParamType::get(last_type));
-            param_names.push_back(param.id->get_name());
         }
 
-        // Look for redefinitions
-        if (scope_depth == 0) {
-            const auto & global_func = functions.find(name);
-            if (global_func != functions.end()) {
-                error("Unable to redefine function " + name, func_decl->pos);
-            }
-        } else {
-            const auto & local_func = scope->functions.find(name);
-            if (local_func != scope->functions.end()) {
-                error("Unable to redefine function " + name, func_decl->pos);
-            }
-        }
-
-        uint32_t name_offset = make_string(name);
-
-        // Compile-time sh*t //
         const func_t_ptr signature = FuncType::get(return_type, params_t);
-        const uint32_t offset = chunk.functions.size() - 1;
-        closure_ptr closure = std::make_shared<Closure>(scope, offset, name_offset, signature);
 
-        for (std::size_t i = 0; i < signature->arg_types.size(); i++) {
-            closure->locals.emplace_back(VarDeclKind::Val, signature->arg_types.at(i), param_names.at(i));
-        }
-
+        // Declare function
+        bool is_local_func = false;
         if (scope_depth == 0) {
-            functions.insert({name, closure});
+            const auto & found = globals.find(func_name);
+            if (found != globals.end()) {
+                error("Unable to redefine global function " + func_name, func_decl->pos);
+            }
+
+            globals.emplace(func_name, std::make_shared<Variable>(VarDeclKind::Val, signature));
+
+            // Define global
+            uint32_t global_name_offset = make_string(func_name);
+            emit(bytecode::OpCode::DefineGlobal);
+            emit(global_name_offset);
         } else {
-            scope->functions.insert({name, closure});
+            declare_var(VarDeclKind::Val, signature, func_decl->id.get());
+            is_local_func = true;
         }
 
-        // Bytecode sh*t //
-        const auto & prev_func = cur_func;
-        cur_func = std::make_shared<bytecode::Function>();
-        // Set parameter names
-        for (const auto & param_name : param_names) {
-            cur_func->param_names.push_back(make_string(param_name));
-        }
-        chunk.functions.push_back(cur_func);
+        enter_scope();
 
-        enter_scope(closure);
+        for (std::size_t i = 0; i < func_decl->params.size(); i++) {
+            // TODO!: Default value
+            declare_var(VarDeclKind::Val, params_t.at(i), func_decl->params.at(i).id.get());
+        }
+
+        // TODO: Return type check
+        const auto & previous_function = current_function;
         func_decl->body->accept(*this);
         exit_scope();
 
-        cur_func = prev_func;
+        const auto & function = current_function;
+
+        // Make function closure
+        chunk.constant_pool.push_back(function);
+        emit(bytecode::OpCode::Closure);
+        emit(static_cast<uint32_t>(chunk.constant_pool.size() - 1));
+
+        current_function = previous_function;
+
+        for (const auto & upvalue : scope->upvalues) {
+            emit(upvalue.is_local ? 1u : 0u);
+            emit(upvalue.index);
+        }
+
+//        const uint32_t name_offset = make_string(func_name);
+//        const auto & arg_count = func_decl->params.size();
+//        const auto & prev_func = current_function;
     }
 
     void Compiler::visit(tree::ReturnStmt * expr_stmt) {
@@ -258,12 +260,19 @@ namespace jc::compiler {
         assign->value->accept(*this);
         bytecode::OpCode opcode;
         uint32_t operand;
-        try {
-            operand = resolve_local(scope, assign->id.get());
+        int64_t local = resolve_local(scope, assign->id.get());
+        if (local != -1) {
             opcode = bytecode::OpCode::StoreLocal;
-        } catch (IUndefinedEntity & e) {
-            operand = make_string(assign->id->get_name());
-            opcode = bytecode::OpCode::StoreGlobal;
+            operand = static_cast<uint32_t>(local);
+        } else {
+            int64_t upvalue = resolve_upvalue(scope, assign->id.get());
+            if (upvalue != -1) {
+                opcode = bytecode::OpCode::SetUpvalue;
+                operand = static_cast<uint32_t>(upvalue);
+            } else {
+                opcode = bytecode::OpCode::StoreGlobal;
+                operand = make_string(assign->id->get_name());
+            }
         }
         emit(opcode);
         emit(operand);
@@ -485,8 +494,8 @@ namespace jc::compiler {
     // Bytecode //
     //////////////
     void Compiler::emit(uint8_t byte) {
-        if (cur_func) {
-            cur_func->code.push_back(byte);
+        if (current_function) {
+            current_function->code.push_back(byte);
         } else {
             chunk.code.push_back(byte);
         }
@@ -525,7 +534,6 @@ namespace jc::compiler {
             emit(found->second);
             return;
         }
-        // Make int
         chunk.constant_pool.push_back(std::make_shared<bytecode::IntConstant>(int_val));
         int_constants[int_val] = chunk.constant_pool.size() - 1;
         emit(static_cast<uint32_t>(chunk.constant_pool.size() - 1));
@@ -561,30 +569,39 @@ namespace jc::compiler {
     ///////////
     // Scope //
     ///////////
-    void Compiler::enter_scope(scope_ptr nested) {
+    void Compiler::enter_scope() {
         scope_depth++;
-        if (nested) {
-            scope = nested;
-        } else {
-            scope = std::make_shared<Scope>(scope);
-        }
+        scope = std::make_shared<Scope>(scope);
     }
 
-    void Compiler::exit_scope() {
+    scope_ptr Compiler::exit_scope() {
         scope_depth--;
+
+        while (!scope->locals.empty() && scope->locals.back().depth > scope_depth) {
+            if (scope->locals.back().is_captured) {
+                emit(bytecode::OpCode::CloseUpvalue);
+            } else {
+                emit(bytecode::OpCode::Pop);
+            }
+            scope->locals.pop_back();
+        }
+
+        // FIXME: We can go back to global scope...
         if (!scope->parent) {
             throw DevError("Attempt to exit global scope");
         }
+
+        auto previous = scope;
         scope = scope->parent;
+        return previous;
     }
 
     ///////////////
     // Variables //
     ///////////////
-    uint32_t Compiler::resolve_local(const scope_ptr & _scope, tree::Identifier * id) {
+    int64_t Compiler::resolve_local(const scope_ptr & _scope, tree::Identifier * id) {
         if (_scope->locals.empty()) {
-            // local size is unsigned, so I cannot subtract it
-            undefined_entity();
+            return -1;
         }
 
         // Note: I need to use (uint32_t)(0 - 1), 'cause unsigned 0 - 1 is not -1
@@ -595,81 +612,70 @@ namespace jc::compiler {
                     log.debug("In 'resolve_local()':");
                     error(id->get_name() + " is not defined", id->pos);
                 }
+                last_type = local.type;
                 return i;
             }
         }
 
-        undefined_entity();
+        return -1;
     }
 
-    uint32_t Compiler::resolve_upvalue(const scope_ptr & _scope, tree::Identifier * id) {
-//        if (!_scope->parent) {
-//            undefined_entity();
-//        }
-//
-//        uint32_t local = resolve_local(_scope, id);
-//        if (local != -1) {
-//            _scope->parent->locals[local].is_captured = true;
-//    //        return add_upvalue(_scope, static_cast<uint32_t>(local), true);
-//        }
-//
-//        uint32_t upvalue = resolve_upvalue(_scope->parent, id);
-//        if (upvalue != -1) {
-//    //        return add_upvalue(_scope, static_cast<uint64_t>(upvalue), false);
-//        }
-
-        undefined_entity();
-    }
-
-    uint32_t Compiler::resolve_func(const std::map<std::string, closure_ptr> & funcs, tree::Identifier * id, scope_ptr parent) {
-        for (const auto & func : funcs) {
-            if (func.first == id->get_name()) {
-                return func.second->offset;
-            }
+    int64_t Compiler::resolve_upvalue(const scope_ptr & _scope, tree::Identifier * id) {
+        if (!_scope->parent) {
+            return -1;
         }
 
-        if (parent) {
-            return resolve_func(parent->functions, id);
+        int64_t local = resolve_local(_scope->parent, id);
+        if (local != -1) {
+            _scope->parent->locals.at(local).is_captured = true;
+            return add_upvalue(_scope, local, true);
         }
 
-        undefined_entity();
+        int64_t upvalue = resolve_upvalue(_scope->parent, id);
+        if (upvalue != -1) {
+            return add_upvalue(_scope, upvalue, false);
+        }
+
+        return -1;
     }
 
     void Compiler::emit_id(tree::Identifier * id) {
-        bytecode::OpCode opcode;
-        uint32_t operand;
-
-        try {
-            // Try local
-            operand = resolve_local(scope, id);
-            opcode = bytecode::OpCode::LoadLocal;
-            last_type = scope->locals.at(operand).type;
-        } catch (IUndefinedEntity & e) {
-            try {
-                // Try function
-                operand = resolve_func(scope->functions, id, scope->parent);
-                opcode = bytecode::OpCode::LoadFunc;
-            } catch (IUndefinedEntity & e) {
-                // Try global
-                operand = make_string(id->get_name());
-                opcode = bytecode::OpCode::LoadGlobal;
-
-                try {
-                    const auto & global = globals.at(id->get_name());
-                    if (!global) {
-                        log.debug(id->get_name(), " global is null");
-                        throw std::out_of_range(id->get_name());
-                    }
-                    last_type = global->type;
-                } catch (std::out_of_range & e) {
-                    log.debug("In 'emit_id()' [LoadGlobal]");
-                    error(id->get_name() + " is not defined", id->pos);
-                }
-            }
+        // Locals
+        int64_t local = resolve_local(scope, id);
+        if (local != -1) {
+            emit(bytecode::OpCode::LoadLocal);
+            emit(static_cast<uint32_t>(local));
+            return;
         }
 
-        emit(opcode);
-        emit(operand);
+        // Upvalues
+        int64_t upvalue = resolve_upvalue(scope, id);
+        if (upvalue != -1) {
+            emit(bytecode::OpCode::GetUpvalue);
+            emit(static_cast<uint32_t>(upvalue));
+            return;
+        }
+
+//        // Functions
+//        int64_t func = resolve_func(scope->functions, id, scope->parent);
+//        if (func != -1) {
+//            emit(bytecode::OpCode::LoadFunc);
+//            emit(static_cast<uint32_t>(func));
+//        }
+
+        // Globals
+        try {
+            const auto & global = globals.at(id->get_name());
+            if (!global) {
+                throw std::out_of_range(id->get_name());
+            }
+            last_type = global->type;
+            emit(bytecode::OpCode::LoadGlobal);
+            emit(make_string(id->get_name()));
+        } catch (std::out_of_range & e) {
+            log.debug("In 'emit_id()' [LoadGlobal]");
+            error(id->get_name() + " is not defined", id->pos);
+        }
     }
 
     void Compiler::declare_var(VarDeclKind kind, type_ptr type, tree::Identifier * id) {
@@ -689,12 +695,6 @@ namespace jc::compiler {
             }
         }
 
-        for (const auto & func : scope->functions) {
-            if (func.first == name) {
-                error(name + " has been already declared in this scope as function", id->pos);
-            }
-        }
-
         add_local(kind, type, id->get_name());
     }
 
@@ -704,6 +704,22 @@ namespace jc::compiler {
         }
 
         scope->locals.emplace_back(kind, type, name);
+    }
+
+    uint32_t Compiler::add_upvalue(scope_ptr scope, uint32_t offset, bool is_local) {
+        for (std::size_t i = 0; i < scope->upvalues.size(); i++) {
+            const auto & upvalue = scope->upvalues.at(i);
+            if (upvalue.index == offset) {
+                return i;
+            }
+        }
+
+        if (scope->upvalues.size() == UINT32_MAX) {
+            throw DevError("Too many closure variables in function");
+        }
+
+        scope->upvalues.emplace_back(offset, is_local);
+        return scope->upvalues.size() - 1;
     }
 
     ///////////
