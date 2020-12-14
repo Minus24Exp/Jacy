@@ -125,6 +125,25 @@ namespace jc::vm {
         std::cout << top()->to_string();
     }
 
+    void Disasm::_get_upvalue() {
+        uint32_t slot = read4();
+        push(frame->closure->upvalues[slot]->location->object);
+    }
+
+    void Disasm::_set_upvalue() {
+        uint32_t slot = read4();
+        frame->closure->upvalues.at(slot)->location->object = top();
+    }
+
+    void Disasm::_close_upvalue() {
+        close_upvalues();
+        pop();
+    }
+
+    void Disasm::_closure() {
+
+    }
+
     void Disasm::_jump() {
         const auto & offset = read8();
         std::cout << offset;

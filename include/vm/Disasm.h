@@ -23,6 +23,10 @@ namespace jc::vm {
         {bytecode::OpCode::StoreGlobal, "StoreGlobal"},
         {bytecode::OpCode::LoadLocal, "LoadLocal"},
         {bytecode::OpCode::StoreLocal, "StoreLocal"},
+        {bytecode::OpCode::GetUpvalue, "GetUpvalue"},
+        {bytecode::OpCode::SetUpvalue, "SetUpvalue"},
+        {bytecode::OpCode::CloseUpvalue, "CloseUpvalue"},
+        {bytecode::OpCode::Closure, "Closure"},
         {bytecode::OpCode::Jump, "Jump"},
         {bytecode::OpCode::JumpFalse, "JumpFalse"},
         {bytecode::OpCode::Invoke, "Invoke"},
@@ -56,6 +60,10 @@ namespace jc::vm {
         void _store_global() override;
         void _load_local() override;
         void _store_local() override;
+        void _get_upvalue() override;
+        void _set_upvalue() override;
+        void _close_upvalue() override;
+        void _closure() override;
         void _jump() override;
         void _jump_false() override;
         void _invoke() override;

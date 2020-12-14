@@ -95,7 +95,7 @@ namespace jc::compiler {
         void emit_id(tree::Identifier * id);
         void declare_var(VarDeclKind kind, type_ptr type, tree::Identifier * id);
         void add_local(VarDeclKind kind, type_ptr type, const std::string & name);
-        uint32_t add_upvalue(scope_ptr scope, uint32_t offset, bool is_local);
+        uint32_t add_upvalue(const scope_ptr & scope, uint32_t offset, bool is_local);
 
         // Jumps //
         int32_t emit_jump(bytecode::OpCode jump_instr);
@@ -115,6 +115,6 @@ namespace jc::compiler {
         common::CompilerOptions options;
         common::Logger log;
     };
-};
+}
 
 #endif // COMPILER_H

@@ -10,7 +10,7 @@ namespace jc::vm {
     void BaseVM::eval(const bytecode::Chunk & _chunk) {
         this->chunk = _chunk;
 
-        while (ip < chunk.code.size()) {
+        while (true) {
             const auto & byte = read();
             const auto & opcode = static_cast<bytecode::OpCode>(byte);
             before_opcode(opcode);
@@ -54,6 +54,18 @@ namespace jc::vm {
                 case bytecode::OpCode::StoreLocal: {
                     _store_local();
                 } break;
+                case bytecode::OpCode::GetUpvalue: {
+                    _get_upvalue();
+                } break;
+                case bytecode::OpCode::SetUpvalue: {
+                    _set_upvalue();
+                } break;
+                case bytecode::OpCode::CloseUpvalue: {
+                    _close_upvalue();
+                } break;
+                case bytecode::OpCode::Closure: {
+                    _closure();
+                } break;
                 case bytecode::OpCode::Jump: {
                     _jump();
                 } break;
@@ -90,26 +102,19 @@ namespace jc::vm {
     //////////////
     // Bytecode //
     //////////////
-    uint8_t BaseVM::peek() const {
-        if (frame->closure) {
-            return frame->closure.at(chunk.functions.size() - in_func - 1)->code.at(in_func);
-        }
-        return chunk.code.at(ip);
+    uint8_t BaseVM::peek() {
+        return *peek_it();
     }
 
-    bytecode::opcode_it BaseVM::peek_it() {
-        if (in_func) {
-            return chunk.functions.at(chunk.functions.size() - in_func - 1)->code.begin() + func_pc;
+    bytecode::bytelist_it BaseVM::peek_it() {
+        if (frame->closure) {
+            return frame->closure->function->code.begin() + frame->ip;
         }
-        return chunk.code.begin() + ip;
+        return chunk.code.begin() + frame->ip;
     }
 
     void BaseVM::advance(int distance) {
-        if (in_func) {
-            func_pc += distance;
-        } else {
-            ip += distance;
-        }
+        frame->ip += distance;
     }
 
     uint8_t BaseVM::read() {

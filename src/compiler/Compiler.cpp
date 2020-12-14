@@ -91,6 +91,7 @@ namespace jc::compiler {
 
         // Declare function
         bool is_local_func = false;
+        const auto & func_name_offset = make_string(func_name);
         if (scope_depth == 0) {
             const auto & found = globals.find(func_name);
             if (found != globals.end()) {
@@ -100,7 +101,7 @@ namespace jc::compiler {
             globals.emplace(func_name, std::make_shared<Variable>(VarDeclKind::Val, signature));
 
             // Define global
-            uint32_t global_name_offset = make_string(func_name);
+            uint32_t global_name_offset = func_name_offset;
             emit(bytecode::OpCode::DefineGlobal);
             emit(global_name_offset);
         } else {
@@ -115,31 +116,32 @@ namespace jc::compiler {
             declare_var(VarDeclKind::Val, params_t.at(i), func_decl->params.at(i).id.get());
         }
 
-        // TODO: Return type check
         const auto & previous_function = current_function;
+        const auto & compiled_function = std::make_shared<bytecode::FuncConstant>(func_name_offset, func_decl->params.size());
+        current_function = compiled_function;
+
+        // TODO: Return type check
         func_decl->body->accept(*this);
+
         exit_scope();
 
-        const auto & function = current_function;
-
         // Make function closure
-        chunk.constant_pool.push_back(function);
+        chunk.constant_pool.push_back(current_function);
+        current_function = previous_function;
+
         emit(bytecode::OpCode::Closure);
         emit(static_cast<uint32_t>(chunk.constant_pool.size() - 1));
-
-        current_function = previous_function;
 
         for (const auto & upvalue : scope->upvalues) {
             emit(upvalue.is_local ? 1u : 0u);
             emit(upvalue.index);
         }
 
-//        const uint32_t name_offset = make_string(func_name);
-//        const auto & arg_count = func_decl->params.size();
-//        const auto & prev_func = current_function;
+        compiled_function->upvalue_count = scope->upvalues.size();
     }
 
     void Compiler::visit(tree::ReturnStmt * expr_stmt) {
+        expr_stmt->accept(*this);
 
     }
 
@@ -644,7 +646,7 @@ namespace jc::compiler {
         int64_t local = resolve_local(scope, id);
         if (local != -1) {
             emit(bytecode::OpCode::LoadLocal);
-            emit(static_cast<uint32_t>(local));
+            emit(static_cast<uint32_t>(local));r
             return;
         }
 
@@ -706,20 +708,21 @@ namespace jc::compiler {
         scope->locals.emplace_back(kind, type, name);
     }
 
-    uint32_t Compiler::add_upvalue(scope_ptr scope, uint32_t offset, bool is_local) {
-        for (std::size_t i = 0; i < scope->upvalues.size(); i++) {
-            const auto & upvalue = scope->upvalues.at(i);
-            if (upvalue.index == offset) {
+    uint32_t Compiler::add_upvalue(const scope_ptr & _scope, uint32_t offset, bool is_local) {
+        for (std::size_t i = 0; i < _scope->upvalues.size(); i++) {
+            const auto & upvalue = _scope->upvalues.at(i);
+            if (upvalue.index == offset && upvalue.is_local == is_local) {
                 return i;
             }
         }
 
-        if (scope->upvalues.size() == UINT32_MAX) {
+        if (_scope->upvalues.size() == UINT32_MAX) {
             throw DevError("Too many closure variables in function");
         }
 
-        scope->upvalues.emplace_back(offset, is_local);
-        return scope->upvalues.size() - 1;
+        _scope->upvalues.emplace_back(offset, is_local);
+        current_function->upvalue_count++;
+        return _scope->upvalues.size() - 1;
     }
 
     ///////////

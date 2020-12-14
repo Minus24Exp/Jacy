@@ -12,7 +12,7 @@
 namespace jc::bytecode {
     struct Constant;
     using ByteList = std::vector<uint8_t>;
-    using opcode_it = ByteList::iterator;
+    using bytelist_it = ByteList::iterator;
     using constant_ptr = std::shared_ptr<Constant>;
 
     const int jump_space = 8;
@@ -81,7 +81,6 @@ namespace jc::bytecode {
         StoreGlobal,
         LoadLocal,
         StoreLocal,
-        LoadFunc,
         GetUpvalue,
         SetUpvalue,
         CloseUpvalue,

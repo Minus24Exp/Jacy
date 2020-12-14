@@ -11,18 +11,26 @@
 namespace jc::vm {
     struct Closure;
     struct Upvalue;
+    struct Value;
     using closure_ptr = std::shared_ptr<Closure>;
     using upvalue_ptr = std::shared_ptr<Upvalue>;
+    using value_ptr = std::shared_ptr<Value>;
+
+    struct Value {
+        object_ptr object;
+    };
 
     struct CallFrame {
-        // Closure is not nullptr if we are in function
+        // Closure is not nullptr if we are in a function
         std::shared_ptr<Closure> closure{nullptr};
-        std::vector<object_ptr> slots;
+        std::vector<value_ptr> slots;
         uint64_t ip;
     };
 
-    struct Upvalue : Object {
-
+    struct Upvalue {
+        value_ptr location;
+        Value closed;
+        std::shared_ptr<Upvalue> next;
     };
 
     struct Closure : Object {
@@ -56,6 +64,10 @@ namespace jc::vm {
         virtual void _define_global() = 0;
         virtual void _load_global() = 0;
         virtual void _store_global() = 0;
+        virtual void _get_upvalue() = 0;
+        virtual void _set_upvalue() = 0;
+        virtual void _close_upvalue() = 0;
+        virtual void _closure() = 0;
         virtual void _load_local() = 0;
         virtual void _store_local() = 0;
         virtual void _jump() = 0;
@@ -69,11 +81,8 @@ namespace jc::vm {
 
         // Bytecode //
         bytecode::Chunk chunk;
-        uint32_t in_func;
-        size_t ip{0};
-        size_t func_pc{0};
-        uint8_t peek() const;
-        bytecode::opcode_it peek_it();
+        uint8_t peek();
+        bytecode::bytelist_it peek_it();
         void advance(int distance = 1);
         uint8_t read();
         uint16_t read2();

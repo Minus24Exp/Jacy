@@ -73,13 +73,13 @@ namespace jc::bytecode {
     };
 
     struct FuncConstant : Constant {
-        FuncConstant(uint32_t name_offset, uint32_t arg_count, uint32_t upvalue_count, ByteList code)
-            : name_offset(name_offset), arg_count(arg_count), upvalue_count(upvalue_count), code(std::move(code)) {}
+        FuncConstant(uint32_t name_offset, uint32_t param_count)
+            : name_offset(name_offset), param_count(param_count) {}
 
         uint32_t name_offset;
-        uint32_t arg_count;
-        uint32_t upvalue_count;
-        ByteList code;
+        uint32_t param_count;
+        uint32_t upvalue_count{0};
+        ByteList code{};
 
         ByteList codegen() override {
             // TODO
