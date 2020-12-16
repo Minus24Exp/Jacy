@@ -17,7 +17,13 @@ namespace jc::vm {
     struct Callable;
     struct Func;
     struct NativeFunc;
+    struct Closure;
+    struct Upvalue;
+    struct Value;
 
+    using closure_ptr = std::shared_ptr<Closure>;
+    using upvalue_ptr = std::shared_ptr<Upvalue>;
+    using value_ptr = std::shared_ptr<Value>;
     using object_ptr = std::shared_ptr<Object>;
     using class_ptr = std::shared_ptr<Class>;
     using FuncArgs = std::vector<object_ptr>;
@@ -26,9 +32,52 @@ namespace jc::vm {
     using callable_ptr = std::shared_ptr<Callable>;
     using NFBody = std::function<object_ptr(const FuncArgs&)>;
 
-    class_ptr get_cNull();
+    enum class ObjectType : uint8_t {
+        // Internal-level
+        Upvalue     = 0b0001,
+        Closure     = 0b0010,
+        Class       = 0b0011,
+
+        // Language-level
+        Instance    = 0b1001,
+        Null        = 0b1010,
+        Bool        = 0b1011,
+        Int         = 0b1100,
+        Float       = 0b1101,
+        String      = 0b1110,
+        Func        = 0b1111,
+    };
+
+    bool is_instance_obj(ObjectType type);
+
+    struct Value {
+        object_ptr object;
+    };
 
     struct Object {
+        explicit Object(ObjectType type);
+
+        ObjectType type;
+    };
+
+    struct Upvalue : Object {
+        Upvalue();
+
+        value_ptr location;
+        Value closed;
+        std::shared_ptr<Upvalue> next;
+    };
+
+    struct Closure : Object {
+        explicit Closure(func_ptr func);
+
+        func_ptr func;
+        std::vector<upvalue_ptr> upvalues{};
+    };
+
+    struct Instance : Object {
+        explicit Instance(ObjectType type = ObjectType::Instance);
+
         class_ptr _class;
         std::map<std::string, object_ptr> fields;
 
@@ -36,89 +85,77 @@ namespace jc::vm {
         virtual std::string to_string() = 0;
     };
 
-    struct NullObject : Object {
+    struct NullObject : Instance {
         NullObject();
 
         bool to_b() override;
-
         std::string to_string() override;
     };
     const auto Null = std::make_shared<NullObject>();
 
-    struct FalseObject : Object {
+    struct FalseObject : Instance {
         FalseObject();
 
         bool to_b() override;
-
         std::string to_string() override;
     };
     const auto False = std::make_shared<FalseObject>();
 
-    struct TrueObject : Object {
+    struct TrueObject : Instance {
         TrueObject();
 
         bool to_b() override;
-
         std::string to_string() override;
     };
     const auto True = std::make_shared<TrueObject>();
 
-    struct IntObject : Object {
+    struct IntObject : Instance {
         explicit IntObject(long long value);
         explicit IntObject(const std::shared_ptr<bytecode::IntConstant> & int_constant);
 
         long long value;
 
         bool to_b() override;
-
         std::string to_string() override;
     };
 
-    struct FloatObject : Object {
+    struct FloatObject : Instance {
         explicit FloatObject(const std::shared_ptr<bytecode::FloatConstant> & float_constant);
 
         double value;
 
         bool to_b() override;
-
         std::string to_string() override;
     };
 
-    struct StringObject : Object {
+    struct StringObject : Instance {
         explicit StringObject(const std::string & value);
         explicit StringObject(const std::shared_ptr<bytecode::StringConstant> & string_constant);
 
         std::string value;
 
         bool to_b() override;
-
         std::string to_string() override;
-    };
-
-    struct Callable : Object {
-        ~Callable() = default;
     };
 
     // TODO: Function
-    struct Func : Callable {
-        explicit Func(std::string name);
+    struct Func : Instance {
+        explicit Func(std::string name, bytecode::byte_list code);
 
         std::string name;
-        // TODO: Body
+        bytecode::byte_list code;
 
         bool to_b() override;
-
         std::string to_string() override;
     };
 
-    struct NativeFunc : Callable {
+    struct NativeFunc : Instance {
         explicit NativeFunc(std::string name, NFBody body);
 
         std::string name;
         NFBody body;
 
         bool to_b() override;
-
         std::string to_string() override;
     };
 

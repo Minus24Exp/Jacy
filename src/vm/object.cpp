@@ -2,12 +2,23 @@
 #include "vm/class.h"
 
 namespace jc::vm {
-    ////////////////
-    // NullObject //
-    ////////////////
-    NullObject::NullObject() {
-
+    bool is_instance_obj(ObjectType type) {
+        return (static_cast<uint8_t>(type) >> 4u) & 1u;
     }
+
+    Object::Object(ObjectType type) : type(type) {}
+
+    // Upvalue //
+    Upvalue::Upvalue() : Object(ObjectType::Upvalue) {}
+
+    // Closure //
+    Closure::Closure(func_ptr func) : Object(ObjectType::Closure), func(func) {}
+
+    // Instance //
+    Instance::Instance(ObjectType type) : Object(type) {}
+
+    // NullObject //
+    NullObject::NullObject() : Instance(ObjectType::Null) {}
 
     bool NullObject::to_b() {
         return false;
@@ -17,12 +28,8 @@ namespace jc::vm {
         return "null";
     }
 
-    /////////////////
     // FalseObject //
-    /////////////////
-    FalseObject::FalseObject() {
-
-    }
+    FalseObject::FalseObject() : Instance(ObjectType::Bool) {}
 
     bool FalseObject::to_b() {
         return false;
@@ -32,12 +39,8 @@ namespace jc::vm {
         return "false";
     }
 
-    ////////////////
     // TrueObject //
-    ////////////////
-    TrueObject::TrueObject() {
-
-    }
+    TrueObject::TrueObject() : Instance(ObjectType::Bool) {}
 
     bool TrueObject::to_b() {
         return true;
@@ -47,10 +50,8 @@ namespace jc::vm {
         return "true";
     }
 
-    ///////////////
     // IntObject //
-    ///////////////
-    IntObject::IntObject(long long value) : value(value) {
+    IntObject::IntObject(long long value) : Instance(ObjectType::Int), value(value) {
         // TODO!: Use class
         // TODO!: Use mangling functions
         // TODO!: This is the cause why I need API...
@@ -73,11 +74,9 @@ namespace jc::vm {
         return std::to_string(value);
     }
 
-    /////////////////
     // FloatObject //
-    /////////////////
     FloatObject::FloatObject(const std::shared_ptr<bytecode::FloatConstant> &float_constant)
-        : value(float_constant->value) {}
+        : Instance(ObjectType::Float), value(float_constant->value) {}
 
     bool FloatObject::to_b() {
         return value != 0.0F;
@@ -89,10 +88,8 @@ namespace jc::vm {
         return ss.str();
     }
 
-    //////////////////
     // StringObject //
-    //////////////////
-    StringObject::StringObject(const std::string & value) : value(value) {
+    StringObject::StringObject(const std::string & value) : Instance(ObjectType::String), value(value) {
         // TODO: Remove everything from here
         fields.insert({"size", std::make_shared<IntObject>(value.size())});
     }
@@ -108,10 +105,9 @@ namespace jc::vm {
         return value;
     }
 
-    //////////
     // Func //
-    //////////
-    Func::Func(std::string name) : name(std::move(name)) {}
+    Func::Func(std::string name, bytecode::byte_list code)
+        : Instance(ObjectType::Func), name(std::move(name)), code(std::move(code)) {}
 
     bool Func::to_b() {
         return true;
@@ -121,10 +117,9 @@ namespace jc::vm {
         return "<func:"+ name +">";
     }
 
-    ////////////////
     // NativeFunc //
-    ////////////////
-    NativeFunc::NativeFunc(std::string name, NFBody body) : name(std::move(name)), body(std::move(body)) {}
+    NativeFunc::NativeFunc(std::string name, NFBody body)
+        : Instance(ObjectType::Func), name(std::move(name)), body(std::move(body)) {}
 
     bool NativeFunc::to_b() {
         return true;

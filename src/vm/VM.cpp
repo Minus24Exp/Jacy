@@ -2,6 +2,10 @@
 
 namespace jc::vm {
     VM::VM() : log("VM", options.log) {
+        for (const auto & global : globals::jcGlobals) {
+            globals[global.first] = global.second.value;
+        }
+
         call_frames.push_back({});
         frame = call_frames.begin();
     }
@@ -65,7 +69,7 @@ namespace jc::vm {
     void VM::_load_local() {
         const auto & slot = read8();
         try {
-            push(frame->slots.at(slot));
+            push(frame->slots.at(slot)->object);
         } catch (std::out_of_range & e) {
             // TODO: Update when locals names will be done
             error("Unable to resolve local");
@@ -75,26 +79,49 @@ namespace jc::vm {
     void VM::_store_local() {
         const auto & slot = read8();
         try {
-            frame->slots.at(slot) = top();
+            frame->slots.at(slot)->object = top();
         } catch (std::out_of_range & e) {
             error("Unable to resolve local");
         }
     }
 
+    void VM::_get_upvalue() {
+        uint32_t slot = read4();
+        std::cout << slot;
+    }
+
+    void VM::_set_upvalue() {
+        uint32_t slot = read4();
+        std::cout << slot;
+    }
+
+    void VM::_close_upvalue() {
+
+    }
+
+    void VM::_closure() {
+
+    }
+
     void VM::_jump() {
         const auto & offset = read8();
-        ip += offset;
+        frame->ip += offset;
     }
 
     void VM::_jump_false() {
         const auto & offset = read8();
         if (!top()->to_b()) {
-            ip += offset;
+            frame->ip += offset;
         }
     }
 
     void VM::_invoke() {
+        int argCount = READ_BYTE();
+        if (!callValue(peek(argCount), argCount)) {
+            return INTERPRET_RUNTIME_ERROR;
+        }
 
+        frame = &vm.frames[vm.frameCount - 1];
     }
 
     void VM::_invoke_nf() {
@@ -116,8 +143,13 @@ namespace jc::vm {
         uint32_t arg_count = read8();
         const auto & method_name = read_string_const()->value;
         const auto & object = top(arg_count);
+        if (is_instance_obj(object->type)) {
+            // TODO: Move to verifier
+            throw DevError("Non-instance object in invoke_nf_method");
+        }
+        const auto & instance = std::static_pointer_cast<Instance>(object);
         const auto & args = read_args(arg_count);
-        const auto & method = std::static_pointer_cast<NativeFunc>(object->_class->methods.at(method_name));
+        const auto & method = std::static_pointer_cast<NativeFunc>(instance->_class->methods.at(method_name));
         auto value = method->body(args);
         // TODO: Look above (about void)
         value = value ? value : Null;
@@ -126,14 +158,52 @@ namespace jc::vm {
 
     void VM::_get_property() {
         // TODO: Rewrite for functions
-        const auto & object = top();
+        const auto & instance = std::static_pointer_cast<Instance>(top());
         const auto & prop_name = read_string_const();
         pop();
-        push(object->fields.at(prop_name->value));
+        push(instance->fields.at(prop_name->value));
     }
 
     void VM::_set_property() {
         // TODO
+    }
+
+    // Byte-code reading //
+    bytecode::bytelist_it VM::peek_it() {
+        if (frame->closure) {
+            return frame->closure->func->code.begin() + frame->ip;
+        }
+        return chunk.code.begin() + frame->ip;
+    }
+
+    void VM::advance(int distance) {
+        frame->ip += distance;
+    }
+
+    ///////////
+    // Stack //
+    ///////////
+    void VM::push(const object_ptr & value) {
+        stack.push_back(value);
+    }
+
+    object_ptr VM::pop() {
+        object_ptr back = stack.back();
+        stack.pop_back();
+        return back;
+    }
+
+    object_ptr VM::top(uint32_t offset) {
+        return stack.at(stack.size() - offset - 1);
+    }
+
+    std::vector<object_ptr> VM::read_args(uint32_t arg_count) {
+        std::vector<object_ptr> args;
+        args.reserve(arg_count);
+        for (uint32_t i = 0; i < arg_count; i++) {
+            args.push_back(top(arg_count - i - 1));
+        }
+        return args;
     }
 
     ////////////

@@ -11,8 +11,8 @@
 
 namespace jc::bytecode {
     struct Constant;
-    using ByteList = std::vector<uint8_t>;
-    using bytelist_it = ByteList::iterator;
+    using byte_list = std::vector<uint8_t>;
+    using bytelist_it = byte_list::iterator;
     using constant_ptr = std::shared_ptr<Constant>;
 
     const int jump_space = 8;
@@ -100,7 +100,7 @@ namespace jc::bytecode {
 
     struct Chunk {
         // Global code
-        ByteList code;
+        byte_list code;
 
         std::vector<constant_ptr> constant_pool;
 //        std::vector<Attribute> attributes;

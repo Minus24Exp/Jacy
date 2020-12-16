@@ -646,7 +646,7 @@ namespace jc::compiler {
         int64_t local = resolve_local(scope, id);
         if (local != -1) {
             emit(bytecode::OpCode::LoadLocal);
-            emit(static_cast<uint32_t>(local));r
+            emit(static_cast<uint32_t>(local));
             return;
         }
 

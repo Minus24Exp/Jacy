@@ -1,45 +1,26 @@
 #ifndef BASEVM_H
 #define BASEVM_H
 
-#include "vm/class.h"
-#include "bytecode/opcode.h"
+#include "bytecode/constant.h"
 #include "Exception.h"
-#include "../../lib/globals.h"
+
 #include <vector>
 #include <map>
 
+/**
+ * BaseVM
+ * Base class for Disasm and VM
+ * It simplifies the byte-code reading by branching opcodes to functions,
+ * by reading byte-code using overridden reader-functions.
+ *
+ * Some reader-functions need to be overridden 'cause of difference between Disasm and VM:
+ * - Disasm at first just dumps all constants (including function constants and their inner byte-code) and prints the main byte-code
+ * - VM goes to functions and create CallFrame thus it needs to read differently: from main byte-code or from function byte-code
+ *
+ * So, in spite of what was before, Disasm must not have anything in common with run-time, so no stack, call frames, etc.
+ */
+
 namespace jc::vm {
-    struct Closure;
-    struct Upvalue;
-    struct Value;
-    using closure_ptr = std::shared_ptr<Closure>;
-    using upvalue_ptr = std::shared_ptr<Upvalue>;
-    using value_ptr = std::shared_ptr<Value>;
-
-    struct Value {
-        object_ptr object;
-    };
-
-    struct CallFrame {
-        // Closure is not nullptr if we are in a function
-        std::shared_ptr<Closure> closure{nullptr};
-        std::vector<value_ptr> slots;
-        uint64_t ip;
-    };
-
-    struct Upvalue {
-        value_ptr location;
-        Value closed;
-        std::shared_ptr<Upvalue> next;
-    };
-
-    struct Closure : Object {
-        Closure(const std::shared_ptr<bytecode::FuncConstant> & function) : function(function) {}
-
-        std::shared_ptr<bytecode::FuncConstant> function;
-        std::vector<upvalue_ptr> upvalues{};
-    };
-
     class BaseVM {
     public:
         BaseVM();
@@ -82,31 +63,20 @@ namespace jc::vm {
         // Bytecode //
         bytecode::Chunk chunk;
         uint8_t peek();
-        bytecode::bytelist_it peek_it();
-        void advance(int distance = 1);
         uint8_t read();
         uint16_t read2();
         uint32_t read4();
         uint64_t read8();
 
-        // Stack //
-        std::vector<object_ptr> stack;
-        void push(const object_ptr & value);
-        object_ptr pop();
-        object_ptr top(uint32_t offset = 0);
-
-        std::map<std::string, object_ptr> globals;
-
-        // Call-frames //
-        std::vector<CallFrame> call_frames;
-        std::vector<CallFrame>::iterator frame;
-        std::vector<object_ptr> read_args(uint32_t arg_count);
+        virtual bytecode::bytelist_it peek_it() = 0;
+        virtual void advance(int distance) = 0;
 
         // Constants //
         bytecode::constant_ptr read_const();
         std::shared_ptr<bytecode::IntConstant> read_int_const();
         std::shared_ptr<bytecode::FloatConstant> read_float_const();
         std::shared_ptr<bytecode::StringConstant> read_string_const();
+        std::shared_ptr<bytecode::StringConstant> get_string_const(uint32_t offset);
 
         // Errors //
         static void error(const std::string & msg);

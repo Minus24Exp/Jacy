@@ -73,6 +73,13 @@ namespace jc::vm {
         void _get_property() override;
         void _set_property() override;
 
+        static void print_bytes(const bytecode::byte_list & bytes);
+
+        // Byte-code reading //
+        bytecode::bytelist_it peek_it() override;
+        void advance(int distance) override;
+        std::size_t ip{0};
+
         // Debug //
     public:
         common::DisasmOptions options{};

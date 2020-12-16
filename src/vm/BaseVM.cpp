@@ -1,11 +1,7 @@
 #include "vm/BaseVM.h"
 
 namespace jc::vm {
-    BaseVM::BaseVM() {
-        for (const auto & global : globals::jcGlobals) {
-            globals[global.first] = global.second.value;
-        }
-    }
+    BaseVM::BaseVM() = default;
 
     void BaseVM::eval(const bytecode::Chunk & _chunk) {
         this->chunk = _chunk;
@@ -106,20 +102,9 @@ namespace jc::vm {
         return *peek_it();
     }
 
-    bytecode::bytelist_it BaseVM::peek_it() {
-        if (frame->closure) {
-            return frame->closure->function->code.begin() + frame->ip;
-        }
-        return chunk.code.begin() + frame->ip;
-    }
-
-    void BaseVM::advance(int distance) {
-        frame->ip += distance;
-    }
-
     uint8_t BaseVM::read() {
         uint8_t b = peek();
-        advance();
+        advance(1);
         return b;
     }
 
@@ -142,23 +127,6 @@ namespace jc::vm {
         std::copy(peek_it(), peek_it() + 8, reinterpret_cast<uint8_t*>(&l));
         advance(8);
         return l;
-    }
-
-    ///////////
-    // Stack //
-    ///////////
-    void BaseVM::push(const object_ptr & value) {
-        stack.push_back(value);
-    }
-
-    object_ptr BaseVM::pop() {
-        object_ptr back = stack.back();
-        stack.pop_back();
-        return back;
-    }
-
-    object_ptr BaseVM::top(uint32_t offset) {
-        return stack.at(stack.size() - offset - 1);
     }
 
     ///////////////
@@ -190,13 +158,12 @@ namespace jc::vm {
         return std::static_pointer_cast<bytecode::StringConstant>(constant);
     }
 
-    std::vector<object_ptr> BaseVM::read_args(uint32_t arg_count) {
-        std::vector<object_ptr> args;
-        args.reserve(arg_count);
-        for (uint32_t i = 0; i < arg_count; i++) {
-            args.push_back(top(arg_count - i - 1));
+    std::shared_ptr<bytecode::StringConstant> BaseVM::get_string_const(uint32_t offset) {
+        // TODO: Unite read_const and get_const
+        if (offset >= chunk.constant_pool.size()) {
+            throw DevError("Constant offset is out of constant pool bounds");
         }
-        return args;
+        return std::static_pointer_cast<bytecode::StringConstant>(chunk.constant_pool.at(offset));
     }
 
     ////////////

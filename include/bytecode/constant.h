@@ -7,22 +7,31 @@
 // TODO: Remove types from constants and create helpers for type determination, constants must not depend on compiler
 
 namespace jc::bytecode {
-    struct Constant {
-        Constant() = default;
+    enum class ConstTag {
+        Int,
+        Float,
+        String,
+        Func,
+    };
 
-        virtual ByteList codegen() = 0;
+    struct Constant {
+        explicit Constant(ConstTag tag) : tag(tag) {}
+
+        ConstTag tag;
+
+        virtual byte_list codegen() = 0;
 
         // Debug
         virtual std::string to_string() = 0;
     };
 
     struct IntConstant : Constant {
-        explicit IntConstant(long long value) : value(value) {}
+        explicit IntConstant(long long value) : Constant(ConstTag::Int), value(value) {}
 
         long long value;
 
-        ByteList codegen() override {
-    //        ByteList bytes = {type_code()};
+        byte_list codegen() override {
+    //        byte_list bytes = {type_code()};
     //        for (int i = 0; i < sizeof(value); i++) {
     //            bytes.push_back((value >> (i * U8)) & U255);
     //        }
@@ -35,12 +44,12 @@ namespace jc::bytecode {
     };
 
     struct FloatConstant : Constant {
-        explicit FloatConstant(double value) : value(value) {}
+        explicit FloatConstant(double value) : Constant(ConstTag::Float), value(value) {}
 
         double value;
 
-        ByteList codegen() override {
-//        ByteList bytes = {type_code()};
+        byte_list codegen() override {
+//        byte_list bytes = {type_code()};
 //        const auto * byte_arr = reinterpret_cast<uint8_t*>(&value);
 //        for (int i = 0; i < sizeof(value); i++) {
 //            bytes.push_back(byte_arr[i]);
@@ -54,13 +63,13 @@ namespace jc::bytecode {
     };
 
     struct StringConstant : Constant {
-        explicit StringConstant(std::string value) : value(std::move(value)) {}
+        explicit StringConstant(std::string value) : Constant(ConstTag::String), value(std::move(value)) {}
 
         std::string value;
 
-        ByteList codegen() override {
+        byte_list codegen() override {
             // TODO: UNICODE!!!!
-//        ByteList bytes = {type_code()};
+//        byte_list bytes = {type_code()};
 //        for (const auto & c : value) {
 //            bytes.push_back(static_cast<uint8_t>(c));
 //        }
@@ -74,20 +83,19 @@ namespace jc::bytecode {
 
     struct FuncConstant : Constant {
         FuncConstant(uint32_t name_offset, uint32_t param_count)
-            : name_offset(name_offset), param_count(param_count) {}
+            : Constant(ConstTag::Func), name_offset(name_offset), param_count(param_count) {}
 
         uint32_t name_offset;
         uint32_t param_count;
         uint32_t upvalue_count{0};
-        ByteList code{};
+        byte_list code{};
 
-        ByteList codegen() override {
+        byte_list codegen() override {
             // TODO
         }
 
         std::string to_string() override {
-            // TODO:
-            return "TODO: function";
+            return "[Function stub]";
         }
     };
 }
