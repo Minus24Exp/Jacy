@@ -165,6 +165,10 @@ namespace jc {
     //////////////////////
     // Other Exceptions //
     //////////////////////
+    class ByteCodeVerificationError : public JacyException {
+    public:
+        explicit ByteCodeVerificationError(const std::string & msg) : JacyException("Byte-code verification error: " + msg) {}
+    };
 
     // Dev Error used in cases there something was wrong with source code
     // It's mostly like a hint for developers

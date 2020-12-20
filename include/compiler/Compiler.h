@@ -75,6 +75,7 @@ namespace jc::compiler {
         std::map<double, uint32_t> float_constants;
         std::map<std::string, uint32_t> string_constants;
 
+        uint32_t add_const(const bytecode::constant_ptr & constant);
         void emit_int(long long int_val);
         void emit_float(double float_val);
         void emit_string(const std::string & string_val);

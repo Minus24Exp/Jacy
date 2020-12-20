@@ -14,7 +14,6 @@
 namespace jc::vm {
     struct Object;
     struct Class;
-    struct Callable;
     struct Func;
     struct NativeFunc;
     struct Closure;
@@ -29,28 +28,31 @@ namespace jc::vm {
     using FuncArgs = std::vector<object_ptr>;
     using func_ptr = std::shared_ptr<Func>;
     using nf_ptr = std::shared_ptr<NativeFunc>;
-    using callable_ptr = std::shared_ptr<Callable>;
     using NFBody = std::function<object_ptr(const FuncArgs&)>;
 
     enum class ObjectType : uint8_t {
         // Internal-level
-        Upvalue     = 0b0001,
-        Closure     = 0b0010,
-        Class       = 0b0011,
+        Upvalue     = 0b00001,
+        Closure     = 0b00010,
+        Class       = 0b00011,
 
         // Language-level
-        Instance    = 0b1001,
-        Null        = 0b1010,
-        Bool        = 0b1011,
-        Int         = 0b1100,
-        Float       = 0b1101,
-        String      = 0b1110,
-        Func        = 0b1111,
+        Instance    = 0b10001,
+        Unit        = 0b10010,
+        Null        = 0b10011,
+        Bool        = 0b10100,
+        Int         = 0b10101,
+        Float       = 0b10110,
+        String      = 0b10111,
+        Func        = 0b11000,
+        NativeFunc  = 0b11001,
     };
 
     bool is_instance_obj(ObjectType type);
 
     struct Value {
+        explicit Value(object_ptr object) : object(object) {}
+
         object_ptr object;
     };
 
@@ -64,7 +66,7 @@ namespace jc::vm {
         Upvalue();
 
         value_ptr location;
-        Value closed;
+        Value closed{nullptr};
         std::shared_ptr<Upvalue> next;
     };
 
@@ -83,6 +85,13 @@ namespace jc::vm {
 
         virtual bool to_b() = 0;
         virtual std::string to_string() = 0;
+    };
+
+    struct Unit : Instance {
+        explicit Unit();
+
+        bool to_b() override;
+        std::string to_string() override;
     };
 
     struct NullObject : Instance {

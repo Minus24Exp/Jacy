@@ -24,24 +24,24 @@ namespace jc::compiler {
         return nullptr;
     }
 
-    // Nothing //
-    Nothing::Nothing() : Type(TypeTag::Bottom) {}
+    // NothingType //
+    NothingType::NothingType() : Type(TypeTag::Bottom) {}
 
-    type_ptr Nothing::get() {
-        static type_ptr nothing_t = std::make_shared<Nothing>();
+    type_ptr NothingType::get() {
+        static type_ptr nothing_t = std::make_shared<NothingType>();
         return nothing_t;
     }
 
-    bool Nothing::equals(const type_ptr & other) {
+    bool NothingType::equals(const type_ptr & other) {
         return true; // Stub
     }
 
-    std::string Nothing::to_string() {
-        return "Nothing";
+    std::string NothingType::to_string() {
+        return "NothingType";
     }
 
-    std::string Nothing::mangle() {
-        return "Nothing";
+    std::string NothingType::mangle() {
+        return "NothingType";
     }
 
     // Unit //

@@ -110,22 +110,29 @@ namespace jc::vm {
 
     void VM::_jump_false() {
         const auto & offset = read8();
-        if (!top()->to_b()) {
+        const auto & object = top();
+        bool truthy = false;
+        if (!is_instance_obj(object->type)) {
+            // Note: All non-instance objects considered truthy
+            truthy = true;
+        } else {
+            // TODO: Use overridden language-level to_b not instance.to_b, so use invoke(instance, 'to_b')
+            truthy = as_instance(object)->to_b();
+        }
+        if (truthy) {
             frame->ip += offset;
         }
     }
 
     void VM::_invoke() {
-        int argCount = READ_BYTE();
-        if (!callValue(peek(argCount), argCount)) {
-            return INTERPRET_RUNTIME_ERROR;
-        }
-
-        frame = &vm.frames[vm.frameCount - 1];
+        uint32_t arg_count = read4();
+        invoke_object(top(arg_count), arg_count);
+        frame = call_frames.end() - 1;
     }
 
     void VM::_invoke_nf() {
         uint32_t arg_count = read8();
+        // TODO: Verify
         const auto & func = std::static_pointer_cast<NativeFunc>(top(arg_count));
         const auto & args = read_args(arg_count);
         auto value = func->body(args);
@@ -142,12 +149,7 @@ namespace jc::vm {
     void VM::_invoke_nf_method() {
         uint32_t arg_count = read8();
         const auto & method_name = read_string_const()->value;
-        const auto & object = top(arg_count);
-        if (is_instance_obj(object->type)) {
-            // TODO: Move to verifier
-            throw DevError("Non-instance object in invoke_nf_method");
-        }
-        const auto & instance = std::static_pointer_cast<Instance>(object);
+        const auto & instance = as_instance(top(arg_count));
         const auto & args = read_args(arg_count);
         const auto & method = std::static_pointer_cast<NativeFunc>(instance->_class->methods.at(method_name));
         auto value = method->body(args);
@@ -157,8 +159,7 @@ namespace jc::vm {
     }
 
     void VM::_get_property() {
-        // TODO: Rewrite for functions
-        const auto & instance = std::static_pointer_cast<Instance>(top());
+        const auto & instance = as_instance(top());
         const auto & prop_name = read_string_const();
         pop();
         push(instance->fields.at(prop_name->value));
@@ -183,18 +184,18 @@ namespace jc::vm {
     ///////////
     // Stack //
     ///////////
-    void VM::push(const object_ptr & value) {
-        stack.push_back(value);
+    void VM::push(const object_ptr & object) {
+        stack.push_back(std::make_shared<Value>(object));
     }
 
     object_ptr VM::pop() {
-        object_ptr back = stack.back();
+        object_ptr back = stack.back()->object;
         stack.pop_back();
         return back;
     }
 
     object_ptr VM::top(uint32_t offset) {
-        return stack.at(stack.size() - offset - 1);
+        return stack.at(stack.size() - offset - 1)->object;
     }
 
     std::vector<object_ptr> VM::read_args(uint32_t arg_count) {
@@ -206,6 +207,42 @@ namespace jc::vm {
         return args;
     }
 
+    std::shared_ptr<Instance> VM::as_instance(const object_ptr & object) {
+        if (!is_instance_obj(object->type)) {
+            throw DevError("Instance object expected");
+        }
+        return std::static_pointer_cast<Instance>(object);
+    }
+
+    void VM::invoke_object(object_ptr callee, uint32_t arg_count) {
+        switch (callee->type) {
+            case ObjectType::Closure: {
+                invoke(std::static_pointer_cast<Closure>(callee), arg_count);
+            } break;
+            case ObjectType::NativeFunc: {
+                // TODO
+            } break;
+            case ObjectType::Class: {
+                // TODO
+            } break;
+            default: {
+                invalid_bytecode("Non-callable object in function call");
+            }
+        }
+    }
+
+    void VM::invoke(closure_ptr closure, uint32_t arg_count) {
+        // TODO!: Store args count in function object and verify
+
+        if (call_frames.size() >= CallFrame::FRAMES_LIMIT) {
+            error("Stack overflow");
+        }
+
+        call_frames.push_back({closure});
+        frame = call_frames.end() - 1;
+        frame->slots = std::vector<value_ptr>(stack.end() - arg_count - 1, stack.end());
+    }
+
     ////////////
     // Errors //
     ////////////
@@ -213,5 +250,10 @@ namespace jc::vm {
         // TODO: Current file
         // TODO: Position tracking
         throw RuntimeError(msg, {});
+    }
+
+    void VM::invalid_bytecode(const std::string & msg) {
+        // TODO: Move to verifier
+        throw ByteCodeVerificationError(msg);
     }
 }

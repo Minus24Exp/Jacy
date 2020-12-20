@@ -9,7 +9,7 @@ namespace jc::vm {
 
         std::string name;
         std::map<std::string, object_ptr> fields;
-        std::map<std::string, callable_ptr> methods;
+        std::map<std::string, object_ptr> methods;
     };
 }
 

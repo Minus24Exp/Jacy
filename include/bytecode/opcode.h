@@ -41,7 +41,7 @@ namespace jc::bytecode {
      * - L - Long (8-byte)
      *
      * -- Opcode --     | -- operands --
-     * NOP              | [Nothing]
+     * NOP              | [NothingType]
      * NullConst        | ST = NullConst
      * FalseConst       | ST = FalseConst
      * TrueConst        | ST = TrueConst
@@ -67,6 +67,7 @@ namespace jc::bytecode {
 
     enum class OpCode : uint8_t {
         NOP,
+        Halt,
         Pop,
 
         NullConst,
@@ -81,13 +82,15 @@ namespace jc::bytecode {
         StoreGlobal,
         LoadLocal,
         StoreLocal,
-        GetUpvalue,
-        SetUpvalue,
+        LoadUpvalue,
+        StoreUpvalue,
         CloseUpvalue,
         Closure,
 
         Jump,
         JumpFalse,
+
+        Return,
 
         Invoke,
         InvokeNF,

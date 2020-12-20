@@ -1,4 +1,3 @@
-#include "vm/object.h"
 #include "vm/class.h"
 
 namespace jc::vm {
@@ -119,7 +118,7 @@ namespace jc::vm {
 
     // NativeFunc //
     NativeFunc::NativeFunc(std::string name, NFBody body)
-        : Instance(ObjectType::Func), name(std::move(name)), body(std::move(body)) {}
+        : Instance(ObjectType::NativeFunc), name(std::move(name)), body(std::move(body)) {}
 
     bool NativeFunc::to_b() {
         return true;

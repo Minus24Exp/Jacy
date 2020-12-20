@@ -10,8 +10,10 @@ namespace jc::vm {
     struct CallFrame {
         // Closure is not nullptr if we are in a function
         std::shared_ptr<Closure> closure{nullptr};
-        std::vector<value_ptr> slots;
-        uint64_t ip;
+        std::vector<value_ptr> slots{};
+        uint64_t ip{0};
+
+        static constexpr uint64_t FRAMES_LIMIT = 256;
     };
 
     class VM : public BaseVM {
@@ -54,8 +56,8 @@ namespace jc::vm {
         void advance(int distance) override;
 
         // Stack //
-        std::vector<object_ptr> stack;
-        void push(const object_ptr & value);
+        std::vector<value_ptr> stack;
+        void push(const object_ptr & object);
         object_ptr pop();
         object_ptr top(uint32_t offset = 0);
 
@@ -66,9 +68,16 @@ namespace jc::vm {
         std::vector<CallFrame>::iterator frame;
         std::vector<object_ptr> read_args(uint32_t arg_count);
 
+        // TODO: Move to verifier
+        std::shared_ptr<Instance> as_instance(const object_ptr & object);
+
+        void invoke_object(object_ptr callee, uint32_t arg_count);
+        void invoke(closure_ptr closure, uint32_t arg_count);
+
     private:
         // Errors //
         static void error(const std::string & msg);
+        static void invalid_bytecode(const std::string & msg);
 
         // DEBUG //
     public:

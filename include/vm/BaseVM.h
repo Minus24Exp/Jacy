@@ -77,6 +77,7 @@ namespace jc::vm {
         std::shared_ptr<bytecode::FloatConstant> read_float_const();
         std::shared_ptr<bytecode::StringConstant> read_string_const();
         std::shared_ptr<bytecode::StringConstant> get_string_const(uint32_t offset);
+        std::shared_ptr<bytecode::FuncConstant> read_func_constant();
 
         // Errors //
         static void error(const std::string & msg);

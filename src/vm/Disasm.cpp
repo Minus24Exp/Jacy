@@ -21,7 +21,9 @@ namespace jc::vm {
             if (constant->tag == bytecode::ConstTag::Func) {
                 const auto & func = std::static_pointer_cast<bytecode::FuncConstant>(constant);
                 std::cout << cp_offset++ << " - " << "<func:" << get_string_const(func->name_offset)->value + ">";
-                print_bytes(func->code);
+                std::cout << " {" << std::endl;
+                print_bytes(func->code, true);
+                std::cout << "}" << std::endl;
             } else {
                 std::cout << cp_offset++ << " - " << constant->to_string() << std::endl;
             }
@@ -107,7 +109,8 @@ namespace jc::vm {
     }
 
     void Disasm::_closure() {
-
+        const auto & function = read_func_constant();
+        std::cout << function->upvalue_count;
     }
 
     void Disasm::_jump() {
@@ -121,7 +124,6 @@ namespace jc::vm {
     }
 
     void Disasm::_invoke() {
-        // TODO: Should I push result of invoke???
         uint32_t arg_count = read4();
         std::cout << arg_count;
     }
@@ -148,9 +150,12 @@ namespace jc::vm {
         std::cout << "[top - 1]." << read_string_const()->value << " = " << "[top]";
     }
 
-    void Disasm::print_bytes(const bytecode::byte_list & bytes) {
+    void Disasm::print_bytes(const bytecode::byte_list & bytes, bool with_indent) {
         int div = 0;
         for (const auto & byte : bytes) {
+            if (with_indent && div % 4 == 0) {
+                std::cout << "    ";
+            }
             std::cout << std::hex << static_cast<int>(byte) << " " << std::dec;
             div++;
             if (div == 4) {

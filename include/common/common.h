@@ -6,9 +6,7 @@ namespace jc {
      * Just some common things
      */
 
-    // Note: I used enum for declaration type, but not a bool
-    //  because I want to add `const` in the future
-    enum class VarDeclKind {Var, Val};
+    enum class VarDeclKind {Var, Val, Type};
 }
 
 #endif // COMMON_H

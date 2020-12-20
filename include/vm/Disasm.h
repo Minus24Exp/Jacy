@@ -10,31 +10,32 @@
 
 namespace jc::vm {
     const std::map<bytecode::OpCode, std::string> opcode_names = {
-        {bytecode::OpCode::NOP, "NOP"},
-        {bytecode::OpCode::Pop, "POP"},
-        {bytecode::OpCode::NullConst, "NullConst"},
-        {bytecode::OpCode::FalseConst, "FalseConst"},
-        {bytecode::OpCode::TrueConst, "TrueConst"},
-        {bytecode::OpCode::IntConst, "IntConst"},
-        {bytecode::OpCode::FloatConst, "FloatConst"},
-        {bytecode::OpCode::StringConst, "StringConst"},
-        {bytecode::OpCode::DefineGlobal, "DefineGlobal"},
-        {bytecode::OpCode::LoadGlobal, "LoadGlobal"},
-        {bytecode::OpCode::StoreGlobal, "StoreGlobal"},
-        {bytecode::OpCode::LoadLocal, "LoadLocal"},
-        {bytecode::OpCode::StoreLocal, "StoreLocal"},
-        {bytecode::OpCode::GetUpvalue, "GetUpvalue"},
-        {bytecode::OpCode::SetUpvalue, "SetUpvalue"},
-        {bytecode::OpCode::CloseUpvalue, "CloseUpvalue"},
-        {bytecode::OpCode::Closure, "Closure"},
-        {bytecode::OpCode::Jump, "Jump"},
-        {bytecode::OpCode::JumpFalse, "JumpFalse"},
-        {bytecode::OpCode::Invoke, "Invoke"},
-        {bytecode::OpCode::InvokeNF, "InvokeNF"},
-        {bytecode::OpCode::InvokeMethod, "InvokeMethod"},
-        {bytecode::OpCode::InvokeNFMethod, "InvokeNFMethod"},
-        {bytecode::OpCode::GetProperty, "GetProperty"},
-        {bytecode::OpCode::SetProperty, "SetProperty"},
+        {bytecode::OpCode::NOP,                 "NOP"},
+        {bytecode::OpCode::Pop,                 "Pop"},
+        {bytecode::OpCode::Halt,                "Halt"},
+        {bytecode::OpCode::NullConst,           "NullConst"},
+        {bytecode::OpCode::FalseConst,          "FalseConst"},
+        {bytecode::OpCode::TrueConst,           "TrueConst"},
+        {bytecode::OpCode::IntConst,            "IntConst"},
+        {bytecode::OpCode::FloatConst,          "FloatConst"},
+        {bytecode::OpCode::StringConst,         "StringConst"},
+        {bytecode::OpCode::DefineGlobal,        "DefineGlobal"},
+        {bytecode::OpCode::LoadGlobal,          "LoadGlobal"},
+        {bytecode::OpCode::StoreGlobal,         "StoreGlobal"},
+        {bytecode::OpCode::LoadLocal,           "LoadLocal"},
+        {bytecode::OpCode::StoreLocal,          "StoreLocal"},
+        {bytecode::OpCode::LoadUpvalue,         "LoadUpvalue"},
+        {bytecode::OpCode::StoreUpvalue,        "StoreUpvalue"},
+        {bytecode::OpCode::CloseUpvalue,        "CloseUpvalue"},
+        {bytecode::OpCode::Closure,             "Closure"},
+        {bytecode::OpCode::Jump,                "Jump"},
+        {bytecode::OpCode::JumpFalse,           "JumpFalse"},
+        {bytecode::OpCode::Invoke,              "Invoke"},
+        {bytecode::OpCode::InvokeNF,            "InvokeNF"},
+        {bytecode::OpCode::InvokeMethod,        "InvokeMethod"},
+        {bytecode::OpCode::InvokeNFMethod,      "InvokeNFMethod"},
+        {bytecode::OpCode::GetProperty,         "GetProperty"},
+        {bytecode::OpCode::SetProperty,         "SetProperty"},
     };
 
     class Disasm : public BaseVM {
@@ -73,7 +74,7 @@ namespace jc::vm {
         void _get_property() override;
         void _set_property() override;
 
-        static void print_bytes(const bytecode::byte_list & bytes);
+        static void print_bytes(const bytecode::byte_list & bytes, bool with_indent = false);
 
         // Byte-code reading //
         bytecode::bytelist_it peek_it() override;

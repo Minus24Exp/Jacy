@@ -22,18 +22,23 @@ namespace jc::globals {
         // print //
         const compiler::func_t_ptr print_signature = FuncType::get_nf_t(UnitType::get(), {FuncParamType::get(VarargType::get(Any::get()), false)});
         static vm::object_ptr print(const vm::FuncArgs & args) {
-            for (int i = 0; i < args.size(); i++) {
-                std::cout << args.at(i)->to_string();
-                if (i < args.size() - 1) {
-                    std::cout << " ";
-                }
-            }
-            std::cout << std::endl;
+            std::cout << "TODO: print" << std::endl;
+            // TODO: Return unit
             return nullptr;
+//            for (int i = 0; i < args.size(); i++) {
+//                std::cout << args.at(i)->to_string();
+//                if (i < args.size() - 1) {
+//                    std::cout << " ";
+//                }
+//            }
+//            std::cout << std::endl;
+//            return nullptr;
         }
     }
 
     const std::map<std::string, G::Global> jcGlobals = {
+        // Types //
+        {"unit", {VarDeclKind::Type, compiler::UnitType::get(), nullptr}},
         {"print", {VarDeclKind::Val, G::print_signature, make_nf("print", G::print)}},
     };
 }

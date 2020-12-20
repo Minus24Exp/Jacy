@@ -66,8 +66,8 @@ namespace jc::compiler {
         func_t_ptr has_method(const std::string & method_name, const func_t_ptr & signature, bool is_op_optional);
     };
 
-    struct Nothing : Type {
-        Nothing();
+    struct NothingType : Type {
+        NothingType();
 
         static type_ptr get();
 

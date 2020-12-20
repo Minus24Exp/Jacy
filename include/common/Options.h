@@ -16,7 +16,6 @@ namespace jc::common {
     };
 
     // LogLevel //
-    // uint8_t because we need to know the priority
     enum class LogLevel : uint8_t {
         Verbose,
         Debug,
@@ -46,7 +45,7 @@ namespace jc::common {
     // Jacy main options //
     struct JacyOptions {
         bool debug{false};
-        RunLevel run_level{RunLevel::Compiler}; // Note: For parser debug only
+        RunLevel run_level{RunLevel::Vm};
         std::string main_file;
 
         LoggerOptions log = {

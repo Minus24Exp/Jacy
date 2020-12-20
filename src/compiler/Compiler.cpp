@@ -16,6 +16,8 @@ namespace jc::compiler {
             stmt->accept(*this);
         }
 
+        emit(bytecode::OpCode::Halt);
+
         return chunk;
     }
 
@@ -116,17 +118,28 @@ namespace jc::compiler {
             declare_var(VarDeclKind::Val, params_t.at(i), func_decl->params.at(i).id.get());
         }
 
-        const auto & previous_function = current_function;
-        const auto & compiled_function = std::make_shared<bytecode::FuncConstant>(func_name_offset, func_decl->params.size());
-        current_function = compiled_function;
+        // Note: Of course not `const auto &`, 'cause we need to go back, but not to the redefined current_function
+        const auto previous_function = current_function;
+        current_function = std::make_shared<bytecode::FuncConstant>(func_name_offset, func_decl->params.size());
 
         // TODO: Return type check
         func_decl->body->accept(*this);
 
-        exit_scope();
+        // Note: For functions returning unit type emit return instruction
+        if (!func_decl->body->stmts.empty()
+        && func_decl->body->stmts.back()->type != tree::StmtType::Return
+        && !return_type->equals(UnitType::get())) {
+            emit(bytecode::OpCode::LoadGlobal);
+            emit(make_string("unit"));
+            emit(bytecode::OpCode::GetProperty);
+            emit(make_string("instance"));
+            emit(bytecode::OpCode::Return);
+        }
 
         // Make function closure
         chunk.constant_pool.push_back(current_function);
+        current_function->upvalue_count = scope->upvalues.size();
+
         current_function = previous_function;
 
         emit(bytecode::OpCode::Closure);
@@ -137,7 +150,7 @@ namespace jc::compiler {
             emit(upvalue.index);
         }
 
-        compiled_function->upvalue_count = scope->upvalues.size();
+        exit_scope();
     }
 
     void Compiler::visit(tree::ReturnStmt * expr_stmt) {
@@ -269,7 +282,7 @@ namespace jc::compiler {
         } else {
             int64_t upvalue = resolve_upvalue(scope, assign->id.get());
             if (upvalue != -1) {
-                opcode = bytecode::OpCode::SetUpvalue;
+                opcode = bytecode::OpCode::StoreUpvalue;
                 operand = static_cast<uint32_t>(upvalue);
             } else {
                 opcode = bytecode::OpCode::StoreGlobal;
@@ -529,6 +542,19 @@ namespace jc::compiler {
     ///////////////
     // Constants //
     ///////////////
+    /**
+     * Push constant to constant_pool
+     * @param constant
+     * @return added constant offset
+     */
+    uint32_t Compiler::add_const(const bytecode::constant_ptr & constant) {
+        chunk.constant_pool.emplace_back(constant);
+        if (chunk.constant_pool.size() >= UINT32_MAX) {
+            throw DevError("Constant pool size exceeded");
+        }
+        return static_cast<uint32_t>(chunk.constant_pool.size() - 1);
+    }
+
     void Compiler::emit_int(long long int_val) {
         emit(bytecode::OpCode::IntConst);
         const auto & found = int_constants.find(int_val);
@@ -536,9 +562,9 @@ namespace jc::compiler {
             emit(found->second);
             return;
         }
-        chunk.constant_pool.push_back(std::make_shared<bytecode::IntConstant>(int_val));
-        int_constants[int_val] = chunk.constant_pool.size() - 1;
-        emit(static_cast<uint32_t>(chunk.constant_pool.size() - 1));
+        const auto & offset = add_const(std::make_shared<bytecode::IntConstant>(int_val));
+        int_constants.emplace(offset, chunk.constant_pool.size() - 1);
+        emit(offset);
     }
 
     void Compiler::emit_float(double float_val) {
@@ -548,9 +574,9 @@ namespace jc::compiler {
             emit(found->second);
             return;
         }
-        chunk.constant_pool.push_back(std::make_shared<bytecode::FloatConstant>(float_val));
-        float_constants[float_val] = chunk.constant_pool.size() - 1;
-        emit(static_cast<uint32_t>(chunk.constant_pool.size() - 1));
+        const auto & offset = add_const(std::make_shared<bytecode::FloatConstant>(float_val));
+        float_constants.emplace(float_val, offset);
+        emit(offset);
     }
 
     void Compiler::emit_string(const std::string & string_val) {
@@ -563,9 +589,9 @@ namespace jc::compiler {
         if (found != string_constants.end()) {
             return found->second;
         }
-        chunk.constant_pool.push_back(std::make_shared<bytecode::StringConstant>(string_val));
-        string_constants[string_val] = chunk.constant_pool.size() - 1;
-        return chunk.constant_pool.size() - 1;
+        const auto & offset = add_const(std::make_shared<bytecode::StringConstant>(string_val));
+        string_constants.emplace(string_val, offset);
+        return offset;
     }
 
     ///////////
@@ -577,8 +603,6 @@ namespace jc::compiler {
     }
 
     scope_ptr Compiler::exit_scope() {
-        scope_depth--;
-
         while (!scope->locals.empty() && scope->locals.back().depth > scope_depth) {
             if (scope->locals.back().is_captured) {
                 emit(bytecode::OpCode::CloseUpvalue);
@@ -589,10 +613,11 @@ namespace jc::compiler {
         }
 
         // FIXME: We can go back to global scope...
-        if (!scope->parent) {
+        if (!scope) {
             throw DevError("Attempt to exit global scope");
         }
 
+        scope_depth--;
         auto previous = scope;
         scope = scope->parent;
         return previous;
@@ -602,7 +627,7 @@ namespace jc::compiler {
     // Variables //
     ///////////////
     int64_t Compiler::resolve_local(const scope_ptr & _scope, tree::Identifier * id) {
-        if (_scope->locals.empty()) {
+        if (!_scope || scope_depth == 0 || _scope->locals.empty()) {
             return -1;
         }
 
@@ -623,7 +648,7 @@ namespace jc::compiler {
     }
 
     int64_t Compiler::resolve_upvalue(const scope_ptr & _scope, tree::Identifier * id) {
-        if (!_scope->parent) {
+        if (!_scope || !_scope->parent) {
             return -1;
         }
 
@@ -653,7 +678,7 @@ namespace jc::compiler {
         // Upvalues
         int64_t upvalue = resolve_upvalue(scope, id);
         if (upvalue != -1) {
-            emit(bytecode::OpCode::GetUpvalue);
+            emit(bytecode::OpCode::LoadUpvalue);
             emit(static_cast<uint32_t>(upvalue));
             return;
         }
@@ -756,7 +781,7 @@ namespace jc::compiler {
 
         while (_scope) {
             for (const auto & local : _scope->locals) {
-                if (local.name == id->id->get_name()) {
+                if (local.kind == VarDeclKind::Type && local.name == id->id->get_name()) {
                     return local.type;
                 }
             }
@@ -764,7 +789,7 @@ namespace jc::compiler {
         }
 
         const auto & global = globals.find(id->id->get_name());
-        if (global != globals.end()) {
+        if (global != globals.end() && global->second->kind == VarDeclKind::Type) {
             return global->second->type;
         }
 

@@ -6,6 +6,8 @@ namespace jc::vm {
     void BaseVM::eval(const bytecode::Chunk & _chunk) {
         this->chunk = _chunk;
 
+        before_eval();
+
         while (true) {
             const auto & byte = read();
             const auto & opcode = static_cast<bytecode::OpCode>(byte);
@@ -13,6 +15,11 @@ namespace jc::vm {
             switch (opcode) {
                 case bytecode::OpCode::NOP: {
                     _nop();
+                } break;
+                case bytecode::OpCode::Halt: {
+                    // Note: Halt opcode does not have companion function
+                    after_opcode();
+                    return;
                 } break;
                 case bytecode::OpCode::Pop: {
                     _pop();
@@ -50,10 +57,10 @@ namespace jc::vm {
                 case bytecode::OpCode::StoreLocal: {
                     _store_local();
                 } break;
-                case bytecode::OpCode::GetUpvalue: {
+                case bytecode::OpCode::LoadUpvalue: {
                     _get_upvalue();
                 } break;
-                case bytecode::OpCode::SetUpvalue: {
+                case bytecode::OpCode::StoreUpvalue: {
                     _set_upvalue();
                 } break;
                 case bytecode::OpCode::CloseUpvalue: {
@@ -132,9 +139,13 @@ namespace jc::vm {
     ///////////////
     // Constants //
     ///////////////
+    /**
+     * Read 4-byte constant offset and return constant
+     * @return
+     */
     bytecode::constant_ptr BaseVM::read_const() {
         // Note: read_const automatically reads constant offset and advances
-        const auto & offset = read8();
+        const auto & offset = read4();
         if (offset >= chunk.constant_pool.size()) {
             // TODO: Remove cout
             std::cout << std::endl << "offset: " << offset << ". size: " << chunk.constant_pool.size() << std::endl;
@@ -144,18 +155,15 @@ namespace jc::vm {
     }
 
     std::shared_ptr<bytecode::IntConstant> BaseVM::read_int_const() {
-        bytecode::constant_ptr constant = read_const();
-        return std::static_pointer_cast<bytecode::IntConstant>(constant);
+        return std::static_pointer_cast<bytecode::IntConstant>(read_const());
     }
 
     std::shared_ptr<bytecode::FloatConstant> BaseVM::read_float_const() {
-        bytecode::constant_ptr constant = read_const();
-        return std::static_pointer_cast<bytecode::FloatConstant>(constant);
+        return std::static_pointer_cast<bytecode::FloatConstant>(read_const());
     }
 
     std::shared_ptr<bytecode::StringConstant> BaseVM::read_string_const() {
-        bytecode::constant_ptr constant = read_const();
-        return std::static_pointer_cast<bytecode::StringConstant>(constant);
+        return std::static_pointer_cast<bytecode::StringConstant>(read_const());
     }
 
     std::shared_ptr<bytecode::StringConstant> BaseVM::get_string_const(uint32_t offset) {
@@ -164,6 +172,10 @@ namespace jc::vm {
             throw DevError("Constant offset is out of constant pool bounds");
         }
         return std::static_pointer_cast<bytecode::StringConstant>(chunk.constant_pool.at(offset));
+    }
+
+    std::shared_ptr<bytecode::FuncConstant> BaseVM::read_func_constant() {
+        return std::static_pointer_cast<bytecode::FuncConstant>(read_const());
     }
 
     ////////////
